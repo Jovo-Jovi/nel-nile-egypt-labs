@@ -69,3 +69,27 @@ condition demanded the journal at a path it has never occupied; and the
 PowerShell capture artefact (PR-14), where formatted-table output is silently
 discarded and a resolved file path reads as a zero result.
 
+---
+
+## 2026-08-25 — DECISIONS and CONTENT_MODEL authored (P00-T02)
+
+Nineteen decisions filed, including OD-01 (selection rule, region PENDING at
+P01), OD-02 (static client-side search index) and OD-03 (scope freeze signed
+25 Aug 2026, lapses 15 Sep 2026). `CONTENT_MODEL.md` records the entity model,
+the two-axis `ProgrammeTier` mapping, the Children-exclusion cumulation rule,
+and the public route set.
+
+Route enumeration is 12 static patterns, 24 locale-prefixed URLs, zero dynamic
+public segments. The phase map's 13 was never enumerated; the difference is FAQ,
+which the draft quotation marks optional and no OD includes. Search is a
+build-time index on the `Programme` listing, not a route. `SESSION_CONTEXT.md`
+phase map amended to match the enumeration.
+
+CF-16 closed on the §3h confirmation: D-05 answers the GLOSSARY `ProgrammeTier`
+deferral and D-07 answers the `ResultsPortalLink` deferral. PR-13's second
+clause superseded by PR-17 (`docs/method/` holds method documents; the binding
+pair is `PRECEDENTS.md` and `CARRY_FORWARDS.md`). PR-18 records reviewer
+authority; PR-19 records the residual-repair path. CF-17 and CF-18 track the
+quotation's superseded payment schedule and the bilingual exclusion that D-10
+overrides. Next action is P01-T03 schema.
+

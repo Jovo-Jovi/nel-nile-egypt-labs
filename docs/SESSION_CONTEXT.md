@@ -12,8 +12,11 @@
 
 ## Blocking condition
 
-**Scope is not frozen.** `SCOPE.md` derives from the signed quotation. Until the
-quotation is signed, no build task is issued. Document-authoring tasks may run.
+**OD-03 is the scope freeze until a signed quotation is filed.** Signed
+25 August 2026; lapses 15 September 2026 if no signed quotation lands.
+Development proceeds against the draft quotation as amended by OD-03 and
+D-01 through D-19. `SCOPE.md` still derives from a signed quotation and is
+not authored.
 
 ---
 
@@ -24,48 +27,52 @@ quotation is signed, no build task is issued. Document-authoring tasks may run.
 | — | Repo scaffolded from bootstrap | — | |
 | — | Research evidence landed in `docs/research/` (12 files) | — | |
 | — | Seed verified: `python data/seed/verify_seed.py` → `121 -> 72`, PASS | — | |
-| P00-T01 | Gate-0 seeded pair audited, amended and FROZEN — `GLOSSARY.md` · `BOUNDARY_MODEL.md`. Halted once at 4b on a reviewer anchor defect; reissued as T01-R | pending | 2026-08-25 |
+| P00-T01-R | Gate-0 seeded pair audited, amended and FROZEN — `GLOSSARY.md` · `BOUNDARY_MODEL.md`. Merged to `main` as PR #1 (`94642db`, includes `7843267`) | merged | 2026-08-25 |
+| P00-T02 | `DECISIONS.md` (D-01..D-19, OD-01..OD-03) and `CONTENT_MODEL.md` authored. CF-16 closed. Route enumeration: 12 patterns, 24 locale-prefixed URLs | pending | 2026-08-25 |
 
 ## Next action
 
-**P00-T02 — author `CONTENT_MODEL.md`.**
-Enumerates the P03 route set and the P05 module set, neither of which has ever
-been enumerated (CF-15). Records the CF-12 and CF-13 decisions and supersedes the
-two `GLOSSARY` §2 cells left stale by them (CF-16).
+**P01-T03 — schema.**
 
 Gate-0 blocking set: `PRODUCT_BRIEF` · `GLOSSARY` **frozen** · `SCOPE` ·
-`DECISIONS` · `CONTENT_MODEL` · `BOUNDARY_MODEL` **frozen**.
+`DECISIONS` **authored** · `CONTENT_MODEL` **authored** · `BOUNDARY_MODEL` **frozen**.
+
+---
 
 ## Open carry-forwards
 
-14 open, 2 closed, computed by:
+Computed by:
 `Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
 
 **Open:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
-CF-10 · CF-11 · CF-14 · CF-15 · CF-16
+CF-10 · CF-11 · CF-14 · CF-15 · CF-17 · CF-18
 **Closed 25 Aug 2026 by decision:** CF-12 (`ProgrammeTier` — two axes) ·
-CF-13 (`ResultsPortalLink` — build-time constant, host allowlisted)
+CF-13 (`ResultsPortalLink` — build-time constant, host allowlisted) ·
+CF-16 (`CONTENT_MODEL` carries D-05 and D-07; GLOSSARY §2 deferrals closed)
 
-CF-01 to CF-11 are client dependencies. CF-14 is a bilingual content gap owned by
-the lab. CF-15 and CF-16 are method corrections owned by the reviewer.
+CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by
+the lab. CF-15 remains OPEN pending reviewer close: the enumeration has landed
+in `CONTENT_MODEL.md` §3c and §3d; STEP 8 of T02 did not authorise closing it.
+CF-17 and CF-18 are quotation amendments.
 
 ## Open ODs required before P01
 
-- **OD-01 — hosting region.** Verify Supabase region availability first. Do not
-  assume a Middle East region exists.
-- **OD-02 — search architecture.** Proposed: static index built at build time,
-  queried client-side. 72 LabTests does not justify a server round trip.
+- **OD-01 — hosting region.** Rule decided. Region PENDING: enumerate Supabase
+  regions by CLI at project creation, select the nearest to Cairo, record the
+  CLI output in `DECISIONS.md`. Do not assume a Middle East region exists.
+- **OD-02 — search architecture.** DECIDED: static index, client-side, both
+  locales. Shape in `CONTENT_MODEL.md` §3f.
 
 ## Phase map
 
 | Phase | Contents | Gate | Non-waivable |
 |---|---|---|---|
-| P00 | Prepare — docs, ODs, seed verified, clinical QA dispatched | G0 quotation signed | — |
+| P00 | Prepare — docs, ODs, seed verified, clinical QA dispatch deferred (D-19) | G0 quotation signed, or OD-03 in force | — |
 | P01 | Foundation — repo, CI, schema, RLS, Auth, MFA, seed import | G1 | Boundary |
 | P02 | Design system — tokens, RTL primitives, lint rules | G2 | — |
-| P03 | Public site — route set asserted as 13, never enumerated (CF-15), both locales | G3 | Boundary · Bilingual |
+| P03 | Public site — 12 static route patterns, 24 locale-prefixed URLs, enumerated in `CONTENT_MODEL.md` §3c, both locales | G3 | Boundary · Bilingual |
 | P04 | LabTest search — static index, bilingual aliases | G4 | Data integrity · Bilingual |
-| P05 | Admin dashboard — module set asserted as 8, never enumerated (CF-15), Operator accounts | G5 | Boundary · Bilingual |
+| P05 | Admin dashboard — 8 modules enumerated in `CONTENT_MODEL.md` §3d, Operator accounts | G5 | Boundary · Bilingual |
 | P06 | Content & Arabic — translation, entry, clinical sign-off | G6 | **Clinical** · Bilingual |
 | P07 | Hardening & cutover — headers, DNS, redirects, decommission | G7 launch | **Clinical** · **Boundary** · Bilingual · Data integrity |
 
