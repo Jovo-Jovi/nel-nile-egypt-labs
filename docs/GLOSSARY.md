@@ -1,6 +1,8 @@
 # NEL — GLOSSARY
 
 **Status:** FROZEN at P00-T01 · 2026-08-25 · amend only by explicit supersession
+**Superseded in part:** P00-T02-A · 2026-08-25 · §7 supersedes the words "route
+segments" in §6. Every other clause of §6 stands. The FROZEN marker stands.
 **Binding on:** every prompt issued, every document authored, every identifier written
 
 ## §1 Why this exists
@@ -73,3 +75,38 @@ Two carve-outs, explicit so this document does not fail itself:
    name, a type or a route.
 
 Everything outside these two carve-outs is a defect, not a preference.
+
+## §7 Route segments are Visitor-facing strings
+
+**This section supersedes the words "route segments" in §6, and nothing else in
+§6.** Landed at P00-T02-A, 2026-08-25. The superseded clause read: "The forbidden
+set in §3 binds identifiers: table names, type names, route segments, field names,
+and source filenames under the application tree."
+
+**Ruling.** A public URL path segment is a Visitor-facing string, not an
+identifier. It is read by a person and by a search engine, it is the address the
+lab prints and the Visitor types, and it is chosen for legibility in the language
+the page is written in. It is governed by the mapping table in `CONTENT_MODEL.md`
+§3c, which names the entity behind every segment, and not by the forbidden set.
+
+**What §6 continues to bind, unchanged:** table names · type names · field names ·
+source filenames under the application tree. Both §6 carve-outs stand as written.
+
+**What this does not relax.** §5 is untouched. `patient` and `result` remain
+forbidden **outright as identifiers**, and an occurrence of either in a table
+name, a type name, a field name or a source filename is still a boundary defect.
+The route segment `online-results` is a Visitor-facing string naming the outbound
+page at `CONTENT_MODEL.md` §3c row 10. It addresses a page that holds no data and
+links outward under D-07 and D-17. It is not an identifier and does not name a
+column, a type or a file. Read `ResultsPortalLink` as the identifier for that
+surface; `online-results` is what the Visitor sees.
+
+**Why the original clause could not stand.** Of the twelve static segments the
+lab's route set needs, three carry a noun §3 bans: `programmes` bans on
+`programme`, `offers` bans on `offer`, and `online-results` bans on `result`.
+Binding the forbidden set to route segments forced a choice between a URL a
+Visitor can read and a rule this document could keep, and the previous
+enumeration resolved it by shipping PascalCase entity names as public paths —
+`/{locale}/LabUnit`, `/{locale}/Offer`, `/{locale}/ResultsPortalLink`. That is a
+schema leaking into an address bar. This vocabulary exists to stop ambiguity
+entering the codebase, not to choose the lab's URLs.
