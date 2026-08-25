@@ -93,3 +93,55 @@ authority; PR-19 records the residual-repair path. CF-17 and CF-18 track the
 quotation's superseded payment schedule and the bilingual exclusion that D-10
 overrides. Next action is P01-T03 schema.
 
+---
+
+## 2026-08-25 — T02 failed on three defects, closed at T02-A
+
+T02 passed its own checks and was still wrong in three places. Worth recording
+which of the three were the builder's and which were the reviewer's, because the
+distribution is the useful part.
+
+**The eligibility defect was the serious one.** The seed carries four rows whose
+`source_name` restricts them — two PSA rows qualified `male>45`, a semen analysis
+qualified `(Males)`, a genetic counselling row qualified `(Both)`. T02 modelled
+`ProgrammeLabTest` with a `displayOrder` and nothing else, so those qualifiers
+existed nowhere in the model. The cumulation rule then unioned Silver into Gold
+and into Platinum, and Silver carries PSA. Applying §3b as landed rendered a
+prostate marker to every Visitor selecting Gold, and to every Visitor selecting
+Platinum — Female. That is the same harm class the Children constraint exists to
+prevent, reached through a slot the Visitor did select rather than one they
+inherited. T02 wrote the Children constraint carefully and missed the identical
+problem one union away from it. Builder's defect.
+
+`sourceName` is the quieter one and possibly the more expensive. T02 discarded
+the seed's verbatim source string. The clinical gate works by comparing the lab's
+signed corrections against what the 2018 page actually said, and a string nobody
+kept cannot be compared. Five flagged defects and four absent-but-promised tests
+are with the lab under CF-01; without `sourceName` there would have been nothing
+to check their reply against. Builder's defect.
+
+**Two defects originated in reviewer wording, not builder execution.** The
+GLOSSARY froze at T01 with §6 binding the forbidden set to route segments. That
+clause is unsatisfiable against the route set this lab needs: `programmes`,
+`offers` and `online-results` each carry a banned noun. T02 obeyed the clause
+literally and shipped `/{locale}/LabUnit`, `/{locale}/Offer` and
+`/{locale}/ResultsPortalLink` as public paths — a schema leaking into an address
+bar, produced by following the rule rather than breaking it. GLOSSARY §7 now
+supersedes those two words and nothing else. The vocabulary exists to keep
+ambiguity out of the codebase, not to choose the lab's URLs.
+
+The route count was the second. T02 enumerated 12 patterns and 24 URLs honestly
+against the phase map's unenumerated 13, and reported the difference — but the
+enumeration itself omitted a `Programme` detail route, which the search feature
+in the same document needed somewhere to land. An honest count of an incomplete
+set is still an incomplete set. Real figures: 12 static, 1 dynamic, 42 rendered
+URLs.
+
+The clinical flag closed the last gap. PR-08 holds LabTest material behind a
+flag, but T02's search index was specified as a build artefact with no flag
+condition, so the flag would have hidden a listing while a static JSON file
+served all 72 unsigned LabTest names to anyone who requested it. A flag that
+does not gate the artefact is not a flag. §3f now emits no index at all while
+the flag is off, which makes P04 conditional on the lab's sign-off rather than
+on P04's own completion — landed as CF-22, and the phase map now says so.
+

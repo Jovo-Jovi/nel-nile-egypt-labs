@@ -28,14 +28,16 @@ not authored.
 | — | Research evidence landed in `docs/research/` (12 files) | — | |
 | — | Seed verified: `python data/seed/verify_seed.py` → `121 -> 72`, PASS | — | |
 | P00-T01-R | Gate-0 seeded pair audited, amended and FROZEN — `GLOSSARY.md` · `BOUNDARY_MODEL.md`. Merged to `main` as PR #1 (`94642db`, includes `7843267`) | merged | 2026-08-25 |
-| P00-T02 | `DECISIONS.md` (D-01..D-19, OD-01..OD-03) and `CONTENT_MODEL.md` authored. CF-16 closed. Route enumeration: 12 patterns, 24 locale-prefixed URLs | pending | 2026-08-25 |
+| P00-T02 | `DECISIONS.md` (D-01..D-19, OD-01..OD-03) and `CONTENT_MODEL.md` authored. CF-16 closed. Route enumeration stated 12 patterns / 24 URLs — **superseded by T02-A** | superseded | 2026-08-25 |
+| P00-T02-A | Three defects closed: `ProgrammeLabTest` eligibility, `sourceName` preservation, `Offer` currency. `GLOSSARY` §7 supersedes "route segments" in §6. Routes re-enumerated to 12 static + 1 dynamic = 42 URLs. §3f gated on the PR-08 clinical flag | pending | 2026-08-25 |
 
 ## Next action
 
 **P01-T03 — schema.**
 
-Gate-0 blocking set: `PRODUCT_BRIEF` · `GLOSSARY` **frozen** · `SCOPE` ·
-`DECISIONS` **authored** · `CONTENT_MODEL` **authored** · `BOUNDARY_MODEL` **frozen**.
+Gate-0 blocking set: `PRODUCT_BRIEF` · `GLOSSARY` **frozen, §6 superseded in part** ·
+`SCOPE` · `DECISIONS` **authored** · `CONTENT_MODEL` **authored and amended** ·
+`BOUNDARY_MODEL` **frozen**.
 
 ---
 
@@ -45,15 +47,17 @@ Computed by:
 `Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
 
 **Open:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
-CF-10 · CF-11 · CF-14 · CF-15 · CF-17 · CF-18
-**Closed 25 Aug 2026 by decision:** CF-12 (`ProgrammeTier` — two axes) ·
-CF-13 (`ResultsPortalLink` — build-time constant, host allowlisted) ·
-CF-16 (`CONTENT_MODEL` carries D-05 and D-07; GLOSSARY §2 deferrals closed)
+CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22
+**Closed 25 Aug 2026:** CF-12 (`ProgrammeTier` — two axes) · CF-13
+(`ResultsPortalLink` — build-time constant) · CF-15 (route and module
+enumerations final at T02-A) · CF-16 (`CONTENT_MODEL` carries D-05 and D-07) ·
+CF-19 (`ProgrammeLabTest` eligibility) · CF-20 (`sourceName` preserved) ·
+CF-21 (`Offer` currency) · CF-23 (`Branch` field names canonical)
 
-CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by
-the lab. CF-15 remains OPEN pending reviewer close: the enumeration has landed
-in `CONTENT_MODEL.md` §3c and §3d; STEP 8 of T02 did not authorise closing it.
-CF-17 and CF-18 are quotation amendments.
+CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
+lab. CF-17 and CF-18 are quotation amendments. **CF-22 is the live sequencing
+risk:** P04 search cannot ship until the lab's clinical sign-off opens the
+PR-08 flag.
 
 ## Open ODs required before P01
 
@@ -61,7 +65,8 @@ CF-17 and CF-18 are quotation amendments.
   regions by CLI at project creation, select the nearest to Cairo, record the
   CLI output in `DECISIONS.md`. Do not assume a Middle East region exists.
 - **OD-02 — search architecture.** DECIDED: static index, client-side, both
-  locales. Shape in `CONTENT_MODEL.md` §3f.
+  locales, emitted only behind the PR-08 clinical flag. Shape in
+  `CONTENT_MODEL.md` §3f.
 
 ## Phase map
 
@@ -70,8 +75,8 @@ CF-17 and CF-18 are quotation amendments.
 | P00 | Prepare — docs, ODs, seed verified, clinical QA dispatch deferred (D-19) | G0 quotation signed, or OD-03 in force | — |
 | P01 | Foundation — repo, CI, schema, RLS, Auth, MFA, seed import | G1 | Boundary |
 | P02 | Design system — tokens, RTL primitives, lint rules | G2 | — |
-| P03 | Public site — 12 static route patterns, 24 locale-prefixed URLs, enumerated in `CONTENT_MODEL.md` §3c, both locales | G3 | Boundary · Bilingual |
-| P04 | LabTest search — static index, bilingual aliases | G4 | Data integrity · Bilingual |
+| P03 | Public site — 12 static + 1 dynamic route patterns, 42 rendered URLs, enumerated in `CONTENT_MODEL.md` §3c, both locales | G3 | Boundary · Bilingual |
+| P04 | LabTest search — static index, bilingual aliases. **Gated on clinical sign-off (CF-22)**: no index artefact is emitted while the PR-08 flag is off | G4 | **Clinical** · Data integrity · Bilingual |
 | P05 | Admin dashboard — 8 modules enumerated in `CONTENT_MODEL.md` §3d, Operator accounts | G5 | Boundary · Bilingual |
 | P06 | Content & Arabic — translation, entry, clinical sign-off | G6 | **Clinical** · Bilingual |
 | P07 | Hardening & cutover — headers, DNS, redirects, decommission | G7 launch | **Clinical** · **Boundary** · Bilingual · Data integrity |

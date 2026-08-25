@@ -1,7 +1,9 @@
 # NEL — Content Model
 
-**Status:** AUTHORED at P00-T02 · 2026-08-25
-**Vocabulary:** frozen `GLOSSARY.md` · 2026-08-25. Every entity below is PascalCase and exact.
+**Status:** AUTHORED at P00-T02 · 2026-08-25 · AMENDED at P00-T02-A · 2026-08-25
+**Vocabulary:** frozen `GLOSSARY.md` · 2026-08-25, as superseded in part by its §7.
+Every entity below is PascalCase and exact. Public path segments are Visitor-facing
+strings governed by §3c, not identifiers — see `GLOSSARY.md` §7.
 **Decisions this file records:** D-03, D-04, D-05, D-06, D-07, D-13, D-14, D-15, D-16, D-18.
 
 Totals stated in this file are enumerated in the sections that follow and are verified programmatically before landing (PR-01). Seed cardinalities (9 Programmes, 72 LabTests, 121 relationships) are computed from `data/seed/catalogue.json`, not re-derived by hand.
@@ -44,19 +46,34 @@ Fourteen entities. Visitor-facing strings on every persisted entity that has any
 
 ### Fields
 
-**`Programme`.** `slug` (data identity, not a public route segment at this enumeration) · `name_ar` · `name_en` · `description_ar` · `description_en` · `preparationNotes_ar` · `preparationNotes_en` · `published` · `displayOrder`. No price.
+**`Programme`.** `slug` (data identity, and a public path segment under §3c) · `name_ar` · `name_en` · `description_ar` · `description_en` · `preparationNotes_ar` · `preparationNotes_en` · `published` · `displayOrder`. No price.
 
 **`ProgrammeTier`.** `ProgrammeTierAxis` (`none` \| `Silver` \| `Gold` \| `Platinum` \| `Children`) · `AudienceAxis` (`none` \| `Male` \| `Female`) · `displayOrder`. Belongs to one `Programme`.
 
-**`ProgrammeLabTest`.** `displayOrder`. Belongs to one `ProgrammeTier` and one `LabTest`. Seed storage is delta membership: Gold stores Gold-only rows, not the Silver rows the renderer will union in.
+**`ProgrammeLabTest`.** `displayOrder` · `sourceName` · `eligibility`. Belongs to one `ProgrammeTier` and one `LabTest`. Seed storage is delta membership: Gold stores Gold-only rows, not the Silver rows the renderer will union in.
+
+`sourceName` holds the seed's `source_name` string verbatim, byte for byte, including its spelling and its qualifier wording. Internal, never Visitor-facing. The clinical gate checks the lab's corrections against what the source said, and a string we did not keep cannot be checked.
+
+`eligibility` is a structured qualifier, never free text. Three parts: `audience` (`all` \| `male` \| `female`) · `minAge` (nullable integer) · `note_ar` / `note_en`, the Visitor-facing wording. `minAge` is descriptive and reaches the Visitor only through the note; the platform never asks a Visitor for an age, and no age is stored (`BOUNDARY_MODEL.md` §2).
+
+Four seed rows carry a qualifier inside `sourceName`, computed by matching `/male|female|both|only|>/i` against `programme_tests[].source_name` in `data/seed/catalogue.json`. They map as follows.
+
+| `Programme` | Seed tier | `LabTest` | `sourceName` verbatim | `audience` | `minAge` |
+|---|---|---|---|---|---|
+| General Checkup | `Silver` | `psa` | `PSA Total (male>45only)` | `male` | 45 |
+| General Checkup | `Platinum — Male` | `psa` | `PSA(total & Free)for male>45 year only` | `male` | 45 |
+| Pre-Marital | `''` | `semen-analysis` | `Semen Analysis (Males)` | `male` | null |
+| Pre-Marital | `''` | `genetic-counselling` | `Genetic Counseling (Both)` | `all` | null |
+
+The remaining 117 rows default to `audience` = `all`, `minAge` = null, no note. No qualifier is inferred for a row the seed does not qualify.
 
 **`LabTest`.** `slug` · `name_ar` · `name_en` · `aliases` (both locales, one list) · `qaFlag` (internal; never Visitor-facing). `name_ar` is empty on all seventy-two seed rows (CF-14). Material ships behind a feature flag (D-19 / PR-08).
 
 **`LabUnit`.** `name_ar` · `name_en` · `description_ar` · `description_en` · `published` · `displayOrder`. Optional `MediaAsset`.
 
-**`Branch`.** `name_ar` · `name_en` · `isHeadOffice` · address · phone · working hours · map coordinates · `published` · `displayOrder`. Optional `MediaAsset`. Published business data lives here, never as a literal in application source (PR-16).
+**`Branch`.** `name_ar` · `name_en` · `isHeadOffice` · `addressLine_ar` · `addressLine_en` · `phone` · `workingHours` · `latitude` · `longitude` · `published` · `displayOrder`. Optional `MediaAsset`. `workingHours` is a structured value rendered by locale formatting, not a translated string. Published business data lives here, never as a literal in application source (PR-16).
 
-**`Offer`.** `title_ar` · `title_en` · `description_ar` · `description_en` · `validFrom` · `validUntil` · `priceAmount` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Programme` (D-18).
+**`Offer`.** `title_ar` · `title_en` · `description_ar` · `description_en` · `validFrom` · `validUntil` · `priceAmount` · `priceCurrency` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Programme` (D-18). `priceCurrency` is stored per `Offer`. No currency is hardcoded in application source, and none is named in this document.
 
 **`Equipment`.** `name_ar` · `name_en` · `description_ar` · `description_en` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Video`.
 
@@ -123,39 +140,61 @@ A renderer given a `Programme` and a selected (`ProgrammeTierAxis`, `AudienceAxi
    - If the selection is `Gold` or `Platinum`, union membership whose `ProgrammeTierAxis` is `Gold`.
    - If the selection is `Platinum`, union membership whose `ProgrammeTierAxis` is `Platinum` and whose `AudienceAxis` matches the selected `AudienceAxis`.
 3. If `ProgrammeTierAxis` is `none`: return membership whose `ProgrammeTierAxis` is `none` and whose `AudienceAxis` matches the selected `AudienceAxis` (`Male`, `Female`, or `none`). No cumulation.
+4. **Eligibility filter.** Apply to the set produced by step 2 or step 3, after the union. Step 1 returns before this step and is not governed by it. For each row in the set, read `eligibility.audience`:
+   - `all` — the row always renders. No note.
+   - `male` or `female`, and the selected `AudienceAxis` is `Male` or `Female` — the row renders if the two match, and is **excluded from the rendered set** if they do not. An excluded row is removed, not annotated, not greyed, not shown with a caveat.
+   - `male` or `female`, and the selected `AudienceAxis` is `none` — the row renders **with its `note_ar` / `note_en` shown inline**, in the active locale. It is not silently dropped and it is not silently shown bare.
 
 **Hard constraint — Children is standalone.** Step 1 is not a display preference and is not a configuration flag. Reason: Silver membership includes PSA (source wording "PSA Total (male>45only)"); Platinum — Female membership is seven tumour markers (CEA, CA 15.3, CA 125, APP, CA 242, CA 19.9, NSE). A cumulative Children slot would render PSA and those seven tumour markers on a child's page. That is a harm vector (D-06).
+
+**Hard constraint — the eligibility filter is not cosmetic.** PSA is carried by Silver. Silver unions into Gold, and Silver unions into Platinum. Without step 4 the renderer shows a prostate marker to every Visitor selecting Gold, and to every Visitor selecting Platinum — Female. That is the same harm class as the Children constraint, reached by a different route: not an inherited slot, but an inherited row inside a slot the Visitor did select. Step 4 is therefore a rendering constraint of the same rank as step 1, and neither is a configuration flag.
+
+**UNRATIFIED (PR-19).** The T02-A fence asked for the following figures to be *reported*, not landed in this document. They are landed here because a rule whose output is written down can be checked by the next reader, and every cell is verified against `data/seed/catalogue.json` before landing (PR-01). The reviewer ratifies or reverts this table at verdict. Nothing else in §3b depends on it.
+
+| Selection | Rendered size | `psa` rendered |
+|---|---|---|
+| `Silver` / `none` | 13 | yes, with its note |
+| `Gold` / `none` | 21 | yes, with its note |
+| `Platinum` / `Female` | 27 | no — excluded by step 4 |
+| `Platinum` / `Male` | 26 | yes |
+| `Children` / `none` | 13 | no — never unioned |
 
 ---
 
 ## 3c. Route enumeration
 
-Public routes only. The Operator dashboard is not public and is not counted here. FAQ is optional in the draft quotation if copy is supplied; no OD includes it; it is not a route. Search is a client-side index (D-03) on the `Programme` listing, not a route. Entity `slug` values are data identity; they are not public dynamic segments at this enumeration. The phase-map claim of 13 is not authoritative (PR-01).
+Public routes only. The Operator dashboard is not public and is not counted here. FAQ is optional in the draft quotation if copy is supplied; no OD includes it; it is not a route. The phase-map claim of 13 is not authoritative (PR-01).
 
-Locale segment `{locale}` is `ar` or `en`. Arabic is default: the unprefixed `/` redirects onto `ar` and is not a content route.
+Path segments below are Visitor-facing strings, not identifiers. They are governed by this mapping table and by `GLOSSARY.md` §7, which supersedes the words "route segments" in §6. Every segment is lowercase-kebab. Locale segment `{locale}` is `ar` or `en`.
 
-| # | Kind | Pattern | Page |
-|---|---|---|---|
-| 1 | static | `/{locale}` | Home |
-| 2 | static | `/{locale}/about` | About |
-| 3 | static | `/{locale}/LabUnit` | `LabUnit` listing |
-| 4 | static | `/{locale}/Programme` | `Programme` listing, and the search UI |
-| 5 | static | `/{locale}/Offer` | `Offer` listing |
-| 6 | static | `/{locale}/Video` | `Video` listing |
-| 7 | static | `/{locale}/Equipment` | `Equipment` listing |
-| 8 | static | `/{locale}/Branch` | `Branch` listing |
-| 9 | static | `/{locale}/contact` | Contact — WhatsApp deep link, no form |
-| 10 | static | `/{locale}/ResultsPortalLink` | Outbound portal page (D-14) |
-| 11 | static | `/{locale}/privacy-policy` | Privacy Policy (D-13) |
-| 12 | static | `/{locale}/lab-to-lab` | Lab-to-Lab copy from `SiteSettings` (D-15) |
+| # | Kind | Pattern | Entity | Page |
+|---|---|---|---|---|
+| — | redirect | `/` | — | Redirects to `/ar`. Arabic is default. Renders no content. |
+| 1 | static | `/{locale}` | — | Home |
+| 2 | static | `/{locale}/about` | `SiteSettings` | About |
+| 3 | static | `/{locale}/departments` | `LabUnit` | `LabUnit` listing |
+| 4 | static | `/{locale}/programmes` | `Programme` | `Programme` listing, and the search UI |
+| 5 | static | `/{locale}/offers` | `Offer` | `Offer` listing |
+| 6 | static | `/{locale}/videos` | `Video` | `Video` listing |
+| 7 | static | `/{locale}/equipment` | `Equipment` | `Equipment` listing |
+| 8 | static | `/{locale}/locations` | `Branch` | `Branch` listing |
+| 9 | static | `/{locale}/contact` | `SiteSettings` | Contact — WhatsApp deep link, no form |
+| 10 | static | `/{locale}/online-results` | `ResultsPortalLink` | Outbound portal page (D-14) |
+| 11 | static | `/{locale}/privacy-policy` | `SiteSettings` | Privacy Policy (D-13) |
+| 12 | static | `/{locale}/lab-to-lab` | `SiteSettings` | Lab-to-Lab copy (D-15) |
+| 13 | dynamic | `/{locale}/programmes/{slug}` | `Programme` | One detail page per `Programme` |
 
-Dynamic public segments: none.
+`{slug}` is `Programme.slug`, which is now a public path segment and no longer data identity only. Slugs are Latin in both locales: the Arabic page at `/ar/programmes/kidney-profile` carries the same slug as the English one. A slug is not a translated string, so no Arabic slug set exists and none is authored.
 
-**Pattern count:** 12.
+**Static pattern count:** 12.
+**Dynamic pattern count:** 1.
 **Locales:** 2 (`ar`, `en`).
-**Rendered URL count:** 12 × 2 = 24.
+**Programmes:** 9, computed from `data/seed/catalogue.json`.
+**Rendered URL count:** static 12 × 2 = 24 · dynamic 9 × 2 = 18 · **total 42.**
 
-This differs from the phase-map claim of 13. The difference is FAQ, which is not a route. `SESSION_CONTEXT.md` is amended to match this enumeration.
+The `/` redirect is locale-agnostic, exists once, and renders no content, so it is not among the 42.
+
+This differs from the phase-map claim of 13, and from the 24 this document stated at 3bf5dd2. The 13 was never enumerated. The 24 omitted the `Programme` detail route entirely. `SESSION_CONTEXT.md` is amended to 42.
 
 ---
 
@@ -193,6 +232,10 @@ Operator UI language is not decided here.
 
 Built at build time. Queried client-side. No server round trip (D-03). One record per `LabTest`.
 
+**The index is gated by the PR-08 clinical flag.** The build emits the index only when the `LabTest` flag is on. With the flag off, no index artefact is emitted at all — not an empty one, not a partial one — and the search UI does not render on `/{locale}/programmes`. A flag that hides a listing while a static file serves the same names is not a flag: the artefact is fetchable, and a `LabTest` name that has not been signed off would be published by anyone who requested it directly.
+
+**P04 consequence, stated plainly.** Search does not ship until the lab's written clinical sign-off lands. P04 must be sequenced after sign-off, or shipped dark behind the same flag and opened when sign-off arrives. It cannot be sequenced as though the flag were a display toggle. Tracked as a carry-forward owned by the reviewer.
+
 | Field | Locales | Source |
 |---|---|---|
 | `slug` | — | `LabTest.slug` |
@@ -201,7 +244,9 @@ Built at build time. Queried client-side. No server round trip (D-03). One recor
 | `aliases` | `ar` and `en`, one list | `LabTest.aliases` |
 | `membership` | — | Distinct `Programme.slug` values reached through `ProgrammeLabTest` / `ProgrammeTier`, any axis |
 
-A query matches `name_en`, `name_ar`, and every alias. A hit returns the `LabTest` and the Programmes that contain it. The Visitor proceeds to a WhatsApp deep link, not to a `Programme` detail route (none exists at this enumeration). The index is a build artefact, not a public route.
+A query matches `name_en`, `name_ar`, and every alias. A hit returns the `LabTest` and the Programmes that contain it.
+
+**Where a hit lands.** A hit lands on `/{locale}/programmes/{slug}`, the detail route added in §3c, one link per `Programme` in `membership`. The WhatsApp deep link remains available from that page and from `/{locale}/contact`; it is no longer the only destination a hit can offer. The index itself is a build artefact, not a public route.
 
 ---
 
