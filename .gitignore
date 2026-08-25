@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+dist/
+build/
+
+# Environment variables — never commit, populated or empty
+.env
+.env.*
+
+# Vercel
+.vercel/
+
+# Supabase local/CLI state
+supabase/.temp/
+supabase/.branches/
+
+# Logs
+*.log
+
+# OS artefacts
+.DS_Store
+Thumbs.db
