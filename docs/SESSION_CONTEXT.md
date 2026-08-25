@@ -24,17 +24,30 @@ quotation is signed, no build task is issued. Document-authoring tasks may run.
 | — | Repo scaffolded from bootstrap | — | |
 | — | Research evidence landed in `docs/research/` (12 files) | — | |
 | — | Seed verified: `python data/seed/verify_seed.py` → `121 -> 72`, PASS | — | |
+| P00-T01 | Gate-0 seeded pair audited, amended and FROZEN — `GLOSSARY.md` · `BOUNDARY_MODEL.md`. Halted once at 4b on a reviewer anchor defect; reissued as T01-R | pending | 2026-08-25 |
 
 ## Next action
 
-**P00-T01 — author the Gate-0 document set.**
-Blocking set: `PRODUCT_BRIEF` · `GLOSSARY` (seeded) · `SCOPE` · `DECISIONS` ·
-`CONTENT_MODEL` · `BOUNDARY_MODEL` (seeded). Four to author, two to review.
+**P00-T02 — author `CONTENT_MODEL.md`.**
+Enumerates the P03 route set and the P05 module set, neither of which has ever
+been enumerated (CF-15). Records the CF-12 and CF-13 decisions and supersedes the
+two `GLOSSARY` §2 cells left stale by them (CF-16).
+
+Gate-0 blocking set: `PRODUCT_BRIEF` · `GLOSSARY` **frozen** · `SCOPE` ·
+`DECISIONS` · `CONTENT_MODEL` · `BOUNDARY_MODEL` **frozen**.
 
 ## Open carry-forwards
 
-CF-01 … CF-11 — all open. See `docs/method/CARRY_FORWARDS.md`.
-Every one is a client dependency, not a build defect.
+14 open, 2 closed, computed by:
+`Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
+
+**Open:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+CF-10 · CF-11 · CF-14 · CF-15 · CF-16
+**Closed 25 Aug 2026 by decision:** CF-12 (`ProgrammeTier` — two axes) ·
+CF-13 (`ResultsPortalLink` — build-time constant, host allowlisted)
+
+CF-01 to CF-11 are client dependencies. CF-14 is a bilingual content gap owned by
+the lab. CF-15 and CF-16 are method corrections owned by the reviewer.
 
 ## Open ODs required before P01
 
@@ -50,9 +63,9 @@ Every one is a client dependency, not a build defect.
 | P00 | Prepare — docs, ODs, seed verified, clinical QA dispatched | G0 quotation signed | — |
 | P01 | Foundation — repo, CI, schema, RLS, Auth, MFA, seed import | G1 | Boundary |
 | P02 | Design system — tokens, RTL primitives, lint rules | G2 | — |
-| P03 | Public site — 13 routes, both locales | G3 | Boundary · Bilingual |
+| P03 | Public site — route set asserted as 13, never enumerated (CF-15), both locales | G3 | Boundary · Bilingual |
 | P04 | LabTest search — static index, bilingual aliases | G4 | Data integrity · Bilingual |
-| P05 | Admin dashboard — 8 modules, Operator accounts | G5 | Boundary · Bilingual |
+| P05 | Admin dashboard — module set asserted as 8, never enumerated (CF-15), Operator accounts | G5 | Boundary · Bilingual |
 | P06 | Content & Arabic — translation, entry, clinical sign-off | G6 | **Clinical** · Bilingual |
 | P07 | Hardening & cutover — headers, DNS, redirects, decommission | G7 launch | **Clinical** · **Boundary** · Bilingual · Data integrity |
 
