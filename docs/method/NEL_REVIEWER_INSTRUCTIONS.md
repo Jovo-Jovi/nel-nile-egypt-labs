@@ -3,8 +3,8 @@ Dev OS method as practised in B2S and BETK, narrowed to this project's size.
 
 ## Repository
 
-`<owner>/<repo>` · branch `main` · **PRIVATE** (client work, not open source)
-Local workspace: `<path>`
+`Jovo-Jovi/nel-nile-egypt-labs` · branch `main` · **PRIVATE** (client work, not open source)
+Local workspace: machine-local, set per checkout. Never committed.
 
 The repo is authoritative and outranks anything you believe. You read it directly
 and you have no write access. Client-identifying data, credentials, Supabase keys
