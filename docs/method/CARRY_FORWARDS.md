@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-28**
+**Next free id: CF-33**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -33,6 +33,11 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-25 | `eligibility.note_ar` / `note_en` are unauthored for the three audience-restricted `ProgrammeLabTest` rows. Any wording would derive from unverified 2018 source under PR-09, including the age threshold of 45, which is not ours to publish. Rides the clinical gate | Lab clinical staff | OPEN | P06 / G6 — rides the clinical gate |
 | CF-26 | `CONTENT_MODEL` §3c prose asserts a difference from the phase-map claim of 13 that does not exist: 12 static plus 1 dynamic is 13 patterns. The 42 is a different unit — rendered URLs across both locales, not patterns | Reviewer | OPEN | P01-T03 STEP 0b |
 | CF-27 | `DEVOS_ADAPTATION_NOTES` §5 omits Clinical from P04's non-waivable set and now disagrees with `SESSION_CONTEXT`, which carries it. The search index is a build artefact carrying `LabTest` names, so the clinical gate has always bound P04 | Reviewer | OPEN | P01-T03 STEP 0d |
+| CF-28 | Repository made public 25 Aug 2026 for review convenience (OD-04). Client consent to publication is not evidenced anywhere in the repo. Reverts to private before production cutover; the revert is a G7 checklist item. | human | OPEN | P07 / G7 |
+| CF-29 | PR-16's permitted-homes ruling assumed a private repo. Re-cut at T03V: permitted homes unchanged, ban on application source unchanged, new clause on third-party operational weakness assessments. | reviewer | CLOSED at T03V | `PRECEDENTS.md` (PR-16) at T03V |
+| CF-30 | No .gitignore existed in the repository through 45ef104, with the repo public and an npm toolchain pending. Landed at T03V. | builder | CLOSED at T03V | `.gitignore` at T03V |
+| CF-31 | SESSION_CONTEXT.md drifted from CARRY_FORWARDS.md and from merged PR #3/#4 — phase, gate, done-steps verdicts and open-CF list all disagreed. Regenerated at T03V. Root cause: no task regenerated it after T02-A or T02-H. | reviewer | CLOSED at T03V | `SESSION_CONTEXT.md` at T03V |
+| CF-32 | An operational weakness assessment of the third-party results portal was published in two tracked files. Struck at T03V under OD-04 condition 2; the assessment is already public in history at 45ef104 and is not retractable by a later commit. | reviewer | CLOSED at T03V | `BOUNDARY_MODEL.md` / `CARRY_FORWARDS.md` at T03V |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
