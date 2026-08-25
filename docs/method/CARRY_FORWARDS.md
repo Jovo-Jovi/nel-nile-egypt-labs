@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-12**
+**Next free id: CF-17**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -16,7 +16,14 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-08 | YouTube channel `@nileegyptlabs` created Jan 2025 but has zero public videos, despite the client confirming videos are ready | Client | OPEN | P06 |
 | CF-09 | Hotline 16402 still published on ≥4 third-party directories; 15504 is the chosen number | Excluded from scope — propose as paid add-on | OPEN | P07 |
 | CF-10 | Three duplicate Facebook pages fragment their local presence | Excluded from scope — propose as paid add-on | OPEN | P07 |
-| CF-11 | Results portal TLS certificate expires **28 Oct 2026**, inside the project window, with no support contract in place | Client — written reminder filed | OPEN | P07 |
+| CF-11 | Results portal TLS certificate expires **28 Oct 2026**, inside the project window, with no support contract in place. Risk accepted by client decision, 25 Aug 2026. No written notice sent to the client. | Client — written reminder filed internally, not sent | OPEN | P07 |
+| CF-12 | `ProgrammeTier` modelling — CLOSED on decision of 25 Aug 2026: two axes, tier (Silver/Gold/Platinum/Children) and audience (none/Male/Female) | Reviewer | CLOSED | `CONTENT_MODEL` at T02 |
+| CF-13 | `ResultsPortalLink` target — CLOSED on decision of 25 Aug 2026: build-time constant, host allowlisted, no Operator edit path | Reviewer | CLOSED | `CONTENT_MODEL` at T02 |
+| CF-14 | All 72 `LabTest` `name_ar` values empty; 12 carry no Arabic alias — bilingual gap blocking P04 and P06 | Lab, then Opus Max translation | OPEN | P06 / G6 |
+| CF-15 | P03 route count and P05 module count asserted, never enumerated — violates PR-01 wherever repeated | Reviewer — enumerates in `CONTENT_MODEL` | OPEN | `CONTENT_MODEL` at T02 |
+| CF-16 | `GLOSSARY` §2 records the `ProgrammeTier` axis question and the `ResultsPortalLink` target as "NOT decided here"; CF-12 and CF-13 decided both on 25 Aug 2026. The frozen text is stale on arrival — supersede when `CONTENT_MODEL` records the decisions | Reviewer | OPEN | `CONTENT_MODEL` at T02 |
 
-**Note:** every row is a client dependency rather than a build defect. The
-engineering is well defined; the risk sits almost entirely outside the repo.
+**Note:** CF-01 to CF-11 are client dependencies rather than build defects.
+CF-14, CF-15 and CF-16 are owned inside the project — a bilingual content gap
+and two method corrections. The engineering is well defined; the client-side
+risk still sits largely outside the repo.
