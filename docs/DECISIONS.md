@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Nineteen decisions. Three of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03). A decision is in force when it appears here. Conversation does not amend this file.
+Twenty decisions. Four of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04). A decision is in force when it appears here. Conversation does not amend this file. *(Count updated for D-20/OD-04 — UNRATIFIED residual repair, PR-19, landed at T03V. Not quoted in the T03V fence; PR-15 obliged the repair to avoid a self-contradicting document.)*
 
 ---
 
@@ -31,6 +31,30 @@ Nineteen decisions. Three of them are filed as formal Operational Decisions (OD-
 **Lapses:** 15 September 2026 if no signed quotation is filed.
 **Decides:** development proceeds against the draft quotation as amended by this OD and by D-01 through D-19. `SCOPE.md` still derives from a signed quotation; until that quotation is filed, this OD is the freeze.
 **On lapse:** if 15 September 2026 arrives with no signed quotation, this OD expires and no further build task is issued until a new freeze is signed.
+
+### OD-04 — Repository visibility
+
+**Status:** SIGNED
+**Signed:** 25 August 2026
+**Decides:** the repository is PUBLIC during development, for review
+convenience, and reverts to PRIVATE before production cutover.
+**Reverts when:** at P07, before DNS cutover. The revert is a G7 checklist
+item. Until it is done, G7 does not pass.
+**Conditions, binding while public:**
+1. No credential, key, token, project ref or connection string in any
+   commit. PR-10 stands; the exposure window is now immediate rather than
+   theoretical.
+2. No operational weakness assessment of a third-party system in any tracked
+   file. The dependency is tracked; the assessment lives in client
+   correspondence.
+3. No CI trigger that runs fork-supplied code with repository context.
+4. The clinical QA flags are unconfirmed readings of a public 2018 page, not
+   assertions of clinical error, and every file carrying them says so.
+**Not decided here:** whether the client consented to publication. That
+question is open and is tracked as a carry-forward owned by the human.
+**Known limit:** anything already pushed at `45ef104` is already public.
+This OD governs forward state only. Removing published history requires a
+rewrite and a force-push and is not authorised by this OD.
 
 ---
 
@@ -111,3 +135,7 @@ Optional nullable relation. An `Offer` may reference one `Programme`; it is neve
 ### D-19 — Clinical QA dispatch
 
 Deferred by client decision, 25 August 2026. PR-08 holds: `LabTest` material ships behind a feature flag and Programmes render descriptions only. The gate binds release, not development. This becomes critical path the moment a launch date is agreed, and the dispatch date is then derived by working backwards from it.
+
+### D-20 — Repository visibility
+
+OD-04, signed 25 August 2026. The repository is PUBLIC during development, for review convenience, and reverts to PRIVATE before production cutover — the revert is a G7 checklist item.

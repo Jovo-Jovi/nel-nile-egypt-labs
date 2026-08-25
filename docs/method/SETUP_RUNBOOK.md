@@ -11,7 +11,8 @@ and bash alike (PR-07).
 
 ## Step 1 — Create the repo
 
-On GitHub: new repository, **Private**, name `nel-nile-egypt-labs`.
+On GitHub: new repository, **Public** (see OD-04 — reverts to private
+before production cutover), name `nel-nile-egypt-labs`.
 No README, no .gitignore, no licence — the scaffold brings its own.
 
 Then locally:
@@ -164,11 +165,11 @@ Start a new chat in that project and paste the block in Section A below.
 ```
 Session start. NEL — Nile Egypt Labs, Dev OS reviewer surface.
 
-Repo: https://github.com/<you>/nel-nile-egypt-labs · branch main · PRIVATE
+Repo: https://github.com/<you>/nel-nile-egypt-labs · branch main · PUBLIC under OD-04
 Local: <path>
 
-The repo is private, so you cannot fetch it. State is pasted this session — say
-so in your verdict. Pasted below: SESSION_CONTEXT.md and PRECEDENTS.md.
+The repo is public. Clone it and read it directly; pasting state is a
+network-failure fallback only.
 
 --- docs/SESSION_CONTEXT.md ---
 <paste the whole file>

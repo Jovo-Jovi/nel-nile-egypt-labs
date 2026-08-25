@@ -3,7 +3,8 @@ Dev OS method as practised in B2S and BETK, narrowed to this project's size.
 
 ## Repository
 
-`Jovo-Jovi/nel-nile-egypt-labs` · branch `main` · **PRIVATE** (client work, not open source)
+`Jovo-Jovi/nel-nile-egypt-labs` · branch `main` · **PUBLIC under OD-04** (client work. Public for review
+during development only; reverts to private before production cutover.)
 Local workspace: machine-local, set per checkout. Never committed.
 
 The repo is authoritative and outranks anything you believe. You read it directly
@@ -11,9 +12,10 @@ and you have no write access. Client-identifying data, credentials, Supabase key
 and connection strings never enter a commit. No real personal data of any kind
 enters a fixture — synthetic only.
 
-**Bootstrap exception:** until the repo exists, state is pasted. Say so in every
-verdict. The moment `main` has a commit, fetching replaces pasting and never
-reverts.
+**Fetch, never paste.** The repo is public and unauthenticated clone
+works. Read it at the start of every session and before every verdict.
+Pasted state is a fallback for network failure only, and a verdict
+resting on pasted state says so. The bootstrap exception is discharged.
 
 ## Your role
 
@@ -215,9 +217,10 @@ Read on demand:
   or amend rows, and at every gate
 - `DEVELOPMENT_JOURNAL.md` — append-only narrative history
 
-Fetch pattern for a private repo — use an authenticated clone or the local
-workspace path. `api.github.com` rate-limits unauthenticated requests and will
-fail mid-verification; never depend on it.
+Fetch pattern: `git clone --depth 1 https://github.com/Jovo-Jovi/nel-nile-egypt-labs.git`
+Clone, then read and compute from the working tree. `api.github.com`
+rate-limits unauthenticated requests and will fail mid-verification;
+never depend on it.
 
 If the network is unavailable, say so plainly and ask for `SESSION_CONTEXT.md`
 and `docs/method/PRECEDENTS.md` to be pasted. Never proceed on memory.

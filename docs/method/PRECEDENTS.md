@@ -4,7 +4,7 @@ Binding procedural rulings. Consult before re-deriving an established pattern.
 A precedent binds every prompt issued and every verdict returned. To change one,
 supersede it explicitly and name what it replaces. Never deviate silently.
 
-**Next free id: PR-20**
+**Next free id: PR-24**
 
 | Id | Ruling |
 |---|---|
@@ -27,3 +27,7 @@ supersede it explicitly and name what it replaces. Never deviate silently.
 | **PR-17** | **`docs/method/` holds method documents**; `PRECEDENTS.md` and `CARRY_FORWARDS.md` are the binding pair; `SESSION_CONTEXT.md` and `DEVELOPMENT_JOURNAL.md` live at `docs/`. No file is relocated. **Explicitly supersedes** the second clause of PR-13 (the clause that restricted `docs/method/` to binding procedural documents only). PR-13's first clause stands. |
 | **PR-18** | **Reviewer authority.** A reviewer ruling exists only if it is quoted verbatim inside a task fence or cited by PR-nn in this file. Nothing said in conversation is authority. The builder never attributes an edit to a ruling it cannot quote. An edit believed necessary but unlisted in the fence is a HALT — the builder does not make it and attribute it to the reviewer. |
 | **PR-19** | **Residual repair.** PR-15 obliges a HALT, never a repair. Where halting would strand the task, the builder MAY complete it and land the repair only if the row or edit is labelled UNRATIFIED in the file itself and listed under a RESIDUAL REPAIRS heading at the top of the report. The reviewer ratifies or reverts at verdict. An unratified repair is never described as authorised. |
+| **PR-20** | A connected MCP server is not authorisation. No tool in a provider namespace is called from a build fence unless that fence names the tool and the call. This includes read-only calls: a call that touches a cloud account can settle an open OD by side effect. Established by the P01-T03 halt, where the Supabase MCP server was connected and healthy and was correctly not called. |
+| **PR-21** | Amends PR-16 for a public repository. Permitted homes for published business data are unchanged — CARRY_FORWARDS.md and docs/research/. The ban on application source is unchanged. New clause: while the repository is public (OD-04), no operational weakness assessment of a third-party system appears in any tracked file. The dependency is tracked; the assessment lives in client correspondence. PR-16 is amended, not superseded; its redaction clause stands. |
+| **PR-22** | A fence whose commands require an artefact must name the task that landed that artefact. Absent that, the builder halts at precondition, not at the step that trips. Established by the P01-T03 halt, issued into a repository with no build. |
+| **PR-23** | Public-repository standing rules (OD-04). No credential, key, token, project ref or connection string in any commit — the exposure window is immediate. No CI trigger that runs fork-supplied code with repository context: pull_request_target is forbidden, and no workflow reads a secret on a fork-originated event. Anything already pushed is already public and a later commit does not unpublish it. The revert to private is a G7 checklist item, not a courtesy. |

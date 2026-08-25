@@ -1,5 +1,11 @@
 # Client outbound
 
+> **Public repository (OD-04).** The `qa_flag` entries in the seed and the
+> rows in `client-outbound/` are unconfirmed readings of a public 2018 page
+> (PR-09). They are questions for the lab's clinical staff, not assertions
+> of clinical error, and none of them has been reviewed by the lab. Nothing
+> here reaches production before written clinical sign-off (PR-08).
+
 **Not build inputs.** These are questions, not data. Nothing here is imported.
 
 ## `qa-missing-tests.csv`
