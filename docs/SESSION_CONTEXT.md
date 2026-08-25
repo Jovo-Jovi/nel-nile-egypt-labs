@@ -6,7 +6,7 @@
 **Project:** NEL — Nile Egypt Labs website rebuild
 **Phase:** P00 — Prepare
 **Gate:** G0 — not reached
-**Repo:** `<owner>/<repo>` · branch `main` · PRIVATE
+**Repo:** `Jovo-Jovi/nel-nile-egypt-labs` · branch `main` · PRIVATE
 
 ---
 
