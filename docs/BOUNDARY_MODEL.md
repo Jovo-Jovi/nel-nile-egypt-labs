@@ -2,6 +2,7 @@
 
 **Status:** FROZEN at P00-T01 · 2026-08-25 · amend only by explicit supersession
 **Gate:** Boundary — **non-waivable**, cannot be overridden by OD
+**Amended under OD-04 · 25 August 2026 · §3 only.**
 
 ## §1 What this replaces
 
@@ -31,8 +32,8 @@ identified by the August 2026 audit as the patient-data surface. It is linked an
 nothing more. Any modification, assessment or integration requires separate
 written scope and authorisation.
 
-Its TLS certificate expires **28 October 2026** — inside the project window, with
-no support contract in place. Tracked in CARRY_FORWARDS.md as the
+Its TLS certificate expires **28 October 2026** — inside the project window.
+Tracked in CARRY_FORWARDS.md as the
 results-portal certificate row (CF-11 at time of writing; the ledger is
 authoritative over this reference). Not our system; a failure there
 will nonetheless be attributed to the new site.
