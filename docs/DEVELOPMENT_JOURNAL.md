@@ -145,3 +145,49 @@ does not gate the artefact is not a flag. §3f now emits no index at all while
 the flag is off, which makes P04 conditional on the lab's sign-off rather than
 on P04's own completion — landed as CF-22, and the phase map now says so.
 
+---
+
+## 2026-08-25 — P00 branch set closed out (P00-T02-H)
+
+Three pull requests merged to `main`: #1 `p00-t01r-gate0-freeze`, #2
+`p00-t02-decisions-content-model`, #3 `p00-t02a-amend-content-model`.
+
+**#2 and #3 were both merged where #3 alone would have sufficed.** #3 was
+branched from #2, so #3 already carried every commit #2 carried. Merging both
+produced two merge commits — `c3b3a63` then `19a740a` — for one logical body of
+work. Nothing was lost and nothing was duplicated in the tree, but the history
+now records a redundant merge, and the reason is worth keeping: a task that
+amends the branch before it is a descendant, not a sibling, and only the tip
+needs merging.
+
+The containment proof, before anything was deleted:
+`git diff --stat 72bd32f origin/main` returns nothing, 0 lines. `main`'s tree is
+byte-identical to the last commit this project verified. All three merged
+branches return exit 0 from `git merge-base --is-ancestor <branch> origin/main`.
+The seed re-ran on `main` at `121 -> 72`, PASS. Both FROZEN markers survived,
+and all four T02-A markers are present on `main`.
+
+Three remote branches deleted with `-d` and `--delete`, never `-D` and never a
+force push. Their SHAs are recorded here so any of the three is recreatable by a
+single command:
+
+| Branch | SHA |
+|---|---|
+| `p00-t01r-gate0-freeze` | `78432675c8a73901e903934f1cffaadba018b12d` |
+| `p00-t02-decisions-content-model` | `3bf5dd2d7ed9c728362669ab0126e1b9e94ac892` |
+| `p00-t02a-amend-content-model` | `72bd32f191cb0faace19bbf51bfb519846504c8d` |
+
+A fourth branch, `p00-t01-gate0-freeze`, existed locally and was never pushed —
+the halted T01 run left it behind at `08c9551ba9ce9cd064d69386a5ba24a9fdfff4c6`.
+It was reported at the time as holding zero commits. It holds zero commits *that
+`main` does not already have*, which is why `-d` accepted it rather than
+refusing; the original report was imprecise rather than wrong.
+
+Four carry-forwards landed: CF-24 (GLOSSARY §7 does not reach framework-forced
+route directories), CF-25 (`eligibility` notes unauthored, rides the clinical
+gate), CF-26 (§3c prose claims a difference from 13 that does not exist — 12
+static plus 1 dynamic *is* 13 patterns), CF-27 (`DEVOS_ADAPTATION_NOTES` §5 omits
+Clinical from P04 and disagrees with `SESSION_CONTEXT`). Open count 15 → 19. The
+four document corrections themselves belong to P01-T03 STEP 0, not here. Phase
+state unchanged; next action remains P01-T03 schema.
+

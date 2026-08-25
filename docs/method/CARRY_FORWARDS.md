@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-24**
+**Next free id: CF-28**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -29,10 +29,17 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-21 | `Offer` carried `priceAmount` with no currency, which forces a hardcoded currency at render time. CLOSED at T02-A: `priceCurrency` added per `Offer`; no currency named in source or in the document | Builder | CLOSED | `CONTENT_MODEL` at T02-A |
 | CF-22 | P04 search cannot ship until the PR-08 clinical flag opens. The §3f index is emitted only with the flag on, so search is gated on the lab's written sign-off, not on P04 completion. P04 must be resequenced after sign-off or shipped dark behind the same flag — the phase map currently implies neither | Reviewer | OPEN | P04 sequencing |
 | CF-23 | `Branch` fields were listed in prose (address, phone, working hours, map coordinates) rather than as canonical code-spanned names, so no vocabulary scan could reach them. CLOSED at T02-A: `addressLine_ar` · `addressLine_en` · `phone` · `workingHours` · `latitude` · `longitude`. **Landed as a new row, not an amendment — no existing row covered `Branch` field naming. CF-04 and CF-05 cover Branch *data*, not field names. Deviation reported at T02-A** | Builder | CLOSED | `CONTENT_MODEL` at T02-A |
+| CF-24 | GLOSSARY §7 does not extend to framework-forced route files. §6 still binds source filenames under the application tree, and file-based routing requires directories named `online-results`, `programmes` and `offers` to serve the segments §3c prescribes. §7 rules the segment, not the file that produces it, so the two clauses meet head-on the moment the route tree is scaffolded | Reviewer | OPEN | P01-T03 STEP 0a |
+| CF-25 | `eligibility.note_ar` / `note_en` are unauthored for the three audience-restricted `ProgrammeLabTest` rows. Any wording would derive from unverified 2018 source under PR-09, including the age threshold of 45, which is not ours to publish. Rides the clinical gate | Lab clinical staff | OPEN | P06 / G6 — rides the clinical gate |
+| CF-26 | `CONTENT_MODEL` §3c prose asserts a difference from the phase-map claim of 13 that does not exist: 12 static plus 1 dynamic is 13 patterns. The 42 is a different unit — rendered URLs across both locales, not patterns | Reviewer | OPEN | P01-T03 STEP 0b |
+| CF-27 | `DEVOS_ADAPTATION_NOTES` §5 omits Clinical from P04's non-waivable set and now disagrees with `SESSION_CONTEXT`, which carries it. The search index is a build artefact carrying `LabTest` names, so the clinical gate has always bound P04 | Reviewer | OPEN | P01-T03 STEP 0d |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
 amendments owned on this side of the table. CF-19 to CF-21 and CF-23 are
 build defects found and closed at T02-A. CF-22 is a sequencing consequence of
-the clinical gate and is owned by the reviewer. The engineering is well
-defined; the client-side risk still sits largely outside the repo.
+the clinical gate and is owned by the reviewer. CF-24, CF-26 and CF-27 are
+document corrections landed at T02-H and owned by the reviewer; each closes at
+a numbered P01-T03 STEP 0 sub-step. CF-25 rides the clinical gate with CF-01
+and CF-14. The engineering is well defined; the client-side risk still sits
+largely outside the repo.
