@@ -1,0 +1,35 @@
+---
+description: NEL bilingual and RTL rules
+globs: src/**/*.tsx,src/**/*.ts,src/**/*.css
+alwaysApply: false
+---
+
+# NEL — Bilingual & RTL
+
+Arabic is the default locale and renders RTL. English is served under `/en`.
+Bilingual is a **presentation-layer** concern: content carries `_ar` / `_en`
+fields; layout is direction-agnostic.
+
+## Non-negotiable
+
+- **Tailwind logical properties only.** `ps-` `pe-` `ms-` `me-` `start-` `end-`
+  `text-start` `text-end` `border-s` `border-e`.
+  **Never** `pl-` `pr-` `ml-` `mr-` `left-` `right-` `text-left` `text-right`.
+  This is lint-enforced. A physical property is a build failure, not a nit.
+- `dir` is set once on `<html>` from the active locale. Never patched onto
+  individual elements.
+- **Latin strings inside Arabic text need explicit bidi isolation.** URLs, test
+  abbreviations (`CBC`, `HbA1c`), phone numbers and email addresses inside an
+  Arabic paragraph will render wrong without it. This is the single most common
+  RTL defect in this project.
+- Numerals and clock times are Western digits in both locales unless a signed OD
+  says otherwise.
+- Directional icons (arrows, chevrons, carousel controls) mirror.
+  Logos, numerals, media controls and clock icons do **not**.
+- Every user-facing string exists in `ar` and `en`. A missing translation is a
+  failing state, never a silent English fallback in the Arabic tree.
+
+## Verification
+
+Every UI change is checked in **both** locales before it is done. Every E2E path
+runs twice, `ar` and `en`. A screenshot in one direction is not evidence.

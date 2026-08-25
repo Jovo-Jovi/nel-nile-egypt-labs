@@ -1,0 +1,1640 @@
+{
+  "source": "http://nileegyptlabs.com/features.html",
+  "source_last_modified": "2018-02-21",
+  "extracted": "2026-08-24",
+  "programmes": [
+    {
+      "id": "general-checkup",
+      "name_en": "General Checkup",
+      "name_ar": "الفحص الشامل",
+      "tier_note": "Silver / Gold / Platinum / Children — tiers are cumulative"
+    },
+    {
+      "id": "kidney-profile",
+      "name_en": "Kidney Profile",
+      "name_ar": "فحص وظائف الكلى",
+      "tier_note": ""
+    },
+    {
+      "id": "liver-profile",
+      "name_en": "Liver Profile",
+      "name_ar": "فحص وظائف الكبد",
+      "tier_note": ""
+    },
+    {
+      "id": "diabetes",
+      "name_en": "Diabetes",
+      "name_ar": "السكري",
+      "tier_note": ""
+    },
+    {
+      "id": "cardiovascular-profile",
+      "name_en": "Cardiovascular Profile",
+      "name_ar": "فحص القلب والأوعية الدموية",
+      "tier_note": ""
+    },
+    {
+      "id": "joint-bone-pain",
+      "name_en": "Joint & Bone Pain",
+      "name_ar": "آلام المفاصل والعظام",
+      "tier_note": ""
+    },
+    {
+      "id": "infertility",
+      "name_en": "Infertility",
+      "name_ar": "تأخر الإنجاب",
+      "tier_note": "Separate male and female panels"
+    },
+    {
+      "id": "pregnancy-follow-up",
+      "name_en": "Pregnancy Follow-Up",
+      "name_ar": "متابعة الحمل",
+      "tier_note": ""
+    },
+    {
+      "id": "pre-marital",
+      "name_en": "Pre-Marital",
+      "name_ar": "فحوصات ما قبل الزواج",
+      "tier_note": ""
+    }
+  ],
+  "tests": [
+    {
+      "id": "cbc",
+      "name_en": "Complete Blood Count",
+      "name_ar": "",
+      "aliases": [
+        "CBC",
+        "C.B.C",
+        "CBC test",
+        "complete blood picture",
+        "blood picture",
+        "صورة دم كاملة",
+        "صورة دم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "hba1c",
+      "name_en": "HbA1c (Glycated Haemoglobin)",
+      "name_ar": "",
+      "aliases": [
+        "HbA1c",
+        "HBA1C",
+        "A1C",
+        "glycosylated Hb",
+        "cumulative sugar",
+        "السكر التراكمي",
+        "هيموجلوبين سكري"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "lipid-profile",
+      "name_en": "Lipid Profile",
+      "name_ar": "",
+      "aliases": [
+        "lipid profile",
+        "cholesterol",
+        "triglycerides",
+        "دهون",
+        "كوليسترول",
+        "دهون الدم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "urea",
+      "name_en": "Urea",
+      "name_ar": "",
+      "aliases": [
+        "urea",
+        "BUN",
+        "بولينا",
+        "يوريا"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "creatinine",
+      "name_en": "Creatinine",
+      "name_ar": "",
+      "aliases": [
+        "creatinine",
+        "كرياتينين"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "uric-acid",
+      "name_en": "Uric Acid",
+      "name_ar": "",
+      "aliases": [
+        "uric acid",
+        "gout",
+        "حمض البوليك",
+        "نقرس"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "alt",
+      "name_en": "ALT (SGPT)",
+      "name_ar": "",
+      "aliases": [
+        "ALT",
+        "SGPT",
+        "alanine aminotransferase",
+        "انزيمات الكبد"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "ast",
+      "name_en": "AST (SGOT)",
+      "name_ar": "",
+      "aliases": [
+        "AST",
+        "SGOT",
+        "SCOT",
+        "aspartate aminotransferase",
+        "انزيمات الكبد"
+      ],
+      "qa_flag": "MEDIUM — Children tier writes 'SCOT (AST)'. SCOT is a typo for SGOT. Confirm."
+    },
+    {
+      "id": "calcium",
+      "name_en": "Calcium",
+      "name_ar": "",
+      "aliases": [
+        "calcium",
+        "Ca",
+        "كالسيوم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "esr",
+      "name_en": "ESR (Westergren)",
+      "name_ar": "",
+      "aliases": [
+        "ESR",
+        "E.S.R",
+        "erythrocyte sedimentation rate",
+        "Westergren",
+        "Westergreen",
+        "سرعة الترسيب"
+      ],
+      "qa_flag": "LOW — spelled 'Westergreen' in one tier, 'Westergren' in another. Westergren is correct."
+    },
+    {
+      "id": "urinalysis",
+      "name_en": "Urinalysis",
+      "name_ar": "",
+      "aliases": [
+        "urinalysis",
+        "urine analysis",
+        "complete urine",
+        "تحليل بول"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "stool-analysis",
+      "name_en": "Stool Analysis",
+      "name_ar": "",
+      "aliases": [
+        "stool analysis",
+        "stool",
+        "تحليل براز"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "psa",
+      "name_en": "PSA (Prostate Specific Antigen)",
+      "name_ar": "",
+      "aliases": [
+        "PSA",
+        "prostate specific antigen",
+        "PSA total",
+        "PSA free",
+        "بروستاتا"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "occult-blood",
+      "name_en": "Occult Blood in Stool",
+      "name_ar": "",
+      "aliases": [
+        "occult blood",
+        "FOB",
+        "دم خفي في البراز"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "fsh",
+      "name_en": "FSH",
+      "name_ar": "",
+      "aliases": [
+        "FSH",
+        "follicle stimulating hormone",
+        "هرمون منشط للحوصلة"
+      ],
+      "qa_flag": "HIGH — FSH appears in the Gold tier, whose description is about THYROID disorders. FSH is a fertility hormone. Very likely should be TSH. Confirm with lab."
+    },
+    {
+      "id": "ft4",
+      "name_en": "Free T4 (FT4)",
+      "name_ar": "",
+      "aliases": [
+        "FT4",
+        "free T4",
+        "thyroxine",
+        "الغدة الدرقية",
+        "هرمون درقي"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "hcv-ab",
+      "name_en": "HCV Antibody",
+      "name_ar": "",
+      "aliases": [
+        "HCV",
+        "HCV Ab",
+        "hepatitis C",
+        "فيروس سي",
+        "التهاب كبدي سي"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "hbsag",
+      "name_en": "HBsAg",
+      "name_ar": "",
+      "aliases": [
+        "HBsAg",
+        "HBs Ag",
+        "hepatitis B",
+        "فيروس بي",
+        "التهاب كبدي بي"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "ferritin",
+      "name_en": "Ferritin",
+      "name_ar": "",
+      "aliases": [
+        "ferritin",
+        "iron stores",
+        "فيريتين",
+        "مخزون الحديد"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "magnesium",
+      "name_en": "Magnesium",
+      "name_ar": "",
+      "aliases": [
+        "Mg",
+        "magnesium",
+        "ماغنسيوم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "hscrp",
+      "name_en": "hs-CRP (High Sensitivity CRP)",
+      "name_ar": "",
+      "aliases": [
+        "hsCRP",
+        "HsCRP",
+        "high sensitivity CRP",
+        "ultrasensitive CRP"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "crp",
+      "name_en": "CRP (Nephelometry)",
+      "name_ar": "",
+      "aliases": [
+        "CRP",
+        "C-reactive protein",
+        "بروتين سي التفاعلي"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "cea",
+      "name_en": "CEA",
+      "name_ar": "",
+      "aliases": [
+        "CEA",
+        "carcinoembryonic antigen",
+        "دلالات الأورام"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "ca-15-3",
+      "name_en": "CA 15.3",
+      "name_ar": "",
+      "aliases": [
+        "CA 15.3",
+        "CA15-3",
+        "breast tumour marker",
+        "أورام الثدي"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "ca-125",
+      "name_en": "CA 125",
+      "name_ar": "",
+      "aliases": [
+        "CA 125",
+        "CA125",
+        "ovarian tumour marker",
+        "أورام المبيض"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "app-afp",
+      "name_en": "APP — see QA note (likely AFP)",
+      "name_ar": "",
+      "aliases": [
+        "APP",
+        "AFP",
+        "alpha fetoprotein",
+        "أورام الكبد"
+      ],
+      "qa_flag": "HIGH — 'APP' is not a recognised tumour marker. Almost certainly AFP (Alpha-Fetoprotein), which matches the stated purpose (liver tumours). Confirm with lab before publishing."
+    },
+    {
+      "id": "ca-242",
+      "name_en": "CA 242",
+      "name_ar": "",
+      "aliases": [
+        "CA 242",
+        "CA242"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "ca-19-9",
+      "name_en": "CA 19.9",
+      "name_ar": "",
+      "aliases": [
+        "CA 19.9",
+        "CA19-9",
+        "pancreatic tumour marker"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "nse",
+      "name_en": "NSE",
+      "name_ar": "",
+      "aliases": [
+        "NSE",
+        "neuron specific enolase"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "blood-group-abo",
+      "name_en": "Blood Group (ABO)",
+      "name_ar": "",
+      "aliases": [
+        "blood group",
+        "ABO",
+        "blood typing",
+        "فصيلة الدم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "rh",
+      "name_en": "Rh Factor",
+      "name_ar": "",
+      "aliases": [
+        "RH",
+        "Rh factor",
+        "rhesus",
+        "عامل ريسوس"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "hb-electrophoresis",
+      "name_en": "Haemoglobin Electrophoresis",
+      "name_ar": "",
+      "aliases": [
+        "hemoglobin electrophoresis",
+        "haemoglobin electrophoresis",
+        "thalassemia",
+        "فصل الهيموجلوبين",
+        "أنيميا وراثية"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "creatinine-urea-combined",
+      "name_en": "Creatinine / Urea — see QA note",
+      "name_ar": "",
+      "aliases": [
+        "creatinine urea",
+        "kidney function",
+        "وظائف كلى"
+      ],
+      "qa_flag": "MEDIUM — Source reads 'Creatinine\\urea' as one entry. Should almost certainly be two separate tests. Confirm."
+    },
+    {
+      "id": "potassium",
+      "name_en": "Potassium (K)",
+      "name_ar": "",
+      "aliases": [
+        "K",
+        "potassium",
+        "بوتاسيوم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "sodium",
+      "name_en": "Sodium (Na)",
+      "name_ar": "",
+      "aliases": [
+        "Na",
+        "sodium",
+        "صوديوم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "acr",
+      "name_en": "Albumin/Creatinine Ratio",
+      "name_ar": "",
+      "aliases": [
+        "ACR",
+        "albumin creatinine ratio",
+        "microalbumin",
+        "زلال البول"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "egfr",
+      "name_en": "Estimated Creatinine Clearance (eGFR)",
+      "name_ar": "",
+      "aliases": [
+        "eGFR",
+        "GFR",
+        "creatinine clearance",
+        "معدل الترشيح"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "pt",
+      "name_en": "Prothrombin Time",
+      "name_ar": "",
+      "aliases": [
+        "PT",
+        "prothrombin time",
+        "INR",
+        "زمن البروثرومبين"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "ggt",
+      "name_en": "Gamma GT",
+      "name_ar": "",
+      "aliases": [
+        "GGT",
+        "gamma GT",
+        "gamma glutamyl transferase"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "alp",
+      "name_en": "Alkaline Phosphatase",
+      "name_ar": "",
+      "aliases": [
+        "ALP",
+        "alkaline phosphatase",
+        "Alk. Phosphatase",
+        "الفوسفاتيز القلوي"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "albumin",
+      "name_en": "Albumin",
+      "name_ar": "",
+      "aliases": [
+        "albumin",
+        "زلال"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "bilirubin",
+      "name_en": "Bilirubin (Total & Direct)",
+      "name_ar": "",
+      "aliases": [
+        "bilirubin",
+        "jaundice",
+        "بيليروبين",
+        "صفراء"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "glucose-fasting",
+      "name_en": "Fasting Blood Glucose",
+      "name_ar": "",
+      "aliases": [
+        "glucose fasting",
+        "FBS",
+        "fasting sugar",
+        "سكر صائم"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "glucose-pp",
+      "name_en": "Post-Prandial Glucose",
+      "name_ar": "",
+      "aliases": [
+        "glucose PP",
+        "postprandial",
+        "2 hour sugar",
+        "سكر فاطر"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "gct-50g",
+      "name_en": "Glucose Challenge Test (50 g)",
+      "name_ar": "",
+      "aliases": [
+        "glucose challenge",
+        "GCT",
+        "50g glucose",
+        "سكر الحمل"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "homocysteine",
+      "name_en": "Homocysteine",
+      "name_ar": "",
+      "aliases": [
+        "homocysteine",
+        "هوموسيستين"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "protein-electrophoresis",
+      "name_en": "Protein Electrophoresis",
+      "name_ar": "",
+      "aliases": [
+        "protein electrophoresis",
+        "فصل البروتين"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "bone-alp",
+      "name_en": "Bone Alkaline Phosphatase",
+      "name_ar": "",
+      "aliases": [
+        "bone ALP",
+        "bone alkaline phosphatase",
+        "هشاشة العظام"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "beta-crosslaps",
+      "name_en": "β-CrossLaps (β-CTx)",
+      "name_ar": "",
+      "aliases": [
+        "beta crosslaps",
+        "CTx",
+        "B-CTx",
+        "bone turnover"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "ana",
+      "name_en": "ANA (Antinuclear Antibodies)",
+      "name_ar": "",
+      "aliases": [
+        "ANA",
+        "antinuclear antibodies",
+        "أجسام مضادة للنواة"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "rf",
+      "name_en": "Rheumatoid Factor",
+      "name_ar": "",
+      "aliases": [
+        "RF",
+        "rheumatoid factor",
+        "روماتويد"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "anti-ccp",
+      "name_en": "Anti-CCP",
+      "name_ar": "",
+      "aliases": [
+        "anti CCP",
+        "cyclic citrullinated peptide",
+        "روماتويد"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "rose-waaler",
+      "name_en": "Rose-Waaler",
+      "name_ar": "",
+      "aliases": [
+        "Rose Waaler",
+        "rose-waaler"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "lh",
+      "name_en": "LH",
+      "name_ar": "",
+      "aliases": [
+        "LH",
+        "luteinizing hormone",
+        "الهرمون الملوتن"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "testosterone-total",
+      "name_en": "Testosterone — Total",
+      "name_ar": "",
+      "aliases": [
+        "testosterone total",
+        "total testosterone",
+        "تستوستيرون"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "testosterone-free",
+      "name_en": "Testosterone — Free",
+      "name_ar": "",
+      "aliases": [
+        "testosterone free",
+        "free testosterone",
+        "تستوستيرون حر"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "prolactin",
+      "name_en": "Prolactin",
+      "name_ar": "",
+      "aliases": [
+        "prolactin",
+        "هرمون الحليب",
+        "برولاكتين"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "semen-analysis",
+      "name_en": "Semen Analysis",
+      "name_ar": "",
+      "aliases": [
+        "semen analysis",
+        "sperm",
+        "تحليل السائل المنوي"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "lh-fsh-ratio",
+      "name_en": "LH:FSH Ratio",
+      "name_ar": "",
+      "aliases": [
+        "LH FSH ratio",
+        "LH:FSH"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "progesterone",
+      "name_en": "Progesterone",
+      "name_ar": "",
+      "aliases": [
+        "progesterone",
+        "بروجستيرون"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "tsh",
+      "name_en": "TSH",
+      "name_ar": "",
+      "aliases": [
+        "TSH",
+        "thyroid stimulating hormone",
+        "الغدة الدرقية"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "estradiol",
+      "name_en": "Estradiol (E2)",
+      "name_ar": "",
+      "aliases": [
+        "estradiol",
+        "E2",
+        "oestradiol",
+        "استراديول"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "cmv-igg",
+      "name_en": "CMV IgG",
+      "name_ar": "",
+      "aliases": [
+        "CMV IgG",
+        "cytomegalovirus"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "cmv-igm",
+      "name_en": "CMV IgM",
+      "name_ar": "",
+      "aliases": [
+        "CMV IgM",
+        "cytomegalovirus"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "hsv-igg",
+      "name_en": "HSV I & II IgG",
+      "name_ar": "",
+      "aliases": [
+        "HSV IgG",
+        "herpes simplex"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "hsv-igm",
+      "name_en": "HSV I & II IgM",
+      "name_ar": "",
+      "aliases": [
+        "HSV IgM",
+        "herpes simplex"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "rubella-igg",
+      "name_en": "Rubella IgG",
+      "name_ar": "",
+      "aliases": [
+        "rubella IgG",
+        "German measles",
+        "الحصبة الألمانية"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "rubella-igm",
+      "name_en": "Rubella IgM",
+      "name_ar": "",
+      "aliases": [
+        "rubella IgM",
+        "German measles",
+        "الحصبة الألمانية"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "toxo-igg",
+      "name_en": "Toxoplasmosis IgG",
+      "name_ar": "",
+      "aliases": [
+        "toxoplasma IgG",
+        "toxoplasmosis",
+        "التوكسوبلازما"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "toxo-igm",
+      "name_en": "Toxoplasmosis IgM",
+      "name_ar": "",
+      "aliases": [
+        "toxoplasma IgM",
+        "toxoplasmosis",
+        "التوكسوبلازما"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "karyotyping",
+      "name_en": "Karyotyping",
+      "name_ar": "",
+      "aliases": [
+        "karyotype",
+        "karyotyping",
+        "chromosomes",
+        "فحص الكروموسومات"
+      ],
+      "qa_flag": ""
+    },
+    {
+      "id": "genetic-counselling",
+      "name_en": "Genetic Counselling",
+      "name_ar": "",
+      "aliases": [
+        "genetic counseling",
+        "genetic counselling",
+        "استشارة وراثية"
+      ],
+      "qa_flag": ""
+    }
+  ],
+  "programme_tests": [
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "C.B.C",
+      "test_id": "cbc"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "HbA1C",
+      "test_id": "hba1c"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "LIPID PROFILE",
+      "test_id": "lipid-profile"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "UREA",
+      "test_id": "urea"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "CREATININE",
+      "test_id": "creatinine"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "URIC ACID",
+      "test_id": "uric-acid"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "ALT",
+      "test_id": "alt"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "AST",
+      "test_id": "ast"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "CALCIUM",
+      "test_id": "calcium"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "ESR",
+      "test_id": "esr"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "URINALYSIS",
+      "test_id": "urinalysis"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "STOOL ANALYSIS",
+      "test_id": "stool-analysis"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Silver",
+      "source_name": "PSA Total (male>45only)",
+      "test_id": "psa"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "Occult blood in stool",
+      "test_id": "occult-blood"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "FSH",
+      "test_id": "fsh"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "FT4",
+      "test_id": "ft4"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "HCV Ab",
+      "test_id": "hcv-ab"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "HBsAg",
+      "test_id": "hbsag"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "Ferritin",
+      "test_id": "ferritin"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "Mg",
+      "test_id": "magnesium"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Gold",
+      "source_name": "HsCRP",
+      "test_id": "hscrp"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Female",
+      "source_name": "CEA",
+      "test_id": "cea"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Female",
+      "source_name": "CA 15.3",
+      "test_id": "ca-15-3"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Female",
+      "source_name": "CA 125",
+      "test_id": "ca-125"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Female",
+      "source_name": "APP",
+      "test_id": "app-afp"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Female",
+      "source_name": "CA 242",
+      "test_id": "ca-242"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Female",
+      "source_name": "CA 19.9",
+      "test_id": "ca-19-9"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Female",
+      "source_name": "NSE",
+      "test_id": "nse"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Male",
+      "source_name": "CEA",
+      "test_id": "cea"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Male",
+      "source_name": "APP",
+      "test_id": "app-afp"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Male",
+      "source_name": "CA 242",
+      "test_id": "ca-242"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Male",
+      "source_name": "CA 19.9",
+      "test_id": "ca-19-9"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Male",
+      "source_name": "NSE",
+      "test_id": "nse"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Platinum — Male",
+      "source_name": "PSA(total & Free)for male>45 year only",
+      "test_id": "psa"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "CBC",
+      "test_id": "cbc"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "BLOOD GROUPING (ABO)",
+      "test_id": "blood-group-abo"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "RH",
+      "test_id": "rh"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "Hemoglobin electrophoresis",
+      "test_id": "hb-electrophoresis"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "CRP (Nephelometry)",
+      "test_id": "crp"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "E.S.R. (Westergreen)",
+      "test_id": "esr"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "Creatinine\\urea",
+      "test_id": "creatinine-urea-combined"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "Glycosylated Hb (HbA1C)",
+      "test_id": "hba1c"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "SCOT (AST)",
+      "test_id": "ast"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "Ferritin",
+      "test_id": "ferritin"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "Calcium",
+      "test_id": "calcium"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "Stool Analysis",
+      "test_id": "stool-analysis"
+    },
+    {
+      "programme_id": "general-checkup",
+      "tier": "Children",
+      "source_name": "Urine Analysis",
+      "test_id": "urinalysis"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "Urea",
+      "test_id": "urea"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "Creatinine",
+      "test_id": "creatinine"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "Uric acid",
+      "test_id": "uric-acid"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "Urinalysis",
+      "test_id": "urinalysis"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "K",
+      "test_id": "potassium"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "Na",
+      "test_id": "sodium"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "Albumin/Creatinine ratio",
+      "test_id": "acr"
+    },
+    {
+      "programme_id": "kidney-profile",
+      "tier": "",
+      "source_name": "Estimated Creatinine Clearance (eGFR)",
+      "test_id": "egfr"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "SGOT (AST)",
+      "test_id": "ast"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "SGPT (ALT)",
+      "test_id": "alt"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "Prothrombin Time",
+      "test_id": "pt"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "Gamma GT",
+      "test_id": "ggt"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "Alk. Phosphatase",
+      "test_id": "alp"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "Albumin",
+      "test_id": "albumin"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "Bilirubin (T&D )",
+      "test_id": "bilirubin"
+    },
+    {
+      "programme_id": "liver-profile",
+      "tier": "",
+      "source_name": "Complete Blood Picture",
+      "test_id": "cbc"
+    },
+    {
+      "programme_id": "diabetes",
+      "tier": "",
+      "source_name": "Albumin/Creatinine ratio",
+      "test_id": "acr"
+    },
+    {
+      "programme_id": "diabetes",
+      "tier": "",
+      "source_name": "Glucose Fasting",
+      "test_id": "glucose-fasting"
+    },
+    {
+      "programme_id": "diabetes",
+      "tier": "",
+      "source_name": "Glucose PP",
+      "test_id": "glucose-pp"
+    },
+    {
+      "programme_id": "diabetes",
+      "tier": "",
+      "source_name": "Glycosylated Hb (HbA1C)",
+      "test_id": "hba1c"
+    },
+    {
+      "programme_id": "diabetes",
+      "tier": "",
+      "source_name": "Lipid Profile",
+      "test_id": "lipid-profile"
+    },
+    {
+      "programme_id": "diabetes",
+      "tier": "",
+      "source_name": "SGOT (AST)",
+      "test_id": "ast"
+    },
+    {
+      "programme_id": "diabetes",
+      "tier": "",
+      "source_name": "SGPT (ALT)",
+      "test_id": "alt"
+    },
+    {
+      "programme_id": "cardiovascular-profile",
+      "tier": "",
+      "source_name": "CRP hs or ultrasensitive",
+      "test_id": "hscrp"
+    },
+    {
+      "programme_id": "cardiovascular-profile",
+      "tier": "",
+      "source_name": "HbA1C",
+      "test_id": "hba1c"
+    },
+    {
+      "programme_id": "cardiovascular-profile",
+      "tier": "",
+      "source_name": "Lipid profile",
+      "test_id": "lipid-profile"
+    },
+    {
+      "programme_id": "cardiovascular-profile",
+      "tier": "",
+      "source_name": "Uric acid",
+      "test_id": "uric-acid"
+    },
+    {
+      "programme_id": "cardiovascular-profile",
+      "tier": "",
+      "source_name": "Homocysteine “serum”",
+      "test_id": "homocysteine"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "CBC",
+      "test_id": "cbc"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "E.S.R (Westergren)",
+      "test_id": "esr"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "CRP (Nephelometry)",
+      "test_id": "crp"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "Protein Electrophoresis",
+      "test_id": "protein-electrophoresis"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "Uric Acid",
+      "test_id": "uric-acid"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "Bone Alkaline Phosphatase",
+      "test_id": "bone-alp"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "β CrossLaps in serum (β CTx in serum)",
+      "test_id": "beta-crosslaps"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "ANA",
+      "test_id": "ana"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "Rheumatoid factor by Nephelometry",
+      "test_id": "rf"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "Anti CCP (cyclic citrullinated peptide)",
+      "test_id": "anti-ccp"
+    },
+    {
+      "programme_id": "joint-bone-pain",
+      "tier": "",
+      "source_name": "Rose-Waaler",
+      "test_id": "rose-waaler"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Male",
+      "source_name": "FSH",
+      "test_id": "fsh"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Male",
+      "source_name": "LH",
+      "test_id": "lh"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Male",
+      "source_name": "Testosterone-Total",
+      "test_id": "testosterone-total"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Male",
+      "source_name": "Testosterone-Free",
+      "test_id": "testosterone-free"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Male",
+      "source_name": "Prolactin",
+      "test_id": "prolactin"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Male",
+      "source_name": "Semen Analysis",
+      "test_id": "semen-analysis"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Female",
+      "source_name": "FSH",
+      "test_id": "fsh"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Female",
+      "source_name": "LH",
+      "test_id": "lh"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Female",
+      "source_name": "LH:FSH ratio",
+      "test_id": "lh-fsh-ratio"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Female",
+      "source_name": "Progesterone",
+      "test_id": "progesterone"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Female",
+      "source_name": "Prolactin",
+      "test_id": "prolactin"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Female",
+      "source_name": "TSH",
+      "test_id": "tsh"
+    },
+    {
+      "programme_id": "infertility",
+      "tier": "Female",
+      "source_name": "Estradiol – E2",
+      "test_id": "estradiol"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "Glucose (1 hour after 50 g oral glucose intake)",
+      "test_id": "gct-50g"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "Blood grouping (ABO)",
+      "test_id": "blood-group-abo"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "CBC",
+      "test_id": "cbc"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "RH",
+      "test_id": "rh"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "Urinalysis",
+      "test_id": "urinalysis"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "CMV IgG",
+      "test_id": "cmv-igg"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "CMV IgM",
+      "test_id": "cmv-igm"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "HBs Ag",
+      "test_id": "hbsag"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "HSV I & II IgG",
+      "test_id": "hsv-igg"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "HSV I & II IgM",
+      "test_id": "hsv-igm"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "Rubella IgG",
+      "test_id": "rubella-igg"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "Rubella IgM",
+      "test_id": "rubella-igm"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "Toxoplasmosis IgG",
+      "test_id": "toxo-igg"
+    },
+    {
+      "programme_id": "pregnancy-follow-up",
+      "tier": "",
+      "source_name": "Toxoplasmosis IgM",
+      "test_id": "toxo-igm"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "CBC",
+      "test_id": "cbc"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "Glycosylated Hb (HbA1C)",
+      "test_id": "hba1c"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "Hemoglobin Electrophoresis",
+      "test_id": "hb-electrophoresis"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "HBs Ag",
+      "test_id": "hbsag"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "HCV Ab",
+      "test_id": "hcv-ab"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "Semen Analysis (Males)",
+      "test_id": "semen-analysis"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "Karyotyping",
+      "test_id": "karyotyping"
+    },
+    {
+      "programme_id": "pre-marital",
+      "tier": "",
+      "source_name": "Genetic Counseling (Both)",
+      "test_id": "genetic-counselling"
+    }
+  ],
+  "qa_missing": [
+    {
+      "programme_id": "kidney-profile",
+      "test": "Cystatin C",
+      "issue": "Programme description says 'Measuring Cystatin C level' but the test table omits it."
+    },
+    {
+      "programme_id": "infertility",
+      "test": "AMH (Anti-Mullerian Hormone)",
+      "issue": "Female description cites AMH as an ovarian reserve marker; test table omits it."
+    },
+    {
+      "programme_id": "infertility",
+      "test": "Testosterone (female panel)",
+      "issue": "Female description says testosterone is measured; female test table omits it."
+    },
+    {
+      "programme_id": "general-checkup",
+      "test": "ALT (Children tier)",
+      "issue": "Children description promises 'Liver function tests' but the table lists only AST."
+    }
+  ]
+}

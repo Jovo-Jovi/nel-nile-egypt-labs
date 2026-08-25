@@ -1,0 +1,44 @@
+---
+description: NEL vocabulary — forbidden bare nouns and their qualified replacements
+alwaysApply: true
+---
+
+# NEL Vocabulary — enforced
+
+The source content describes the lab through three overlapping taxonomies and
+uses *programme*, *package*, *profile*, *panel* and *checkup* interchangeably.
+That ambiguity does not enter this codebase.
+
+A bare ambiguous noun in a table name, type name, route path or field name is a
+**defect**, not a style preference.
+
+## Forbidden bare nouns
+
+```
+test · result · patient · branch · unit · programme · package · profile
+panel · checkup · device · offer · service · user · admin · content · item
+```
+
+## Qualified replacements
+
+| Forbidden | Use |
+|---|---|
+| `test` | `LabTest` for the domain entity. `spec` for a software test file. |
+| `result` | **Forbidden as a domain noun.** `ResultsPortalLink` is the only permitted compound. Anything else is a boundary defect. |
+| `patient` | **Forbidden.** Site users are `Visitor`. Dashboard users are `Operator`. |
+| `branch` | `Branch` as an exact PascalCase entity only. Lowercase means git. |
+| `unit` | `LabUnit` |
+| `programme` / `package` / `profile` / `panel` / `checkup` | `Programme` is canonical. The rest are source-content synonyms, never identifiers. |
+| `tier` | `ProgrammeTier` — Silver · Gold · Platinum · Children |
+| `device` | `Equipment` — `device` collides with viewport and user-device |
+| `offer` | `Offer`, PascalCase entity only |
+| `service` | Forbidden outright. The 2018 site used it three inconsistent ways. |
+| `content` | Name the entity. |
+
+`Branch` · `Offer` · `Equipment` · `Programme` · `LabTest` · `LabUnit` ·
+`Visitor` · `Operator` are permitted as exact PascalCase entity names only.
+Lowercase use as a bare field or noun is a defect.
+
+**Why `patient` and `result` are banned outright:** the cheapest place to catch a
+boundary violation is at the identifier. If a `results` table is ever written,
+this rule catches it before the security review does.

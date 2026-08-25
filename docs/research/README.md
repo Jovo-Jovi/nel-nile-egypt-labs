@@ -1,0 +1,30 @@
+# Research — extraction evidence only
+
+**PR-09: never current truth, never a parity target.**
+
+These justify decisions. When someone asks in month three why the hotline is
+15504 and not 16402, the answer is `11-research-findings.md` §2.
+
+| File | What it is | Date |
+|---|---|---|
+| `01-audit-brief.pdf` | Unauthenticated public audit — 9 findings, 1 critical | 16 Aug 2026 |
+| `02-architecture-and-user-journeys.pdf` | First architecture pass — **superseded** by the method docs | Aug 2026 |
+| `03-original-quotation-superseded.pdf` | Original 65,000 EGP quotation — **superseded**, kept for history | Aug 2026 |
+| `04-spec-and-gap-review.md` | Consolidated spec, 25 gaps, 7 contradictions found across the first three documents | 18 Aug 2026 |
+| `05-owner-form-en-source.md` | English source text of the client questionnaire | Aug 2026 |
+| `06-owner-form-ar-blank.docx` | Arabic RTL questionnaire as sent to the client | Aug 2026 |
+| `07-owner-form-ar-ANSWERED.docx` | **The client's returned answers.** Selections marked by highlighting, extracted from the document XML | Aug 2026 |
+| `08-form-review-and-next-steps.md` | Review of the returned form — what was answered, what was missing | 24 Aug 2026 |
+| `09-locked-baseline.md` | Decisions closed after the client's rulings. **Feeds `SCOPE.md`** | 24 Aug 2026 |
+| `10-research-prompt.md` | The open-source research brief, incl. the disambiguation list for seven confusable Cairo labs | 24 Aug 2026 |
+| `11-research-findings.md` | Research results — branches, domains, assets, clinical defects, conflicts | 24 Aug 2026 |
+| `12-research-reconciliation.md` | Findings reconciled against the baseline | 24 Aug 2026 |
+
+## Still to land here
+
+**`clinical-signoff-<date>.<ext>`** — the lab's written corrections to the five
+flagged LabTest defects and four missing tests.
+
+Until it arrives, LabTest content stays behind the feature flag (PR-08) and
+**CF-01 stays open**. This is the longest lead time in the project and the only
+carry-forward that can hold the launch.

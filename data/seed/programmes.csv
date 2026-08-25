@@ -1,0 +1,10 @@
+﻿programme_id,name_en,name_ar,tier_note,display_order
+general-checkup,General Checkup,الفحص الشامل,Silver / Gold / Platinum / Children — tiers are cumulative,1
+kidney-profile,Kidney Profile,فحص وظائف الكلى,,2
+liver-profile,Liver Profile,فحص وظائف الكبد,,3
+diabetes,Diabetes,السكري,,4
+cardiovascular-profile,Cardiovascular Profile,فحص القلب والأوعية الدموية,,5
+joint-bone-pain,Joint & Bone Pain,آلام المفاصل والعظام,,6
+infertility,Infertility,تأخر الإنجاب,Separate male and female panels,7
+pregnancy-follow-up,Pregnancy Follow-Up,متابعة الحمل,,8
+pre-marital,Pre-Marital,فحوصات ما قبل الزواج,,9

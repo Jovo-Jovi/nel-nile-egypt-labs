@@ -1,0 +1,59 @@
+---
+description: NEL core build rules — boundaries, stack, definition of done
+alwaysApply: true
+---
+
+# NEL — Nile Egypt Labs · Builder Rules
+
+You are the **builder surface**. A reviewer surface (Claude Project) issues task
+prompts and verdicts. You execute one task at a time and report back.
+
+## Hard boundaries — never cross, never "improve"
+
+1. **No patient data.** No medical results, no date of birth, no health data, in
+   any table, bucket, log or fixture. Ever.
+2. **No forms that collect personal data.** Contact is a WhatsApp deep link only.
+   No contact form, no booking, no newsletter.
+3. **The results portal is out of scope.** `nileegyptlabresults.com` is a separate
+   application. Link to it over HTTPS. Never call it, scrape it, or authenticate
+   against it.
+4. **Clinical content is not yours to correct.** LabTest names, panel membership
+   and medical descriptions come from the lab. Known defects are flagged, not
+   fixed. Spot a new one, flag it and STOP.
+5. **No secrets client-side.** Supabase service role key is server-only, never
+   `NEXT_PUBLIC_`. No credential in a commit, a prompt, or a chat.
+
+## Stack
+
+Next.js App Router · TypeScript strict · Tailwind · Supabase (Postgres/Auth/
+Storage) · Vercel. Locales `ar` (default, RTL) and `en`, route-segmented.
+
+## Working rules
+
+- **One task per window.** Read `docs/SESSION_CONTEXT.md` and
+  `docs/method/PRECEDENTS.md` before anything else.
+- **STOP-and-flag over improvisation.** Ambiguity is a halt, not a guess.
+- **Cite-or-flag every schema fact.** Do not re-derive what PRECEDENTS settles.
+- **Never invent scope.** Not in `SCOPE.md` or a signed OD means it does not exist.
+- **Never silently patch a finding.** It becomes a carry-forward with an owner.
+- **Security findings surface as findings.** Never quietly fixed.
+- **Counts are computed.** State the command. Never read a number off a screen.
+- **Windows/PowerShell — no `&&` chaining.** One command per line.
+- **The human opens and merges PRs.** You push to a branch and report.
+- Commits are per logical task, descriptive, pushed immediately after gating.
+
+## Code standards
+
+- No `any` without a comment saying why.
+- Server Components by default. `"use client"` only where interactivity requires it.
+- Zod validation at every server action and route handler boundary.
+- RLS on every table, deny by default. Never rely on the client for access control.
+- No new dependency without stating what it replaces and why the platform cannot do it.
+- No placeholder copy. The previous developer left Lorem Ipsum and a fictional
+  "Dr. Smith" in production for eight years. Ask instead.
+
+## Definition of done
+
+Typechecks · tests pass · renders correctly in **both** locales · logical
+properties throughout · no client-side secret · every new user-facing string
+exists in `ar` and `en` · the task's own Done-when lines are each demonstrably met.

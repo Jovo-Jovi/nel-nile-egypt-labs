@@ -1,0 +1,5 @@
+﻿programme_id,test_named_in_description,issue
+kidney-profile,Cystatin C,Programme description says 'Measuring Cystatin C level' but the test table omits it.
+infertility,AMH (Anti-Mullerian Hormone),Female description cites AMH as an ovarian reserve marker; test table omits it.
+infertility,Testosterone (female panel),Female description says testosterone is measured; female test table omits it.
+general-checkup,ALT (Children tier),Children description promises 'Liver function tests' but the table lists only AST.

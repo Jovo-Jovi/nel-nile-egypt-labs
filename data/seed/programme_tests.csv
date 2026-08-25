@@ -1,0 +1,122 @@
+﻿programme_id,tier,source_name_verbatim,test_id,display_order
+general-checkup,Silver,C.B.C,cbc,1
+general-checkup,Silver,HbA1C,hba1c,2
+general-checkup,Silver,LIPID PROFILE,lipid-profile,3
+general-checkup,Silver,UREA,urea,4
+general-checkup,Silver,CREATININE,creatinine,5
+general-checkup,Silver,URIC ACID,uric-acid,6
+general-checkup,Silver,ALT,alt,7
+general-checkup,Silver,AST,ast,8
+general-checkup,Silver,CALCIUM,calcium,9
+general-checkup,Silver,ESR,esr,10
+general-checkup,Silver,URINALYSIS,urinalysis,11
+general-checkup,Silver,STOOL ANALYSIS,stool-analysis,12
+general-checkup,Silver,PSA Total (male>45only),psa,13
+general-checkup,Gold,Occult blood in stool,occult-blood,1
+general-checkup,Gold,FSH,fsh,2
+general-checkup,Gold,FT4,ft4,3
+general-checkup,Gold,HCV Ab,hcv-ab,4
+general-checkup,Gold,HBsAg,hbsag,5
+general-checkup,Gold,Ferritin,ferritin,6
+general-checkup,Gold,Mg,magnesium,7
+general-checkup,Gold,HsCRP,hscrp,8
+general-checkup,Platinum — Female,CEA,cea,1
+general-checkup,Platinum — Female,CA 15.3,ca-15-3,2
+general-checkup,Platinum — Female,CA 125,ca-125,3
+general-checkup,Platinum — Female,APP,app-afp,4
+general-checkup,Platinum — Female,CA 242,ca-242,5
+general-checkup,Platinum — Female,CA 19.9,ca-19-9,6
+general-checkup,Platinum — Female,NSE,nse,7
+general-checkup,Platinum — Male,CEA,cea,1
+general-checkup,Platinum — Male,APP,app-afp,2
+general-checkup,Platinum — Male,CA 242,ca-242,3
+general-checkup,Platinum — Male,CA 19.9,ca-19-9,4
+general-checkup,Platinum — Male,NSE,nse,5
+general-checkup,Platinum — Male,PSA(total & Free)for male>45 year only,psa,6
+general-checkup,Children,CBC,cbc,1
+general-checkup,Children,BLOOD GROUPING (ABO),blood-group-abo,2
+general-checkup,Children,RH,rh,3
+general-checkup,Children,Hemoglobin electrophoresis,hb-electrophoresis,4
+general-checkup,Children,CRP (Nephelometry),crp,5
+general-checkup,Children,E.S.R. (Westergreen),esr,6
+general-checkup,Children,Creatinine\urea,creatinine-urea-combined,7
+general-checkup,Children,Glycosylated Hb (HbA1C),hba1c,8
+general-checkup,Children,SCOT (AST),ast,9
+general-checkup,Children,Ferritin,ferritin,10
+general-checkup,Children,Calcium,calcium,11
+general-checkup,Children,Stool Analysis,stool-analysis,12
+general-checkup,Children,Urine Analysis,urinalysis,13
+kidney-profile,,Urea,urea,1
+kidney-profile,,Creatinine,creatinine,2
+kidney-profile,,Uric acid,uric-acid,3
+kidney-profile,,Urinalysis,urinalysis,4
+kidney-profile,,K,potassium,5
+kidney-profile,,Na,sodium,6
+kidney-profile,,Albumin/Creatinine ratio,acr,7
+kidney-profile,,Estimated Creatinine Clearance (eGFR),egfr,8
+liver-profile,,SGOT (AST),ast,1
+liver-profile,,SGPT (ALT),alt,2
+liver-profile,,Prothrombin Time,pt,3
+liver-profile,,Gamma GT,ggt,4
+liver-profile,,Alk. Phosphatase,alp,5
+liver-profile,,Albumin,albumin,6
+liver-profile,,Bilirubin (T&D ),bilirubin,7
+liver-profile,,Complete Blood Picture,cbc,8
+diabetes,,Albumin/Creatinine ratio,acr,1
+diabetes,,Glucose Fasting,glucose-fasting,2
+diabetes,,Glucose PP,glucose-pp,3
+diabetes,,Glycosylated Hb (HbA1C),hba1c,4
+diabetes,,Lipid Profile,lipid-profile,5
+diabetes,,SGOT (AST),ast,6
+diabetes,,SGPT (ALT),alt,7
+cardiovascular-profile,,CRP hs or ultrasensitive,hscrp,1
+cardiovascular-profile,,HbA1C,hba1c,2
+cardiovascular-profile,,Lipid profile,lipid-profile,3
+cardiovascular-profile,,Uric acid,uric-acid,4
+cardiovascular-profile,,Homocysteine “serum”,homocysteine,5
+joint-bone-pain,,CBC,cbc,1
+joint-bone-pain,,E.S.R (Westergren),esr,2
+joint-bone-pain,,CRP (Nephelometry),crp,3
+joint-bone-pain,,Protein Electrophoresis,protein-electrophoresis,4
+joint-bone-pain,,Uric Acid,uric-acid,5
+joint-bone-pain,,Bone Alkaline Phosphatase,bone-alp,6
+joint-bone-pain,,β CrossLaps in serum (β CTx in serum),beta-crosslaps,7
+joint-bone-pain,,ANA,ana,8
+joint-bone-pain,,Rheumatoid factor by Nephelometry,rf,9
+joint-bone-pain,,Anti CCP (cyclic citrullinated peptide),anti-ccp,10
+joint-bone-pain,,Rose-Waaler,rose-waaler,11
+infertility,Male,FSH,fsh,1
+infertility,Male,LH,lh,2
+infertility,Male,Testosterone-Total,testosterone-total,3
+infertility,Male,Testosterone-Free,testosterone-free,4
+infertility,Male,Prolactin,prolactin,5
+infertility,Male,Semen Analysis,semen-analysis,6
+infertility,Female,FSH,fsh,1
+infertility,Female,LH,lh,2
+infertility,Female,LH:FSH ratio,lh-fsh-ratio,3
+infertility,Female,Progesterone,progesterone,4
+infertility,Female,Prolactin,prolactin,5
+infertility,Female,TSH,tsh,6
+infertility,Female,Estradiol – E2,estradiol,7
+pregnancy-follow-up,,Glucose (1 hour after 50 g oral glucose intake),gct-50g,1
+pregnancy-follow-up,,Blood grouping (ABO),blood-group-abo,2
+pregnancy-follow-up,,CBC,cbc,3
+pregnancy-follow-up,,RH,rh,4
+pregnancy-follow-up,,Urinalysis,urinalysis,5
+pregnancy-follow-up,,CMV IgG,cmv-igg,6
+pregnancy-follow-up,,CMV IgM,cmv-igm,7
+pregnancy-follow-up,,HBs Ag,hbsag,8
+pregnancy-follow-up,,HSV I & II IgG,hsv-igg,9
+pregnancy-follow-up,,HSV I & II IgM,hsv-igm,10
+pregnancy-follow-up,,Rubella IgG,rubella-igg,11
+pregnancy-follow-up,,Rubella IgM,rubella-igm,12
+pregnancy-follow-up,,Toxoplasmosis IgG,toxo-igg,13
+pregnancy-follow-up,,Toxoplasmosis IgM,toxo-igm,14
+pre-marital,,CBC,cbc,1
+pre-marital,,Glycosylated Hb (HbA1C),hba1c,2
+pre-marital,,Hemoglobin Electrophoresis,hb-electrophoresis,3
+pre-marital,,HBs Ag,hbsag,4
+pre-marital,,HCV Ab,hcv-ab,5
+pre-marital,,Semen Analysis (Males),semen-analysis,6
+pre-marital,,Karyotyping,karyotyping,7
+pre-marital,,Genetic Counseling (Both),genetic-counselling,8
