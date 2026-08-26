@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-55**
+**Next free id: CF-59**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -60,6 +60,10 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-52 | The Operator dashboard's own chrome language is undecided. I18N_MODEL.md §11 defers it to ADMIN_SPEC.md rather than assuming it follows the public site. | reviewer | OPEN | P04 ADMIN_SPEC.md |
 | CF-53 | The Arabic and Latin typefaces are unselected. I18N_MODEL.md §7 requires the Arabic face to carry the full diacritic set and to render the mark string correctly at mark sizes. Selection lands as a decision with the tested string, before DESIGN_SYSTEM.md fixes a type scale. | reviewer | OPEN | P02 DESIGN_SYSTEM.md |
 | CF-54 | Cross-script search matching is unspecified — whether an Arabic query returns a Latin-named LabTest. D-06 and OD-02 record a build-time index across both locales; the matching rule is a search-architecture question and I18N_MODEL.md §11 declines to answer it. | reviewer | OPEN | P03 search architecture |
+| CF-55 | Mark colours are sampled but no token role is assigned. `DESIGN_SYSTEM.md` maps sampled values onto the eleven-token structure fixed by D-29, under OD-07 bound 1. | reviewer | OPEN | P02 DESIGN_SYSTEM.md |
+| CF-56 | The mark's dominant hue and its accent must be checked for AA contrast at the sizes `DESIGN_SYSTEM.md` uses them. A mark colour that fails AA as body text needs a derived UI variant alongside the mark's literal colour, and that is a decision, not an adjustment. | reviewer | OPEN | P02 DESIGN_SYSTEM.md |
+| CF-57 | P02-X02 landed two tracked files under scripts/ that its fence did not quote, and its report did not disclose them. PR-18 makes an unquoted edit a HALT. The measurement itself was correct and reproduced independently by the reviewer; the failure was non-disclosure. Scripts retained and scripts/ sanctioned at the P02-X02 verdict. | builder | CLOSED at P02-X02-A | P02-X02-A |
+| CF-58 | scripts/ is sanctioned for evidence tooling only. Application code, migrations and seed scripts do not live there. Revisit if P03 needs a build-tooling path. | reviewer | OPEN | P03 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -21,6 +21,7 @@ These justify decisions. When someone asks in month three why the hotline is
 | `12-research-reconciliation.md` | Findings reconciled against the baseline | 24 Aug 2026 |
 | `13-brand-extraction.md` | Brand extraction evidence — colour, logo, typography, template fingerprint across the results portal, the 2018 site and the Facebook page | 26 Aug 2026 |
 | `14-brand-extraction-portal-login.md` | Site 1 supplement — the results portal `/Login/` static HTML and bundled global CSS, authorised under OD-06 | 26 Aug 2026 |
+| `15-mark-colour-sampling.md` | Pixel-level colour sampling of the two committed mark binaries — favicon (source of record) and Facebook cover (corroboration), no network access | 27 Aug 2026 |
 
 ## Still to land here
 
