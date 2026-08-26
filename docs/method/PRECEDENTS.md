@@ -4,7 +4,7 @@ Binding procedural rulings. Consult before re-deriving an established pattern.
 A precedent binds every prompt issued and every verdict returned. To change one,
 supersede it explicitly and name what it replaces. Never deviate silently.
 
-**Next free id: PR-26**
+**Next free id: PR-27**
 
 | Id | Ruling |
 |---|---|
@@ -33,3 +33,4 @@ supersede it explicitly and name what it replaces. Never deviate silently.
 | **PR-23** | Public-repository standing rules (OD-04). No credential, key, token, project ref or connection string in any commit — the exposure window is immediate. No CI trigger that runs fork-supplied code with repository context: pull_request_target is forbidden, and no workflow reads a secret on a fork-originated event. Anything already pushed is already public and a later commit does not unpublish it. The revert to private is a G7 checklist item, not a courtesy. |
 | **PR-24** | PowerShell pattern escaping. Backtick escaping in this environment silently mangles Select-String patterns containing backticks or regex metacharacters. Verify anchors with a tool whose escaping is predictable and state which tool you used. A mangled pattern's output is an artefact, never a result, and is never grounds to halt. Companion to PR-07 and PR-14. Established at P01-T03V, where two anchor patterns mangled on first attempt. |
 | **PR-25** | A Done-when check must be true of the payload its own fence lands. A pattern assertion that the fence's own mandated text violates is a fence defect, owned by the reviewer. The builder reports the mismatch and does not resolve it by editing the mandated text — that would be a PR-18 violation. Established at P01-T03V, where a 'PRIVATE' grep assertion contradicted OD-04's mandated verbatim text. |
+| **PR-26** | Tool-mandated filenames and third-party schema keys are outside the vocabulary rule. package.json, package-lock.json, node_modules, npm's dependencies key and supabase config.toml's field names are fixed by their tools and are not identifiers this project chose. The rule binds identifiers we choose: table, type, route, field, component and module names. Without this, every Node repository is a permanent standing defect. |
