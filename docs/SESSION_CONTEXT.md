@@ -39,17 +39,18 @@ done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 | P01-T03V | Visibility remediation, OD-04, state regeneration — `.gitignore` landed; OD-04/D-20 signed; six PRIVATE assertions replaced with the OD-04 public-repo state; `BOUNDARY_MODEL.md` §3 and CF-11 struck under OD-04 condition 2; clinical-framing notice added to `README.md` and `client-outbound/README.md`; CF-28..CF-32 and PR-20..PR-23 landed; this document regenerated | pushed — verdict at push | 2026-08-25 |
 | P01-T03A | Toolchain, CI, migrations path (re-cut for OD-04). Next.js/TypeScript/ESLint scaffolded at repo root; Supabase CLI installed as a devDependency (no global install); `npm run lint` / `typecheck` / `build` all exit 0; Next telemetry disabled via `postinstall: next telemetry disable`. Single build placeholder route landed per CONTENT_MODEL §3c (P03 replaces it). Public-repo CI workflow landed at `.github/workflows/ci.yml`, gated against fork-originated `pull_request` runs, `contents: read` only, no `pull_request_target`. `npx supabase init` produced `config.toml` + `.gitignore` only — CLI 2.115.0 does not create a `migrations/` directory on init; reported as a STEP 3 STOP, not fabricated. CONTENT_MODEL §3b figures verified against `data/seed/catalogue.json` (13/21/27/26/13, unchanged) and the table's UNRATIFIED label ratified. DECISIONS.md:7 UNRATIFIED residual-repair label removed (counts unchanged, 20/4). CF-33..CF-37 and PR-24..PR-25 landed | pushed — verdict at push | 2026-08-26 |
 | P01-T03B | OD-04 condition 2 swept in three tracked files the T03V fence did not name (`docs/research/08-form-review-and-next-steps.md`, `docs/research/09-locked-baseline.md`, `docs/method/DEVOS_ADAPTATION_NOTES.md`); one residual hit remains at `08-form-review-and-next-steps.md:187` (cell 1), a fence defect reported under PR-25, not repaired. OD-01 amended — region `eu-central-2` (Zurich) — and status changed to DECIDED. OD-05/D-21 signed: P02 design work proceeds ahead of P01 completion, bounded. CF-38..CF-41 and PR-26 landed; `tsconfig.tsbuildinfo` added to `.gitignore` | pushed — verdict at push | 2026-08-26 |
+| P01-T03B-F | OD-04 condition 2 residual closed: `08-form-review-and-next-steps.md:187` cell 1's assessment-of-posture phrasing replaced with `Portal certificate renewal ownership`. OD-01 self-contradiction repaired: `DECISIONS.md`'s stale "CLI evidence (P01): PENDING" line replaced to point at the region amendment already in the same OD. CF-38 reopened against the residual, then reclosed at T03B-F once the STEP 1 post-check verified 0 hits. CF-42..CF-43 and PR-27 landed | pushed — verdict at push | 2026-08-26 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 4 of T03B):
+Computed by (run after STEP 4 of T03B-F):
 `Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
 
-**Open — 25:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 ·
+**Open — 27:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 ·
 CF-09 · CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 ·
-CF-27 · CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41
+CF-27 · CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-42 · CF-43
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module

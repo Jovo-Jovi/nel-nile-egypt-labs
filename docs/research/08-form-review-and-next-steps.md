@@ -184,7 +184,7 @@ Ask for the full test list either way. If they can export it, this becomes achie
 | One results button, not two | Small simplification |
 | Photography self-supplied | Removes a cost line |
 | Middle East hosting preference | Constrains region choice; nearest practical options are Frankfurt or a Gulf region depending on provider. Since no personal data is collected, this is a performance decision more than a legal one |
-| Portal has no support contract | Renewal responsibility held in client correspondence, not in this repo. |
+| Portal certificate renewal ownership | Renewal responsibility held in client correspondence, not in this repo. |
 
 That last row deserves its own sentence in the quotation. **The results portal certificate expires 28 October 2026, inside your project window.** The person who maintains it is your project contact. If it lapses in the same week you launch, your new site will be blamed. Put the reminder in writing, dated, and keep the reply.
 
