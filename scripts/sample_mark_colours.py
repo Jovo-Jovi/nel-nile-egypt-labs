@@ -1,3 +1,4 @@
+# Evidence tooling, not application code. Reproduces the measurement in docs/research/15-mark-colour-sampling.md. Not imported by the application, not covered by its lint or type configuration, and not shipped.
 """P02-X02 — sample the flask mark. No network access. Reads two committed
 binaries and performs the exact pixel-accounting and merge-pass method
 specified in the task fence. Prints results for manual transcription into

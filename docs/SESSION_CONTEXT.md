@@ -49,18 +49,19 @@ on a verbal expansion of an unsigned scope.
 | P02-T04 | OD-06 (bounded portal read) and OD-07 (brand refinement in scope) signed; D-22..D-24 landed, DECISIONS.md now 24 decisions / 7 ODs. Brand-extraction evidence landed as `13-brand-extraction.md` and `14-brand-extraction-portal-login.md` — header-noted per PR-09, results-portal server/framework banners redacted under PR-27, 2018-site and Facebook records left untouched. `docs/research/README.md` and this document's file count updated to 14. CF-02, CF-42, CF-43 closed; CF-44..CF-51 landed (CF-44 and CF-47 closed, CF-45/CF-46/CF-48..CF-51 open) — open count 27 → 30. PR-28 and PR-29 landed | pushed — verdict at push | 2026-08-26 |
 | P02-T05 | `I18N_MODEL.md` landed byte-exact from the reviewer-authored payload (document 6 authored). Route arithmetic verified against `CONTENT_MODEL.md` §3c and `data/seed/catalogue.json`: 12 static × 2 + 9 programmes × 1 dynamic × 2 = 42. D-25..D-29 landed, DECISIONS.md now 29 decisions / 7 ODs; D-29 closes CF-48 (one chromatic family, eleven tokens). CF-52..CF-54 landed, open — open count 30 → 32 | pushed — verdict at push | 2026-08-26 |
 | P02-X02 | Reissue — sampled the flask mark from the two committed binaries, no network call. Both SHA-256 confirmed against `PROVENANCE.md`. Favicon (source of record): 19460 pixels, 13931 background / 1097 fringe / 4432 surviving, 1010 distinct survivor values, 38 merged groups. Cover crop (792,322)-(950,505) at background distance 30: 28914 pixels, 27693 surviving, 137 merged groups, top-edge/corner bleed identified and attributed. Favicon wins on the STEP 3 fidelity ruling: pink family corroborated (distance 7.6–12.6), dominant blue/indigo family not corroborated by the JPEG but not contradicted either. Landed as `docs/research/15-mark-colour-sampling.md` (research file count 14 → 15); no token role assigned, no hex fixed (OD-07 bound 1). D-29's hue assumption amended, D-30 landed, DECISIONS.md now 30 decisions / 7 ODs. CF-55..CF-56 landed, open — open count 32 → 34 | pushed — verdict at push | 2026-08-27 |
+| P02-X02-A | Pre-merge amendment to P02-X02, same branch. `scripts/sample_mark_colours.py` and `scripts/analyze_cover_groups.py` — the two tracked files P02-X02 landed unquoted and undisclosed — each headed with an evidence-tooling notice; `scripts/README.md` authored sanctioning the directory. CF-57 landed CLOSED (the non-disclosure finding) and CF-58 landed OPEN (scripts/ scope boundary, revisit at P03); open count 34 → 35 | pushed — verdict at push | 2026-08-27 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 6 of P02-X02):
+Computed by (run after STEP 4 of P02-X02-A):
 `bash -c "grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md"`
 
-**Open — 34:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 35:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 ·
-CF-51 · CF-52 · CF-53 · CF-54 · CF-55 · CF-56
+CF-51 · CF-52 · CF-53 · CF-54 · CF-55 · CF-56 · CF-58
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -85,6 +86,10 @@ the client)
 **Closed at P02-T05:** CF-48 (chromatic-family count resolved by D-29 — one
 family, eleven tokens)
 
+**Closed at P02-X02-A:** CF-57 (`scripts/` non-disclosure at P02-X02 — the
+measurement was correct, the failure was landing two tracked files the fence
+did not quote; scripts retained, `scripts/` sanctioned)
+
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
@@ -106,7 +111,9 @@ unspecified cross-script search matching (P03 search architecture). CF-55 and
 CF-56 are `DESIGN_SYSTEM.md` dependencies raised at P02-X02: sampled mark
 colours carry no token role until that document assigns one, and the mark's
 sampled hues need an AA contrast check that may require a derived UI variant
-alongside the mark's literal colour.
+alongside the mark's literal colour. CF-58 is the `scripts/` scope boundary
+landed at P02-X02-A: evidence tooling only, revisit if P03 needs a
+build-tooling path.
 
 ---
 

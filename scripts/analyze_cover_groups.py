@@ -1,3 +1,4 @@
+# Evidence tooling, not application code. Reproduces the measurement in docs/research/15-mark-colour-sampling.md. Not imported by the application, not covered by its lint or type configuration, and not shipped.
 """Spatial diagnostic for STEP 2 bleed attribution — not part of the
 reviewer-specified method itself (STEP 1/2 counts and merge pass are
 produced by sample_mark_colours.py unmodified). This script only reports
