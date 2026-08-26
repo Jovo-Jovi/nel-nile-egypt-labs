@@ -4,7 +4,7 @@ Binding procedural rulings. Consult before re-deriving an established pattern.
 A precedent binds every prompt issued and every verdict returned. To change one,
 supersede it explicitly and name what it replaces. Never deviate silently.
 
-**Next free id: PR-28**
+**Next free id: PR-30**
 
 | Id | Ruling |
 |---|---|
@@ -35,3 +35,5 @@ supersede it explicitly and name what it replaces. Never deviate silently.
 | **PR-25** | A Done-when check must be true of the payload its own fence lands. A pattern assertion that the fence's own mandated text violates is a fence defect, owned by the reviewer. The builder reports the mismatch and does not resolve it by editing the mandated text — that would be a PR-18 violation. Established at P01-T03V, where a 'PRIVATE' grep assertion contradicted OD-04's mandated verbatim text. |
 | **PR-26** | Tool-mandated filenames and third-party schema keys are outside the vocabulary rule. package.json, package-lock.json, node_modules, npm's dependencies key and supabase config.toml's field names are fixed by their tools and are not identifiers this project chose. The rule binds identifiers we choose: table, type, route, field, component and module names. Without this, every Node repository is a permanent standing defect. |
 | **PR-27** | OD-04 condition 2 draws its line between **dependency** and **assessment**. A third-party fact any visitor can observe — a TLS expiry date, a public URL — is a tracked dependency and stays. A characterisation of that system's operational posture — absence of a support contract, an unpatched or end-of-life claim, a server or framework version banner — is an assessment and does not appear in a tracked file while the repository is public. A sweep for this condition tests the class, never a single phrase. Established at the P01-T03B verdict, where a phrase-scoped sweep closed CF-38 against one residual hit. |
+| **PR-28** | A Done-when count over a ledger the same fence mutates states its arithmetic, not a bare number — base count by command, plus additions, minus closures. A bare number in that position is an assertion, and PR-01 binds the reviewer as tightly as the builder. Established at P01-T03B-F, where a fence asserted 26 against a payload computing 27, and at P01-T03B, where a sweep tested one phrase instead of the class its own OD names. |
+| **PR-29** | A bulk evidence payload that must land byte-exact is attached rather than inlined, and the fence makes the attachment verifiable: exact filename, exact first heading line, and at least two anchor strings with expected counts. The builder confirms all of them before editing and HALTs if any fails. This amends PR-04 rather than superseding it — self-containment still binds instructions and every payload small enough to inline. Established at P02-T04, where a fence referred to payloads it did not carry and the builder correctly halted. |

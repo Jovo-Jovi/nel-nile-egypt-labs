@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Twenty-one decisions. Five of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05). A decision is in force when it appears here. Conversation does not amend this file.
+Twenty-four decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -119,6 +119,76 @@ quotation is signed. That is a commercial call owned by the human.
 
 ---
 
+### OD-06 — Bounded brand read of the results portal
+
+**Status:** SIGNED
+**Signed:** 26 August 2026
+**Records retroactively:** two fetches of `nileegyptlabresults.com` performed 26
+August 2026 for brand extraction, authorised in conversation before this OD existed.
+`BOUNDARY_MODEL.md` §3 requires separate written scope for any assessment of that
+system, and PR-18 holds that conversation is not authority. This OD supplies the
+written scope and records what was done.
+**Decides:** a bounded read of the results portal is authorised for brand extraction
+only — a `GET` of the listed URL and its redirect target, plus only the stylesheet,
+webfont, favicon and image URLs appearing in those documents' own markup.
+**Forbidden, and observed as forbidden in both fetches:** submitting any credential ·
+following any navigation link · any URL bearing a query parameter not delivered in
+the markup · any path containing `report`, `result`, `patient` or a record id · any
+archive or mirror · fetching the application JavaScript bundles.
+**Not authorised, explicitly:** the Angular application bundles. Component styles
+live there, so the painted login view is UNDETERMINED. That limit stands and is not
+reopened for marginal certainty about a palette.
+**Does not decide:** any integration, modification or coupling with the results
+portal. D-17 stands — linked, never framed. No brand asset produced by this project
+is applied to that system.
+**Boundary position:** no patient record was rendered on any fetched URL and none was
+sought. The portal remains the patient-data surface and remains out of scope.
+
+### OD-07 — Brand refinement enters website scope
+
+**Status:** SIGNED
+**Signed:** 26 August 2026
+**Amends:** OD-03. Brand refinement is absent from the draft quotation; adding it
+under an active freeze requires this OD.
+**Client position, recorded as it is:** approved **verbally** on 26 August 2026. Not
+filed in writing. This OD does not represent a verbal approval as written
+confirmation. Carried forward until the quotation is signed.
+**Commercial position:** pricing deferred by the human. This OD adds unpriced work to
+a quotation already carrying CF-17 and CF-18 as outstanding repricing items.
+**Decides:** the engagement includes **Website UI/UX Modernization + Light Brand
+Refinement**, not Brand Identity Design. The existing bilingual flask lockup is the
+primary identity reference. The expression is modernised; the identity is preserved.
+**In scope:** logo refinement and vector-style reconstruction from the existing mark ·
+primary, compact, light and dark variants · a restrained digital colour palette ·
+bilingual typography direction · a UI design system · application across the website.
+**Out of scope, quotable separately:** alternative logo concepts · logo exploration ·
+corporate identity manual · stationery, signage, vehicle or packaging systems ·
+brand guidelines · naming or positioning · any full rebrand.
+**Bounds:**
+1. **No hex value is fixed by this OD.** Blue / navy / teal is a stated direction,
+   not a token set. `DESIGN_SYSTEM.md` fixes hex only after the mark is sampled at
+   the glyph. Neither stock palette — Medinova `#ffd133`, Kendo `#ff6358`, Bootstrap
+   `#007bff` — is a source.
+2. **No deliverable is applied to the results portal.** OD-06 and D-17 bind.
+   Scalability is constrained by favicon, app icon at 16px, and mobile header.
+3. **Composition is Arabic-first, mirrored to English** (D-10). `I18N_MODEL.md` is
+   authored before `DESIGN_SYSTEM.md` per OD-05 bound 3; Arabic typography
+   constrains the type system, not the reverse.
+4. **`result` and `patient` do not enter the design system.** Publishing status
+   tokens are `StatusState` and cover `Offer`, `Programme` and `Operator` states
+   only. No token renders clinical or patient status. GLOSSARY §5 binds.
+5. **Glyph provenance is confirmed.** The client confirmed verbally on 26 August 2026
+   that the flask symbol is theirs. Reconstruction may therefore proceed and its
+   output is NEL's to own.
+6. **No editable original exists.** The client holds no AI, EPS, SVG, PDF or
+   high-resolution raster. Reconstruction sources are the 2018 favicon at 139×140 and
+   the 2025 Facebook cover at 960×541, and nothing else. A reconstruction from
+   compressed raster is stated as such wherever the mark is documented.
+**Does not decide:** the number of chromatic families, or whether the refined mark
+needs the lab's written approval before launch. Both are carried forward.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze
@@ -204,3 +274,15 @@ OD-04, signed 25 August 2026. The repository is PUBLIC during development, for r
 ### D-21 — Phase order
 
 OD-05, signed 26 August 2026. P02 design work — brand extraction, I18N_MODEL.md, DESIGN_SYSTEM.md, and a single static landing-page mock — proceeds while P01 is incomplete, bounded so that G1 is not claimed, no schema/route/storage/LabTest content is touched, I18N_MODEL.md precedes DESIGN_SYSTEM.md, and the mock is replaced wholesale at P03.
+
+### D-22 — Bounded portal read
+
+OD-06, signed 26 August 2026. A brand-extraction read of the results portal is authorised for stylesheet, webfont, favicon and image URLs only, retroactively covering two fetches of 26 August 2026. Application bundles are not authorised and the painted login view stays UNDETERMINED. No integration, modification or coupling; D-17 stands.
+
+### D-23 — Brand refinement in scope
+
+OD-07, signed 26 August 2026. The engagement includes Website UI/UX Modernization and Light Brand Refinement, not Brand Identity Design. The bilingual flask lockup is the primary identity reference and the client has confirmed the flask symbol is theirs. No editable original exists; reconstruction sources are the 2018 favicon and the 2025 Facebook cover. No hex is fixed until the mark is sampled at the glyph; no deliverable reaches the results portal; composition is Arabic-first; `result` and `patient` stay out of the design system. Client approval is verbal and unfiled; pricing is deferred. Amends OD-03 and reprices alongside CF-17 and CF-18.
+
+### D-24 — Brand provenance
+
+Brand extraction, 26 August 2026, across three NEL web properties. The results portal's palette is Kendo UI Default and Bootstrap 4 stock values and its favicon is the Angular framework logo. The 2018 site's palette is the WpFreeware Medinova template's and its unused `logo.png` carries the template vendor's wordmark. The only genuine NEL brand asset in evidence is the bilingual flask lockup — `Nile` / `EGYPT LAB` / `معامل النيل مصر` — surviving in the 2018 favicon and on the 2025 Facebook cover, present on neither website's interface. `DESIGN_SYSTEM.md` derives from that mark, never from either stock palette.
