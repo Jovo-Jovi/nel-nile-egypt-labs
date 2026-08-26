@@ -16,7 +16,7 @@ Twenty-one decisions. Five of them are filed as formal Operational Decisions (OD
 **Decides:** the selection rule, not the region.
 **Rule:** at Supabase project creation, enumerate the regions the CLI reports as available, select the nearest to Cairo, and paste that CLI output into this OD as the evidence. The resolved region lands as an OD-01 amendment at P01.
 **Not a legal constraint:** the platform stores no personal data, so residency is a latency choice.
-**CLI evidence (P01):** PENDING. Do not assume a Middle East region exists.
+**CLI evidence (P01):** SUPERSEDED by the 26 August 2026 amendment below, which records the resolved region and states the evidence actually available.
 
 **Amendment — 26 August 2026 · region resolved.**
 
