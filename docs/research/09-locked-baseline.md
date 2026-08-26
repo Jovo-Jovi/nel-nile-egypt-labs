@@ -117,7 +117,7 @@ Recording these so nobody is surprised later. None of them should stop work.
 | **Launch date** — 1 September 2026 is not achievable for this scope | Still unresolved. Needs a date or a phase split agreed in writing before the quotation is issued |
 | **No signed approval and no company legal details** | Accepted; moves to the contract stage |
 | **Single point of contact** — one person is approver, content source, domain holder and sole admin | Mitigated by requiring a second admin account |
-| **Results portal certificate expires 28 October 2026**, inside the project window, with no support contract | Written reminder to him, dated, reply retained |
+| **Results portal certificate expires 28 October 2026**, inside the project window | Written reminder to him, dated, reply retained |
 | **WhatsApp responsiveness** — public reviews complain the lab does not answer WhatsApp | Their operational risk. Worth raising once, in writing, since the entire contact model depends on it |
 | **Hotline conflict** — 15504 supplied, 16402 still published on the old site and Facebook | Both corrected at launch |
 | **Fourth branch unverifiable** | Cannot be published until he supplies details |

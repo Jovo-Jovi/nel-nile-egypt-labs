@@ -38,17 +38,18 @@ done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 | P01-T03 | Schema task issued. HALTED at STEP 1 — no work landed. Generalised as PR-20 (a connected MCP server is not authorisation) and PR-22 (a fence requiring an artefact must name the task that landed it) | halted | 2026-08-25 |
 | P01-T03V | Visibility remediation, OD-04, state regeneration — `.gitignore` landed; OD-04/D-20 signed; six PRIVATE assertions replaced with the OD-04 public-repo state; `BOUNDARY_MODEL.md` §3 and CF-11 struck under OD-04 condition 2; clinical-framing notice added to `README.md` and `client-outbound/README.md`; CF-28..CF-32 and PR-20..PR-23 landed; this document regenerated | pushed — verdict at push | 2026-08-25 |
 | P01-T03A | Toolchain, CI, migrations path (re-cut for OD-04). Next.js/TypeScript/ESLint scaffolded at repo root; Supabase CLI installed as a devDependency (no global install); `npm run lint` / `typecheck` / `build` all exit 0; Next telemetry disabled via `postinstall: next telemetry disable`. Single build placeholder route landed per CONTENT_MODEL §3c (P03 replaces it). Public-repo CI workflow landed at `.github/workflows/ci.yml`, gated against fork-originated `pull_request` runs, `contents: read` only, no `pull_request_target`. `npx supabase init` produced `config.toml` + `.gitignore` only — CLI 2.115.0 does not create a `migrations/` directory on init; reported as a STEP 3 STOP, not fabricated. CONTENT_MODEL §3b figures verified against `data/seed/catalogue.json` (13/21/27/26/13, unchanged) and the table's UNRATIFIED label ratified. DECISIONS.md:7 UNRATIFIED residual-repair label removed (counts unchanged, 20/4). CF-33..CF-37 and PR-24..PR-25 landed | pushed — verdict at push | 2026-08-26 |
+| P01-T03B | OD-04 condition 2 swept in three tracked files the T03V fence did not name (`docs/research/08-form-review-and-next-steps.md`, `docs/research/09-locked-baseline.md`, `docs/method/DEVOS_ADAPTATION_NOTES.md`); one residual hit remains at `08-form-review-and-next-steps.md:187` (cell 1), a fence defect reported under PR-25, not repaired. OD-01 amended — region `eu-central-2` (Zurich) — and status changed to DECIDED. OD-05/D-21 signed: P02 design work proceeds ahead of P01 completion, bounded. CF-38..CF-41 and PR-26 landed; `tsconfig.tsbuildinfo` added to `.gitignore` | pushed — verdict at push | 2026-08-26 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 6 of T03V):
+Computed by (run after STEP 4 of T03B):
 `Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
 
-**Open — 23:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 ·
+**Open — 25:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 ·
 CF-09 · CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 ·
-CF-27 · CF-28 · CF-34 · CF-36 · CF-37
+CF-27 · CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -60,39 +61,47 @@ CF-21 (`Offer` currency) · CF-23 (`Branch` field names canonical)
 (`.gitignore` landed) · CF-31 (this document regenerated) · CF-32 (portal
 operational-weakness assessment struck under OD-04 condition 2)
 
+**Closed at T03B:** CF-38 (OD-04 condition 2 sweep, three further files) ·
+CF-40 (`tsconfig.tsbuildinfo` added to `.gitignore`)
+
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
 flag. CF-24 to CF-27 are document corrections owned by the reviewer, each
 closing at a numbered P01-T03 STEP 0 sub-step. CF-28 is the OD-04 visibility
-carry-forward, owned by the human, open until the G7 revert.
+carry-forward, owned by the human, open until the G7 revert. CF-39 is the
+Zurich-region GDPR/FADP adequacy question, owned by the human, open until
+P05. CF-41 is the Node engine-version drift between the build machine and CI,
+owned by the builder.
 
 ---
 
 ## Open ODs
 
-- **OD-01 — hosting region.** Rule decided. Region PENDING: enumerate Supabase
-  regions by CLI at project creation, select the nearest to Cairo, record the
-  CLI output in `DECISIONS.md`. Do not assume a Middle East region exists.
 - **OD-04 — repository visibility.** SIGNED. PUBLIC now; reverts to PRIVATE at
   P07 before DNS cutover — a G7 checklist item, not a courtesy.
 
-OD-02 (search architecture) and OD-03 (scope freeze) are DECIDED / SIGNED —
-see `DECISIONS.md`. Gate-0 document set (`PRODUCT_BRIEF` · `GLOSSARY` frozen,
-§6 superseded in part · `SCOPE` · `DECISIONS` authored · `CONTENT_MODEL`
-authored and amended · `BOUNDARY_MODEL` frozen, amended under OD-04 §3 only)
-is closed; phase has moved to P01.
+OD-01 (hosting region) is DECIDED — region `eu-central-2` (Zurich), amended
+26 August 2026. OD-02 (search architecture) and OD-03 (scope freeze) are
+DECIDED / SIGNED — see `DECISIONS.md`. OD-05 (phase order) is SIGNED 26
+August 2026 — P02 design work proceeds ahead of P01 completion, bounded; see
+`DECISIONS.md` OD-05. Gate-0 document set (`PRODUCT_BRIEF` · `GLOSSARY`
+frozen, §6 superseded in part · `SCOPE` · `DECISIONS` authored ·
+`CONTENT_MODEL` authored and amended · `BOUNDARY_MODEL` frozen, amended under
+OD-04 §3 only) is closed; phase has moved to P01.
 
 ---
 
 ## Next action
 
-**OD-01 — hosting region resolution (human).** Enumerate the Supabase regions
-the CLI reports as available at project creation, select the nearest to Cairo,
-and record that CLI output as the OD-01 amendment in `DECISIONS.md`. Do not
-assume a Middle East region exists.
+**Brand extraction (OD-05).** P02 design work proceeds ahead of P01
+completion, bounded per OD-05: I18N_MODEL.md before DESIGN_SYSTEM.md, no
+schema/route/storage/LabTest content, the landing-page mock replaced wholesale
+at P03, G1 not claimed.
 
-Then **P01-T03-R.**
+**P01-T03-R remains blocked on CF-34** (no local Postgres, no container
+runtime, no elevation) with no resolution date. Resumes the moment CF-34
+clears.
 
 ---
 

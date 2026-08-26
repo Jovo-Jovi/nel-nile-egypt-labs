@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-38**
+**Next free id: CF-42**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -43,6 +43,10 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-35 | DECISIONS.md:7 decision count carried an UNRATIFIED residual-repair label from T03V. Ratified at the T03V verdict against computed heading counts; label removed at T03A. | reviewer | CLOSED at T03A | `DECISIONS.md` at T03A |
 | CF-36 | Root route renders a build placeholder and contradicts CONTENT_MODEL §3c, which specifies that / renders no content and redirects to /ar. Replaced at P03. | builder | OPEN | P03 |
 | CF-37 | Supabase project created 25 Aug 2026. Plan tier, inactivity-pausing behaviour and backup posture are not confirmed against P07 cutover requirements. | human | OPEN | P07 cutover |
+| CF-38 | OD-04 condition 2 was violated in three tracked files the T03V fence did not name. Swept at T03B. The clause is already public in history from the 26 Aug 2026 visibility change and is not retractable by a later commit. | reviewer | CLOSED at T03B | `docs/research/08-form-review-and-next-steps.md` / `docs/research/09-locked-baseline.md` / `docs/method/DEVOS_ADAPTATION_NOTES.md` at T03B |
+| CF-39 | Supabase project region eu-central-2 (Zurich) is outside the EU. From P05 the Auth schema holds Operator email addresses — lab staff personal data, not patient data. Adequacy position not assessed by this project. | human | OPEN | P05 |
+| CF-40 | tsconfig.tsbuildinfo is written by tsc --noEmit under incremental:true and is not covered by .gitignore; next build re-adds incremental:true on every run. | builder | CLOSED at T03B | `.gitignore` at T03B |
+| CF-41 | Node engine drift: eslint-visitor-keys@5.0.1 requires ^22.13.0; the build machine and .github/workflows/ci.yml both pin 22.12.0. Non-fatal now, fatal on a future dependency bump. | builder | OPEN | — |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

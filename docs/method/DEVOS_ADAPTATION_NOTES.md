@@ -128,7 +128,7 @@ The build order is deliberately Phase-1-first — public site before dashboard �
 | YouTube channel empty despite content confirmed | Client |
 | Hotline 16402 live on ≥4 third-party directories | Excluded — propose as add-on |
 | Three duplicate Facebook pages | Excluded — propose as add-on |
-| Results portal certificate expires 28 Oct 2026, no support contract | Client — written reminder filed |
+| Results portal certificate expires 28 Oct 2026 | Client — written reminder filed |
 
 Eleven rows, and every one of them is a client dependency rather than a build defect. That is the honest state of this project: the engineering is well-defined and the risk sits almost entirely outside the repo.
 

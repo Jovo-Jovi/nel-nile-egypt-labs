@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Twenty decisions. Four of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04). A decision is in force when it appears here. Conversation does not amend this file.
+Twenty-one decisions. Five of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -12,11 +12,47 @@ Twenty decisions. Four of them are filed as formal Operational Decisions (OD-01,
 
 ### OD-01 — Hosting region
 
-**Status:** DECIDED-ON-RULE · region PENDING at P01
+**Status:** DECIDED
 **Decides:** the selection rule, not the region.
 **Rule:** at Supabase project creation, enumerate the regions the CLI reports as available, select the nearest to Cairo, and paste that CLI output into this OD as the evidence. The resolved region lands as an OD-01 amendment at P01.
 **Not a legal constraint:** the platform stores no personal data, so residency is a latency choice.
 **CLI evidence (P01):** PENDING. Do not assume a Middle East region exists.
+
+**Amendment — 26 August 2026 · region resolved.**
+
+**Region: `eu-central-2` (Central Europe — Zurich).** Selected 26 August
+2026. The project exists and its region is fixed; Supabase does not permit
+a region change after creation.
+
+**Why this region.** OD-01's rule is the region nearest to Cairo. Great-
+circle distances from Cairo (30.04N, 31.24E): Zurich ~2,750 km · Frankfurt
+~2,940 km · Paris ~3,240 km · London ~3,510 km · Mumbai ~4,375 km. Zurich
+is nearest. OD-01's instruction not to assume a Middle East region exists
+was correct: Supabase's seventeen specific regions run from West US to São
+Paulo and include none in the Middle East or Africa.
+
+**Evidence, stated as it actually is.** OD-01 specified CLI enumeration at
+project creation. The project was created through the Supabase dashboard,
+so no CLI enumeration output exists. The evidence of record is instead the
+published region list at
+https://supabase.com/docs/guides/platform/regions, read 26 August 2026, and
+the human's report of the selected region. This amendment does not
+represent dashboard selection as CLI output.
+
+**Project ref withheld.** OD-01 asked for the CLI output to be recorded
+here. OD-04 condition 1 forbids a project ref in any commit. Where those
+conflict, OD-04 wins: this amendment records the region and the enumeration
+evidence, and the project ref is not written to any tracked file. OD-01's
+recording requirement is discharged by the region and the reasoning, which
+is what it existed to evidence.
+
+**Open consequence.** Switzerland is not an EU member state. No patient or
+visitor personal data exists anywhere in this system, so no PHI residency
+question arises. From P05 the Supabase Auth schema will hold Operator email
+addresses — the lab's own staff, not patients. Switzerland holds a GDPR
+adequacy decision and its own revised FADP, so this is very likely
+unproblematic, but it is not a determination this project is competent to
+make. Tracked as a carry-forward against P05.
 
 ### OD-02 — Search
 
@@ -55,6 +91,31 @@ question is open and is tracked as a carry-forward owned by the human.
 **Known limit:** anything already pushed at `45ef104` is already public.
 This OD governs forward state only. Removing published history requires a
 rewrite and a force-push and is not authorised by this OD.
+
+### OD-05 — Phase order: P02 design work pulled ahead of P01 completion
+
+**Status:** SIGNED
+**Signed:** 26 August 2026
+**Decides:** P02 design work — brand extraction, I18N_MODEL.md,
+DESIGN_SYSTEM.md, and a single static landing-page mock — proceeds while
+P01 is incomplete.
+**Why:** P01-T03-R is blocked on CF-34 (no local Postgres, no container
+runtime, no elevation) with no resolution date. OD-03's scope freeze lapses
+15 September 2026 and a visual is the artefact most likely to convert the
+unsigned quotation. Idle sequencing serves nobody.
+**Bounds:**
+1. G1 is not reached and is not claimed. P01 remains open.
+2. No design task touches schema, routes beyond the existing placeholder,
+   storage, or LabTest content. The boundary and clinical gates are
+   unaffected and remain non-waivable.
+3. I18N_MODEL.md is authored before DESIGN_SYSTEM.md, per the precedence
+   order. RTL and Arabic typography constrain the design system.
+4. The landing-page mock is a mock. It is not a P03 deliverable, does not
+   satisfy any part of G3, and is replaced wholesale at P03.
+5. P01 resumes at T03-R the moment CF-34 clears. Design work does not
+   become an excuse to leave the schema unbuilt.
+**Does not decide:** whether the mock is shown to the client before the
+quotation is signed. That is a commercial call owned by the human.
 
 ---
 
@@ -139,3 +200,7 @@ Deferred by client decision, 25 August 2026. PR-08 holds: `LabTest` material shi
 ### D-20 — Repository visibility
 
 OD-04, signed 25 August 2026. The repository is PUBLIC during development, for review convenience, and reverts to PRIVATE before production cutover — the revert is a G7 checklist item.
+
+### D-21 — Phase order
+
+OD-05, signed 26 August 2026. P02 design work — brand extraction, I18N_MODEL.md, DESIGN_SYSTEM.md, and a single static landing-page mock — proceeds while P01 is incomplete, bounded so that G1 is not claimed, no schema/route/storage/LabTest content is touched, I18N_MODEL.md precedes DESIGN_SYSTEM.md, and the mock is replaced wholesale at P03.
