@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-52**
+**Next free id: CF-55**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -53,10 +53,13 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-45 | No editable original of the flask lockup exists; the client confirmed this on 26 August 2026. Reconstruction sources are the 2018 favicon at 139x140 and the 2025 Facebook cover at 960x541. Every artefact documenting the mark states that it is reconstructed from compressed raster. | client | OPEN | P02 DESIGN_SYSTEM.md |
 | CF-46 | The results portal's painted login view is UNDETERMINED — Angular component styles live in the JS bundles, not fetched under OD-06. The no-brand finding rests on the global stylesheet and the stock Angular favicon. DESIGN_SYSTEM.md states its evidence base rather than claiming proof. | reviewer | OPEN | P02 DESIGN_SYSTEM.md |
 | CF-47 | Flask glyph provenance. Confirmed by the client on 26 August 2026 that the symbol is theirs, so reconstruction produces an asset NEL can own. Raised because logo.png proved to be a template vendor's wordmark and the same defect class had to be excluded one layer down. | reviewer | CLOSED at P02-T04 | `CARRY_FORWARDS.md` at P02-T04 |
-| CF-48 | Number of chromatic families is undecided. OD-07 states a blue/navy/teal direction; whether the system carries one accent over a neutral ramp or three chromatic families is open. Restraint is cheaper to keep consistent across RTL and easier to certify at AA. | human | OPEN | P02 DESIGN_SYSTEM.md |
+| CF-48 | Number of chromatic families is undecided. OD-07 states a blue/navy/teal direction; whether the system carries one accent over a neutral ramp or three chromatic families is open. Restraint is cheaper to keep consistent across RTL and easier to certify at AA. CLOSED at P02-T05: resolved by D-29 — one chromatic family, eleven tokens. | human | CLOSED at P02-T05 | `DECISIONS.md` (D-29) at P02-T05 |
 | CF-49 | The refined mark needs the lab's written approval before launch. Not the clinical gate, which governs LabTest content only, but an approval dependency with client lead time. | human | OPEN | P07 |
 | CF-50 | OD-07's client approval is verbal and unfiled. OD-03 lapses 15 September 2026, after which no further build task is issued until a new freeze is signed. Brand refinement is proceeding on a verbal expansion of an unsigned scope. | human | OPEN | quotation signature |
 | CF-51 | OD-07 adds unpriced brand-refinement work to the draft quotation. Repricing joins CF-17 and CF-18. | human | OPEN | quotation amendment |
+| CF-52 | The Operator dashboard's own chrome language is undecided. I18N_MODEL.md §11 defers it to ADMIN_SPEC.md rather than assuming it follows the public site. | reviewer | OPEN | P04 ADMIN_SPEC.md |
+| CF-53 | The Arabic and Latin typefaces are unselected. I18N_MODEL.md §7 requires the Arabic face to carry the full diacritic set and to render the mark string correctly at mark sizes. Selection lands as a decision with the tested string, before DESIGN_SYSTEM.md fixes a type scale. | reviewer | OPEN | P02 DESIGN_SYSTEM.md |
+| CF-54 | Cross-script search matching is unspecified — whether an Arabic query returns a Latin-named LabTest. D-06 and OD-02 record a build-time index across both locales; the matching rule is a search-architecture question and I18N_MODEL.md §11 declines to answer it. | reviewer | OPEN | P03 search architecture |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

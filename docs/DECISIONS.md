@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Twenty-four decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
+Twenty-nine decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -286,3 +286,23 @@ OD-07, signed 26 August 2026. The engagement includes Website UI/UX Modernizatio
 ### D-24 — Brand provenance
 
 Brand extraction, 26 August 2026, across three NEL web properties. The results portal's palette is Kendo UI Default and Bootstrap 4 stock values and its favicon is the Angular framework logo. The 2018 site's palette is the WpFreeware Medinova template's and its unused `logo.png` carries the template vendor's wordmark. The only genuine NEL brand asset in evidence is the bilingual flask lockup — `Nile` / `EGYPT LAB` / `معامل النيل مصر` — surviving in the 2018 favicon and on the 2025 Facebook cover, present on neither website's interface. `DESIGN_SYSTEM.md` derives from that mark, never from either stock palette.
+
+### D-25 — Numerals
+
+Western Arabic digits (0-9) in both locales, uniformly. Eastern Arabic digits (U+0660–U+0669) appear nowhere in the platform, in either locale, in any field. Number, currency and date formatting pins the `ar-EG` locale with the Latin numbering system explicitly, never the runtime default. Ruled 26 August 2026. Recorded in `I18N_MODEL.md` §5.
+
+### D-26 — Locale routing
+
+Locale is the first path segment and is not inferred from the Visitor. No `Accept-Language` sniffing, no geolocation, no stored preference — a locale preference keyed to a Visitor is a stored preference about a person and `BOUNDARY_MODEL.md` §2 forbids it. An unrecognised locale segment returns 404 rather than coercing to the default. The language switcher navigates to the same page in the other locale. Recorded in `I18N_MODEL.md` §2 and §3.
+
+### D-27 — Logical properties
+
+Layout uses logical properties only. `left`, `right`, and every directional margin, padding, border, float and text-align are forbidden in any stylesheet, inline style or component. `dir` is set once on `<html>` from the locale segment. Two carve-outs, both because neither mirrors: box shadow and elevation offsets, and media assets whose own content is directional. Direction-encoding icons mirror; meaning-encoding icons do not. Recorded in `I18N_MODEL.md` §4.
+
+### D-28 — String catalogue parity
+
+Every Visitor-facing and Operator-facing chrome string exists in `ar` and `en`. A missing key is a build failure, never a render-time fallback to the other locale. Persisted entity strings are not catalogue strings: if an `Operator` may edit it, it is data; if only a developer may, it is a catalogue string. Parity is computed by command at every gate, never asserted. Recorded in `I18N_MODEL.md` §8.
+
+### D-29 — Chromatic families
+
+One chromatic family, not three. The blue-to-cyan range the P02 scope decision describes is one hue family walked in stops, not three independent brand colours. Structure: `primary`, `primary-strong`, `accent` (interactive affordance only, never a surface fill), a five-step neutral ramp cool-tinted from the primary hue rather than pure grey, and three semantic colours used functionally and never decoratively. Eleven tokens. Ruled at the P02-T04-A verdict on RTL verification cost, AA contrast-pair count, the absence of any sampled colour from the mark, and the scope decision's own instruction to avoid a colourful result. No hex value is fixed by this decision — OD-07 bound 1 binds until the mark is sampled at the glyph. Closes CF-48. Lands in full in `DESIGN_SYSTEM.md`.
