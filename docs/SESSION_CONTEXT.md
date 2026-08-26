@@ -37,6 +37,7 @@ done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 | P00-T02-H | Branch set closed out. PR #1, #2, #3 confirmed merged to `main`; `git diff --stat 72bd32f origin/main` → 0 lines; both FROZEN markers and all four T02-A markers present on `main`. Three remote branches deleted with `-d`/`--delete`. CF-24..CF-27 landed, open count 15 → 19 | merged | 2026-08-25 |
 | P01-T03 | Schema task issued. HALTED at STEP 1 — no work landed. Generalised as PR-20 (a connected MCP server is not authorisation) and PR-22 (a fence requiring an artefact must name the task that landed it) | halted | 2026-08-25 |
 | P01-T03V | Visibility remediation, OD-04, state regeneration — `.gitignore` landed; OD-04/D-20 signed; six PRIVATE assertions replaced with the OD-04 public-repo state; `BOUNDARY_MODEL.md` §3 and CF-11 struck under OD-04 condition 2; clinical-framing notice added to `README.md` and `client-outbound/README.md`; CF-28..CF-32 and PR-20..PR-23 landed; this document regenerated | pushed — verdict at push | 2026-08-25 |
+| P01-T03A | Toolchain, CI, migrations path (re-cut for OD-04). Next.js/TypeScript/ESLint scaffolded at repo root; Supabase CLI installed as a devDependency (no global install); `npm run lint` / `typecheck` / `build` all exit 0; Next telemetry disabled via `postinstall: next telemetry disable`. Single build placeholder route landed per CONTENT_MODEL §3c (P03 replaces it). Public-repo CI workflow landed at `.github/workflows/ci.yml`, gated against fork-originated `pull_request` runs, `contents: read` only, no `pull_request_target`. `npx supabase init` produced `config.toml` + `.gitignore` only — CLI 2.115.0 does not create a `migrations/` directory on init; reported as a STEP 3 STOP, not fabricated. CONTENT_MODEL §3b figures verified against `data/seed/catalogue.json` (13/21/27/26/13, unchanged) and the table's UNRATIFIED label ratified. DECISIONS.md:7 UNRATIFIED residual-repair label removed (counts unchanged, 20/4). CF-33..CF-37 and PR-24..PR-25 landed | pushed — verdict at push | 2026-08-26 |
 
 ---
 
@@ -45,9 +46,9 @@ done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 Computed by (run after STEP 6 of T03V):
 `Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
 
-**Open — 20:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 ·
+**Open — 23:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 ·
 CF-09 · CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 ·
-CF-27 · CF-28
+CF-27 · CF-28 · CF-34 · CF-36 · CF-37
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -86,7 +87,12 @@ is closed; phase has moved to P01.
 
 ## Next action
 
-**P01-T03A — toolchain, CI, migrations path.**
+**OD-01 — hosting region resolution (human).** Enumerate the Supabase regions
+the CLI reports as available at project creation, select the nearest to Cairo,
+and record that CLI output as the OD-01 amendment in `DECISIONS.md`. Do not
+assume a Middle East region exists.
+
+Then **P01-T03-R.**
 
 ---
 
