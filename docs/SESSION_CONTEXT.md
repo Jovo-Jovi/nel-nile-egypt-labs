@@ -35,7 +35,7 @@ on a verbal expansion of an unsigned scope.
 | Step | Task | Verdict | Date |
 |---|---|---|---|
 | — | Repo scaffolded from bootstrap | — | |
-| — | Research evidence landed in `docs/research/` (14 files) | — | |
+| — | Research evidence landed in `docs/research/` (15 files, `git ls-files docs/research/ \| grep -v README \| grep -v assets/ \| wc -l`) | — | |
 | — | Seed verified: `python data/seed/verify_seed.py` → `121 -> 72`, PASS | — | |
 | P00-T01-R | Gate-0 seeded pair audited, amended and FROZEN — `GLOSSARY.md` · `BOUNDARY_MODEL.md`. Merged to `main` as PR #1 (`94642db`, includes `7843267`) | merged | 2026-08-25 |
 | P00-T02 | `DECISIONS.md` (D-01..D-19, OD-01..OD-03) and `CONTENT_MODEL.md` authored. CF-16 closed. Route enumeration stated 12 patterns / 24 URLs — superseded by T02-A | superseded | 2026-08-25 |
@@ -48,18 +48,19 @@ on a verbal expansion of an unsigned scope.
 | P01-T03B-F | OD-04 condition 2 residual closed: `08-form-review-and-next-steps.md:187` cell 1's assessment-of-posture phrasing replaced with `Portal certificate renewal ownership`. OD-01 self-contradiction repaired: `DECISIONS.md`'s stale "CLI evidence (P01): PENDING" line replaced to point at the region amendment already in the same OD. CF-38 reopened against the residual, then reclosed at T03B-F once the STEP 1 post-check verified 0 hits. CF-42..CF-43 and PR-27 landed | pushed — verdict at push | 2026-08-26 |
 | P02-T04 | OD-06 (bounded portal read) and OD-07 (brand refinement in scope) signed; D-22..D-24 landed, DECISIONS.md now 24 decisions / 7 ODs. Brand-extraction evidence landed as `13-brand-extraction.md` and `14-brand-extraction-portal-login.md` — header-noted per PR-09, results-portal server/framework banners redacted under PR-27, 2018-site and Facebook records left untouched. `docs/research/README.md` and this document's file count updated to 14. CF-02, CF-42, CF-43 closed; CF-44..CF-51 landed (CF-44 and CF-47 closed, CF-45/CF-46/CF-48..CF-51 open) — open count 27 → 30. PR-28 and PR-29 landed | pushed — verdict at push | 2026-08-26 |
 | P02-T05 | `I18N_MODEL.md` landed byte-exact from the reviewer-authored payload (document 6 authored). Route arithmetic verified against `CONTENT_MODEL.md` §3c and `data/seed/catalogue.json`: 12 static × 2 + 9 programmes × 1 dynamic × 2 = 42. D-25..D-29 landed, DECISIONS.md now 29 decisions / 7 ODs; D-29 closes CF-48 (one chromatic family, eleven tokens). CF-52..CF-54 landed, open — open count 30 → 32 | pushed — verdict at push | 2026-08-26 |
+| P02-X02 | Reissue — sampled the flask mark from the two committed binaries, no network call. Both SHA-256 confirmed against `PROVENANCE.md`. Favicon (source of record): 19460 pixels, 13931 background / 1097 fringe / 4432 surviving, 1010 distinct survivor values, 38 merged groups. Cover crop (792,322)-(950,505) at background distance 30: 28914 pixels, 27693 surviving, 137 merged groups, top-edge/corner bleed identified and attributed. Favicon wins on the STEP 3 fidelity ruling: pink family corroborated (distance 7.6–12.6), dominant blue/indigo family not corroborated by the JPEG but not contradicted either. Landed as `docs/research/15-mark-colour-sampling.md` (research file count 14 → 15); no token role assigned, no hex fixed (OD-07 bound 1). D-29's hue assumption amended, D-30 landed, DECISIONS.md now 30 decisions / 7 ODs. CF-55..CF-56 landed, open — open count 32 → 34 | pushed — verdict at push | 2026-08-27 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 5 of P02-T05):
-`Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
+Computed by (run after STEP 6 of P02-X02):
+`bash -c "grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md"`
 
-**Open — 32:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 34:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 ·
-CF-51 · CF-52 · CF-53 · CF-54
+CF-51 · CF-52 · CF-53 · CF-54 · CF-55 · CF-56
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -101,7 +102,11 @@ OD-07 exposures: verbal, unfiled client approval racing OD-03's 15 September
 quotation. CF-52, CF-53 and CF-54 are `I18N_MODEL.md` deferrals landed at
 P02-T05: the Operator dashboard's chrome language (P04 `ADMIN_SPEC.md`), the
 unselected Arabic and Latin typefaces (P02 `DESIGN_SYSTEM.md`), and
-unspecified cross-script search matching (P03 search architecture).
+unspecified cross-script search matching (P03 search architecture). CF-55 and
+CF-56 are `DESIGN_SYSTEM.md` dependencies raised at P02-X02: sampled mark
+colours carry no token role until that document assigns one, and the mark's
+sampled hues need an AA contrast check that may require a derived UI variant
+alongside the mark's literal colour.
 
 ---
 
@@ -129,11 +134,16 @@ OD-04 §3 only) is closed; phase has moved to P01.
 **Author `DESIGN_SYSTEM.md` (OD-05 bound 3).** `I18N_MODEL.md` has landed
 (document 6) and constrains it — RTL and Arabic typography, logical
 properties, and the D-29 eleven-token chromatic structure are fixed inputs,
-not decisions this document reopens. Blocked on the mark-sampling pass for
-hex values: OD-07 bound 1 fixes no hex until the mark is sampled at the
-glyph. P02 design work remains bounded per OD-05: no schema/route/storage/
-LabTest content, the landing-page mock replaced wholesale at P03, G1 not
-claimed.
+not decisions this document reopens. **The hex dependency is now satisfied**:
+the mark has been sampled at the glyph (`docs/research/15-mark-colour-sampling.md`,
+P02-X02) and D-29/D-30 record the corrected hue assumption — no cyan, no
+teal, one chromatic family. `DESIGN_SYSTEM.md` maps the sampled values onto
+the eleven-token structure and assigns the token role that document 15
+explicitly withholds (OD-07 bound 1). **CF-53 (typefaces) is still open** —
+the Arabic and Latin faces remain unselected and must land alongside the
+token assignment. P02 design work remains bounded per OD-05: no
+schema/route/storage/LabTest content, the landing-page mock replaced
+wholesale at P03, G1 not claimed.
 
 **P01-T03-R remains blocked on CF-34** (no local Postgres, no container
 runtime, no elevation) with no resolution date. Resumes the moment CF-34

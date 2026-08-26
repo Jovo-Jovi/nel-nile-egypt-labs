@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Twenty-nine decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
+Thirty decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -305,4 +305,8 @@ Every Visitor-facing and Operator-facing chrome string exists in `ar` and `en`. 
 
 ### D-29 — Chromatic families
 
-One chromatic family, not three. The blue-to-cyan range the P02 scope decision describes is one hue family walked in stops, not three independent brand colours. Structure: `primary`, `primary-strong`, `accent` (interactive affordance only, never a surface fill), a five-step neutral ramp cool-tinted from the primary hue rather than pure grey, and three semantic colours used functionally and never decoratively. Eleven tokens. Ruled at the P02-T04-A verdict on RTL verification cost, AA contrast-pair count, the absence of any sampled colour from the mark, and the scope decision's own instruction to avoid a colourful result. No hex value is fixed by this decision — OD-07 bound 1 binds until the mark is sampled at the glyph. Closes CF-48. Lands in full in `DESIGN_SYSTEM.md`.
+One chromatic family, not three. The P02 scope decision proposed a blue-to-cyan range; sampling at P02-X02 found the mark carries no cyan and no teal, so the family is the mark's own hue and the mark's second colour occupies the `accent` slot. Amended at P02-X02. Structure: `primary`, `primary-strong`, `accent` (interactive affordance only, never a surface fill), a five-step neutral ramp cool-tinted from the primary hue rather than pure grey, and three semantic colours used functionally and never decoratively. Eleven tokens. Ruled at the P02-T04-A verdict on RTL verification cost, AA contrast-pair count, the absence of any sampled colour from the mark, and the scope decision's own instruction to avoid a colourful result. No hex value is fixed by this decision — OD-07 bound 1 binds until the mark is sampled at the glyph. Closes CF-48. Lands in full in `DESIGN_SYSTEM.md`.
+
+### D-30 — Mark hue, corrected
+
+The P02 scope decision recommended deep Nile blue, navy, teal and controlled cyan. Sampling the preserved 2018 favicon at P02-X02 found neither teal nor cyan present in the mark. The dominant hue and the mark's second colour are recorded in `docs/research/15-mark-colour-sampling.md`; that document assigns no token role and fixes no hex, and `DESIGN_SYSTEM.md` maps sampled values onto the eleven-token structure D-29 fixes. The recommended direction is superseded by the measurement. D-29's structure stands unchanged; only its hue assumption is amended.
