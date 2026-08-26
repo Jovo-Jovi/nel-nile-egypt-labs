@@ -1,7 +1,7 @@
 {
   "name": "nel-nile-egypt-labs",
   "version": "1.0.0",
-  "description": "Bilingual (Arabic/English) website and content dashboard for a medical laboratory in Cairo, replacing an unfinished 2018 template site.",
+  "description": "Bilingual (Arabic/English) public website and Operator dashboard for a medical laboratory in Cairo, replacing an unfinished 2018 template site.",
   "main": "index.js",
   "directories": {
     "doc": "docs"
