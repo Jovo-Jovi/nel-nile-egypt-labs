@@ -2,12 +2,12 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-44**
+**Next free id: CF-52**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
 | CF-01 | Clinical corrections outstanding — 5 flagged defects (FSH/TSH, APP/AFP, SCOT/SGOT, `Creatinine\urea`, Westergren spelling) + 4 tests named in descriptions but absent from their panels | Lab clinical staff | OPEN | P06 / G6 |
-| CF-02 | Logo unverified — file is 274×35, dated 10 May 2015, likely a Medinova template asset. Client may have no logo at all | Client | OPEN | P02 |
+| CF-02 | Logo unverified — file is 274×35, dated 10 May 2015, likely a Medinova template asset. Client may have no logo at all. CLOSED at P02-T04: the 274×35 file reads `WPF MEDINOVA`; the real mark is the bilingual flask lockup surviving in the 2018 favicon and the 2025 Facebook cover; "client may have no logo at all" is answered NO. | Client | CLOSED at P02-T04 | `docs/research/13-brand-extraction.md` at P02-T04 |
 | CF-03 | Launch date unagreed — client stated 1 Sep 2026, not achievable for this scope | Client | OPEN | P00 / G0 |
 | CF-04 | Fourth Branch unconfirmed — a lab exists at 37 El Garage St, apt 9, but the listing name and street number do not match | Client | OPEN | P03 |
 | CF-05 | Working hours unconfirmed for all four Branches. Google contradicts the supplied 10:00–23:00 on two of them | Client | OPEN | P03 |
@@ -47,8 +47,16 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-39 | Supabase project region eu-central-2 (Zurich) is outside the EU. From P05 the Auth schema holds Operator email addresses — lab staff personal data, not patient data. Adequacy position not assessed by this project. | human | OPEN | P05 |
 | CF-40 | tsconfig.tsbuildinfo is written by tsc --noEmit under incremental:true and is not covered by .gitignore; next build re-adds incremental:true on every run. | builder | CLOSED at T03B | `.gitignore` at T03B |
 | CF-41 | Node engine drift: eslint-visitor-keys@5.0.1 requires ^22.13.0; the build machine and .github/workflows/ci.yml both pin 22.12.0. Non-fatal now, fatal on a future dependency bump. | builder | OPEN | — |
-| CF-42 | P02-X01 brand extraction was run without a reviewer-issued fence and assessed the results portal, which BOUNDARY_MODEL.md §3 places behind separate written scope and authorisation. The fetch stopped correctly at the 302 and no patient data was seen, but the authorisation was absent and the collection fences are self-attested. | reviewer | OPEN | the OD proposed at the T03B verdict |
-| CF-43 | The P02-X01 report records the results portal's server and framework version banners. Those must be redacted before that report lands in a tracked file while the repository is public (OD-04 condition 2). | reviewer | OPEN | P02-X01 landing |
+| CF-42 | P02-X01 brand extraction was run without a reviewer-issued fence and assessed the results portal, which BOUNDARY_MODEL.md §3 places behind separate written scope and authorisation. The fetch stopped correctly at the 302 and no patient data was seen, but the authorisation was absent and the collection fences are self-attested. CLOSED at P02-T04: OD-06 supplies the written scope, retroactively covering both fetches. | reviewer | CLOSED at P02-T04 | `DECISIONS.md` (OD-06) at P02-T04 |
+| CF-43 | The P02-X01 report records the results portal's server and framework version banners. Those must be redacted before that report lands in a tracked file while the repository is public (OD-04 condition 2). CLOSED at P02-T04: redaction applied under PR-27 in `13-brand-extraction.md` and `14-brand-extraction-portal-login.md`. | reviewer | CLOSED at P02-T04 | `docs/research/13-brand-extraction.md` / `14-brand-extraction-portal-login.md` at P02-T04 |
+| CF-44 | Reviewer Done-when arithmetic. The T03B-F fence asserted an OPEN count of 26 against a payload computing 27. Caught by the builder under PR-25 and ratified at the T03B-F verdict. | reviewer | CLOSED at P02-T04 | `CARRY_FORWARDS.md` at P02-T04 |
+| CF-45 | No editable original of the flask lockup exists; the client confirmed this on 26 August 2026. Reconstruction sources are the 2018 favicon at 139x140 and the 2025 Facebook cover at 960x541. Every artefact documenting the mark states that it is reconstructed from compressed raster. | client | OPEN | P02 DESIGN_SYSTEM.md |
+| CF-46 | The results portal's painted login view is UNDETERMINED — Angular component styles live in the JS bundles, not fetched under OD-06. The no-brand finding rests on the global stylesheet and the stock Angular favicon. DESIGN_SYSTEM.md states its evidence base rather than claiming proof. | reviewer | OPEN | P02 DESIGN_SYSTEM.md |
+| CF-47 | Flask glyph provenance. Confirmed by the client on 26 August 2026 that the symbol is theirs, so reconstruction produces an asset NEL can own. Raised because logo.png proved to be a template vendor's wordmark and the same defect class had to be excluded one layer down. | reviewer | CLOSED at P02-T04 | `CARRY_FORWARDS.md` at P02-T04 |
+| CF-48 | Number of chromatic families is undecided. OD-07 states a blue/navy/teal direction; whether the system carries one accent over a neutral ramp or three chromatic families is open. Restraint is cheaper to keep consistent across RTL and easier to certify at AA. | human | OPEN | P02 DESIGN_SYSTEM.md |
+| CF-49 | The refined mark needs the lab's written approval before launch. Not the clinical gate, which governs LabTest content only, but an approval dependency with client lead time. | human | OPEN | P07 |
+| CF-50 | OD-07's client approval is verbal and unfiled. OD-03 lapses 15 September 2026, after which no further build task is issued until a new freeze is signed. Brand refinement is proceeding on a verbal expansion of an unsigned scope. | human | OPEN | quotation signature |
+| CF-51 | OD-07 adds unpriced brand-refinement work to the draft quotation. Repricing joins CF-17 and CF-18. | human | OPEN | quotation amendment |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

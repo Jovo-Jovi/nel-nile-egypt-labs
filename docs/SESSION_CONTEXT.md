@@ -22,6 +22,12 @@ PUBLIC during development, for review convenience, and reverts to PRIVATE
 before production cutover. The revert is a G7 checklist item; until it is
 done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 
+**OD-07 — verbal client approval (CF-50).** Brand refinement was approved
+verbally on 26 August 2026, not filed in writing. OD-03's scope freeze lapses
+15 September 2026 if no signed quotation lands, after which no further build
+task is issued until a new freeze is signed. Brand refinement is proceeding
+on a verbal expansion of an unsigned scope.
+
 ---
 
 ## Done steps
@@ -29,7 +35,7 @@ done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 | Step | Task | Verdict | Date |
 |---|---|---|---|
 | — | Repo scaffolded from bootstrap | — | |
-| — | Research evidence landed in `docs/research/` (12 files) | — | |
+| — | Research evidence landed in `docs/research/` (14 files) | — | |
 | — | Seed verified: `python data/seed/verify_seed.py` → `121 -> 72`, PASS | — | |
 | P00-T01-R | Gate-0 seeded pair audited, amended and FROZEN — `GLOSSARY.md` · `BOUNDARY_MODEL.md`. Merged to `main` as PR #1 (`94642db`, includes `7843267`) | merged | 2026-08-25 |
 | P00-T02 | `DECISIONS.md` (D-01..D-19, OD-01..OD-03) and `CONTENT_MODEL.md` authored. CF-16 closed. Route enumeration stated 12 patterns / 24 URLs — superseded by T02-A | superseded | 2026-08-25 |
@@ -40,17 +46,19 @@ done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 | P01-T03A | Toolchain, CI, migrations path (re-cut for OD-04). Next.js/TypeScript/ESLint scaffolded at repo root; Supabase CLI installed as a devDependency (no global install); `npm run lint` / `typecheck` / `build` all exit 0; Next telemetry disabled via `postinstall: next telemetry disable`. Single build placeholder route landed per CONTENT_MODEL §3c (P03 replaces it). Public-repo CI workflow landed at `.github/workflows/ci.yml`, gated against fork-originated `pull_request` runs, `contents: read` only, no `pull_request_target`. `npx supabase init` produced `config.toml` + `.gitignore` only — CLI 2.115.0 does not create a `migrations/` directory on init; reported as a STEP 3 STOP, not fabricated. CONTENT_MODEL §3b figures verified against `data/seed/catalogue.json` (13/21/27/26/13, unchanged) and the table's UNRATIFIED label ratified. DECISIONS.md:7 UNRATIFIED residual-repair label removed (counts unchanged, 20/4). CF-33..CF-37 and PR-24..PR-25 landed | pushed — verdict at push | 2026-08-26 |
 | P01-T03B | OD-04 condition 2 swept in three tracked files the T03V fence did not name (`docs/research/08-form-review-and-next-steps.md`, `docs/research/09-locked-baseline.md`, `docs/method/DEVOS_ADAPTATION_NOTES.md`); one residual hit remains at `08-form-review-and-next-steps.md:187` (cell 1), a fence defect reported under PR-25, not repaired. OD-01 amended — region `eu-central-2` (Zurich) — and status changed to DECIDED. OD-05/D-21 signed: P02 design work proceeds ahead of P01 completion, bounded. CF-38..CF-41 and PR-26 landed; `tsconfig.tsbuildinfo` added to `.gitignore` | pushed — verdict at push | 2026-08-26 |
 | P01-T03B-F | OD-04 condition 2 residual closed: `08-form-review-and-next-steps.md:187` cell 1's assessment-of-posture phrasing replaced with `Portal certificate renewal ownership`. OD-01 self-contradiction repaired: `DECISIONS.md`'s stale "CLI evidence (P01): PENDING" line replaced to point at the region amendment already in the same OD. CF-38 reopened against the residual, then reclosed at T03B-F once the STEP 1 post-check verified 0 hits. CF-42..CF-43 and PR-27 landed | pushed — verdict at push | 2026-08-26 |
+| P02-T04 | OD-06 (bounded portal read) and OD-07 (brand refinement in scope) signed; D-22..D-24 landed, DECISIONS.md now 24 decisions / 7 ODs. Brand-extraction evidence landed as `13-brand-extraction.md` and `14-brand-extraction-portal-login.md` — header-noted per PR-09, results-portal server/framework banners redacted under PR-27, 2018-site and Facebook records left untouched. `docs/research/README.md` and this document's file count updated to 14. CF-02, CF-42, CF-43 closed; CF-44..CF-51 landed (CF-44 and CF-47 closed, CF-45/CF-46/CF-48..CF-51 open) — open count 27 → 30. PR-28 and PR-29 landed | pushed — verdict at push | 2026-08-26 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 4 of T03B-F):
+Computed by (run after STEP 5 of P02-T04):
 `Select-String -Path docs/method/CARRY_FORWARDS.md -Pattern "^\| CF-\d+ .*\| OPEN \|"`
 
-**Open — 27:** CF-01 · CF-02 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 ·
-CF-09 · CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 ·
-CF-27 · CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-42 · CF-43
+**Open — 30:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
+CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-48 · CF-49 ·
+CF-50 · CF-51
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -65,6 +73,13 @@ operational-weakness assessment struck under OD-04 condition 2)
 **Closed at T03B:** CF-38 (OD-04 condition 2 sweep, three further files) ·
 CF-40 (`tsconfig.tsbuildinfo` added to `.gitignore`)
 
+**Closed at P02-T04:** CF-02 (logo determination — the 274×35 file reads `WPF
+MEDINOVA`; the genuine mark is the bilingual flask) · CF-42 (OD-06 supplies
+the written scope for the retroactive portal read) · CF-43 (results-portal
+server/framework banners redacted under PR-27) · CF-44 (T03B-F Done-when
+arithmetic mismatch, ratified) · CF-47 (flask glyph provenance confirmed by
+the client)
+
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
@@ -73,7 +88,13 @@ closing at a numbered P01-T03 STEP 0 sub-step. CF-28 is the OD-04 visibility
 carry-forward, owned by the human, open until the G7 revert. CF-39 is the
 Zurich-region GDPR/FADP adequacy question, owned by the human, open until
 P05. CF-41 is the Node engine-version drift between the build machine and CI,
-owned by the builder.
+owned by the builder. CF-45, CF-46, CF-48 and CF-49 are `DESIGN_SYSTEM.md`
+dependencies raised at brand extraction under OD-06/OD-07: no editable
+original of the mark, the portal's painted login staying UNDETERMINED, the
+undecided chromatic-family count, and the lab's pre-launch approval of the
+refined mark. CF-50 and CF-51 are the OD-07 exposures: verbal, unfiled client
+approval racing OD-03's 15 September 2026 lapse, and unpriced brand-
+refinement work joining CF-17/CF-18 at the quotation.
 
 ---
 
@@ -86,7 +107,10 @@ OD-01 (hosting region) is DECIDED — region `eu-central-2` (Zurich), amended
 26 August 2026. OD-02 (search architecture) and OD-03 (scope freeze) are
 DECIDED / SIGNED — see `DECISIONS.md`. OD-05 (phase order) is SIGNED 26
 August 2026 — P02 design work proceeds ahead of P01 completion, bounded; see
-`DECISIONS.md` OD-05. Gate-0 document set (`PRODUCT_BRIEF` · `GLOSSARY`
+`DECISIONS.md` OD-05. OD-06 (bounded brand read of the results portal) and
+OD-07 (brand refinement enters website scope, amending OD-03) are both
+SIGNED 26 August 2026 — see `DECISIONS.md` OD-06 and OD-07. Gate-0 document
+set (`PRODUCT_BRIEF` · `GLOSSARY`
 frozen, §6 superseded in part · `SCOPE` · `DECISIONS` authored ·
 `CONTENT_MODEL` authored and amended · `BOUNDARY_MODEL` frozen, amended under
 OD-04 §3 only) is closed; phase has moved to P01.
@@ -95,10 +119,12 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**Brand extraction (OD-05).** P02 design work proceeds ahead of P01
-completion, bounded per OD-05: I18N_MODEL.md before DESIGN_SYSTEM.md, no
-schema/route/storage/LabTest content, the landing-page mock replaced wholesale
-at P03, G1 not claimed.
+**Author `I18N_MODEL.md` (OD-05 bound 3).** Brand extraction has landed
+(`13-brand-extraction.md`, `14-brand-extraction-portal-login.md`; OD-06,
+OD-07). `I18N_MODEL.md` is authored before `DESIGN_SYSTEM.md` — RTL and
+Arabic typography constrain the design system, not the reverse. P02 design
+work remains bounded per OD-05: no schema/route/storage/LabTest content, the
+landing-page mock replaced wholesale at P03, G1 not claimed.
 
 **P01-T03-R remains blocked on CF-34** (no local Postgres, no container
 runtime, no elevation) with no resolution date. Resumes the moment CF-34
