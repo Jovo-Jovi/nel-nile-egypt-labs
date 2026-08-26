@@ -154,7 +154,7 @@ No other raster logo URL in the HTML. CSS `logo` / `login` hits are Kendo icon g
 
 **Webfonts**
 
-- Font Awesome **4.7.0**, self-hosted under `/Login/`, **https**:
+- Font Awesome **[version redacted under PR-27]**, self-hosted under `/Login/`, **https**:
   `url(fontawesome-webfont.af7ae505a9eed503f8b8.woff2?v=[redacted under PR-27])` etc.
   HEAD `https://www.nileegyptlabresults.com/Login/fontawesome-webfont.af7ae505a9eed503f8b8.woff2?v=[redacted under PR-27]` → `Content-Type: application/font-woff2`, `Last-Modified: Sun, 07 Nov 2021 15:09:36 GMT`, `Content-Length: 77160`
 - Kendo `WebComponentsIcons` is an inlined TTF data URI (https page, data URL)
@@ -170,7 +170,7 @@ No other raster logo URL in the HTML. CSS `logo` / `login` hits are Kendo icon g
 
 ### D. Template fingerprint
 
-**Verdict: TEMPLATE / vendor stack — Angular SPA + Kendo UI Default theme + Bootstrap 4 + Font Awesome 4.7.0.** Not Medinova. Not a lab-named theme.
+**Verdict: TEMPLATE / vendor stack — Angular SPA + Kendo UI Default theme + Bootstrap 4 + Font Awesome.** Not Medinova. Not a lab-named theme.
 
 Deciding source lines:
 
@@ -178,7 +178,7 @@ Deciding source lines:
 2. HTML `<title>Results WebSite</title>` — generic, not the lab name.
 3. CSS first tokens: `.k-common-test-class,.k-theme-test-class{opacity:0}.k-widget{…}` and `.k-button.k-primary{border-color:#ff6358;background-color:#ff6358}` — **Kendo UI Default** (stock primary `#ff6358`).
 4. CSS: `.btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}` plus body font stack with `Noto Sans` — **Bootstrap 4**.
-5. Font URLs `?v=[redacted under PR-27]` — Font Awesome **4.7.0**.
+5. Font URLs `?v=[redacted under PR-27]` — Font Awesome, version redacted under PR-27.
 6. Favicon is the **Angular** shield-A (see B).
 7. No `<meta name="generator">`. No WpFreeware / Medinova / `wpfreeware.com` string in HTML or this CSS (`medinova=0`, `nile=0`, `egypt=0`).
 8. No lorem in the 888-byte HTML. Component copy is UNDETERMINED without JS.
