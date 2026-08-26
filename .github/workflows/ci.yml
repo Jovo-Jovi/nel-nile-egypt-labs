@@ -1,0 +1,56 @@
+name: CI
+
+# PR-23 / OD-04 condition 3: this repository is public. `pull_request_target`
+# is forbidden outright (it would run fork-supplied code with base-branch
+# permissions and token access). `push` runs on every branch and never
+# touches fork code. `pull_request` runs on every PR, but the job itself is
+# gated by an `if:` check on head.repo.full_name so a fork-originated PR
+# triggers the event yet the job body — including checkout — never executes.
+# No step below references `secrets.*` or `${{ secrets }}` in any form.
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, typecheck, build, seed integrity
+    runs-on: ubuntu-latest
+    # Same-repository branches only. For `push` this is always true. For
+    # `pull_request`, a forked head repo has a different full_name from the
+    # base repo, so the job — and the checkout of that fork's code — is
+    # skipped rather than run with any elevated context.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: "npm"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify seed data
+        run: python data/seed/verify_seed.py

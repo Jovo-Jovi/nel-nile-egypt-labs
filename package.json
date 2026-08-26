@@ -1,0 +1,42 @@
+{
+  "name": "nel-nile-egypt-labs",
+  "version": "1.0.0",
+  "description": "Bilingual (Arabic/English) website and content dashboard for a medical laboratory in Cairo, replacing an unfinished 2018 template site.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "next telemetry disable"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jovo-Jovi/nel-nile-egypt-labs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Jovo-Jovi/nel-nile-egypt-labs/issues"
+  },
+  "homepage": "https://github.com/Jovo-Jovi/nel-nile-egypt-labs#readme",
+  "dependencies": {
+    "next": "^16.3.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^26.3.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.3",
+    "supabase": "^2.115.0",
+    "typescript": "^6.0.3"
+  }
+}

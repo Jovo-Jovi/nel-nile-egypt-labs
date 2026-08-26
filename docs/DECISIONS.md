@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Twenty decisions. Four of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04). A decision is in force when it appears here. Conversation does not amend this file. *(Count updated for D-20/OD-04 — UNRATIFIED residual repair, PR-19, landed at T03V. Not quoted in the T03V fence; PR-15 obliged the repair to avoid a self-contradicting document.)*
+Twenty decisions. Four of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 

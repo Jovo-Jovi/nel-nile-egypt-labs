@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-33**
+**Next free id: CF-38**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -38,6 +38,11 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-30 | No .gitignore existed in the repository through 45ef104, with the repo public and an npm toolchain pending. Landed at T03V. | builder | CLOSED at T03V | `.gitignore` at T03V |
 | CF-31 | SESSION_CONTEXT.md drifted from CARRY_FORWARDS.md and from merged PR #3/#4 — phase, gate, done-steps verdicts and open-CF list all disagreed. Regenerated at T03V. Root cause: no task regenerated it after T02-A or T02-H. | reviewer | CLOSED at T03V | `SESSION_CONTEXT.md` at T03V |
 | CF-32 | An operational weakness assessment of the third-party results portal was published in two tracked files. Struck at T03V under OD-04 condition 2; the assessment is already public in history at 45ef104 and is not retractable by a later commit. | reviewer | CLOSED at T03V | `BOUNDARY_MODEL.md` / `CARRY_FORWARDS.md` at T03V |
+| CF-33 | P01 lists repo and CI before schema. Neither landed before the P01-T03 schema fence was issued, which had no migrations path to resolve and no build to fail. Toolchain, CI and migrations path landed at T03A. | reviewer | CLOSED at T03A | `package.json` / `.github/workflows/ci.yml` / `supabase/` at T03A |
+| CF-34 | Build machine has no local Postgres and no container runtime, and the shell has no elevation. The migration authoring and verification route is undecided. Blocks P01-T03-R. | human | OPEN | P01-T03-R |
+| CF-35 | DECISIONS.md:7 decision count carried an UNRATIFIED residual-repair label from T03V. Ratified at the T03V verdict against computed heading counts; label removed at T03A. | reviewer | CLOSED at T03A | `DECISIONS.md` at T03A |
+| CF-36 | Root route renders a build placeholder and contradicts CONTENT_MODEL §3c, which specifies that / renders no content and redirects to /ar. Replaced at P03. | builder | OPEN | P03 |
+| CF-37 | Supabase project created 25 Aug 2026. Plan tier, inactivity-pausing behaviour and backup posture are not confirmed against P07 cutover requirements. | human | OPEN | P07 cutover |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -149,7 +149,7 @@ A renderer given a `Programme` and a selected (`ProgrammeTierAxis`, `AudienceAxi
 
 **Hard constraint — the eligibility filter is not cosmetic.** PSA is carried by Silver. Silver unions into Gold, and Silver unions into Platinum. Without step 4 the renderer shows a prostate marker to every Visitor selecting Gold, and to every Visitor selecting Platinum — Female. That is the same harm class as the Children constraint, reached by a different route: not an inherited slot, but an inherited row inside a slot the Visitor did select. Step 4 is therefore a rendering constraint of the same rank as step 1, and neither is a configuration flag.
 
-**UNRATIFIED (PR-19).** The T02-A fence asked for the following figures to be *reported*, not landed in this document. They are landed here because a rule whose output is written down can be checked by the next reader, and every cell is verified against `data/seed/catalogue.json` before landing (PR-01). The reviewer ratifies or reverts this table at verdict. Nothing else in §3b depends on it.
+The T02-A fence asked for the following figures to be *reported*, not landed in this document. They are landed here because a rule whose output is written down can be checked by the next reader, and every cell is verified against `data/seed/catalogue.json` before landing (PR-01). RATIFIED by reviewer verdict at P01-T03. Nothing else in §3b depends on it.
 
 | Selection | Rendered size | `psa` rendered |
 |---|---|---|
