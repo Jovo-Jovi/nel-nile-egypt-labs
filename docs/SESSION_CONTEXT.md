@@ -50,18 +50,19 @@ on a verbal expansion of an unsigned scope.
 | P02-T05 | `I18N_MODEL.md` landed byte-exact from the reviewer-authored payload (document 6 authored). Route arithmetic verified against `CONTENT_MODEL.md` §3c and `data/seed/catalogue.json`: 12 static × 2 + 9 programmes × 1 dynamic × 2 = 42. D-25..D-29 landed, DECISIONS.md now 29 decisions / 7 ODs; D-29 closes CF-48 (one chromatic family, eleven tokens). CF-52..CF-54 landed, open — open count 30 → 32 | pushed — verdict at push | 2026-08-26 |
 | P02-X02 | Reissue — sampled the flask mark from the two committed binaries, no network call. Both SHA-256 confirmed against `PROVENANCE.md`. Favicon (source of record): 19460 pixels, 13931 background / 1097 fringe / 4432 surviving, 1010 distinct survivor values, 38 merged groups. Cover crop (792,322)-(950,505) at background distance 30: 28914 pixels, 27693 surviving, 137 merged groups, top-edge/corner bleed identified and attributed. Favicon wins on the STEP 3 fidelity ruling: pink family corroborated (distance 7.6–12.6), dominant blue/indigo family not corroborated by the JPEG but not contradicted either. Landed as `docs/research/15-mark-colour-sampling.md` (research file count 14 → 15); no token role assigned, no hex fixed (OD-07 bound 1). D-29's hue assumption amended, D-30 landed, DECISIONS.md now 30 decisions / 7 ODs. CF-55..CF-56 landed, open — open count 32 → 34 | pushed — verdict at push | 2026-08-27 |
 | P02-X02-A | Pre-merge amendment to P02-X02, same branch. `scripts/sample_mark_colours.py` and `scripts/analyze_cover_groups.py` — the two tracked files P02-X02 landed unquoted and undisclosed — each headed with an evidence-tooling notice; `scripts/README.md` authored sanctioning the directory. CF-57 landed CLOSED (the non-disclosure finding) and CF-58 landed OPEN (scripts/ scope boundary, revisit at P03); open count 34 → 35 | pushed — verdict at push | 2026-08-27 |
+| P02-T06 | `DESIGN_SYSTEM.md` landed byte-exact from the reviewer-authored payload (document 8 authored). STEP 2 evidence check confirmed: `#2E3192` and `#181D8C` both appear in `docs/research/15-mark-colour-sampling.md`. D-31 (typefaces — IBM Plex Sans Arabic, one family for both locales) landed, DECISIONS.md now 31 decisions / 7 ODs. CF-53, CF-55, CF-56 CLOSED at P02-T06; CF-59 and CF-60 landed OPEN — open count 35 → 34 | pushed — verdict at push | 2026-08-27 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 4 of P02-X02-A):
+Computed by (run after STEP 4 of P02-T06):
 `bash -c "grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md"`
 
-**Open — 35:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 34:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 ·
-CF-51 · CF-52 · CF-53 · CF-54 · CF-55 · CF-56 · CF-58
+CF-51 · CF-52 · CF-54 · CF-58 · CF-59 · CF-60
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -90,6 +91,11 @@ family, eleven tokens)
 measurement was correct, the failure was landing two tracked files the fence
 did not quote; scripts retained, `scripts/` sanctioned)
 
+**Closed at P02-T06:** CF-53 (typefaces selected — D-31, IBM Plex Sans
+Arabic) · CF-55 (token roles assigned, `DESIGN_SYSTEM.md` §3) · CF-56 (AA
+checked — the mark's pink reaches 1.89 against white and cannot carry an
+interactive affordance, so `accent` is a derived variant at the mark's hue)
+
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
@@ -104,16 +110,15 @@ original of the mark, the portal's painted login staying UNDETERMINED, and
 the lab's pre-launch approval of the refined mark. CF-50 and CF-51 are the
 OD-07 exposures: verbal, unfiled client approval racing OD-03's 15 September
 2026 lapse, and unpriced brand-refinement work joining CF-17/CF-18 at the
-quotation. CF-52, CF-53 and CF-54 are `I18N_MODEL.md` deferrals landed at
-P02-T05: the Operator dashboard's chrome language (P04 `ADMIN_SPEC.md`), the
-unselected Arabic and Latin typefaces (P02 `DESIGN_SYSTEM.md`), and
-unspecified cross-script search matching (P03 search architecture). CF-55 and
-CF-56 are `DESIGN_SYSTEM.md` dependencies raised at P02-X02: sampled mark
-colours carry no token role until that document assigns one, and the mark's
-sampled hues need an AA contrast check that may require a derived UI variant
-alongside the mark's literal colour. CF-58 is the `scripts/` scope boundary
-landed at P02-X02-A: evidence tooling only, revisit if P03 needs a
-build-tooling path.
+quotation. CF-52 and CF-54 are `I18N_MODEL.md` deferrals landed at P02-T05
+still open: the Operator dashboard's chrome language (P04 `ADMIN_SPEC.md`)
+and unspecified cross-script search matching (P03 search architecture). CF-58
+is the `scripts/` scope boundary landed at P02-X02-A: evidence tooling only,
+revisit if P03 needs a build-tooling path. CF-59 and CF-60 are landed at
+P02-T06: `DESIGN_SYSTEM.md` §3 ratios and §8 floor are computed against flat
+fills and font metrics, re-verified on rendered pages at the first gate that
+ships a screen; and the rendered Arabic has not been read by anyone who
+reads clinical Arabic, owned by the client, open until the landing-page mock.
 
 ---
 
@@ -138,19 +143,17 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**Author `DESIGN_SYSTEM.md` (OD-05 bound 3).** `I18N_MODEL.md` has landed
-(document 6) and constrains it — RTL and Arabic typography, logical
-properties, and the D-29 eleven-token chromatic structure are fixed inputs,
-not decisions this document reopens. **The hex dependency is now satisfied**:
-the mark has been sampled at the glyph (`docs/research/15-mark-colour-sampling.md`,
-P02-X02) and D-29/D-30 record the corrected hue assumption — no cyan, no
-teal, one chromatic family. `DESIGN_SYSTEM.md` maps the sampled values onto
-the eleven-token structure and assigns the token role that document 15
-explicitly withholds (OD-07 bound 1). **CF-53 (typefaces) is still open** —
-the Arabic and Latin faces remain unselected and must land alongside the
-token assignment. P02 design work remains bounded per OD-05: no
-schema/route/storage/LabTest content, the landing-page mock replaced
-wholesale at P03, G1 not claimed.
+**Build the single static landing-page mock (OD-05 bound 3) — the last P02
+item.** `DESIGN_SYSTEM.md` has landed (document 8) with the token roles
+assigned, the AA contrast check closed, and the typeface decision (D-31, IBM
+Plex Sans Arabic) recorded. Nothing upstream of the mock remains open in P02:
+`I18N_MODEL.md`, `DESIGN_SYSTEM.md` and the typeface selection are all
+authored. The mock is the first surface able to close CF-59 (§3 ratios and §8
+floor re-verified on a rendered page, both locales) and CF-60 (the rendered
+Arabic read by someone who reads clinical Arabic). It is a mock only — not a
+P03 deliverable, satisfies no part of G3, and is replaced wholesale at P03
+per OD-05 bound 4. P02 design work remains bounded per OD-05: no
+schema/route/storage/LabTest content, G1 not claimed.
 
 **P01-T03-R remains blocked on CF-34** (no local Postgres, no container
 runtime, no elevation) with no resolution date. Resumes the moment CF-34
