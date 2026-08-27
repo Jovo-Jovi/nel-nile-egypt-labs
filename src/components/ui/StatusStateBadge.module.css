@@ -1,0 +1,24 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nel-space-8);
+  padding-block: var(--nel-space-4);
+  padding-inline: var(--nel-space-12);
+  border-radius: var(--nel-radius-full);
+  font-size: var(--nel-size-sm);
+  font-weight: 500;
+  color: var(--nel-color-surface);
+  line-height: 1.2;
+}
+
+.success {
+  background-color: var(--nel-color-success);
+}
+
+.warning {
+  background-color: var(--nel-color-warning);
+}
+
+.error {
+  background-color: var(--nel-color-error);
+}

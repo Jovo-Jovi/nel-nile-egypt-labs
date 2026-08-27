@@ -1,45 +1,46 @@
 .header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--nel-space-16);
-  padding-block: var(--nel-space-16);
-  padding-inline: var(--nel-space-24);
-  border-block-end: 1px solid var(--nel-color-border);
-  background-color: var(--nel-color-surface);
-}
-
-.mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding-inline: var(--nel-space-12);
-  padding-block: var(--nel-space-8);
-  border: 1px dashed var(--nel-color-border);
-  border-radius: var(--nel-radius-md);
-  color: var(--nel-color-muted);
-  font-size: var(--nel-size-sm);
-}
-
-.toggle {
-  min-inline-size: 44px;
-  min-block-size: 44px;
+  block-size: 56px;
   padding-inline: var(--nel-space-16);
-  border: 1px solid var(--nel-color-border);
-  border-radius: var(--nel-radius-sm);
   background-color: var(--nel-color-surface);
-  color: var(--nel-color-primary);
-  font-family: inherit;
-  font-size: var(--nel-size-sm);
-  font-weight: 600;
-  cursor: pointer;
+  border-block-end-width: var(--nel-elevation-0-border-width);
+  border-block-end-style: solid;
+  border-block-end-color: var(--nel-color-border);
+  box-shadow: var(--nel-elevation-0-shadow);
+  transition: box-shadow 150ms, border-color 150ms;
 }
 
-.toggle:hover {
-  background-color: var(--nel-color-background);
+@media (min-width: 768px) {
+  .header {
+    block-size: 72px;
+    padding-inline: var(--nel-space-24);
+  }
 }
 
-.toggle:focus-visible {
-  outline: 2px solid var(--nel-color-primary);
-  outline-offset: 2px;
+.header[data-elevated="true"] {
+  border-block-end-width: var(--nel-elevation-1-border-width);
+  box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.markSlot {
+  display: flex;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--nel-space-12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: none;
+  }
 }

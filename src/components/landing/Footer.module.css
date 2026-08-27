@@ -1,9 +1,48 @@
 .footer {
-  padding-block: var(--nel-space-24);
-  padding-inline: var(--nel-space-24);
-  border-block-start: 1px solid var(--nel-color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nel-space-16);
+  padding-block: var(--nel-space-32);
+  padding-inline: var(--nel-space-16);
+  border-block-start-width: 1px;
+  border-block-start-style: solid;
+  border-block-start-color: var(--nel-color-border);
+  background-color: var(--nel-color-background);
+  text-align: center;
+}
+
+.mark {
+  display: flex;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nel-space-4);
+}
+
+.contactHeading {
+  font-size: var(--nel-size-sm);
+  font-weight: 600;
+  color: var(--nel-color-primary-strong);
+  margin-block: 0;
+}
+
+.line {
+  font-size: var(--nel-size-sm);
+  color: var(--nel-color-muted);
+  margin-block: 0;
+}
+
+.label {
+  color: var(--nel-color-text);
+}
+
+.notice {
   color: var(--nel-color-muted);
   font-size: var(--nel-size-xs);
   line-height: var(--nel-line-height-tight);
-  text-align: center;
+  margin-block: 0;
 }

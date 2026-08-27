@@ -53,18 +53,20 @@ on a verbal expansion of an unsigned scope.
 | P02-T06 | `DESIGN_SYSTEM.md` landed byte-exact from the reviewer-authored payload (document 8 authored). STEP 2 evidence check confirmed: `#2E3192` and `#181D8C` both appear in `docs/research/15-mark-colour-sampling.md`. D-31 (typefaces — IBM Plex Sans Arabic, one family for both locales) landed, DECISIONS.md now 31 decisions / 7 ODs. CF-53, CF-55, CF-56 CLOSED at P02-T06; CF-59 and CF-60 landed OPEN — open count 35 → 34 | pushed — verdict at push | 2026-08-27 |
 | P02-T07 | Landing-page mock built at the existing placeholder route `/` only (OD-05 bound 4 — mock, not a P03 deliverable, satisfies no part of G3). Fonts: `@fontsource/ibm-plex-sans-arabic` installed; six weight/subset `.woff2` files (400/500/600 × arabic/latin) plus `LICENSE` committed to `public/fonts/` — `git ls-files public/fonts/ \| wc -l` → 7; local `@font-face` with the package's own per-subset `unicode-range`, `font-display: swap`, no CDN. Tokens: one stylesheet carries the eleven `DESIGN_SYSTEM.md` §3 colour tokens verbatim (no twelfth), the §4 seven-step size scale, the §5 nine-step spacing scale, four-value radius set and three elevation levels (border width 1px per §5; §5 gives no shadow blur/opacity numbers, so the shadow values are a mock rendering of the qualitative description, not a document value), plus the en/ar §4 line-height fork. Page: header (mark placeholder, locale toggle) · hero · two actions · hours-and-location · footer — locale is client state defaulting to `ar`; `dir`/`lang` set on a page-root wrapper rather than `<html>` (named deviation, no locale segment exists — CF-61). Portal action is an `https://` anchor to `https://example.invalid/portal-placeholder`, `target="_blank" rel="noopener noreferrer"`, never a frame; WhatsApp action builds a `wa.me` link client-side from a placeholder constant, not a form. 23-key bilingual catalogue (`ar`/`en` identical), parity asserted at compile time and runtime so a drift fails the build. `docs/DESIGN_SYSTEM.md` and `docs/I18N_MODEL.md` untouched (`git diff --name-only 8818be7 HEAD` does not list either); DECISIONS.md unchanged at 31 decisions / 7 ODs — this task lands no decision. STEP 4 evidence: physical-property grep (`left`/`right`/`margin-left`/etc.) → 0; catalogue key counts `ar`=23, `en`=23, identical; Eastern Arabic digit grep → 0; built output (`npm run build`) carries `dir="rtl"`, `lang="ar"`, and all six font URLs resolve to same-origin `/fonts/...` paths; `<form>`/`<iframe>`/`<embed>` grep → 0 each. CF-61 and CF-62 landed OPEN (both reviewer-owned, P03); CF-59 and CF-60 correctly left OPEN — open count 34 → 36 | pushed — verdict at push | 2026-08-27 |
 | P02-T08 | `DESIGN_SYSTEM.md` v2 landed byte-exact from the reviewer-authored payload, superseding the first cut rather than merging it (document 8, unchanged precedence). STEP 0 verified before overwrite: `git hash-object docs/DESIGN_SYSTEM.md` → `22b0a5c38ce4b1cdce410ded8236b08c7c2859b8`, line count 377 — both matched the expected outgoing state. Landed file's blob SHA (`7850ce538cf4d0f40fafe83b4ed448dc1933eae4`) confirmed identical to the attachment's. STEP 2 counts, each verified against its own section: 12 `## §` headings, §3 eleven colour token rows, §4 seven size steps, §5 three elevation levels, §6 total 24 = 14 public + 10 dashboard (counted from the two lists), §8 six accessibility criteria, §11 six state rows. v2 adds §9 composition, §10 eleven component specifications, and §11 states, and ratifies the §5 shadow values the P02-T07 builder flagged as descriptive. D-32 landed, DECISIONS.md now 32 decisions / 7 ODs (`grep -c "^### D-"` → 32, `grep -c "^### OD-"` → 7). CF-63 landed OPEN (thirteen of §6's 24 components remain unspecified beyond §10's eleven) — open count 36 → 37; CF-59 and CF-60 correctly left open, the mock they'd close is being rebuilt | pushed — verdict at push | 2026-08-27 |
+| P02-T09 | Landing-page mock rebuilt wholesale against `DESIGN_SYSTEM.md` v2 (§9 composition, §10 components, §11 states) at the existing placeholder route `/` only — still a mock under OD-05 bound 4, no new route created, `dir`/`lang` still on the page-root wrapper per CF-61. Branched `p02-t09` from `origin/main` at `798389f` (the P02-T08 merge commit). Kept from P02-T07: the token stylesheet, the font declarations, the catalogue shape, the `Isolate` primitive (moved to `ui/`, unchanged) — the composition was replaced entirely. Client-state view toggle added alongside the locale toggle — `landing` and `system` — no new route, no new dependency. Landing view: preview banner (`accent` border-block-end, `background` fill, always visible) · header per §10 (mark slot at inline-start, language switcher and WhatsApp action at inline-end, sticky, elevation 0→1 on scroll) · hero per §9 (two columns at `md`+, Arabic-first, bilingual headline `معامل النيل مصر` / `Nile Egypt Lab` per `docs/research/13-brand-extraction.md:212-213`, synthetic standfirst, two deliberately unequal actions) · stat band — §9 specifies four cells, only three non-clinical structural counts exist (Branch, Programme, LabUnit); three rendered centred, no fourth invented, deviation logged as CF-64 · LabUnit section, the four `CONTENT_MODEL.md:129` department names as cards, no `LabTest` name, no `Programme` name, no count, no medical description, no booking action · Branch-and-hours block, synthetic values, 16:9 labelled frames · footer per §10, no form. System view, rendered from the same tokens the landing view uses: eleven §3 colour tokens as swatches with hex read live from `tokens.css` and measured contrast ratios transcribed from the document; §4 seven-step type scale, both scripts, per-locale line heights shown; §5 spacing scale, four radii, three elevation levels; every §10 component in every applicable §11 state, including the two the landing view does not use — `StatusState` badge and the bilingual field pair; §8's six criteria as a checklist with what closes each. Catalogue grew from 23 to 127 keys, `ar`/`en` parity enforced at compile time (a mismatched key fails typecheck) and at runtime (a drift throws before render); count verified by direct read of `src/lib/catalog.ts`. `public/mark/.gitkeep` added, no SVG — the mark slot's `onError` fallback renders the §9 labelled frame until the human supplies `nel-mark.svg`. STEP 4 evidence, each command run directly: physical-property grep (`left`/`right`/`margin-left`/`padding-right`/`text-align: left`/etc.) across `src/` → 0; catalogue key counts `ar`=127, `en`=127, identical; Eastern Arabic digit (`U+0660`–`U+0669`) grep across `src/` → 0; `npm run build`, then in `.next/server/app/index.html`: `dir="rtl"` present, `lang="ar"` present, every font/CSS/JS/image URL same-origin (`/fonts/…`, `/_next/static/…`, `/mark/…`) — the only absolute external URLs found are the `wa.me` WhatsApp deep link and the `https://example.invalid/portal-placeholder` anchor, both intentional action links rather than assets; `<form>`/`<iframe>`/`<embed>` grep across `src/` → 0 each; no `Programme`/`LabTest` name (checked against every seeded programme and test name) and no `opacity` on a disabled state anywhere in `src/`. `docs/DESIGN_SYSTEM.md`, `I18N_MODEL.md` and `CONTENT_MODEL.md` untouched; DECISIONS.md unchanged at 32 decisions / 7 ODs (`grep -c "^### D-"` → 32) — this task lands no decision. CF-64 (§9's four-cell stat band vs. three non-clinical counts) and CF-65 (mark slot undelivered, human supplies the SVG) landed OPEN; CF-59, CF-60, CF-49 and CF-50 correctly left open — no CF closed at this task — open count 37 → 39 | pushed — verdict at push | 2026-08-27 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 4 of P02-T08):
+Computed by (run after STEP 4 of P02-T09):
 `bash -c "grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md"`
 
-**Open — 37:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 39:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 ·
-CF-51 · CF-52 · CF-54 · CF-58 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63
+CF-51 · CF-52 · CF-54 · CF-58 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63 · CF-64 ·
+CF-65
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -131,7 +133,14 @@ and the portal href, pending real values from `SiteSettings` and the D-07
 build-time constant. CF-63 is landed at P02-T08, reviewer-owned, open until
 P03: thirteen of the 24 components `DESIGN_SYSTEM.md` §6 enumerates remain
 unspecified beyond the eleven §10 covers, each to be specified at the phase
-that builds it by extending §10 rather than rewriting it.
+that builds it by extending §10 rather than rewriting it. CF-64 and CF-65 are
+landed at P02-T09, both open until the phases named in `CARRY_FORWARDS.md`:
+CF-64 (reviewer-owned, P03) is the stat-band cell count — §9 specifies four,
+only three non-clinical structural counts exist, and three were rendered
+rather than a fourth invented; CF-65 (client-owned, P02) is the mark slot
+still rendering its labelled-frame fallback because no SVG has reached
+`public/mark/nel-mark.svg` — no reconstruction was performed, the human
+supplies the file.
 
 ---
 
@@ -156,22 +165,35 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**Mark reconstruction under OD-07**, then the client-facing preview rebuild.
-`DESIGN_SYSTEM.md` is now v2 (document 8) — §9 composition, §10 eleven
-component specifications and §11 states landed at P02-T08, so the tokens the
-first cut carried now have the rules that turn them into a page. Nothing in
-P02-T08 touched `src/`, `public/fonts/` or the P02-T07 mock; that mock is
-rebuilt next, wholesale, against v2 rather than the superseded first cut.
+**The client preview review.** `src/` now renders the client-facing preview
+built at P02-T09 against `DESIGN_SYSTEM.md` v2 — a landing view and a system
+view behind a client-state toggle, still a mock under OD-05 bound 4, at the
+existing `/` route only. This is the surface that lets a human close what
+code alone cannot.
 
-CF-59 (`DESIGN_SYSTEM.md` §3 ratios and §8 floor re-verified on a rendered
-page, both locales) and CF-60 (the rendered Arabic read by someone who reads
-clinical Arabic) remain open — closing needs a human looking at a screen, and
-the mock that could make them actionable is being rebuilt, not read. CF-61
-(page-root-wrapper deviation) and CF-62 (synthetic placeholder status of all
-mock copy/links) are reviewer-owned rows carried to P03, where the mock is
-replaced wholesale per OD-05 bound 4. CF-63 (thirteen of §6's 24 components
-unspecified beyond §10's eleven) is landed at P02-T08 and carried to the
-phase that builds each remaining component.
+Four carry-forwards move only when Androw sees it:
+
+- **CF-59** — `DESIGN_SYSTEM.md` §3 ratios and §8 floor are computed against
+  flat fills and font metrics; the preview is the first rendered page in both
+  locales that lets those numbers be re-verified on screen rather than on
+  paper.
+- **CF-60** — the rendered Arabic has not been read by anyone who reads
+  clinical Arabic. The typeface was selected from measured metrics; the
+  preview is what a reader judges against.
+- **CF-49** — the refined mark needs the lab's written approval before
+  launch. The preview's mark slot renders the §9 labelled-frame fallback
+  (CF-65) until the client supplies both the SVG and the approval.
+- **CF-50** — OD-07's client approval is verbal and unfiled, racing OD-03's
+  15 September 2026 scope-freeze lapse. Showing the preview is the occasion
+  to put that approval in writing.
+
+CF-61 (page-root-wrapper deviation), CF-62 (synthetic placeholder status of
+all mock copy/links) and CF-63 (thirteen of §6's 24 components unspecified
+beyond §10's eleven) are reviewer-owned rows carried to P03, where the mock
+is replaced wholesale per OD-05 bound 4. CF-64 (stat-band cell count, three
+rendered against §9's four) is reviewer-owned, also carried to P03. CF-65
+(mark slot undelivered) is client-owned and closes the moment
+`public/mark/nel-mark.svg` lands — no code change required.
 
 **P01-T03-R remains blocked on CF-34** (no local Postgres, no container
 runtime, no elevation) with no resolution date. Resumes the moment CF-34
