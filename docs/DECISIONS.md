@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Thirty decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
+Thirty-one decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -310,3 +310,7 @@ One chromatic family, not three. The P02 scope decision proposed a blue-to-cyan 
 ### D-30 — Mark hue, corrected
 
 The P02 scope decision recommended deep Nile blue, navy, teal and controlled cyan. Sampling the preserved 2018 favicon at P02-X02 found neither teal nor cyan present in the mark. The dominant hue and the mark's second colour are recorded in `docs/research/15-mark-colour-sampling.md`; that document assigns no token role and fixes no hex, and `DESIGN_SYSTEM.md` maps sampled values onto the eleven-token structure D-29 fixes. The recommended direction is superseded by the measurement. D-29's structure stands unchanged; only its hue assumption is amended.
+
+### D-31 — Typefaces
+
+IBM Plex Sans Arabic, SIL OFL 1.1, self-hosted, one family for both locales. Selected at the P02-X02-A verdict against the four criteria in `DESIGN_SYSTEM.md` §4, each verified against the font binaries rather than a specification page: full harakat coverage and complete coverage of the mark string; a permissive licence; eight real weight cuts of which three are used, so no synthetic bold; and uniform-width figures by default, which makes `tnum` correctly absent rather than missing. One family rather than two because the Arabic family ships Latin metrically identical to IBM Plex Sans across all sixty-two Latin glyphs at the same x-height and em, so every Latin run isolated inside Arabic under `I18N_MODEL.md` §6 renders in the same face without a per-string decision. The per-locale line-height fork is computed from the two scripts' measured vertical spans, not chosen. Noto Sans Arabic was rejected as the system fallback and Cairo as a regional default with a weak Latin. Closes CF-53. Recorded in `DESIGN_SYSTEM.md` §4.
