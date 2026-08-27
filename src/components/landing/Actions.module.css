@@ -1,0 +1,75 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+}
+
+.heading {
+  font-size: var(--nel-size-xl);
+  font-weight: 600;
+  color: var(--nel-color-primary-strong);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nel-space-24);
+}
+
+.card {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-12);
+  padding: var(--nel-space-24);
+  background-color: var(--nel-color-surface);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  border-radius: var(--nel-radius-md);
+  box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.description {
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-sm);
+  line-height: var(--nel-line-height-body);
+  margin-block: 0;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  padding-inline: var(--nel-space-24);
+  border-radius: var(--nel-radius-sm);
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--nel-color-surface);
+}
+
+.portalLink {
+  background-color: var(--nel-color-primary);
+}
+
+.portalLink:hover {
+  background-color: var(--nel-color-primary-strong);
+}
+
+.whatsappLink {
+  background-color: var(--nel-color-accent);
+}
+
+.whatsappLink:hover {
+  background-color: var(--nel-color-error);
+}
+
+.caption {
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-xs);
+  margin-block: 0;
+}

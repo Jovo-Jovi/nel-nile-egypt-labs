@@ -1,0 +1,38 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  padding: var(--nel-space-24);
+  background-color: var(--nel-color-surface);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  border-radius: var(--nel-radius-md);
+  box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.title {
+  font-size: var(--nel-size-xl);
+  font-weight: 600;
+  color: var(--nel-color-primary-strong);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nel-space-16);
+  font-size: var(--nel-size-base);
+  color: var(--nel-color-text);
+}
+
+.label {
+  color: var(--nel-color-muted);
+}

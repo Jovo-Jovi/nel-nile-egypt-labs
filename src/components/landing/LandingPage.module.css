@@ -1,0 +1,16 @@
+.root {
+  min-height: 100vh;
+  background-color: var(--nel-color-background);
+  color: var(--nel-color-text);
+  line-height: var(--nel-line-height-body);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-64);
+  padding-block: var(--nel-space-64);
+  padding-inline: var(--nel-space-24);
+  max-inline-size: 960px;
+  margin-inline: auto;
+}

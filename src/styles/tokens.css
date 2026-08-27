@@ -1,0 +1,75 @@
+/* DESIGN_SYSTEM.md §3, §4, §5 — values copied verbatim, not recomputed. */
+
+:root {
+  /* §3 Colour — eleven tokens exactly (D-29). Do not add a twelfth. */
+  --nel-color-primary: #2E3192;
+  --nel-color-primary-strong: #181D8C;
+  --nel-color-accent: #CC3533;
+  --nel-color-background: #FAFAFC;
+  --nel-color-surface: #FFFFFF;
+  --nel-color-border: #8B8CA7;
+  --nel-color-text: #1D1D35;
+  --nel-color-muted: #656686;
+  --nel-color-success: #1E7A4C;
+  --nel-color-warning: #8A5A00;
+  --nel-color-error: #B3261E;
+
+  /* §4 Size scale — seven steps */
+  --nel-size-xs: 12px;
+  --nel-size-sm: 14px;
+  --nel-size-base: 16px;
+  --nel-size-lg: 18px;
+  --nel-size-xl: 24px;
+  --nel-size-2xl: 32px;
+  --nel-size-3xl: 40px;
+
+  /* §5 Spacing scale — nine steps, 4px base */
+  --nel-space-4: 4px;
+  --nel-space-8: 8px;
+  --nel-space-12: 12px;
+  --nel-space-16: 16px;
+  --nel-space-24: 24px;
+  --nel-space-32: 32px;
+  --nel-space-48: 48px;
+  --nel-space-64: 64px;
+  --nel-space-96: 96px;
+
+  /* §5 Radius set — four values */
+  --nel-radius-none: 0;
+  --nel-radius-sm: 4px;
+  --nel-radius-md: 8px;
+  --nel-radius-full: 9999px;
+
+  /* §4 Line-height fork, en/ar, computed from font metrics and copied verbatim */
+  --nel-line-height-body-en: 1.50;
+  --nel-line-height-body-ar: 1.75;
+  --nel-line-height-heading-en: 1.20;
+  --nel-line-height-heading-ar: 1.40;
+  --nel-line-height-tight-en: 1.10;
+  --nel-line-height-tight-ar: 1.25;
+
+  /* §5 Elevation — three levels, each a 1px border plus a shadow, never
+     translucency. The document fixes the border width (1px) and describes
+     each shadow only qualitatively ("soft short" / "softer long"); it states
+     no blur/spread/opacity numbers. The box-shadow values below render that
+     description for this mock and are not values copied from the document —
+     flagged in the task report, not a §5 value. */
+  --nel-elevation-0-border-width: 0;
+  --nel-elevation-0-shadow: none;
+  --nel-elevation-1-border-width: 1px;
+  --nel-elevation-1-shadow: 0 1px 3px rgba(29, 29, 53, 0.08), 0 1px 2px rgba(29, 29, 53, 0.05);
+  --nel-elevation-2-border-width: 1px;
+  --nel-elevation-2-shadow: 0 8px 24px rgba(29, 29, 53, 0.10), 0 2px 8px rgba(29, 29, 53, 0.06);
+}
+
+[data-locale="ar"] {
+  --nel-line-height-body: var(--nel-line-height-body-ar);
+  --nel-line-height-heading: var(--nel-line-height-heading-ar);
+  --nel-line-height-tight: var(--nel-line-height-tight-ar);
+}
+
+[data-locale="en"] {
+  --nel-line-height-body: var(--nel-line-height-body-en);
+  --nel-line-height-heading: var(--nel-line-height-heading-en);
+  --nel-line-height-tight: var(--nel-line-height-tight-en);
+}
