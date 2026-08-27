@@ -3,7 +3,10 @@
 **Status:** COMPLETE and landable. §3 values derive from
 `docs/research/15-mark-colour-sampling.md`, landed at P02-X02; OD-07 bound 1 is
 discharged. §4 typefaces selected at the P02-X02-A verdict against the four criteria,
-verified against the font binaries; CF-53 closes on landing.
+verified against the font binaries. §5 elevation values ratified at the P02-T07 verdict,
+where the builder flagged them as descriptive rather than numeric. §9, §10 and §11
+authored at that same verdict, after a mock built strictly from §3–§6 rendered correctly
+and looked like nothing — tokens do not compose a page.
 **Vocabulary:** frozen `GLOSSARY.md` · 2026-08-25, as superseded in part by its §7.
 **Authored under:** OD-05 bound 3, after `I18N_MODEL.md`, which constrains this document.
 **Decisions this file records:** D-29, and the decisions §3 and §4 will carry once
@@ -272,11 +275,16 @@ per component; no component mixes two.
 **Elevation.** Three levels, each a 1px `border` plus a shadow. No blur surface, no
 translucency, per §2 principle 3.
 
-| Level | Use | Composition |
-|---|---|---|
-| 0 | page canvas, inline text | no border, no shadow |
-| 1 | cards, `Programme` tiles, `Offer` cards | 1px `border` + soft short shadow |
-| 2 | menus, dialogs, the language switcher when open | 1px `border` + softer long shadow |
+| Level | Use | Border | Shadow |
+|---|---|---|---|
+| 0 | page canvas, inline text | none | `none` |
+| 1 | cards, `Programme` tiles, `Offer` cards | 1px `border` | `0 1px 3px rgba(29,29,53,0.08), 0 1px 2px rgba(29,29,53,0.05)` |
+| 2 | menus, dialogs, the language switcher when open | 1px `border` | `0 8px 24px rgba(29,29,53,0.10), 0 2px 8px rgba(29,29,53,0.06)` |
+
+The shadow colour is `text` (`#1D1D35`) at low alpha, never neutral black. A black shadow
+over a hue-tinted neutral ramp reads as dirt; the same hue at low alpha reads as depth.
+These values were left descriptive in the first cut of this document and were supplied by
+the P02-T07 builder, which flagged the gap rather than inventing silently. Ratified here.
 
 Shadow offsets are physical, not logical, and this is one of the two carve-outs
 `I18N_MODEL.md` §4 permits: light does not mirror when the layout does. A shadow that
@@ -364,13 +372,222 @@ Six requirements. Criterion 1 cannot be closed until §3 carries values.
 
 ---
 
-## §9 What this document does not decide
+## §9 Composition
 
-- The mark's refinement itself. OD-07 governs it; §7 consumes it.
+Tokens do not compose a page. This section is what §1 through §8 were missing: the rules
+that turn a token set into a layout. Authored at P02-T07's verdict, where a mock built
+strictly from §3–§6 rendered correctly and looked like nothing.
+
+### Grid and containers
+
+A 12-column grid, gutter `24px`, applied at `md` and above. Below `md` the layout is a
+single column and the grid is not used — a 12-column grid on a 360px phone is arithmetic
+theatre.
+
+| Container | Max inline size | Use |
+|---|---|---|
+| `narrow` | 720px | running prose — About, Privacy Policy, `Programme` description |
+| `default` | 1120px | every standard page |
+| `wide` | 1360px | the landing hero band and full-bleed sections only |
+
+Breakpoints: `sm` 480 · `md` 768 · `lg` 1024 · `xl` 1280. Four. Containers centre with
+`margin-inline: auto` and carry `padding-inline` of `16px` below `md`, `24px` above.
+
+### Vertical rhythm
+
+Section spacing comes from the §5 scale and nothing else.
+
+| Slot | Below `md` | `md` and above |
+|---|---|---|
+| Between major sections | `48px` | `96px` |
+| Section heading to its body | `24px` | `32px` |
+| Between sibling cards | `16px` | `24px` |
+| Inside a card | `16px` | `16px` |
+
+**Whitespace is the product.** §2 principle 2 says the modern-laboratory impression comes
+from restraint and rhythm. That is only true if the rhythm is generous: 96px between
+sections looks wrong in a code review and correct on a screen. Do not compress it to fit
+more above the fold.
+
+### Measure and density
+
+Running prose caps at `70ch` in Latin and `55ch` in Arabic. Arabic sets wider per
+character, so an identical `ch` cap produces a longer physical line and a harder return
+sweep. This is one of the few places a value forks by locale outside line height.
+
+One idea per card. A card that needs a scrollbar is two cards.
+
+### Imagery
+
+**All photography is client-supplied** (`docs/research/08-form-review-and-next-steps.md:73`
+— the lab holds its own photos and handles them). No stock photography ships, and none
+appears in a preview shown to the client: a stock image sets an expectation the client
+has already agreed to fill, and it is a cost line the engagement removed.
+
+Until real assets land, an image slot renders as a **labelled frame** — correct aspect
+ratio, `border` at 1px, `radius` 8px, a centred label naming what belongs there. A
+labelled frame reads as composed. An empty div reads as broken.
+
+| Slot | Ratio | Where |
+|---|---|---|
+| Hero | 4:3 | landing, beside the headline at `md` and above; below it under `md` |
+| `Equipment` | 4:3 | Equipment cards |
+| `Branch` | 16:9 | Branch cards |
+| `Video` poster | 16:9 | Video frames |
+
+Text is never set over a photograph. A scrim makes contrast depend on the image behind
+it, and §2 principle 3 rules out anything that makes contrast uncertifiable. Text sits
+beside imagery, not on it.
+
+### The landing hero
+
+Two columns at `md` and above, Arabic-first so the text column takes the inline-start
+position and the image slot the inline-end. One column below `md`, text first.
+
+Order inside the text column: eyebrow (`sm`, `accent`, weight 600) · headline (`3xl`,
+`primary-strong`, weight 600) · standfirst (`lg`, `muted`) · the two actions.
+
+**The hero carries exactly two actions and they are not equal.** The portal action is a
+filled `primary` button; the WhatsApp action is an outlined button on `surface`. Both
+clear 44px. Two filled buttons side by side make a visitor choose between identical
+weights, which is not a choice, it is a pause.
+
+Nothing else enters the hero. No search, no statistics, no third link.
+
+### The stat band
+
+Directly under the hero, four cells at `md` and above, two-by-two below.
+
+Structural facts only — branch count, head-office flag, `Programme` count, `LabUnit`
+count. **A count is not a medical claim, but a name is.** No `Programme` name, no
+`LabTest` name, and no count of LabTests within a `Programme`, ever appears here. That distinction is what
+separates this from the mockups a general-purpose tool produces, which reach for
+`45 تحليل` because it looks impressive and lands squarely inside the clinical gate.
+
+Numbers set at `2xl`, weight 600, `primary`. Labels at `sm`, `muted`. Western digits
+(D-25).
+
+### The mark
+
+| Placement | Variant | Size |
+|---|---|---|
+| Header | primary horizontal | 40px block size, inline size auto |
+| Footer | light or dark monochrome | 32px block size |
+| Favicon and app icon | compact | 16px, 32px, 180px |
+
+Clear space is one flask-width on all sides (§7). The mark never mirrors, never rotates,
+never recolours, and never sits on a photograph. Its own pink `#F7A8A7` survives inside
+it and is not a UI token (§3).
+
+### Section pattern
+
+Every section: heading at `xl` in `primary-strong` · optional standfirst at
+`base` in `muted` · body · optional single text link in `accent`. Sections do not
+carry their own background colour. Alternating bands are how a template signals a section
+change; a system signals it with space.
+
+---
+
+## §10 Component specifications
+
+§6 enumerates 24 components. This section specifies the eleven that either carry a rule
+easy to get wrong or appear on the landing surface. The remaining thirteen are specified
+at the phase that builds them, and this section is extended rather than rewritten.
+
+Every component inherits: logical properties only · 44px minimum target · visible focus ·
+`letter-spacing: 0` · no `text-transform`.
+
+**Button.** Three variants. `primary` — `primary` fill, `surface` text, radius 4px,
+padding `12px` block and `24px` inline, weight 600, `base` size. `secondary` — `surface`
+fill, 1px `primary` border, `primary` text, same metrics. `text` — no fill, no border,
+`accent` text, underline on hover only. Minimum block size 44px in all three. Icon, when
+present, sits inline-start of the label in both locales and mirrors only if it encodes
+direction (`I18N_MODEL.md` §4).
+
+**Card.** `surface` fill, elevation 1, radius 8px, padding 16px. Heading `lg` weight 600
+`text`; body `base` `muted`. Optional image slot at the block-start, full bleed to the
+card edge, radius clipped to 8px on the leading corners only. Whole card is not a link;
+the action inside it is.
+
+**Header.** Block size 72px at `md` and above, 56px below. Mark at inline-start,
+navigation centred, language switcher and WhatsApp action at inline-end. Elevation 0
+until scroll, elevation 1 after. Sticky. Below `md` the navigation collapses to a
+disclosure; the language switcher never collapses — a visitor in the wrong locale must
+never have to open a menu to leave it.
+
+**Language switcher.** A single control showing the *target* locale, not the current one:
+on an Arabic page it reads `EN`. Showing the current locale is the most common bilingual
+UI defect and it inverts the meaning of the click. 44px, radius `full`, 1px `border`,
+`text` label.
+
+**Stat cell.** Number `2xl` weight 600 `primary`; label `sm` `muted`; no border, no fill,
+separated by space alone.
+
+**Image frame.** Fixed ratio per §9, 1px `border`, radius 8px, `background` fill, label
+centred at `sm` in `muted`. Never a spinner and never a broken-image icon.
+
+**WhatsApp action.** Builds `https://wa.me/<number>?text=<message>` client-side from
+`SiteSettings` and opens it in a new browsing context. Not a form, no input, nothing
+posted (D-09, `BOUNDARY_MODEL.md` §2). The number is never a literal in source (PR-16).
+
+**Outbound `ResultsPortalLink` action.** `https://` anchor, `target="_blank"`,
+`rel="noopener noreferrer"`. **Never a frame, iframe or embed.** Framing that portal puts
+its login inside our origin where a `Visitor` cannot verify the address bar, which is a
+credential-phishing shape and is forbidden regardless of who asks (D-17). Carries no
+portal styling and no portal colour — OD-07 bound 2 means nothing this project designs is
+applied to that system.
+
+**Bilingual field pair.** Both locales visible simultaneously, never behind a tab. Arabic
+field in the inline-start position, composed first. Each field labelled with its locale.
+A tabbed pair lets an `Operator` save with one locale empty.
+
+**`StatusState` badge.** Radius `full`, `sm`, weight 500, padding `4px` block `12px`
+inline. Carries an icon **and** a text label — never colour alone (§3). Covers `Offer`
+validity, `Programme` publication and `Operator` invite state. Never clinical or
+`Visitor` status (OD-07 bound 4).
+
+**Footer.** `background` fill, `border` 1px on the block-start edge only. Mark at 32px,
+`SiteSettings`-sourced contact block, locale-appropriate column order. No newsletter
+signup, no contact form, nothing that collects anything.
+
+---
+
+## §11 States
+
+Six states, specified once, inherited by every interactive component.
+
+| State | Rule |
+|---|---|
+| Default | as specified in §10 |
+| Hover | fill moves to `primary-strong`; outlined and text variants gain a `background` fill. 150ms (§5) |
+| Focus | 2px `accent` outline at 2px offset, **always visible**, never removed. `:focus-visible` for pointer input, but never `outline: none` without a replacement |
+| Active | `primary-strong` fill, no transform, no scale |
+| Disabled | `muted` text on `background`, 1px `border`, `cursor: not-allowed`. **Not reduced opacity** — opacity makes the effective contrast depend on what sits behind, which §2 principle 3 rules out |
+| Loading | inline spinner replacing the icon slot, label retained, control non-interactive. Never a full-page overlay |
+
+Two states that are not interaction and are specified because they are always forgotten:
+
+**Empty.** A heading at `base` weight 600, one line of `muted` explanation, and an action
+where one exists. Never a bare "No data". Both locales.
+
+**Error.** `error` colour, an icon, and text saying what failed and what to do. Never a
+raw exception, never a status code alone, never English inside an Arabic page.
+
+Focus is the one in this table most likely to be quietly removed by a builder who thinks
+the outline is ugly. It is an §8 criterion and it is not negotiable.
+
+---
+
+## §12 What this document does not decide
+
+- The mark's refinement itself. OD-07 governs it; §7 and §9 consume its output.
 - Whether the rendered pages actually hit the §3 ratios and the §8 floor. Computed
   ratios and font metrics are necessary conditions, not evidence. Both are re-verified
   on rendered pages in both locales at the first gate that ships a screen.
-- Page composition and layout for any specific route. That is P03 build work against
+- The thirteen components §10 does not yet specify. Each is specified at the phase that
+  builds it, by extending §10 rather than rewriting it.
+- Page composition for any specific route beyond the landing surface. §9 fixes the
+  grid, rhythm and patterns; applying them route by route is P03 build work against
   `CONTENT_MODEL.md` §3c.
 - The `Operator` dashboard's chrome language. CF-52, deferred to `ADMIN_SPEC.md`.
 - Anything about data shape or security. `DATA_MODEL.md` and `SECURITY_MODEL.md` are
