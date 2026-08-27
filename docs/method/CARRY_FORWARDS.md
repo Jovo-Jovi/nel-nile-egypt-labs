@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-63**
+**Next free id: CF-64**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -68,6 +68,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-60 | The rendered Arabic has not been read by anyone who reads clinical Arabic. The typeface was selected from measured metrics. If the lab's staff find the rendered Arabic wrong, that judgement outranks the metrics. Not the clinical gate, which governs LabTest content only. | client | OPEN | P02 landing-page mock |
 | CF-61 | The landing-page mock sets dir and lang on a page-root wrapper rather than on <html>, because OD-05 bound 2 forbids creating locale routes and no locale segment exists. This is a mock-only deviation from I18N_MODEL.md §4. P03 sets both on <html> from the locale segment and the wrapper does not survive. | reviewer | OPEN | P03 |
 | CF-62 | All copy, the WhatsApp target and the portal href in the mock are synthetic placeholders. Real values come from SiteSettings and from the D-07 build-time constant at P03. No published business data entered application source (PR-16). | reviewer | OPEN | P03 |
+| CF-63 | Thirteen of the 24 components in DESIGN_SYSTEM.md §6 are not yet specified. §10 specifies eleven. Each remaining component is specified at the phase that builds it, by extending §10 rather than rewriting it. | reviewer | OPEN | P03 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

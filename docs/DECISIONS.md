@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Thirty-one decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
+Thirty-two decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -314,3 +314,7 @@ The P02 scope decision recommended deep Nile blue, navy, teal and controlled cya
 ### D-31 — Typefaces
 
 IBM Plex Sans Arabic, SIL OFL 1.1, self-hosted, one family for both locales. Selected at the P02-X02-A verdict against the four criteria in `DESIGN_SYSTEM.md` §4, each verified against the font binaries rather than a specification page: full harakat coverage and complete coverage of the mark string; a permissive licence; eight real weight cuts of which three are used, so no synthetic bold; and uniform-width figures by default, which makes `tnum` correctly absent rather than missing. One family rather than two because the Arabic family ships Latin metrically identical to IBM Plex Sans across all sixty-two Latin glyphs at the same x-height and em, so every Latin run isolated inside Arabic under `I18N_MODEL.md` §6 renders in the same face without a per-string decision. The per-locale line-height fork is computed from the two scripts' measured vertical spans, not chosen. Noto Sans Arabic was rejected as the system fallback and Cairo as a regional default with a weak Latin. Closes CF-53. Recorded in `DESIGN_SYSTEM.md` §4.
+
+### D-32 — Composition layer
+
+`DESIGN_SYSTEM.md` v2, authored at the P02-T07 verdict. The first cut carried colour, type, space, elevation and a component list, and a mock built strictly from it rendered correctly and looked like nothing: tokens do not compose a page. v2 adds §9 composition (grid, containers, vertical rhythm, measure, imagery policy, hero pattern, stat band, mark placement, section pattern), §10 specifications for eleven components, and §11 six interaction states plus empty and error. It also ratifies the §5 elevation shadow values, which the first cut left descriptive and which the P02-T07 builder flagged rather than inventing silently. Two rules bind beyond styling: all photography is client-supplied and no stock imagery ships or appears in a client preview, and in the stat band a count is permitted where a name is not — no `Programme` name, no `LabTest` name, and no count of LabTests within a `Programme`.
