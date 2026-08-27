@@ -51,18 +51,19 @@ on a verbal expansion of an unsigned scope.
 | P02-X02 | Reissue — sampled the flask mark from the two committed binaries, no network call. Both SHA-256 confirmed against `PROVENANCE.md`. Favicon (source of record): 19460 pixels, 13931 background / 1097 fringe / 4432 surviving, 1010 distinct survivor values, 38 merged groups. Cover crop (792,322)-(950,505) at background distance 30: 28914 pixels, 27693 surviving, 137 merged groups, top-edge/corner bleed identified and attributed. Favicon wins on the STEP 3 fidelity ruling: pink family corroborated (distance 7.6–12.6), dominant blue/indigo family not corroborated by the JPEG but not contradicted either. Landed as `docs/research/15-mark-colour-sampling.md` (research file count 14 → 15); no token role assigned, no hex fixed (OD-07 bound 1). D-29's hue assumption amended, D-30 landed, DECISIONS.md now 30 decisions / 7 ODs. CF-55..CF-56 landed, open — open count 32 → 34 | pushed — verdict at push | 2026-08-27 |
 | P02-X02-A | Pre-merge amendment to P02-X02, same branch. `scripts/sample_mark_colours.py` and `scripts/analyze_cover_groups.py` — the two tracked files P02-X02 landed unquoted and undisclosed — each headed with an evidence-tooling notice; `scripts/README.md` authored sanctioning the directory. CF-57 landed CLOSED (the non-disclosure finding) and CF-58 landed OPEN (scripts/ scope boundary, revisit at P03); open count 34 → 35 | pushed — verdict at push | 2026-08-27 |
 | P02-T06 | `DESIGN_SYSTEM.md` landed byte-exact from the reviewer-authored payload (document 8 authored). STEP 2 evidence check confirmed: `#2E3192` and `#181D8C` both appear in `docs/research/15-mark-colour-sampling.md`. D-31 (typefaces — IBM Plex Sans Arabic, one family for both locales) landed, DECISIONS.md now 31 decisions / 7 ODs. CF-53, CF-55, CF-56 CLOSED at P02-T06; CF-59 and CF-60 landed OPEN — open count 35 → 34 | pushed — verdict at push | 2026-08-27 |
+| P02-T07 | Landing-page mock built at the existing placeholder route `/` only (OD-05 bound 4 — mock, not a P03 deliverable, satisfies no part of G3). Fonts: `@fontsource/ibm-plex-sans-arabic` installed; six weight/subset `.woff2` files (400/500/600 × arabic/latin) plus `LICENSE` committed to `public/fonts/` — `git ls-files public/fonts/ \| wc -l` → 7; local `@font-face` with the package's own per-subset `unicode-range`, `font-display: swap`, no CDN. Tokens: one stylesheet carries the eleven `DESIGN_SYSTEM.md` §3 colour tokens verbatim (no twelfth), the §4 seven-step size scale, the §5 nine-step spacing scale, four-value radius set and three elevation levels (border width 1px per §5; §5 gives no shadow blur/opacity numbers, so the shadow values are a mock rendering of the qualitative description, not a document value), plus the en/ar §4 line-height fork. Page: header (mark placeholder, locale toggle) · hero · two actions · hours-and-location · footer — locale is client state defaulting to `ar`; `dir`/`lang` set on a page-root wrapper rather than `<html>` (named deviation, no locale segment exists — CF-61). Portal action is an `https://` anchor to `https://example.invalid/portal-placeholder`, `target="_blank" rel="noopener noreferrer"`, never a frame; WhatsApp action builds a `wa.me` link client-side from a placeholder constant, not a form. 23-key bilingual catalogue (`ar`/`en` identical), parity asserted at compile time and runtime so a drift fails the build. `docs/DESIGN_SYSTEM.md` and `docs/I18N_MODEL.md` untouched (`git diff --name-only 8818be7 HEAD` does not list either); DECISIONS.md unchanged at 31 decisions / 7 ODs — this task lands no decision. STEP 4 evidence: physical-property grep (`left`/`right`/`margin-left`/etc.) → 0; catalogue key counts `ar`=23, `en`=23, identical; Eastern Arabic digit grep → 0; built output (`npm run build`) carries `dir="rtl"`, `lang="ar"`, and all six font URLs resolve to same-origin `/fonts/...` paths; `<form>`/`<iframe>`/`<embed>` grep → 0 each. CF-61 and CF-62 landed OPEN (both reviewer-owned, P03); CF-59 and CF-60 correctly left OPEN — open count 34 → 36 | pushed — verdict at push | 2026-08-27 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 4 of P02-T06):
+Computed by (run after STEP 4 of P02-T07):
 `bash -c "grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md"`
 
-**Open — 34:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 36:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 ·
-CF-51 · CF-52 · CF-54 · CF-58 · CF-59 · CF-60
+CF-51 · CF-52 · CF-54 · CF-58 · CF-59 · CF-60 · CF-61 · CF-62
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -118,7 +119,15 @@ revisit if P03 needs a build-tooling path. CF-59 and CF-60 are landed at
 P02-T06: `DESIGN_SYSTEM.md` §3 ratios and §8 floor are computed against flat
 fills and font metrics, re-verified on rendered pages at the first gate that
 ships a screen; and the rendered Arabic has not been read by anyone who
-reads clinical Arabic, owned by the client, open until the landing-page mock.
+reads clinical Arabic. The landing-page mock (P02-T07) is the surface that
+makes both actionable but does not close either — closing needs a human
+looking at a screen, so both remain open, CF-59 until P03 and CF-60 owned by
+the client. CF-61 and CF-62 are landed at P02-T07, both reviewer-owned and
+open until P03: CF-61 is the page-root-wrapper deviation from
+`I18N_MODEL.md` §4 forced by OD-05 bound 2 (no locale route exists yet); CF-62
+is the mock's synthetic-placeholder status for all copy, the WhatsApp target
+and the portal href, pending real values from `SiteSettings` and the D-07
+build-time constant.
 
 ---
 
@@ -143,17 +152,18 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**Build the single static landing-page mock (OD-05 bound 3) — the last P02
-item.** `DESIGN_SYSTEM.md` has landed (document 8) with the token roles
-assigned, the AA contrast check closed, and the typeface decision (D-31, IBM
-Plex Sans Arabic) recorded. Nothing upstream of the mock remains open in P02:
-`I18N_MODEL.md`, `DESIGN_SYSTEM.md` and the typeface selection are all
-authored. The mock is the first surface able to close CF-59 (§3 ratios and §8
-floor re-verified on a rendered page, both locales) and CF-60 (the rendered
-Arabic read by someone who reads clinical Arabic). It is a mock only — not a
-P03 deliverable, satisfies no part of G3, and is replaced wholesale at P03
-per OD-05 bound 4. P02 design work remains bounded per OD-05: no
-schema/route/storage/LabTest content, G1 not claimed.
+**P02 close-out.** The landing-page mock (P02-T07) was the last P02 item —
+fonts, tokens and the page all landed at the existing placeholder route `/`,
+bounded per OD-05: no schema, no route beyond the placeholder, no storage, no
+LabTest content, G1 not claimed. Nothing remains open in P02's own scope.
+
+CF-59 (`DESIGN_SYSTEM.md` §3 ratios and §8 floor re-verified on a rendered
+page, both locales) and CF-60 (the rendered Arabic read by someone who reads
+clinical Arabic) are now **actionable** — the mock is the rendered surface
+both need — but neither closes automatically: closing needs a human looking
+at a screen. CF-61 (page-root-wrapper deviation) and CF-62 (synthetic
+placeholder status of all mock copy/links) are new reviewer-owned rows
+carried to P03, where the mock is replaced wholesale per OD-05 bound 4.
 
 **P01-T03-R remains blocked on CF-34** (no local Postgres, no container
 runtime, no elevation) with no resolution date. Resumes the moment CF-34
