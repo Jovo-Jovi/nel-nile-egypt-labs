@@ -68,6 +68,26 @@
   color: var(--nel-color-muted);
 }
 
+.washSample {
+  inline-size: 200px;
+  block-size: 80px;
+  border-radius: var(--nel-radius-md);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nel-size-xs);
+  color: var(--nel-color-muted);
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent),
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent)
+    ),
+    linear-gradient(to bottom, var(--nel-color-background), var(--nel-color-surface));
+}
+
 .fillStrip {
   display: flex;
   flex-wrap: wrap;

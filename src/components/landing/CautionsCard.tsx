@@ -25,9 +25,9 @@ export function CautionsCard({ locale }: CautionsCardProps) {
     >
       <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.clinical">
         <div className={styles.list}>
-          <CautionCardEntry title={translate(locale, "cautions.entry1.title")} body={translate(locale, "cautions.entry1.body")} />
-          <CautionCardEntry title={translate(locale, "cautions.entry2.title")} body={translate(locale, "cautions.entry2.body")} />
-          <CautionCardEntry title={translate(locale, "cautions.entry3.title")} body={translate(locale, "cautions.entry3.body")} />
+          <CautionCardEntry pending title={translate(locale, "cautions.entry1.title")} body={translate(locale, "cautions.entry1.body")} />
+          <CautionCardEntry pending title={translate(locale, "cautions.entry2.title")} body={translate(locale, "cautions.entry2.body")} />
+          <CautionCardEntry pending title={translate(locale, "cautions.entry3.title")} body={translate(locale, "cautions.entry3.body")} />
         </div>
       </ApprovalGate>
     </BandCard>

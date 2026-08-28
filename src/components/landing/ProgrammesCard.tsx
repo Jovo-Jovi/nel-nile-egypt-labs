@@ -26,9 +26,9 @@ export function ProgrammesCard({ locale }: ProgrammesCardProps) {
     >
       <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.clinical">
         <div className={styles.list}>
-          <ProgrammeRow icon={<ProgrammeIcon size={20} />} title={translate(locale, "programmes.row1Title")} subtitle={translate(locale, "programmes.row1Subtitle")} />
-          <ProgrammeRow icon={<ProgrammeIcon size={20} />} title={translate(locale, "programmes.row2Title")} subtitle={translate(locale, "programmes.row2Subtitle")} />
-          <ProgrammeRow icon={<ProgrammeIcon size={20} />} title={translate(locale, "programmes.row3Title")} subtitle={translate(locale, "programmes.row3Subtitle")} />
+          <ProgrammeRow pending icon={<ProgrammeIcon size={20} />} title={translate(locale, "programmes.row1Title")} subtitle={translate(locale, "programmes.row1Subtitle")} />
+          <ProgrammeRow pending icon={<ProgrammeIcon size={20} />} title={translate(locale, "programmes.row2Title")} subtitle={translate(locale, "programmes.row2Subtitle")} />
+          <ProgrammeRow pending icon={<ProgrammeIcon size={20} />} title={translate(locale, "programmes.row3Title")} subtitle={translate(locale, "programmes.row3Subtitle")} />
         </div>
       </ApprovalGate>
     </BandCard>

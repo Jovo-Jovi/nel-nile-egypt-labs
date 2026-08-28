@@ -25,11 +25,13 @@ export function NewsCard({ locale }: NewsCardProps) {
       <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
         <div className={styles.list}>
           <NewsCardEntry
+            pending
             date={translate(locale, "news.entry1.date")}
             title={translate(locale, "news.entry1.title")}
             excerpt={translate(locale, "news.entry1.excerpt")}
           />
           <NewsCardEntry
+            pending
             date={translate(locale, "news.entry2.date")}
             title={translate(locale, "news.entry2.title")}
             excerpt={translate(locale, "news.entry2.excerpt")}

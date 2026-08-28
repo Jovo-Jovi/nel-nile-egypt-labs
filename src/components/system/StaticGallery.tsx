@@ -41,6 +41,15 @@ export function CardGallery({ locale }: GalleryProps) {
             <p className={styles.emptyLine}>{translate(locale, "gallery.card.body")}</p>
           </Card>
         </StateSample>
+        <StateSample label={translate(locale, "state.hoverReveal")}>
+          <Card
+            heading={translate(locale, "gallery.card.title")}
+            detail={<p className={styles.emptyLine}>{translate(locale, "gallery.card.detail")}</p>}
+            action={<Button variant="text">{translate(locale, "gallery.card.action")}</Button>}
+          >
+            {translate(locale, "gallery.card.body")}
+          </Card>
+        </StateSample>
       </StateRow>
     </ComponentBlock>
   );
@@ -230,9 +239,9 @@ export function CautionCardEntryGallery({ locale }: GalleryProps) {
   );
 }
 
-// DESIGN_SYSTEM.md §10 Location card — 16:9 static map frame, address and
-// hotline, one outlined action. Address/hotline are pending (PR-16); the
-// map frame is a permanent architectural choice, never gated.
+// DESIGN_SYSTEM.md v4 §10 Location card — drawn 16:9 map, address and
+// hotline, one outlined action. The map's own pins and the address/
+// hotline text are both §12 pending (PR-16, CF-69).
 export function LocationCardGallery({ locale }: GalleryProps) {
   return (
     <ComponentBlock heading={translate(locale, "gallery.locationCard.heading")}>
@@ -240,11 +249,8 @@ export function LocationCardGallery({ locale }: GalleryProps) {
         <div className={styles.frameSample}>
           <LocationCard
             locale={locale}
-            mapLabel={translate(locale, "gallery.locationCard.mapLabel")}
             addressLabel={translate(locale, "gallery.locationCard.addressLabel")}
-            address={translate(locale, "gallery.locationCard.address")}
             hotlineLabel={translate(locale, "gallery.locationCard.hotlineLabel")}
-            hotline={translate(locale, "gallery.locationCard.hotline")}
             actionLabel={translate(locale, "gallery.locationCard.action")}
             pendingLabelKey="approval.pending.businessData"
           />

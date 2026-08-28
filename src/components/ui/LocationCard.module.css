@@ -5,22 +5,9 @@
 }
 
 .mapFrame {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   inline-size: 100%;
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--nel-color-border);
   border-radius: var(--nel-radius-sm);
-  background-color: var(--nel-color-background);
-  padding: var(--nel-space-16);
-  text-align: center;
-}
-
-.mapLabel {
-  color: var(--nel-color-muted);
-  font-size: var(--nel-size-sm);
+  overflow: hidden;
 }
 
 .details {

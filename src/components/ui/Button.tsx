@@ -4,7 +4,12 @@ import type { MouseEventHandler, ReactNode } from "react";
 import styles from "./Button.module.css";
 
 // DESIGN_SYSTEM.md §10 — three variants, all 44px minimum block size.
-export type ButtonVariant = "primary" | "secondary" | "text";
+// v4 §10 "WhatsApp action" adds two more, scoped to that one component:
+// whatsappFilled (the hero's second action, `#25D366` fill) and
+// whatsappOutlined (the header action, `surface` fill inheriting the
+// secondary variant's geometry). Neither is a general-purpose variant —
+// see WhatsAppAction.tsx, the only caller.
+export type ButtonVariant = "primary" | "secondary" | "text" | "whatsappFilled" | "whatsappOutlined";
 
 // DESIGN_SYSTEM.md §11 — six interaction states. `forceState` lets the
 // System view gallery demonstrate a state without simulating real pointer
@@ -22,6 +27,12 @@ interface ButtonProps {
   ariaLabel?: string;
   forceState?: ButtonForcedState;
   disabled?: boolean;
+  // DESIGN_SYSTEM.md §10 Button — "icon, when present, sits inline-start
+  // of the label in both locales and mirrors only if it encodes
+  // direction". Every icon passed here is a meaning-encoding mark
+  // (currently only the WhatsApp mark), never a chevron, so it never
+  // mirrors.
+  icon?: ReactNode;
 }
 
 export function Button({
@@ -34,6 +45,7 @@ export function Button({
   ariaLabel,
   forceState,
   disabled,
+  icon,
 }: ButtonProps) {
   const isLoading = forceState === "loading";
   const isDisabled = Boolean(disabled) || forceState === "disabled";
@@ -41,7 +53,7 @@ export function Button({
 
   const inner = (
     <>
-      {isLoading ? <span className={styles.spinner} aria-hidden="true" /> : null}
+      {isLoading ? <span className={styles.spinner} aria-hidden="true" /> : icon}
       <span className={styles.label}>{children}</span>
     </>
   );

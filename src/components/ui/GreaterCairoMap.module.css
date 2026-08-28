@@ -1,0 +1,55 @@
+/* DESIGN_SYSTEM.md v4 §10 — the drawn map. Fixed 16:9 via the parent
+   frame; this component fills it. */
+
+.map {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: hidden;
+}
+
+.svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.districtLabel {
+  fill: var(--nel-color-muted);
+  font-size: 3.4px;
+  font-family: inherit;
+}
+
+/* 44px minimum target (§2 principle 4), centred on the indicative
+   coordinate. The visible pin icon is 24px/28px; the button's own
+   padding brings the hit area to the floor without changing the icon's
+   drawn size. */
+.pinTarget,
+.pinTargetHeadOffice {
+  position: absolute;
+  inline-size: 44px;
+  block-size: 44px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--nel-radius-full);
+  background: transparent;
+  color: var(--nel-color-primary);
+  padding: 0;
+  cursor: not-allowed;
+}
+
+.pinTargetHeadOffice {
+  color: var(--nel-color-accent);
+}
+
+.pinTarget:disabled,
+.pinTargetHeadOffice:disabled {
+  color: var(--nel-color-primary);
+}
+
+.pinTargetHeadOffice:disabled {
+  color: var(--nel-color-accent);
+}

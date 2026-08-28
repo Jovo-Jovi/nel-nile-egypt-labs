@@ -33,7 +33,7 @@ export function Hero({ locale }: HeroProps) {
         <p className={styles.standfirst}>{translate(locale, "hero.standfirst")}</p>
         <div className={styles.actionsRow}>
           <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" />
-          <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="secondary" />
+          <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappFilled" />
         </div>
         <TrustRow locale={locale} />
       </div>

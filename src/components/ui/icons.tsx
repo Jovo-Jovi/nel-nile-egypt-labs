@@ -97,6 +97,24 @@ export function ImagePlaceholderIcon({ size = 20 }: IconProps) {
   );
 }
 
+// DESIGN_SYSTEM.md v4 §10 "WhatsApp action" §3 third-party brand-mark
+// exception — the one place `#25D366` enters this codebase outside the
+// hero's filled fill. Fixed brand colour, never `currentColor`: this
+// icon's own green does not change with the label colour around it, so
+// it is hardcoded rather than inherited. The inner glyph uses the
+// `surface` token, not a literal white, and carries no text of its own.
+export function WhatsAppMarkIcon({ size = 20 }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="11" fill="#25D366" />
+      <path
+        d="M16.7 13.9c-.3-.15-1.75-.85-2-.95-.3-.1-.5-.15-.7.15-.2.3-.8.95-1 1.15-.2.2-.35.2-.6.05-.85-.4-1.75-1-2.5-2.05-.7-.9-.95-1.55-.55-1.95.35-.35.7-.5.55-1-.1-.35-.55-1.35-.7-1.7-.15-.35-.3-.3-.45-.3h-.4c-.2 0-.45 0-.65.4-.5 1-.65 1.9.15 3.15 1.35 2.1 2.9 3.5 5.35 4.35 1.7.6 2.3.4 2.75.15.5-.3.85-1 .95-1.4.1-.4 0-.65-.2-.85-.05-.05-.15-.1-.5-.25Z"
+        fill="var(--nel-color-surface)"
+      />
+    </svg>
+  );
+}
+
 // Direction-encoding — mirrors between locales (I18N_MODEL.md §4). The
 // mirroring is applied in CSS ([dir="rtl"] scaleX(-1)), never here.
 export function ChevronIcon({ size = 16 }: IconProps) {

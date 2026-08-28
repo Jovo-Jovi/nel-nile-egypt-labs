@@ -77,9 +77,27 @@ function AlternatingFills({ locale }: { locale: Locale }) {
   );
 }
 
+// DESIGN_SYSTEM.md v4 §9 "The page wash" — the one permitted page-level
+// gradient, reproduced here at swatch scale with the same formula
+// PreviewRoot.module.css uses (STEP 1), so the decorative-layer rule is
+// demonstrated rather than only described: no text and no interactive
+// target on the layer itself, both stops within 1.05:1 of each other.
+function PageWashRule({ locale }: { locale: Locale }) {
+  return (
+    <ComponentBlock heading={translate(locale, "system.composition.wash.heading")}>
+      <p className={styles.body}>{translate(locale, "system.composition.wash.body")}</p>
+      <div className={styles.washSample}>
+        <Isolate>background → surface, primary 6%</Isolate>
+      </div>
+      <p className={styles.note}>{translate(locale, "system.composition.wash.note")}</p>
+    </ComponentBlock>
+  );
+}
+
 // STEP 3 — v3's new composition rules, demonstrated live rather than only
 // described: the Bold 700 display rule, the single-hue-family gradient
-// rule, and the two-neutral alternating section fills.
+// rule, and the two-neutral alternating section fills. v4 adds the page
+// wash and its decorative-layer rule (STEP 1).
 export function CompositionSection({ locale }: CompositionSectionProps) {
   return (
     <section className={styles.section}>
@@ -88,6 +106,7 @@ export function CompositionSection({ locale }: CompositionSectionProps) {
         <BoldRule locale={locale} />
         <GradientRule locale={locale} />
         <AlternatingFills locale={locale} />
+        <PageWashRule locale={locale} />
       </div>
     </section>
   );

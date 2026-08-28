@@ -1,7 +1,7 @@
 import { translate, type Locale } from "@/lib/catalog";
 import { MarkSlot } from "@/components/ui/MarkSlot";
-import { Isolate } from "@/components/ui/Isolate";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
+import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import styles from "./Footer.module.css";
 
 interface FooterProps {
@@ -24,16 +24,22 @@ export function Footer({ locale }: FooterProps) {
         <div className={styles.contact}>
           <h2 className={styles.contactHeading}>{translate(locale, "footer.contactHeading")}</h2>
           <p className={styles.line}>
-            <span className={styles.label}>{translate(locale, "footer.hotlineLabel")}</span>{" "}
-            <Isolate>{translate(locale, "footer.hotlineValue")}</Isolate>
+            <span className={styles.label}>{translate(locale, "footer.hotlineLabel")}</span>
+            <span className={styles.lineBar}>
+              <SkeletonBar size="sm" widthPercent={100} />
+            </span>
           </p>
           <p className={styles.line}>
-            <span className={styles.label}>{translate(locale, "footer.whatsappLabel")}</span>{" "}
-            <Isolate>{translate(locale, "footer.whatsappValue")}</Isolate>
+            <span className={styles.label}>{translate(locale, "footer.whatsappLabel")}</span>
+            <span className={styles.lineBar}>
+              <SkeletonBar size="sm" widthPercent={100} />
+            </span>
           </p>
           <p className={styles.line}>
-            <span className={styles.label}>{translate(locale, "footer.addressLabel")}</span>{" "}
-            {translate(locale, "footer.addressValue")}
+            <span className={styles.label}>{translate(locale, "footer.addressLabel")}</span>
+            <span className={styles.lineBarWide}>
+              <SkeletonBar size="sm" widthPercent={100} />
+            </span>
           </p>
         </div>
       </ApprovalGate>

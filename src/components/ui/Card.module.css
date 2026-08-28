@@ -9,6 +9,40 @@
   border-color: var(--nel-color-border);
   border-radius: var(--nel-radius-md);
   box-shadow: var(--nel-elevation-1-shadow);
+  transition: box-shadow 150ms, border-color 150ms, transform 150ms;
+}
+
+.card:hover {
+  box-shadow: var(--nel-elevation-2-shadow);
+  border-color: var(--nel-color-primary);
+  transform: translateY(-2px);
+}
+
+.detailReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 250ms;
+}
+
+.card:hover .detailReveal,
+.card:focus-within .detailReveal {
+  grid-template-rows: 1fr;
+}
+
+.detailInner {
+  min-block-size: 0;
+  overflow: hidden;
+  padding-block-start: var(--nel-space-8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  .detailReveal {
+    transition: none;
+  }
 }
 
 .imageSlot {

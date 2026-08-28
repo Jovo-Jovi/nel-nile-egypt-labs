@@ -78,12 +78,17 @@ const ar = {
   // Card band — Locations
   "locations.heading": "الفروع",
   "locations.viewAll": "عرض الكل",
-  "locations.mapLabel": "خريطة الموقع (عنصر نائب ثابت)",
   "locations.addressLabel": "العنوان",
-  "locations.headOfficeAddress": "عنوان المقر الرئيسي — بيانات تجريبية",
   "locations.hotlineLabel": "الخط الساخن",
-  "locations.hotlineValue": "00000",
   "locations.action": "الحصول على الاتجاهات",
+
+  // v4 §10 drawn Greater Cairo map — CF-69, indicative pin positions only
+  "locations.map.ariaLabel": "خريطة تخطيطية للقاهرة الكبرى، مواقع الفروع تقريبية",
+  "locations.map.pinLabel": "موقع فرع (تقريبي)",
+  "locations.map.headOfficePinLabel": "موقع المقر الرئيسي (تقريبي)",
+  "locations.map.district.giza": "الجيزة",
+  "locations.map.district.cairo": "القاهرة",
+  "locations.map.district.maadi": "المعادي",
 
   // Card band — Programmes
   "programmes.heading": "البرامج",
@@ -121,11 +126,8 @@ const ar = {
   // Footer
   "footer.contactHeading": "تواصل معنا",
   "footer.hotlineLabel": "الخط الساخن",
-  "footer.hotlineValue": "00000",
   "footer.whatsappLabel": "واتساب",
-  "footer.whatsappValue": "+20 000 000 0000",
   "footer.addressLabel": "المقر الرئيسي",
-  "footer.addressValue": "شارع تجريبي، القاهرة",
   "footer.notice": "معاينة داخلية فقط، وليست نسخة منشورة. جميع البيانات وهمية.",
 
   // System view — shared chrome
@@ -176,11 +178,18 @@ const ar = {
   "system.composition.alternatingFills.heading": "تناوب تعبئة الأقسام",
   "system.composition.alternatingFills.body":
     "تتناوب الأقسام بين لونين محايدين فقط، بلا عائلة لونية جديدة وبلا لون خاص بقسم واحد.",
+  "system.composition.wash.heading": "طبقة التمويه الخلفية",
+  "system.composition.wash.body":
+    "طبقة تزيينية واحدة ثابتة خلف كل شيء: من background إلى surface بتدرج primary لا يتجاوز 6%. لا تحمل نصًا ولا هدفًا تفاعليًا.",
+  "system.composition.wash.note":
+    "كل منطقة تحمل نصًا تُرسم فوق background أو surface خاصة بها، فلا تتم قراءة أي تباين من هذه الطبقة.",
 
   // System view — §12 approval states, three side by side (STEP 3)
   "system.approval.heading": "حالات الاعتماد (§12)",
   "system.approval.standfirst":
     "الحالات الثلاث معروضة جنبًا إلى جنب على نفس المكوّن، لتكون الآلية واضحة.",
+  "system.approval.craftedNote":
+    "المعالجة المُتقنة: شريط تلاشي بطيء 2000ms بين background وsurface فقط، وأسطر المحتوى أشرطة بانحناء 4px بالحجم الحقيقي — لا نص تجريبي واقعي أبدًا.",
   "system.approval.approvedLabel": "معتمد",
   "system.approval.pendingLabel": "قيد الانتظار",
   "system.approval.withheldLabel": "محجوب",
@@ -200,6 +209,7 @@ const ar = {
   "state.loading": "تحميل",
   "state.empty": "فارغ",
   "state.error": "خطأ",
+  "state.hoverReveal": "كشف عند التحويم",
 
   // Component gallery — labels and sample copy
   "gallery.button.heading": "زر (Button)",
@@ -209,6 +219,7 @@ const ar = {
   "gallery.card.heading": "بطاقة (Card)",
   "gallery.card.title": "عنوان البطاقة",
   "gallery.card.body": "نص وصفي مختصر داخل البطاقة.",
+  "gallery.card.detail": "سطر تفصيلي إضافي يظهر عند التحويم.",
   "gallery.card.action": "فتح",
   "gallery.header.heading": "الترويسة (Header)",
   "gallery.languageSwitcher.heading": "مبدّل اللغة",
@@ -219,6 +230,10 @@ const ar = {
   "gallery.imageFrame.label": "صورة (يوفرها العميل)",
   "gallery.whatsapp.heading": "إجراء واتساب",
   "gallery.whatsapp.label": "تواصل عبر واتساب",
+  "gallery.whatsapp.filledRatio": "معبأ — 8.28 AA",
+  "gallery.whatsapp.outlinedRatio": "مفرغ — يرث الزر الثانوي",
+  "gallery.whatsapp.forbiddenNote":
+    "نص أبيض فوق #25D366 يقيس 1.98 ويفشل معيار AA؛ لهذا لا يُستخدم في أي معالجة.",
   "gallery.portal.heading": "رابط بوابة النتائج (ResultsPortalLink)",
   "gallery.portal.label": "فتح بوابة النتائج",
   "gallery.bilingualField.heading": "حقل ثنائي اللغة (Bilingual field pair)",
@@ -245,11 +260,8 @@ const ar = {
   "gallery.cautionCardEntry.title": "عنوان نموذجي للتنبيه",
   "gallery.cautionCardEntry.body": "نص تجريبي لتوضيح شكل التنبيه.",
   "gallery.locationCard.heading": "بطاقة الموقع (Location card)",
-  "gallery.locationCard.mapLabel": "خريطة (عنصر نائب ثابت)",
   "gallery.locationCard.addressLabel": "العنوان",
-  "gallery.locationCard.address": "عنوان نموذجي",
   "gallery.locationCard.hotlineLabel": "الخط الساخن",
-  "gallery.locationCard.hotline": "00000",
   "gallery.locationCard.action": "الحصول على الاتجاهات",
   "gallery.programmeRow.heading": "صف البرنامج (Programme row)",
   "gallery.programmeRow.title": "عنوان نموذجي للصف",
@@ -339,12 +351,17 @@ const en = {
   // Card band — Locations
   "locations.heading": "Locations",
   "locations.viewAll": "View all",
-  "locations.mapLabel": "Location map (static placeholder)",
   "locations.addressLabel": "Address",
-  "locations.headOfficeAddress": "Head office address — placeholder data",
   "locations.hotlineLabel": "Hotline",
-  "locations.hotlineValue": "00000",
   "locations.action": "Get directions",
+
+  // v4 §10 drawn Greater Cairo map — CF-69, indicative pin positions only
+  "locations.map.ariaLabel": "Schematic map of Greater Cairo, branch positions indicative",
+  "locations.map.pinLabel": "Branch location (indicative)",
+  "locations.map.headOfficePinLabel": "Head office location (indicative)",
+  "locations.map.district.giza": "Giza",
+  "locations.map.district.cairo": "Cairo",
+  "locations.map.district.maadi": "Maadi",
 
   // Card band — Programmes
   "programmes.heading": "Programmes",
@@ -382,11 +399,8 @@ const en = {
   // Footer
   "footer.contactHeading": "Contact",
   "footer.hotlineLabel": "Hotline",
-  "footer.hotlineValue": "00000",
   "footer.whatsappLabel": "WhatsApp",
-  "footer.whatsappValue": "+20 000 000 0000",
   "footer.addressLabel": "Head office",
-  "footer.addressValue": "Sample Street, Cairo",
   "footer.notice": "Internal preview only, not a published version. All data is synthetic.",
 
   // System view — shared chrome
@@ -436,11 +450,18 @@ const en = {
   "system.composition.alternatingFills.heading": "Alternating section fills",
   "system.composition.alternatingFills.body":
     "Sections alternate between two neutral fills only — no new chromatic family, no per-section colour.",
+  "system.composition.wash.heading": "The page wash",
+  "system.composition.wash.body":
+    "One fixed decorative layer behind everything: background easing to surface with a primary tint no more than 6%. Carries no text and no interactive target.",
+  "system.composition.wash.note":
+    "Every text-bearing region paints its own background or surface fill above it, so no ratio is ever read off this layer.",
 
   // System view — §12 approval states, three side by side (STEP 3)
   "system.approval.heading": "Approval states (§12)",
   "system.approval.standfirst":
     "The three states shown side by side on the same component, so the mechanism is visible.",
+  "system.approval.craftedNote":
+    "The crafted treatment: a 2000ms shimmer sweeping background to surface and back only, and content lines as radius-4px bars at their true size — never realistic fake copy.",
   "system.approval.approvedLabel": "Approved",
   "system.approval.pendingLabel": "Pending",
   "system.approval.withheldLabel": "Withheld",
@@ -460,6 +481,7 @@ const en = {
   "state.loading": "Loading",
   "state.empty": "Empty",
   "state.error": "Error",
+  "state.hoverReveal": "Hover-reveal",
 
   // Component gallery — labels and sample copy
   "gallery.button.heading": "Button",
@@ -469,6 +491,7 @@ const en = {
   "gallery.card.heading": "Card",
   "gallery.card.title": "Card title",
   "gallery.card.body": "A short descriptive line inside the card.",
+  "gallery.card.detail": "An extra detail line, revealed on hover.",
   "gallery.card.action": "Open",
   "gallery.header.heading": "Header",
   "gallery.languageSwitcher.heading": "Language switcher",
@@ -479,6 +502,10 @@ const en = {
   "gallery.imageFrame.label": "Image (client-supplied)",
   "gallery.whatsapp.heading": "WhatsApp action",
   "gallery.whatsapp.label": "Chat on WhatsApp",
+  "gallery.whatsapp.filledRatio": "Filled — 8.28 AA",
+  "gallery.whatsapp.outlinedRatio": "Outlined — inherits secondary",
+  "gallery.whatsapp.forbiddenNote":
+    "White text on #25D366 measures 1.98 and fails AA, which is why it is never used in either treatment.",
   "gallery.portal.heading": "ResultsPortalLink action",
   "gallery.portal.label": "Open results portal",
   "gallery.bilingualField.heading": "Bilingual field pair",
@@ -505,11 +532,8 @@ const en = {
   "gallery.cautionCardEntry.title": "Sample caution title",
   "gallery.cautionCardEntry.body": "Sample text showing the caution's shape.",
   "gallery.locationCard.heading": "Location card",
-  "gallery.locationCard.mapLabel": "Map (static placeholder)",
   "gallery.locationCard.addressLabel": "Address",
-  "gallery.locationCard.address": "Sample address",
   "gallery.locationCard.hotlineLabel": "Hotline",
-  "gallery.locationCard.hotline": "00000",
   "gallery.locationCard.action": "Get directions",
   "gallery.programmeRow.heading": "Programme row",
   "gallery.programmeRow.title": "Sample row title",

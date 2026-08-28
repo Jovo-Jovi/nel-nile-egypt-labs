@@ -67,15 +67,33 @@ export function LanguageSwitcherGallery({ locale }: GalleryProps) {
   );
 }
 
-// DESIGN_SYSTEM.md §10 WhatsApp action — a Button wrapper, so it inherits
-// every §11 state.
+// DESIGN_SYSTEM.md v4 §10 WhatsApp action — a Button wrapper, so it
+// inherits every §11 state. First row: the two permitted treatments
+// side by side with their measured ratios — filled is the hero's second
+// action, outlined is the header's. Both carry the mark at 20px in
+// #25D366; the label is the text token in both, never white (white on
+// #25D366 measures 1.98 and fails AA, which is why it is not offered as
+// a treatment here or anywhere else). Second row: every §11 state on the
+// filled treatment, since it inherits the same Button mechanics as
+// every other variant.
 export function WhatsAppGallery({ locale }: GalleryProps) {
   return (
     <ComponentBlock heading={translate(locale, "gallery.whatsapp.heading")}>
       <StateRow>
+        <StateSample label={translate(locale, "gallery.whatsapp.filledRatio")}>
+          <WhatsAppAction label={translate(locale, "gallery.whatsapp.label")} variant="whatsappFilled" />
+        </StateSample>
+        <StateSample label={translate(locale, "gallery.whatsapp.outlinedRatio")}>
+          <WhatsAppAction label={translate(locale, "gallery.whatsapp.label")} variant="whatsappOutlined" />
+        </StateSample>
+      </StateRow>
+      <p style={{ fontSize: "var(--nel-size-xs)", color: "var(--nel-color-muted)" }}>
+        {translate(locale, "gallery.whatsapp.forbiddenNote")}
+      </p>
+      <StateRow>
         {BUTTON_STATES.map(({ labelKey, force }) => (
           <StateSample key={labelKey} label={translate(locale, labelKey)}>
-            <WhatsAppAction label={translate(locale, "gallery.whatsapp.label")} variant="secondary" forceState={force} />
+            <WhatsAppAction label={translate(locale, "gallery.whatsapp.label")} variant="whatsappFilled" forceState={force} />
           </StateSample>
         ))}
       </StateRow>

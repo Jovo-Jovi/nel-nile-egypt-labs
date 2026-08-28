@@ -1,4 +1,5 @@
 import { PlayIcon } from "./icons";
+import { SkeletonBar } from "./SkeletonBar";
 import styles from "./VideoCard.module.css";
 
 interface VideoCardProps {
@@ -7,6 +8,12 @@ interface VideoCardProps {
   title: string;
   description: string;
   playLabel: string;
+  // DESIGN_SYSTEM.md v4 §12 "Crafted, not cheap" — title and description
+  // render as bars when pending. The poster is the §9 labelled-frame
+  // pattern (its own label, play affordance and duration badge are
+  // permanent design chrome, not gated copy) and is unchanged. The
+  // gallery instance (StaticGallery.tsx) omits this prop.
+  pending?: boolean;
 }
 
 // DESIGN_SYSTEM.md §9 video posters / §10 Video card — a self-hosted
@@ -18,7 +25,7 @@ interface VideoCardProps {
 // already unverifiable. The play triangle encodes meaning and does not
 // mirror. Nothing loads before a click, and this mock has no real video
 // to load, so the affordance is not wired to a handler.
-export function VideoCard({ posterLabel, duration, title, description, playLabel }: VideoCardProps) {
+export function VideoCard({ posterLabel, duration, title, description, playLabel, pending }: VideoCardProps) {
   return (
     <div className={styles.card}>
       <div className={styles.poster} style={{ aspectRatio: "16 / 9" }}>
@@ -28,8 +35,17 @@ export function VideoCard({ posterLabel, duration, title, description, playLabel
         </button>
         <span className={styles.durationBadge}>{duration}</span>
       </div>
-      <p className={styles.title}>{title}</p>
-      <p className={styles.description}>{description}</p>
+      {pending ? (
+        <div className={styles.textSkeleton}>
+          <SkeletonBar size="base" widthPercent={75} />
+          <SkeletonBar size="sm" widthPercent={90} />
+        </div>
+      ) : (
+        <>
+          <p className={styles.title}>{title}</p>
+          <p className={styles.description}>{description}</p>
+        </>
+      )}
     </div>
   );
 }

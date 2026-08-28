@@ -4,6 +4,10 @@
    a reviewer can certify). */
 
 .pending {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  block-size: 100%;
   border-width: 1px;
   border-style: dashed;
   border-color: var(--nel-color-muted);
@@ -30,7 +34,12 @@
 
 .pendingContent {
   /* The child renders at its own full fidelity; this wrapper adds no
-     spacing of its own beyond the marker frame above. */
+     spacing of its own beyond the marker frame above. flex: 1 only
+     matters when an ancestor gives .pending a definite block-size (the
+     drawn map's 16:9 frame) — everywhere else the parent is auto-height
+     and this resolves to its content size as before. */
+  flex: 1;
+  min-block-size: 0;
 }
 
 .pendingLabel {

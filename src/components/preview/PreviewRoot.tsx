@@ -23,6 +23,13 @@ export function PreviewRoot() {
 
   return (
     <div className={styles.root} lang={locale} dir={dir} data-locale={locale}>
+      {/* DESIGN_SYSTEM.md v4 §9 "The page wash" — the one permitted
+          page-level decorative layer: background easing to surface, a
+          primary tint at no more than 6%, fixed to the viewport, behind
+          everything. Carries no text and no interactive target; every
+          text-bearing region below paints its own opaque background or
+          surface fill above it, so nothing is ever read off this layer. */}
+      <div className={styles.wash} aria-hidden="true" />
       <PreviewBanner locale={locale} view={view} onViewChange={setView} />
       <Header locale={locale} onLocaleChange={setLocale} />
       <main className={styles.main}>

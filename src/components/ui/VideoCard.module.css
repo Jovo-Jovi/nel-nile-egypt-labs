@@ -62,6 +62,12 @@
   font-size: var(--nel-size-xs);
 }
 
+.textSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+}
+
 .title {
   font-size: var(--nel-size-base);
   font-weight: 600;

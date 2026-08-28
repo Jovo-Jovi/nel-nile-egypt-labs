@@ -41,7 +41,7 @@ export function Header({ locale, onLocaleChange, forceElevated }: HeaderProps) {
       </div>
       <div className={styles.actions}>
         <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
-        <WhatsAppAction label={translate(locale, "header.whatsappCompactLabel")} variant="text" />
+        <WhatsAppAction label={translate(locale, "header.whatsappCompactLabel")} variant="whatsappOutlined" />
       </div>
     </header>
   );

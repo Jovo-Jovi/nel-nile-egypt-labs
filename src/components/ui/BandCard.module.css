@@ -9,6 +9,24 @@
   border-radius: var(--nel-radius-md);
   box-shadow: var(--nel-elevation-1-shadow);
   block-size: 100%;
+  transition: box-shadow 150ms, border-color 150ms, transform 150ms;
+}
+
+/* DESIGN_SYSTEM.md v4 §11 "Hover, cards" — elevation 1 -> 2, border
+   toward primary, translateY(-2px), 150ms. No scale, no rotation, no
+   perspective. Each band card's own detail (its rows/entries) is its
+   full permanent content, not a summary — so there is no hover-reveal
+   here, only the hover state itself. */
+.card:hover {
+  box-shadow: var(--nel-elevation-2-shadow);
+  border-color: var(--nel-color-primary);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
 }
 
 .body {

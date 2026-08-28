@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-71**
+**Next free id: CF-72**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -76,6 +76,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-68 | The landing preview renders 11 regions as §12 pending. Each clears only on a signature or a supplied asset, not on a design task. Enumerated in the P02-T11 report. | reviewer | OPEN | P02 close-out |
 | CF-69 | The drawn SVG map in DESIGN_SYSTEM.md §10 needs Branch coordinates. It renders pending with indicative pins until Branch records carry verified addresses. Unverified geography is a defect, not a placeholder. | client | OPEN | P03 |
 | CF-70 | DESIGN_SYSTEM.md §3 permits exactly one third-party brand mark, the WhatsApp mark, in its own brand colour. A second such mark requires a decision and does not follow from this precedent. | reviewer | OPEN | P03 |
+| CF-71 | The P02-T13 preview renders 12 regions as §12 pending, each with the crafted treatment. Each clears only on a signature or a supplied asset, not on a design task. Enumerated in the P02-T13 report. | reviewer | OPEN | P02 close-out |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -6,9 +6,4 @@
 .fallback {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--nel-color-primary-strong);
-  font-size: var(--nel-size-sm);
-  font-weight: 600;
-  white-space: nowrap;
 }

@@ -22,6 +22,7 @@ export function VideoSection({ locale }: VideoSectionProps) {
       <div className={styles.grid}>
         <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.videoAsset">
           <VideoCard
+            pending
             posterLabel={translate(locale, "video.posterLabel")}
             duration={translate(locale, "video.entry1.duration")}
             title={translate(locale, "video.entry1.title")}
@@ -31,6 +32,7 @@ export function VideoSection({ locale }: VideoSectionProps) {
         </ApprovalGate>
         <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.videoAsset">
           <VideoCard
+            pending
             posterLabel={translate(locale, "video.posterLabel")}
             duration={translate(locale, "video.entry2.duration")}
             title={translate(locale, "video.entry2.title")}
@@ -40,6 +42,7 @@ export function VideoSection({ locale }: VideoSectionProps) {
         </ApprovalGate>
         <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.videoAsset">
           <VideoCard
+            pending
             posterLabel={translate(locale, "video.posterLabel")}
             duration={translate(locale, "video.entry3.duration")}
             title={translate(locale, "video.entry3.title")}

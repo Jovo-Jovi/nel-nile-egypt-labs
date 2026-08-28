@@ -7,10 +7,11 @@ interface LocationsCardProps {
   locale: Locale;
 }
 
-// DESIGN_SYSTEM.md §9 card band, Locations card — a map frame, the
-// head-office address and hotline, one action. Address and hotline are
-// pending (PR-16); the map is a static labelled frame, never an embedded
-// third-party map (BOUNDARY_MODEL.md §5).
+// DESIGN_SYSTEM.md v4 §9 card band, §10 Locations card — a drawn map,
+// the head-office address and hotline, one action. Address, hotline and
+// the map's own Branch coordinates are pending (PR-16, CF-69); the map
+// is a hand-authored SVG, never an embedded third-party map
+// (BOUNDARY_MODEL.md §5).
 export function LocationsCard({ locale }: LocationsCardProps) {
   return (
     <BandCard
@@ -23,11 +24,8 @@ export function LocationsCard({ locale }: LocationsCardProps) {
     >
       <LocationCard
         locale={locale}
-        mapLabel={translate(locale, "locations.mapLabel")}
         addressLabel={translate(locale, "locations.addressLabel")}
-        address={translate(locale, "locations.headOfficeAddress")}
         hotlineLabel={translate(locale, "locations.hotlineLabel")}
-        hotline={translate(locale, "locations.hotlineValue")}
         actionLabel={translate(locale, "locations.action")}
         pendingLabelKey="approval.pending.businessData"
       />

@@ -10,3 +10,23 @@
 .main {
   flex: 1;
 }
+
+/* DESIGN_SYSTEM.md v4 §9 "The page wash" — background easing to surface,
+   a primary tint at no more than 6% opacity via color-mix (never a
+   hardcoded second hex for the same value), fixed to the viewport,
+   painted first so every later sibling's own opaque fill sits above it.
+   No z-index is set: an un-positioned decorative layer that is first in
+   DOM paints behind every later, non-negative-z-index sibling by default
+   painting order, which is enough here and avoids a stray stacking
+   context. */
+.wash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent),
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent)
+    ),
+    linear-gradient(to bottom, var(--nel-color-background), var(--nel-color-surface));
+}
