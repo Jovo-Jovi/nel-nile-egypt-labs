@@ -1,12 +1,18 @@
 # NEL — Design System
 
-**Status:** COMPLETE and landable. §3 values derive from
+**Status:** v3, COMPLETE and landable. §3 values derive from
 `docs/research/15-mark-colour-sampling.md`, landed at P02-X02; OD-07 bound 1 is
 discharged. §4 typefaces selected at the P02-X02-A verdict against the four criteria,
-verified against the font binaries. §5 elevation values ratified at the P02-T07 verdict,
-where the builder flagged them as descriptive rather than numeric. §9, §10 and §11
-authored at that same verdict, after a mock built strictly from §3–§6 rendered correctly
-and looked like nothing — tokens do not compose a page.
+verified against the font binaries. §5 elevation values ratified at the P02-T07 verdict.
+§9, §10 and §11 authored at that verdict, after a mock built strictly from §3–§6 rendered
+correctly and looked like nothing — tokens do not compose a page.
+
+v3 adds the composition a reference design made obvious and the document lacked: a
+full-bleed hero media column, a trust row, the four-card band, alternating neutral
+section backgrounds, single-family gradients, video poster rules, seven component
+specifications, two display type steps, and Bold 700 above `2xl`. It also adds **§12
+approval states**, which is what lets the whole page be built now and its copy, imagery
+and claims gated until the signatures that govern them arrive.
 **Vocabulary:** frozen `GLOSSARY.md` · 2026-08-25, as superseded in part by its §7.
 **Authored under:** OD-05 bound 3, after `I18N_MODEL.md`, which constrains this document.
 **Decisions this file records:** D-29, and the decisions §3 and §4 will carry once
@@ -171,10 +177,14 @@ inconsistently.
 
 ### Weights
 
-Three real cuts, no synthetic bold: **Regular 400 · Medium 500 · SemiBold 600.**
-The family ships eight (Thin, ExtraLight, Light, Regular, Text, Medium, SemiBold, Bold);
-three carry the whole hierarchy. Bold 700 is deliberately unused — heavy weights thicken
-Arabic joins and the scale earns its hierarchy from size and space, per §2 principle 2.
+Four real cuts, no synthetic bold: **Regular 400 · Medium 500 · SemiBold 600 · Bold 700.**
+The family ships eight; four carry the hierarchy.
+
+**Bold 700 is permitted at `2xl` and above only.** Below that it is forbidden. Heavy
+weights thicken Arabic joins and clog the counters at body size, which is why the first
+cut of this document excluded 700 entirely. That exclusion was too broad: at 32px and
+above the joins have room and Bold Arabic sets cleanly. Amended at P02-T10 so display
+headlines can carry real weight without damaging running text.
 
 ### Size scale
 
@@ -188,9 +198,12 @@ One set of sizes, both locales. `I18N_MODEL.md` §7 — two scales drift within 
 | `lg` | 18px | lead paragraphs, card titles |
 | `xl` | 24px | section headings |
 | `2xl` | 32px | page headings |
-| `3xl` | 40px | the landing hero, once per page |
+| `3xl` | 40px | page hero headings |
+| `4xl` | 56px | the landing hero headline, once per page |
+| `5xl` | 72px | reserved; `lg` breakpoint and above only |
 
-Seven steps. Nothing below 12px renders Arabic legibly with diacritics.
+Nine steps. Nothing below 12px renders Arabic legibly with diacritics. `4xl` and `5xl`
+step down two levels below `md` — a 72px headline on a 360px phone is one word per line.
 
 ### Line height forks by locale, and the fork is computed
 
@@ -442,17 +455,67 @@ beside imagery, not on it.
 ### The landing hero
 
 Two columns at `md` and above, Arabic-first so the text column takes the inline-start
-position and the image slot the inline-end. One column below `md`, text first.
+position and the media the inline-end. One column below `md`, text first.
 
-Order inside the text column: eyebrow (`sm`, `accent`, weight 600) · headline (`3xl`,
-`primary-strong`, weight 600) · standfirst (`lg`, `muted`) · the two actions.
+The media **may bleed to the inline-end viewport edge**, escaping the container while the
+text column stays inside it. This is the only full-bleed element on the page and it is
+what gives the hero its scale.
+
+**Text never crosses into the media.** Not with a scrim, not with a gradient overlay, not
+at a "safe" opacity. The moment text sits on an image its contrast depends on a file the
+client can replace, and §8 criterion 1 stops being verifiable. Where a reference design
+appears to put text on a photograph and still reads well, that is the particular
+photograph, not a rule.
+
+Order inside the text column: eyebrow (`sm`, `accent`, weight 600) · headline (`4xl`,
+weight 700, two lines, the second line in `accent`) · standfirst (`lg`, `muted`, max
+two lines) · the two actions · the trust row.
 
 **The hero carries exactly two actions and they are not equal.** The portal action is a
-filled `primary` button; the WhatsApp action is an outlined button on `surface`. Both
-clear 44px. Two filled buttons side by side make a visitor choose between identical
-weights, which is not a choice, it is a pause.
+filled `primary` button; the second is an outlined button on `surface`. Both clear 44px.
+Two filled buttons side by side make a visitor choose between identical weights, which is
+not a choice, it is a pause.
 
-Nothing else enters the hero. No search, no statistics, no third link.
+**The selective-colour headline.** The second line sets in `accent` at 5.09 against
+`background`. Not a gradient — a gradient's contrast varies across every glyph and cannot
+be certified, which is the argument that ruled out translucency in §2 principle 3.
+
+### The trust row
+
+Directly under the hero actions. Three or four entries, each an icon at 24px in `primary`
+plus two lines: a label at `sm` weight 600 in `text`, and a qualifier at `xs` in `muted`.
+No card, no border, no fill — separated by space alone.
+
+**Every claim in this row is a factual assertion about the laboratory and each one needs
+a source.** A certification badge names a scheme, a number and an issuing body, and it
+does not render until those are verified against a document the client supplies. An
+unverified accreditation claim on a laboratory site is a regulatory exposure, not a
+design element. Claims with no verifiable source render under §12 `pending`.
+
+### The card band
+
+Directly under the hero, and the highest-value structure on the page: it answers what a
+visitor came for without a scroll.
+
+Four cards at `lg` and above, two-by-two at `md`, stacked below. Each is `surface` at
+elevation 1, radius 8px, padding 16px, equal block size across the row.
+
+| Card | Contains |
+|---|---|
+| News | two or three dated entries, each a 64px thumbnail, title, one-line excerpt |
+| Cautions | three entries, each a 24px icon, title, two-line body |
+| Locations | a map frame, the head-office address and hotline, one action |
+| Programmes | three or four rows, each an icon, title, one-line subtitle, chevron |
+
+Each card carries a header: title at `lg` weight 600 in `text`, and a `View all` text
+link at the inline-end. The chevron on a Programme row is direction-encoding and
+**mirrors** between locales (§4); the icons inside News and Cautions encode meaning and
+**do not**.
+
+Two of these four cards carry material that cannot render as approved without sign-off —
+see §12. The band is built now and gated.
+
+Nothing else enters the hero region. No search, no third action.
 
 ### The stat band
 
@@ -482,16 +545,44 @@ it and is not a UI token (§3).
 ### Section pattern
 
 Every section: heading at `xl` in `primary-strong` · optional standfirst at
-`base` in `muted` · body · optional single text link in `accent`. Sections do not
-carry their own background colour. Alternating bands are how a template signals a section
-change; a system signals it with space.
+`base` in `muted` · body · optional single text link in `accent`.
+
+**Sections may alternate between `background` and `surface`**, and nothing else. Two
+existing neutrals, no new chromatic family, no per-section colour. A section that wants
+its own colour is a template signalling a change it has not earned; a system alternates
+two neutrals or uses space.
+
+### Gradients
+
+Permitted, within one hue family only. `primary` → `primary-strong`, or `background` →
+`surface`. Never multi-hue, never lavender-to-pink-to-blue: that is three chromatic
+families and D-29 fixes one.
+
+A gradient may sit behind a section or a hero band. It may **not** sit behind text
+unless the text clears its floor against **both** stops, verified at each end and
+recorded — a single measurement in the middle proves nothing about the corners. It may
+never be applied to text itself (§9, the selective-colour headline).
+
+### Video posters
+
+A video poster is a self-hosted `MediaAsset` or a §9 labelled frame. **Never a
+YouTube-hosted thumbnail URL.** Hot-linking `img.youtube.com/vi/{id}/…` transmits the
+`Visitor`'s IP to a third party on page load, exactly as an autoloading player does, and
+it voids the `BOUNDARY_MODEL.md` §5 no-banner position without touching a column.
+
+The poster carries a centred play affordance at 48px and a duration badge at the
+block-end inline-end corner: `xs`, `surface` text on `text` at 80% — the one permitted
+use of a translucent fill, because it sits on a poster whose contrast is already
+unverifiable and it carries no information the title does not repeat.
+
+The play triangle encodes meaning, not direction. It **does not mirror** (§4).
 
 ---
 
 ## §10 Component specifications
 
-§6 enumerates 24 components. This section specifies the eleven that either carry a rule
-easy to get wrong or appear on the landing surface. The remaining thirteen are specified
+§6 enumerates 24 components. This section specifies eighteen: the eleven that carry a
+rule easy to get wrong, plus the seven the v3 landing composition introduced. The remaining thirteen are specified
 at the phase that builds them, and this section is extended rather than rewritten.
 
 Every component inherits: logical properties only · 44px minimum target · visible focus ·
@@ -546,6 +637,36 @@ inline. Carries an icon **and** a text label — never colour alone (§3). Cover
 validity, `Programme` publication and `Operator` invite state. Never clinical or
 `Visitor` status (OD-07 bound 4).
 
+**Section header.** Title at `lg` weight 600 in `text` at the inline-start, optional
+`View all` text link in `accent` at the inline-end, baseline-aligned. Used by every card
+in the band and by every section.
+
+**News card entry.** 64px square thumbnail at the inline-start, radius 4px. Date at `xs`
+in `muted` above the title. Title at `base` weight 600 in `text`, two lines maximum.
+Excerpt at `sm` in `muted`, one line, truncated with an ellipsis rather than faded — a
+fade is a gradient over text.
+
+**Caution card entry.** 24px icon at the inline-start in `primary`, no fill behind it.
+Title at `base` weight 600 in `text`. Body at `sm` in `muted`, two lines. The icon
+encodes meaning and does not mirror. **Content is gated — see §12.**
+
+**Location card.** A 16:9 map frame at the block-start, radius 4px, then the head-office
+address at `sm` in `text` and the hotline at `sm` weight 600. One outlined action at the
+block-end. The map is a static image asset, never an embedded third-party map: an
+embedded map is an evidence-item-7 surface and discloses the `Visitor` on page load.
+
+**Programme row.** 32px icon in a `background` circle at the inline-start, title at
+`base` weight 600, subtitle at `sm` in `muted`, chevron at the inline-end. The chevron is
+direction-encoding and **mirrors**. The whole row is the target and clears 44px.
+**Content is gated — see §12.**
+
+**Video card.** Poster per §9 with its play affordance and duration badge, then title at
+`base` weight 600 and description at `sm` in `muted`, two lines. Click loads the player
+in privacy-enhanced mode; nothing loads before the click (D-13).
+
+**Trust entry.** 24px icon in `primary`, label at `sm` weight 600 in `text`, qualifier at
+`xs` in `muted`. No card, no border. **Every claim needs a verified source — see §12.**
+
 **Footer.** `background` fill, `border` 1px on the block-start edge only. Mark at 32px,
 `SiteSettings`-sourced contact block, locale-appropriate column order. No newsletter
 signup, no contact form, nothing that collects anything.
@@ -578,7 +699,53 @@ the outline is ugly. It is an §8 criterion and it is not negotiable.
 
 ---
 
-## §12 What this document does not decide
+## §12 Approval states
+
+The structure of this site can be built before the material inside it is approved. The
+two must not be confused, and confusing them is how unsigned clinical copy reaches
+production.
+
+Every region carries one of three states. The state is a property of the material, not of
+the component, and the same component renders all three.
+
+| State | Renders | Marked |
+|---|---|---|
+| `approved` | the real material | no |
+| `pending` | real structure, placeholder copy | yes, visibly |
+| `withheld` | nothing — the region is absent | n/a |
+
+**`pending` treatment.** The component renders at full fidelity with its real spacing,
+type and elevation, so the layout is honest. Copy is synthetic and reads as synthetic.
+The region carries a marker: a 1px dashed `border` in `muted` and a `xs` label in `muted`
+naming what is awaited. A `pending` region is never styled to look finished — a
+placeholder that passes for real content is worse than an empty one, because nobody
+chases it.
+
+**What is `pending` by default, and why.** These are not stylistic judgements.
+
+| Material | Why | Clears when |
+|---|---|---|
+| Any `LabTest` name, `Programme` name, `ProgrammeLabTest` membership or medical description | Clinical gate, **non-waivable** | the lab's clinical staff sign the copy in writing |
+| Health cautions and pre-test instructions | Medical instruction. Fasting hours and medication guidance are clinical content whatever heading sits above them | same signature |
+| Certification and accreditation claims | A regulatory assertion. Scheme, number, issuing body and expiry must match a document the client supplies | the document is supplied and checked |
+| Hotline, WhatsApp number, addresses, hours | Published business data, never a literal in source (PR-16) | `SiteSettings` carries them |
+| The mark | No editable original exists; reconstruction is undelivered (CF-45, CF-65) | the client supplies the SVG |
+| Photography | Client-supplied; no stock ships (§9) | the client supplies the files |
+| News entries | The module that would manage them is a ninth module, which D-15 and D-16 forbid without an OD | the OD is signed |
+
+**Two rules that hold regardless of state.**
+
+A `pending` region never carries a real clinical string "just to show the shape". If the
+placeholder needs to look like a `Programme` name, the placeholder is the problem, not
+the gate.
+
+**A whole page of `pending` regions is still a preview, not a deliverable.** OD-05 bound
+4 governs the mock and is not softened by how finished it looks. Anything shown to the
+client carries a visible banner saying so, and that banner survives a screenshot.
+
+---
+
+## §13 What this document does not decide
 
 - The mark's refinement itself. OD-07 governs it; §7 and §9 consume its output.
 - Whether the rendered pages actually hit the §3 ratios and the §8 floor. Computed
@@ -592,3 +759,5 @@ the outline is ugly. It is an §8 criterion and it is not negotiable.
 - The `Operator` dashboard's chrome language. CF-52, deferred to `ADMIN_SPEC.md`.
 - Anything about data shape or security. `DATA_MODEL.md` and `SECURITY_MODEL.md` are
   unauthored.
+- Whether any `pending` region in §12 is ever approved. That is the client's and the
+  lab's, and no design decision substitutes for a signature.

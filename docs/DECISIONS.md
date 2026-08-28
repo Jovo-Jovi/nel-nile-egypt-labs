@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Thirty-two decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
+Thirty-three decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -318,3 +318,7 @@ IBM Plex Sans Arabic, SIL OFL 1.1, self-hosted, one family for both locales. Sel
 ### D-32 — Composition layer
 
 `DESIGN_SYSTEM.md` v2, authored at the P02-T07 verdict. The first cut carried colour, type, space, elevation and a component list, and a mock built strictly from it rendered correctly and looked like nothing: tokens do not compose a page. v2 adds §9 composition (grid, containers, vertical rhythm, measure, imagery policy, hero pattern, stat band, mark placement, section pattern), §10 specifications for eleven components, and §11 six interaction states plus empty and error. It also ratifies the §5 elevation shadow values, which the first cut left descriptive and which the P02-T07 builder flagged rather than inventing silently. Two rules bind beyond styling: all photography is client-supplied and no stock imagery ships or appears in a client preview, and in the stat band a count is permitted where a name is not — no `Programme` name, no `LabTest` name, and no count of LabTests within a `Programme`.
+
+### D-33 — Composition v3 and approval states
+
+`DESIGN_SYSTEM.md` v3, authored at P02-T10 after a competitor reference made plain what the document still lacked. Adds to §9 a full-bleed hero media column with text never crossing into it, a trust row whose every claim requires a verified source, the four-card band (News, Cautions, Locations, Programmes), alternating `background`/`surface` section fills, single-hue-family gradients only, and video poster rules forbidding any YouTube-hosted thumbnail URL. Adds two display type steps and permits Bold 700 at `2xl` and above only, superseding v2's blanket exclusion: Arabic joins clog at body size, not at display size. Adds seven component specifications, taking §10 to eighteen of twenty-four. Adds **§12 approval states** — `approved`, `pending`, `withheld` — so structure can be built before the material inside it is signed, with seven classes gated by default including every `LabTest` and `Programme` name, health cautions, and certification claims. A `pending` region renders at full fidelity with a visible marker and never carries a real clinical string to show the shape. Supersedes D-32's §9 stat band, which the card band replaces; closes CF-64.
