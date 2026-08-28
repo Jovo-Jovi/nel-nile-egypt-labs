@@ -6,6 +6,11 @@
 // The four LabUnit department names are the ones CONTENT_MODEL.md:129
 // enumerates in English; their Arabic renderings are standard laboratory
 // terminology, not a clinical translation requiring the lab's sign-off.
+//
+// Rebuilt at P02-T11 against DESIGN_SYSTEM.md v3. Every new key below
+// backs a §12 `pending` or `approved` region — see ApprovalGate.tsx. No
+// key here names a real seeded Programme or LabTest (checked against
+// `data/seed/catalogue.json` at STEP 4f of that task).
 
 export type Locale = "ar" | "en";
 
@@ -22,25 +27,75 @@ const ar = {
   "languageSwitcher.toAr": "التبديل إلى العربية",
   "languageSwitcher.toEn": "التبديل إلى الإنجليزية",
 
+  // §12 approval-state markers — one label per pending material class.
+  // Named to the class, reused everywhere that class of material appears.
+  "approval.pending.clinical": "قيد الانتظار — بانتظار توقيع الفريق الطبي بالمعمل كتابيًا",
+  "approval.pending.businessData": "قيد الانتظار — بانتظار بيانات الاتصال الرسمية من العميل",
+  "approval.pending.mark": "قيد الانتظار — بانتظار ملف الشعار من العميل",
+  "approval.pending.photography": "قيد الانتظار — بانتظار صور المعمل من العميل",
+  "approval.pending.newsModule": "قيد الانتظار — بانتظار اعتماد وحدة تحكم تاسعة",
+  "approval.pending.videoAsset": "قيد الانتظار — بانتظار ملفات الفيديو من العميل",
+
   // Hero
   "hero.eyebrow": "مختبرات تحاليل طبية",
-  "hero.headline": "معامل النيل مصر",
+  "hero.headlineLine1": "رعاية صحية شاملة",
+  "hero.headlineLine2": "لكل أسرة في القاهرة الكبرى",
   "hero.standfirst":
     "شبكة فروع تغطي القاهرة الكبرى وتشكيلة من البرامج الصحية، بخبرة تراكمت على مدى سنوات في خدمة الأسرة المصرية.",
   "hero.imageFrameLabel": "صورة المعمل (يوفرها العميل)",
   "hero.portalAction": "الدخول إلى بوابة النتائج",
   "hero.whatsappAction": "تواصل عبر واتساب",
 
-  // Stat band
-  "stat.locationsNumber": "4",
-  "stat.locationsLabel": "فروع",
-  "stat.locationsSublabel": "أحدها المقر الرئيسي",
-  "stat.programmesNumber": "9",
-  "stat.programmesLabel": "برامج",
-  "stat.labUnitsNumber": "4",
-  "stat.labUnitsLabel": "أقسام المعمل",
+  // Trust row — three verified structural facts (CONTENT_MODEL.md §3a /
+  // D-11), approved, not gated.
+  "trust.branches.label": "4 فروع",
+  "trust.branches.qualifier": "في القاهرة الكبرى، أحدها المقر الرئيسي",
+  "trust.programmes.label": "9 برامج",
+  "trust.programmes.qualifier": "برامج فحص شاملة منشورة",
+  "trust.labUnits.label": "4 أقسام",
+  "trust.labUnits.qualifier": "أقسام معملية متخصصة",
 
-  // Departments (LabUnit)
+  // Card band — News
+  "news.heading": "الأخبار",
+  "news.viewAll": "عرض الكل",
+  "news.entry1.date": "التاريخ (عنصر نائب)",
+  "news.entry1.title": "عنوان خبر نائب — بانتظار اعتماد وحدة تحكم تاسعة",
+  "news.entry1.excerpt": "نص تجريبي، لا يمثل خبرًا فعليًا.",
+  "news.entry2.date": "التاريخ (عنصر نائب)",
+  "news.entry2.title": "عنوان خبر نائب آخر — نفس القيد",
+  "news.entry2.excerpt": "نص تجريبي آخر، لا يمثل خبرًا فعليًا.",
+
+  // Card band — Cautions
+  "cautions.heading": "تنبيهات",
+  "cautions.viewAll": "عرض الكل",
+  "cautions.entry1.title": "تنبيه نائب 1 — بانتظار توقيع الفريق الطبي",
+  "cautions.entry1.body": "نص تجريبي، لا يمثل تعليمات طبية فعلية.",
+  "cautions.entry2.title": "تنبيه نائب 2 — بانتظار توقيع الفريق الطبي",
+  "cautions.entry2.body": "نص تجريبي، لا يمثل تعليمات طبية فعلية.",
+  "cautions.entry3.title": "تنبيه نائب 3 — بانتظار توقيع الفريق الطبي",
+  "cautions.entry3.body": "نص تجريبي، لا يمثل تعليمات طبية فعلية.",
+
+  // Card band — Locations
+  "locations.heading": "الفروع",
+  "locations.viewAll": "عرض الكل",
+  "locations.mapLabel": "خريطة الموقع (عنصر نائب ثابت)",
+  "locations.addressLabel": "العنوان",
+  "locations.headOfficeAddress": "عنوان المقر الرئيسي — بيانات تجريبية",
+  "locations.hotlineLabel": "الخط الساخن",
+  "locations.hotlineValue": "00000",
+  "locations.action": "الحصول على الاتجاهات",
+
+  // Card band — Programmes
+  "programmes.heading": "البرامج",
+  "programmes.viewAll": "عرض الكل",
+  "programmes.row1Title": "برنامج فحص نائب 1 — بانتظار توقيع الفريق الطبي",
+  "programmes.row1Subtitle": "نص فرعي تجريبي",
+  "programmes.row2Title": "برنامج فحص نائب 2 — بانتظار توقيع الفريق الطبي",
+  "programmes.row2Subtitle": "نص فرعي تجريبي",
+  "programmes.row3Title": "برنامج فحص نائب 3 — بانتظار توقيع الفريق الطبي",
+  "programmes.row3Subtitle": "نص فرعي تجريبي",
+
+  // Departments (LabUnit) — approved, not gated
   "departments.heading": "أقسام المعمل",
   "departments.standfirst": "أربعة أقسام متخصصة تدير عملنا اليومي.",
   "departments.immunology": "علم المناعة",
@@ -48,22 +103,20 @@ const ar = {
   "departments.haematology": "أمراض الدم",
   "departments.molecularBiology": "الأحياء الجزيئية",
 
-  // Locations (Branch) and hours
-  "locations.heading": "الفروع ومواعيد العمل",
-  "locations.standfirst": "بيانات تجريبية — القيم الفعلية تُستكمل من العميل.",
-  "locations.imageFrameLabel": "صورة الفرع",
-  "locations.headOfficeTag": "المقر الرئيسي",
-  "locations.hoursLabel": "المواعيد",
-  "locations.hoursValue": "السبت – الخميس، 09:00–17:00",
-  "locations.addressLabel": "العنوان",
-  "locations.location1Name": "الفرع التجريبي أ",
-  "locations.location1Address": "شارع تجريبي 1، القاهرة",
-  "locations.location2Name": "الفرع التجريبي ب",
-  "locations.location2Address": "شارع تجريبي 2، القاهرة",
-  "locations.location3Name": "الفرع التجريبي ج",
-  "locations.location3Address": "شارع تجريبي 3، القاهرة",
-  "locations.location4Name": "الفرع التجريبي د",
-  "locations.location4Address": "شارع تجريبي 4، القاهرة",
+  // Video section
+  "video.heading": "فيديوهات",
+  "video.standfirst": "ثلاثة فيديوهات — بانتظار ملفات الفيديو من العميل.",
+  "video.posterLabel": "غلاف الفيديو (عنصر نائب)",
+  "video.playLabel": "تشغيل الفيديو",
+  "video.entry1.duration": "2:30",
+  "video.entry1.title": "عنوان فيديو نائب 1",
+  "video.entry1.description": "وصف تجريبي، لا يمثل محتوى فعليًا.",
+  "video.entry2.duration": "3:15",
+  "video.entry2.title": "عنوان فيديو نائب 2",
+  "video.entry2.description": "وصف تجريبي، لا يمثل محتوى فعليًا.",
+  "video.entry3.duration": "1:45",
+  "video.entry3.title": "عنوان فيديو نائب 3",
+  "video.entry3.description": "وصف تجريبي، لا يمثل محتوى فعليًا.",
 
   // Footer
   "footer.contactHeading": "تواصل معنا",
@@ -106,6 +159,35 @@ const ar = {
   "system.space.radiusScale": "مقياس الانحناء",
   "system.space.elevationScale": "مستويات الارتفاع",
   "system.components.heading": "المكونات",
+
+  // System view — v3 composition rules (STEP 3)
+  "system.composition.heading": "قواعد التركيب الجديدة في v3",
+  "system.composition.boldRule.heading": "قاعدة الوزن الغامق 700",
+  "system.composition.boldRule.body":
+    "الوزن الغامق 700 مسموح فقط عند حجم كبير جدًا وما فوق؛ يُمنع أسفل ذلك لأنه يزحم توصيلات الحروف العربية عند حجم النص العادي.",
+  "system.composition.boldRule.sampleAllowed": "مسموح",
+  "system.composition.boldRule.sampleForbidden": "ممنوع",
+  "system.composition.gradientRule.heading": "قاعدة التدرجات",
+  "system.composition.gradientRule.body":
+    "يُسمح بتدرج واحد داخل نفس العائلة اللونية فقط، خلف قسم أو شريط رئيسي، وليس فوق النص أبدًا.",
+  "system.composition.gradientRule.primarySample": "التدرج الأساسي",
+  "system.composition.gradientRule.neutralSample": "التدرج المحايد",
+  "system.composition.gradientRule.textNote": "لا يُطبَّق التدرج على النص أبدًا — انظر الترويسة الرئيسية.",
+  "system.composition.alternatingFills.heading": "تناوب تعبئة الأقسام",
+  "system.composition.alternatingFills.body":
+    "تتناوب الأقسام بين لونين محايدين فقط، بلا عائلة لونية جديدة وبلا لون خاص بقسم واحد.",
+
+  // System view — §12 approval states, three side by side (STEP 3)
+  "system.approval.heading": "حالات الاعتماد (§12)",
+  "system.approval.standfirst":
+    "الحالات الثلاث معروضة جنبًا إلى جنب على نفس المكوّن، لتكون الآلية واضحة.",
+  "system.approval.approvedLabel": "معتمد",
+  "system.approval.pendingLabel": "قيد الانتظار",
+  "system.approval.withheldLabel": "محجوب",
+  "system.approval.withheldNote":
+    "لا يُعرض شيء — هذا الشرح خارج المنطقة المحجوبة نفسها، وليس جزءًا منها.",
+  "system.approval.pendingExampleTitle": "اسم برنامج نائب — بانتظار توقيع الفريق الطبي",
+
   "system.accessibility.heading": "الحد الأدنى لإتاحة الاستخدام",
   "system.accessibility.closesWith": "يُغلق بواسطة",
 
@@ -148,6 +230,37 @@ const ar = {
   "gallery.statusBadge.expired": "منتهي",
   "gallery.footer.heading": "التذييل (Footer)",
 
+  // Component gallery — the seven §10 components v3 introduced
+  "gallery.sectionHeader.heading": "ترويسة القسم (Section header)",
+  "gallery.sectionHeader.title": "عنوان القسم",
+  "gallery.sectionHeader.viewAll": "عرض الكل",
+  "gallery.trustEntry.heading": "عنصر الثقة (Trust entry)",
+  "gallery.trustEntry.label": "تسمية نموذجية",
+  "gallery.trustEntry.qualifier": "وصف فرعي نموذجي",
+  "gallery.newsCardEntry.heading": "عنصر بطاقة خبر (News card entry)",
+  "gallery.newsCardEntry.date": "التاريخ (عنصر نائب)",
+  "gallery.newsCardEntry.title": "عنوان نموذجي لعنصر خبر",
+  "gallery.newsCardEntry.excerpt": "نص تجريبي مقتطف من الخبر.",
+  "gallery.cautionCardEntry.heading": "عنصر بطاقة تنبيه (Caution card entry)",
+  "gallery.cautionCardEntry.title": "عنوان نموذجي للتنبيه",
+  "gallery.cautionCardEntry.body": "نص تجريبي لتوضيح شكل التنبيه.",
+  "gallery.locationCard.heading": "بطاقة الموقع (Location card)",
+  "gallery.locationCard.mapLabel": "خريطة (عنصر نائب ثابت)",
+  "gallery.locationCard.addressLabel": "العنوان",
+  "gallery.locationCard.address": "عنوان نموذجي",
+  "gallery.locationCard.hotlineLabel": "الخط الساخن",
+  "gallery.locationCard.hotline": "00000",
+  "gallery.locationCard.action": "الحصول على الاتجاهات",
+  "gallery.programmeRow.heading": "صف البرنامج (Programme row)",
+  "gallery.programmeRow.title": "عنوان نموذجي للصف",
+  "gallery.programmeRow.subtitle": "نص فرعي نموذجي",
+  "gallery.videoCard.heading": "بطاقة الفيديو (Video card)",
+  "gallery.videoCard.posterLabel": "غلاف الفيديو (عنصر نائب)",
+  "gallery.videoCard.duration": "2:30",
+  "gallery.videoCard.title": "عنوان نموذجي للفيديو",
+  "gallery.videoCard.description": "وصف تجريبي للفيديو.",
+  "gallery.videoCard.playLabel": "تشغيل الفيديو",
+
   // Accessibility checklist (§8)
   "a11y.criterion1": "تباين AA على كل زوج نص/سطح",
   "a11y.criterion1Closes": "مقاس لكل زوج، مسجَّل بجانب الرمز، باللغتين",
@@ -176,25 +289,74 @@ const en = {
   "languageSwitcher.toAr": "Switch to Arabic",
   "languageSwitcher.toEn": "Switch to English",
 
+  // §12 approval-state markers — one label per pending material class.
+  "approval.pending.clinical": "Pending — awaiting the lab's written clinical sign-off",
+  "approval.pending.businessData": "Pending — awaiting the client's official contact data",
+  "approval.pending.mark": "Pending — awaiting the client-supplied mark file",
+  "approval.pending.photography": "Pending — awaiting client-supplied photography",
+  "approval.pending.newsModule": "Pending — awaiting a signed ninth dashboard module",
+  "approval.pending.videoAsset": "Pending — awaiting client-supplied video assets",
+
   // Hero
   "hero.eyebrow": "Medical laboratory services",
-  "hero.headline": "Nile Egypt Lab",
+  "hero.headlineLine1": "Complete health care",
+  "hero.headlineLine2": "for every family in Greater Cairo",
   "hero.standfirst":
     "A branch network across Greater Cairo and a range of health programmes, built on years of experience serving Egyptian families.",
   "hero.imageFrameLabel": "Lab photograph (client-supplied)",
   "hero.portalAction": "Access the results portal",
   "hero.whatsappAction": "Chat on WhatsApp",
 
-  // Stat band
-  "stat.locationsNumber": "4",
-  "stat.locationsLabel": "Branches",
-  "stat.locationsSublabel": "one head office",
-  "stat.programmesNumber": "9",
-  "stat.programmesLabel": "Programmes",
-  "stat.labUnitsNumber": "4",
-  "stat.labUnitsLabel": "Departments",
+  // Trust row — three verified structural facts (CONTENT_MODEL.md §3a /
+  // D-11), approved, not gated.
+  "trust.branches.label": "4 Branches",
+  "trust.branches.qualifier": "Across Greater Cairo, one head office",
+  "trust.programmes.label": "9 Programmes",
+  "trust.programmes.qualifier": "Published check-up programmes",
+  "trust.labUnits.label": "4 Departments",
+  "trust.labUnits.qualifier": "Specialised laboratory departments",
 
-  // Departments (LabUnit)
+  // Card band — News
+  "news.heading": "News",
+  "news.viewAll": "View all",
+  "news.entry1.date": "Date (placeholder)",
+  "news.entry1.title": "Placeholder news title — awaiting a signed ninth dashboard module",
+  "news.entry1.excerpt": "Sample text; not a real news item.",
+  "news.entry2.date": "Date (placeholder)",
+  "news.entry2.title": "Another placeholder news title — same constraint",
+  "news.entry2.excerpt": "Another sample text; not a real news item.",
+
+  // Card band — Cautions
+  "cautions.heading": "Cautions",
+  "cautions.viewAll": "View all",
+  "cautions.entry1.title": "Placeholder caution 1 — awaiting clinical sign-off",
+  "cautions.entry1.body": "Sample text; not a real clinical instruction.",
+  "cautions.entry2.title": "Placeholder caution 2 — awaiting clinical sign-off",
+  "cautions.entry2.body": "Sample text; not a real clinical instruction.",
+  "cautions.entry3.title": "Placeholder caution 3 — awaiting clinical sign-off",
+  "cautions.entry3.body": "Sample text; not a real clinical instruction.",
+
+  // Card band — Locations
+  "locations.heading": "Locations",
+  "locations.viewAll": "View all",
+  "locations.mapLabel": "Location map (static placeholder)",
+  "locations.addressLabel": "Address",
+  "locations.headOfficeAddress": "Head office address — placeholder data",
+  "locations.hotlineLabel": "Hotline",
+  "locations.hotlineValue": "00000",
+  "locations.action": "Get directions",
+
+  // Card band — Programmes
+  "programmes.heading": "Programmes",
+  "programmes.viewAll": "View all",
+  "programmes.row1Title": "Placeholder programme 1 — awaiting clinical sign-off",
+  "programmes.row1Subtitle": "Sample subtitle",
+  "programmes.row2Title": "Placeholder programme 2 — awaiting clinical sign-off",
+  "programmes.row2Subtitle": "Sample subtitle",
+  "programmes.row3Title": "Placeholder programme 3 — awaiting clinical sign-off",
+  "programmes.row3Subtitle": "Sample subtitle",
+
+  // Departments (LabUnit) — approved, not gated
   "departments.heading": "Departments",
   "departments.standfirst": "Four specialised departments run our day-to-day work.",
   "departments.immunology": "Immunology",
@@ -202,22 +364,20 @@ const en = {
   "departments.haematology": "Haematology",
   "departments.molecularBiology": "Molecular Biology",
 
-  // Locations (Branch) and hours
-  "locations.heading": "Branches & hours",
-  "locations.standfirst": "Synthetic data — real values are supplied by the client.",
-  "locations.imageFrameLabel": "Branch photograph",
-  "locations.headOfficeTag": "Head office",
-  "locations.hoursLabel": "Hours",
-  "locations.hoursValue": "Saturday – Thursday, 09:00–17:00",
-  "locations.addressLabel": "Address",
-  "locations.location1Name": "Sample Branch A",
-  "locations.location1Address": "Sample Street 1, Cairo",
-  "locations.location2Name": "Sample Branch B",
-  "locations.location2Address": "Sample Street 2, Cairo",
-  "locations.location3Name": "Sample Branch C",
-  "locations.location3Address": "Sample Street 3, Cairo",
-  "locations.location4Name": "Sample Branch D",
-  "locations.location4Address": "Sample Street 4, Cairo",
+  // Video section
+  "video.heading": "Videos",
+  "video.standfirst": "Three videos — awaiting client-supplied video files.",
+  "video.posterLabel": "Video poster (placeholder)",
+  "video.playLabel": "Play video",
+  "video.entry1.duration": "2:30",
+  "video.entry1.title": "Placeholder video title 1",
+  "video.entry1.description": "Sample description; not real content.",
+  "video.entry2.duration": "3:15",
+  "video.entry2.title": "Placeholder video title 2",
+  "video.entry2.description": "Sample description; not real content.",
+  "video.entry3.duration": "1:45",
+  "video.entry3.title": "Placeholder video title 3",
+  "video.entry3.description": "Sample description; not real content.",
 
   // Footer
   "footer.contactHeading": "Contact",
@@ -259,6 +419,35 @@ const en = {
   "system.space.radiusScale": "Radius scale",
   "system.space.elevationScale": "Elevation levels",
   "system.components.heading": "Components",
+
+  // System view — v3 composition rules (STEP 3)
+  "system.composition.heading": "v3's new composition rules",
+  "system.composition.boldRule.heading": "The Bold 700 rule",
+  "system.composition.boldRule.body":
+    "Bold 700 is permitted at 2xl and above only; forbidden below that because it clogs Arabic joins at running-text size.",
+  "system.composition.boldRule.sampleAllowed": "Permitted",
+  "system.composition.boldRule.sampleForbidden": "Forbidden",
+  "system.composition.gradientRule.heading": "The gradient rule",
+  "system.composition.gradientRule.body":
+    "One gradient within a single hue family only, behind a section or hero band, never over text.",
+  "system.composition.gradientRule.primarySample": "Primary gradient",
+  "system.composition.gradientRule.neutralSample": "Neutral gradient",
+  "system.composition.gradientRule.textNote": "Never applied to text — see the hero headline.",
+  "system.composition.alternatingFills.heading": "Alternating section fills",
+  "system.composition.alternatingFills.body":
+    "Sections alternate between two neutral fills only — no new chromatic family, no per-section colour.",
+
+  // System view — §12 approval states, three side by side (STEP 3)
+  "system.approval.heading": "Approval states (§12)",
+  "system.approval.standfirst":
+    "The three states shown side by side on the same component, so the mechanism is visible.",
+  "system.approval.approvedLabel": "Approved",
+  "system.approval.pendingLabel": "Pending",
+  "system.approval.withheldLabel": "Withheld",
+  "system.approval.withheldNote":
+    "Nothing renders — this caption sits outside the withheld region itself, not inside it.",
+  "system.approval.pendingExampleTitle": "Placeholder programme name — awaiting clinical sign-off",
+
   "system.accessibility.heading": "Accessibility floor",
   "system.accessibility.closesWith": "Closes with",
 
@@ -300,6 +489,37 @@ const en = {
   "gallery.statusBadge.draft": "Draft",
   "gallery.statusBadge.expired": "Expired",
   "gallery.footer.heading": "Footer",
+
+  // Component gallery — the seven §10 components v3 introduced
+  "gallery.sectionHeader.heading": "Section header",
+  "gallery.sectionHeader.title": "Section title",
+  "gallery.sectionHeader.viewAll": "View all",
+  "gallery.trustEntry.heading": "Trust entry",
+  "gallery.trustEntry.label": "Sample label",
+  "gallery.trustEntry.qualifier": "Sample qualifier",
+  "gallery.newsCardEntry.heading": "News card entry",
+  "gallery.newsCardEntry.date": "Date (placeholder)",
+  "gallery.newsCardEntry.title": "Sample news entry title",
+  "gallery.newsCardEntry.excerpt": "Sample excerpt text.",
+  "gallery.cautionCardEntry.heading": "Caution card entry",
+  "gallery.cautionCardEntry.title": "Sample caution title",
+  "gallery.cautionCardEntry.body": "Sample text showing the caution's shape.",
+  "gallery.locationCard.heading": "Location card",
+  "gallery.locationCard.mapLabel": "Map (static placeholder)",
+  "gallery.locationCard.addressLabel": "Address",
+  "gallery.locationCard.address": "Sample address",
+  "gallery.locationCard.hotlineLabel": "Hotline",
+  "gallery.locationCard.hotline": "00000",
+  "gallery.locationCard.action": "Get directions",
+  "gallery.programmeRow.heading": "Programme row",
+  "gallery.programmeRow.title": "Sample row title",
+  "gallery.programmeRow.subtitle": "Sample subtitle",
+  "gallery.videoCard.heading": "Video card",
+  "gallery.videoCard.posterLabel": "Video poster (placeholder)",
+  "gallery.videoCard.duration": "2:30",
+  "gallery.videoCard.title": "Sample video title",
+  "gallery.videoCard.description": "Sample video description.",
+  "gallery.videoCard.playLabel": "Play video",
 
   // Accessibility checklist (§8)
   "a11y.criterion1": "AA contrast on every text-on-surface pair",

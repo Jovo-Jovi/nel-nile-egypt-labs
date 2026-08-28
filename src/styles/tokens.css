@@ -14,7 +14,11 @@
   --nel-color-warning: #8A5A00;
   --nel-color-error: #B3261E;
 
-  /* §4 Size scale — seven steps */
+  /* §4 Size scale — nine steps (v3 adds 4xl/5xl). 4xl and 5xl step down two
+     levels below md (to 2xl and 3xl respectively) — see the media query
+     below — because a 56px/72px headline on a 360px phone is one word per
+     line. 5xl is reserved for lg and above; nothing in this build uses it,
+     it exists so the System view can show the complete nine-step scale. */
   --nel-size-xs: 12px;
   --nel-size-sm: 14px;
   --nel-size-base: 16px;
@@ -22,6 +26,8 @@
   --nel-size-xl: 24px;
   --nel-size-2xl: 32px;
   --nel-size-3xl: 40px;
+  --nel-size-4xl: 32px;
+  --nel-size-5xl: 40px;
 
   /* §5 Spacing scale — nine steps, 4px base */
   --nel-space-4: 4px;
@@ -60,6 +66,13 @@
   --nel-elevation-1-shadow: 0 1px 3px rgba(29, 29, 53, 0.08), 0 1px 2px rgba(29, 29, 53, 0.05);
   --nel-elevation-2-border-width: 1px;
   --nel-elevation-2-shadow: 0 8px 24px rgba(29, 29, 53, 0.10), 0 2px 8px rgba(29, 29, 53, 0.06);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --nel-size-4xl: 56px;
+    --nel-size-5xl: 72px;
+  }
 }
 
 [data-locale="ar"] {

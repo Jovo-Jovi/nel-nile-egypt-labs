@@ -1,0 +1,51 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--nel-space-12);
+  min-block-size: 44px;
+  padding-block: var(--nel-space-8);
+}
+
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-background);
+  color: var(--nel-color-primary);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-4);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.title {
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  color: var(--nel-color-text);
+  line-height: var(--nel-line-height-tight);
+}
+
+.subtitle {
+  font-size: var(--nel-size-sm);
+  color: var(--nel-color-muted);
+  line-height: var(--nel-line-height-tight);
+}
+
+.chevron {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--nel-color-muted);
+}
+
+/* Direction-encoding icon — mirrors between locales (I18N_MODEL.md §4). */
+:global([dir="rtl"]) .chevron {
+  transform: scaleX(-1);
+}

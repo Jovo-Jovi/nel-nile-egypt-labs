@@ -1,0 +1,33 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-24);
+}
+
+.heading {
+  font-size: var(--nel-size-xl);
+  font-weight: 600;
+  color: var(--nel-color-primary-strong);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}
+
+.standfirst {
+  font-size: var(--nel-size-base);
+  color: var(--nel-color-muted);
+  line-height: var(--nel-line-height-body);
+  margin-block: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nel-space-16);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--nel-space-24);
+  }
+}

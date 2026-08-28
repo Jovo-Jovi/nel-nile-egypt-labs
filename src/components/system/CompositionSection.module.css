@@ -1,0 +1,96 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-24);
+}
+
+.heading {
+  font-size: var(--nel-size-2xl);
+  font-weight: 600;
+  color: var(--nel-color-primary-strong);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  font-size: var(--nel-size-base);
+  color: var(--nel-color-muted);
+  line-height: var(--nel-line-height-body);
+  margin-block: 0 var(--nel-space-8);
+  max-inline-size: 640px;
+}
+
+.note {
+  font-size: var(--nel-size-xs);
+  color: var(--nel-color-muted);
+  margin-block: var(--nel-space-8) 0;
+}
+
+.boldAllowed {
+  font-size: var(--nel-size-2xl);
+  font-weight: 700;
+  color: var(--nel-color-text);
+}
+
+.boldForbidden {
+  font-size: var(--nel-size-base);
+  font-weight: 700;
+  color: var(--nel-color-error);
+  text-decoration: line-through;
+}
+
+.gradientPrimary,
+.gradientNeutral {
+  inline-size: 200px;
+  block-size: 80px;
+  border-radius: var(--nel-radius-md);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nel-size-xs);
+  color: var(--nel-color-surface);
+}
+
+.gradientPrimary {
+  background-image: linear-gradient(135deg, var(--nel-color-primary), var(--nel-color-primary-strong));
+}
+
+.gradientNeutral {
+  background-image: linear-gradient(135deg, var(--nel-color-background), var(--nel-color-surface));
+  color: var(--nel-color-muted);
+}
+
+.fillStrip {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fillBackground,
+.fillSurface {
+  inline-size: 96px;
+  block-size: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nel-size-xs);
+  color: var(--nel-color-muted);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-color-border);
+}
+
+.fillBackground {
+  background-color: var(--nel-color-background);
+}
+
+.fillSurface {
+  background-color: var(--nel-color-surface);
+}

@@ -6,6 +6,14 @@ import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { Button } from "@/components/ui/Button";
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { TrustEntry } from "@/components/ui/TrustEntry";
+import { NewsCardEntry } from "@/components/ui/NewsCardEntry";
+import { CautionCardEntry } from "@/components/ui/CautionCardEntry";
+import { LocationCard } from "@/components/ui/LocationCard";
+import { ProgrammeRow } from "@/components/ui/ProgrammeRow";
+import { VideoCard } from "@/components/ui/VideoCard";
+import { LocationPinIcon, ProgrammeIcon } from "@/components/ui/icons";
 import { ComponentBlock, StateRow, StateSample } from "./GalleryPrimitives";
 import styles from "./StaticGallery.module.css";
 
@@ -148,6 +156,139 @@ export function EmptyErrorGallery({ locale }: GalleryProps) {
           </div>
         </StateSample>
       </StateRow>
+    </ComponentBlock>
+  );
+}
+
+// DESIGN_SYSTEM.md §10 Section header — title lg weight 600, optional
+// "View all" text link at the inline-end. Not interactive here, since a
+// working example already appears live in every card band gallery entry.
+export function SectionHeaderGallery({ locale }: GalleryProps) {
+  return (
+    <ComponentBlock heading={translate(locale, "gallery.sectionHeader.heading")}>
+      <StateSample label={translate(locale, "state.default")}>
+        <div className={styles.wideSample}>
+          <SectionHeader
+            title={translate(locale, "gallery.sectionHeader.title")}
+            viewAllLabel={translate(locale, "gallery.sectionHeader.viewAll")}
+          />
+        </div>
+      </StateSample>
+    </ComponentBlock>
+  );
+}
+
+// DESIGN_SYSTEM.md §10 Trust entry — 24px icon in primary, label sm weight
+// 600, qualifier xs muted. No card, no border.
+export function TrustEntryGallery({ locale }: GalleryProps) {
+  return (
+    <ComponentBlock heading={translate(locale, "gallery.trustEntry.heading")}>
+      <StateSample label={translate(locale, "state.default")}>
+        <TrustEntry
+          icon={<LocationPinIcon size={24} />}
+          label={translate(locale, "gallery.trustEntry.label")}
+          qualifier={translate(locale, "gallery.trustEntry.qualifier")}
+        />
+      </StateSample>
+    </ComponentBlock>
+  );
+}
+
+// DESIGN_SYSTEM.md §10 News card entry — 64px thumbnail, date xs muted,
+// title base weight 600 (two lines max), excerpt sm muted truncated.
+export function NewsCardEntryGallery({ locale }: GalleryProps) {
+  return (
+    <ComponentBlock heading={translate(locale, "gallery.newsCardEntry.heading")}>
+      <StateSample label={translate(locale, "state.default")}>
+        <div className={styles.wideSample}>
+          <NewsCardEntry
+            date={translate(locale, "gallery.newsCardEntry.date")}
+            title={translate(locale, "gallery.newsCardEntry.title")}
+            excerpt={translate(locale, "gallery.newsCardEntry.excerpt")}
+          />
+        </div>
+      </StateSample>
+    </ComponentBlock>
+  );
+}
+
+// DESIGN_SYSTEM.md §10 Caution card entry — 24px icon in primary, title
+// base weight 600, body sm muted. Content itself is §12 gated; the
+// gallery shows the component's shape, not the gate (the CardBand does).
+export function CautionCardEntryGallery({ locale }: GalleryProps) {
+  return (
+    <ComponentBlock heading={translate(locale, "gallery.cautionCardEntry.heading")}>
+      <StateSample label={translate(locale, "state.default")}>
+        <div className={styles.wideSample}>
+          <CautionCardEntry
+            title={translate(locale, "gallery.cautionCardEntry.title")}
+            body={translate(locale, "gallery.cautionCardEntry.body")}
+          />
+        </div>
+      </StateSample>
+    </ComponentBlock>
+  );
+}
+
+// DESIGN_SYSTEM.md §10 Location card — 16:9 static map frame, address and
+// hotline, one outlined action. Address/hotline are pending (PR-16); the
+// map frame is a permanent architectural choice, never gated.
+export function LocationCardGallery({ locale }: GalleryProps) {
+  return (
+    <ComponentBlock heading={translate(locale, "gallery.locationCard.heading")}>
+      <StateSample label={translate(locale, "state.default")}>
+        <div className={styles.frameSample}>
+          <LocationCard
+            locale={locale}
+            mapLabel={translate(locale, "gallery.locationCard.mapLabel")}
+            addressLabel={translate(locale, "gallery.locationCard.addressLabel")}
+            address={translate(locale, "gallery.locationCard.address")}
+            hotlineLabel={translate(locale, "gallery.locationCard.hotlineLabel")}
+            hotline={translate(locale, "gallery.locationCard.hotline")}
+            actionLabel={translate(locale, "gallery.locationCard.action")}
+            pendingLabelKey="approval.pending.businessData"
+          />
+        </div>
+      </StateSample>
+    </ComponentBlock>
+  );
+}
+
+// DESIGN_SYSTEM.md §10 Programme row — 32px icon in a background circle,
+// title base weight 600, subtitle sm muted, mirroring chevron.
+export function ProgrammeRowGallery({ locale }: GalleryProps) {
+  return (
+    <ComponentBlock heading={translate(locale, "gallery.programmeRow.heading")}>
+      <StateSample label={translate(locale, "state.default")}>
+        <div className={styles.wideSample}>
+          <ProgrammeRow
+            icon={<ProgrammeIcon size={20} />}
+            title={translate(locale, "gallery.programmeRow.title")}
+            subtitle={translate(locale, "gallery.programmeRow.subtitle")}
+          />
+        </div>
+      </StateSample>
+    </ComponentBlock>
+  );
+}
+
+// DESIGN_SYSTEM.md §9/§10 Video card — 16:9 labelled-frame poster, 48px
+// centred play affordance, duration badge (the one permitted translucent
+// fill). Never a YouTube-hosted thumbnail or player (D-13).
+export function VideoCardGallery({ locale }: GalleryProps) {
+  return (
+    <ComponentBlock heading={translate(locale, "gallery.videoCard.heading")}>
+      <StateSample label={translate(locale, "state.default")}>
+        <div className={styles.frameSample}>
+          <VideoCard
+            posterLabel={translate(locale, "gallery.videoCard.posterLabel")}
+            duration={translate(locale, "gallery.videoCard.duration")}
+            title={translate(locale, "gallery.videoCard.title")}
+            description={translate(locale, "gallery.videoCard.description")}
+            playLabel={translate(locale, "gallery.videoCard.playLabel")}
+          />
+        </div>
+      </StateSample>
     </ComponentBlock>
   );
 }

@@ -55,19 +55,20 @@ on a verbal expansion of an unsigned scope.
 | P02-T08 | `DESIGN_SYSTEM.md` v2 landed byte-exact from the reviewer-authored payload, superseding the first cut rather than merging it (document 8, unchanged precedence). STEP 0 verified before overwrite: `git hash-object docs/DESIGN_SYSTEM.md` → `22b0a5c38ce4b1cdce410ded8236b08c7c2859b8`, line count 377 — both matched the expected outgoing state. Landed file's blob SHA (`7850ce538cf4d0f40fafe83b4ed448dc1933eae4`) confirmed identical to the attachment's. STEP 2 counts, each verified against its own section: 12 `## §` headings, §3 eleven colour token rows, §4 seven size steps, §5 three elevation levels, §6 total 24 = 14 public + 10 dashboard (counted from the two lists), §8 six accessibility criteria, §11 six state rows. v2 adds §9 composition, §10 eleven component specifications, and §11 states, and ratifies the §5 shadow values the P02-T07 builder flagged as descriptive. D-32 landed, DECISIONS.md now 32 decisions / 7 ODs (`grep -c "^### D-"` → 32, `grep -c "^### OD-"` → 7). CF-63 landed OPEN (thirteen of §6's 24 components remain unspecified beyond §10's eleven) — open count 36 → 37; CF-59 and CF-60 correctly left open, the mock they'd close is being rebuilt | pushed — verdict at push | 2026-08-27 |
 | P02-T09 | Landing-page mock rebuilt wholesale against `DESIGN_SYSTEM.md` v2 (§9 composition, §10 components, §11 states) at the existing placeholder route `/` only — still a mock under OD-05 bound 4, no new route created, `dir`/`lang` still on the page-root wrapper per CF-61. Branched `p02-t09` from `origin/main` at `798389f` (the P02-T08 merge commit). Kept from P02-T07: the token stylesheet, the font declarations, the catalogue shape, the `Isolate` primitive (moved to `ui/`, unchanged) — the composition was replaced entirely. Client-state view toggle added alongside the locale toggle — `landing` and `system` — no new route, no new dependency. Landing view: preview banner (`accent` border-block-end, `background` fill, always visible) · header per §10 (mark slot at inline-start, language switcher and WhatsApp action at inline-end, sticky, elevation 0→1 on scroll) · hero per §9 (two columns at `md`+, Arabic-first, bilingual headline `معامل النيل مصر` / `Nile Egypt Lab` per `docs/research/13-brand-extraction.md:212-213`, synthetic standfirst, two deliberately unequal actions) · stat band — §9 specifies four cells, only three non-clinical structural counts exist (Branch, Programme, LabUnit); three rendered centred, no fourth invented, deviation logged as CF-64 · LabUnit section, the four `CONTENT_MODEL.md:129` department names as cards, no `LabTest` name, no `Programme` name, no count, no medical description, no booking action · Branch-and-hours block, synthetic values, 16:9 labelled frames · footer per §10, no form. System view, rendered from the same tokens the landing view uses: eleven §3 colour tokens as swatches with hex read live from `tokens.css` and measured contrast ratios transcribed from the document; §4 seven-step type scale, both scripts, per-locale line heights shown; §5 spacing scale, four radii, three elevation levels; every §10 component in every applicable §11 state, including the two the landing view does not use — `StatusState` badge and the bilingual field pair; §8's six criteria as a checklist with what closes each. Catalogue grew from 23 to 127 keys, `ar`/`en` parity enforced at compile time (a mismatched key fails typecheck) and at runtime (a drift throws before render); count verified by direct read of `src/lib/catalog.ts`. `public/mark/.gitkeep` added, no SVG — the mark slot's `onError` fallback renders the §9 labelled frame until the human supplies `nel-mark.svg`. STEP 4 evidence, each command run directly: physical-property grep (`left`/`right`/`margin-left`/`padding-right`/`text-align: left`/etc.) across `src/` → 0; catalogue key counts `ar`=127, `en`=127, identical; Eastern Arabic digit (`U+0660`–`U+0669`) grep across `src/` → 0; `npm run build`, then in `.next/server/app/index.html`: `dir="rtl"` present, `lang="ar"` present, every font/CSS/JS/image URL same-origin (`/fonts/…`, `/_next/static/…`, `/mark/…`) — the only absolute external URLs found are the `wa.me` WhatsApp deep link and the `https://example.invalid/portal-placeholder` anchor, both intentional action links rather than assets; `<form>`/`<iframe>`/`<embed>` grep across `src/` → 0 each; no `Programme`/`LabTest` name (checked against every seeded programme and test name) and no `opacity` on a disabled state anywhere in `src/`. `docs/DESIGN_SYSTEM.md`, `I18N_MODEL.md` and `CONTENT_MODEL.md` untouched; DECISIONS.md unchanged at 32 decisions / 7 ODs (`grep -c "^### D-"` → 32) — this task lands no decision. CF-64 (§9's four-cell stat band vs. three non-clinical counts) and CF-65 (mark slot undelivered, human supplies the SVG) landed OPEN; CF-59, CF-60, CF-49 and CF-50 correctly left open — no CF closed at this task — open count 37 → 39 | pushed — verdict at push | 2026-08-27 |
 | P02-T10 | `DESIGN_SYSTEM.md` v3 landed byte-exact from the reviewer-authored payload (document 8, still), superseding v2 rather than merging it. Branched `p02-t10` from `origin/main` at `85ddea5` (the P02-T09 merge commit). STEP 0 verified before overwrite: `git hash-object docs/DESIGN_SYSTEM.md` → `7850ce538cf4d0f40fafe83b4ed448dc1933eae4`, line count 594 — both matched the expected outgoing v2 state. Landed file's blob SHA (`8ce9344a1a56355b98d14c7be97cb4262b9b9cca`) confirmed identical to the attachment's; landed line count 763, `grep -c "^## §"` → 13. STEP 2 counts, each verified against its own section: §3 eleven colour token rows, §4 nine size steps, §5 three elevation levels, §6 total 24 = 14 public + 10 dashboard (counted from the two lists, unchanged from v2), §8 six accessibility criteria, §11 six interaction state rows, §10 eighteen bolded component specifications (matching the document's own "specifies eighteen" prose), §12 three approval-state rows, §12 seven pending-material rows. v3 adds to §9 the full-bleed hero media column, the trust row, the four-card band (News/Cautions/Locations/Programmes) replacing the stat band, alternating `background`/`surface` section fills, single-hue-family gradients, and video-poster rules forbidding a YouTube-hosted thumbnail URL; adds two display type steps and permits Bold 700 at `2xl`+ only, superseding v2's blanket exclusion; adds seven §10 component specifications, taking §10 from eleven to eighteen of §6's 24 and leaving six unspecified (CF-66, superseding CF-63's thirteen); adds **§12 approval states** (`approved`/`pending`/`withheld`), gating seven material classes by default. D-33 landed, DECISIONS.md now 33 decisions / 7 ODs (`grep -c "^### D-"` → 33, `grep -c "^### OD-"` → 7) — supersedes D-32's §9 stat band, closes CF-64. CF-64 CLOSED at P02-T10 (card band supersedes the stat band; the three-count deviation no longer exists); CF-66 (six of §6's 24 components remain unspecified beyond §10's eighteen, reviewer, P03) and CF-67 (three of §12's seven pending classes need a client/clinical signature no design task can supply, human, P02 close-out) landed OPEN; next-free id advanced to CF-68; CF-59, CF-60 and CF-65 correctly left open — open count 39 → 40 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 40). `src/`, `public/`, the mock, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` untouched — the rebuild against v3 is P02-T11 | pushed — verdict at push | 2026-08-28 |
+| P02-T11 | Landing-page mock rebuilt wholesale against `DESIGN_SYSTEM.md` v3 at the existing `/` route only (OD-05 bound 4 — still a mock, no new route). Branched `p02-t11` from `origin/main` at `8ade12e` (the P02-T10 merge commit). Kept from P02-T09: tokens, font declarations, the catalogue shape, `Isolate`, the view toggle, the system view — the landing composition was replaced entirely. **STEP 1** — `ApprovalGate` (`src/components/ui/ApprovalGate.tsx`) landed first: one `ApprovalState` type (`approved`/`pending`/`withheld`), one wrapper. `pending` renders children at full fidelity plus the §12 marker (1px dashed `border` in `muted`, `xs` `muted` label, both locales, a `dense` variant for the header/footer mark slot); `withheld` renders nothing; no region hardcodes its own placeholder styling. **STEP 2** — hero rewritten full-bleed (media bleeds to the inline-end viewport edge outside `Container`, text never crosses into it, no scrim/overlay/opacity), two-line `4xl` weight-700 headline with the second line in solid `accent`, media gated `pending` (photography); trust row added, three entries carrying *verified* structural facts (4 Branches, 9 Programmes, 4 LabUnits — `CONTENT_MODEL.md` §3a / `data/seed/catalogue.json`), rendered `approved`, not gated — no certification badge renders (`withheld` by omission, scheme/number/issuer/expiry unsupplied); four-card band (News, Cautions, Locations, Programmes) replacing the stat band, News/Cautions/Programmes gated `pending` on their own class (`newsModule`/`clinical`/`clinical`), Locations' map a static labelled frame (never gated) with address/hotline gated `pending` (`businessData`, PR-16); LabUnit section unchanged, `approved`, four department names from `CONTENT_MODEL.md`; video section added, three §10 video cards, each a `pending` labelled-frame poster with a disabled 48px play affordance and a duration badge, no YouTube-hosted thumbnail and no player (D-13); footer's mark and contact block both gated `pending`. Superseded `StatBand`/`StatBand.module.css` and `LocationsSection`/`LocationsSection.module.css` deleted, not left dead. Eight new UI primitives landed (`SectionHeader`, `TrustEntry`, `NewsCardEntry`, `CautionCardEntry`, `LocationCard`, `ProgrammeRow`, `VideoCard`, `BandCard`) plus a meaning-vs-direction icon set (`icons.tsx`); `MarkSlot` divested of its own placeholder border, now unstyled chrome inside `ApprovalGate`. **STEP 3** — system view extended: `TYPE_STEPS` gained `4xl`/`5xl`; a new `CompositionSection` demonstrates the Bold-700-at-`2xl`+ rule, the single-hue-family gradient rule (`primary`→`primary-strong`, `background`→`surface`, swatches only, never over text) and the two-neutral alternating-fill rule; the seven new §10 components each gained a gallery entry (eighteen components total, matching CF-66/CF-67's §10 count); a new `ApprovalStatesSection` shows all three §12 states side by side on one `Card` — `approved` (a real LabUnit name), `pending` (synthetic placeholder text through the STEP 1 wrapper), `withheld` (renders nothing, captioned from outside the gated region). Catalogue rewritten from 127 to 211 keys (`ar`/`en` identical, enforced at compile time and at runtime); no key contains a real seeded `Programme` or `LabTest` name (checked against all 9 + 72 names in `data/seed/catalogue.json` programmatically, 0 hits) — placeholder copy for News/Cautions/Programmes reads as synthetic and names what is awaited, never signed content. **STEP 4** evidence, each command run directly: physical-property grep (`left`/`right`/`margin-left`/`padding-right`/`text-align: left`/`float:`/etc.) across `src/` → 0; catalogue key counts `ar`=211, `en`=211, identical; Eastern Arabic digit (`U+0660`–`U+0669`) grep across `src/` → 0; `npm run build`, then in `.next/server/app/index.html`: `dir="rtl"` and `lang="ar"` both present, every script/style/image asset URL same-origin (`/_next/static/…`, `/mark/…` — the only absolute externals are the intentional `wa.me` and portal-placeholder action links), zero occurrences of `youtube.com`/`youtu.be`/`ytimg.com`/`googleapis.com`; `<form>`/`<iframe>`/`<embed>` grep across `src/` → 0 each; no seeded `Programme`/`LabTest` name, no medical instruction, no booking action, no certification number, no `opacity` on a disabled state anywhere in `src/`; every gated region routes through `ApprovalGate` — **11 `pending` regions** in the landing preview, named: header mark, footer mark, footer contact block, hero media (photography), News card (newsModule), Cautions card (clinical), Locations card address/hotline (businessData), Programmes card (clinical), and the three Video cards (videoAsset ×3) — the System view's own three-states demo is not counted, it is a demonstration of the mechanism, not a landing region. `docs/DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` untouched; DECISIONS.md unchanged at 33 decisions / 7 ODs (`grep -c "^### D-"` → 33) — this task lands no decision. **STEP 5** — CF-68 landed OPEN (human-owner reviewer, P02 close-out): the landing preview's 11 §12-pending regions, each clearing only on a signature or a supplied asset; next-free id advanced to CF-69; CF-59, CF-60 and CF-65 correctly left open, CF-59/CF-60/CF-49/CF-50 unaffected by this task — open count 40 → 41 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 41). `git ls-files public/mark/` → 1 (`.gitkeep`, no SVG, CF-65 still open); `git ls-files public/fonts/` → 7, unchanged | pushed — verdict at push | 2026-08-28 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 4 of P02-T10):
+Computed by (run after STEP 4 of P02-T11):
 `bash -c "grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md"`
 
-**Open — 40:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 41:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 ·
 CF-51 · CF-52 · CF-54 · CF-58 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63 · CF-65 ·
-CF-66 · CF-67
+CF-66 · CF-67 · CF-68
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -151,6 +152,12 @@ seven pending-material classes need a client or clinical signature no design
 task can supply — `LabTest`/`Programme` names and health cautions need the
 lab's written sign-off, certification claims need a supplied document, and
 News entries need an OD amending D-15/D-16 to add a ninth dashboard module.
+CF-68 is landed at P02-T11, reviewer-owned, open until P02 close-out: the
+rebuilt landing preview renders 11 regions as §12 `pending` (header mark,
+footer mark, footer contact block, hero media, News card, Cautions card,
+Locations card address/hotline, Programmes card, three Video cards), and
+each of the 11 clears only on a signature or a supplied asset — never on a
+further design task — enumerated by name in the P02-T11 report.
 
 ---
 
@@ -175,40 +182,48 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**The landing rebuild against `DESIGN_SYSTEM.md` v3.** `src/` still renders
-the P02-T09 preview built against v2 — its landing view is now stale against
-v3's card band (replacing the stat band), full-bleed hero media column, trust
-row, and §12 approval states. P02-T11 rebuilds the mock wholesale against v3,
-still a mock under OD-05 bound 4, at the existing `/` route only. This task
-(P02-T10) landed the document only; `src/`, `public/` and the mock are
-untouched.
+**The client preview review.** `src/` now renders the P02-T11 landing view,
+rebuilt wholesale against `DESIGN_SYSTEM.md` v3 — full-bleed hero media,
+trust row, the four-card band, the LabUnit section, the video section, and
+**§12 approval states** rendered live rather than only specified: 11 regions
+render `pending` with the visible dashed marker and synthetic copy, none
+renders `approved` copy that has not been signed. There is no further design
+task queued against this mock; the next event is a human looking at the
+rendered screen.
 
-**§12 approval states are what P02-T11 must render, not just read.** Every
-gated region (LabTest/Programme names, health cautions, certification
-claims, News entries, the mark, photography, published business data) renders
-`pending` with a visible marker and synthetic copy, never `approved` copy
-that has not been signed. CF-67 names which of those seven classes are
-outside any design task's power to clear.
-
-Two carry-forwards move only when Androw sees a rendered v3 preview:
+**Nothing left in this task's power moves any of the following four
+carry-forwards. All four move only when Androw responds to the rendered
+v3 preview:**
 
 - **CF-59** — `DESIGN_SYSTEM.md` §3 ratios and §8 floor are computed against
-  flat fills and font metrics; a rendered preview is what lets those numbers
-  be re-verified on screen rather than on paper.
+  flat fills and font metrics; the rendered preview is what lets those
+  numbers be re-verified on screen rather than on paper.
 - **CF-60** — the rendered Arabic has not been read by anyone who reads
-  clinical Arabic. The typeface was selected from measured metrics; a
+  clinical Arabic. The typeface was selected from measured metrics; the
   rendered preview is what a reader judges against.
+- **CF-49** — the refined mark needs the lab's written approval before
+  launch; the mark slot in the preview still renders its labelled-frame
+  fallback (CF-65), so there is nothing yet to approve, but the approval
+  itself is not a design dependency.
+- **CF-50** — OD-07's client approval is verbal and unfiled, racing OD-03's
+  15 September 2026 lapse; a signed quotation is what closes it, not a
+  further build task.
 
-CF-49 and CF-50 (mark approval and OD-07's unfiled verbal approval) and
+**The §12 gates move the same way, one signature or supplied asset at a
+time, never on a design task (CF-67, CF-68).** Of the preview's 11 `pending`
+regions: the mark (header and footer) clears the moment
+`public/mark/nel-mark.svg` lands (CF-65); the News, Cautions and Programmes
+cards clear on the lab's written clinical sign-off or an OD amending
+D-15/D-16; the Locations card's address and hotline clear on `SiteSettings`;
+the hero media and the three Video cards clear on client-supplied
+photography and video assets. No further P02 task changes any of these —
+each is a signature or an asset, named in CF-68.
+
 CF-61/CF-62 (page-root-wrapper deviation, synthetic placeholder status)
-remain open, reviewer- and client-owned, unaffected by this task. CF-63 is
-landed at P02-T08 and stands as written (thirteen unspecified against v2's
-eleven); CF-66 restates the same count against v3's eighteen (six remain) —
-both carried to P03, where the mock is replaced wholesale. CF-65 (mark slot
-undelivered) is client-owned and closes the moment
-`public/mark/nel-mark.svg` lands — no code change required. CF-67 (three of
-§12's seven pending classes need a signature no design task can supply) is
-human-owned, open until P02 close-out.
+remain open, reviewer-owned, unaffected by this task, carried to P03. CF-63
+is landed at P02-T08 and stands as written (thirteen unspecified against
+v2's eleven); CF-66 restates the same count against v3's eighteen (six
+remain) — both carried to P03, where the mock is replaced wholesale.
 
 **P01-T03-R remains blocked on CF-34** (no local Postgres, no container
 runtime, no elevation) with no resolution date. Resumes the moment CF-34

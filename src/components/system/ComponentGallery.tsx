@@ -14,6 +14,13 @@ import {
   StatusBadgeGallery,
   FooterGallery,
   EmptyErrorGallery,
+  SectionHeaderGallery,
+  TrustEntryGallery,
+  NewsCardEntryGallery,
+  CautionCardEntryGallery,
+  LocationCardGallery,
+  ProgrammeRowGallery,
+  VideoCardGallery,
 } from "./StaticGallery";
 import styles from "./ComponentGallery.module.css";
 
@@ -21,9 +28,11 @@ interface ComponentGalleryProps {
   locale: Locale;
 }
 
-// DESIGN_SYSTEM.md §10 — the eleven components it specifies, each in every
-// §11 state that applies to it, including the two the landing view does
-// not use: the StatusState badge and the bilingual field pair.
+// DESIGN_SYSTEM.md §10 — eighteen specified components (the eleven the
+// P02-T09 build carried plus the seven v3's landing composition
+// introduced), each in every §11 state that applies to it, including
+// several the landing view does not use directly: the StatusState badge
+// and the bilingual field pair.
 export function ComponentGallery({ locale }: ComponentGalleryProps) {
   return (
     <section className={styles.section}>
@@ -39,6 +48,13 @@ export function ComponentGallery({ locale }: ComponentGalleryProps) {
         <PortalLinkGallery locale={locale} />
         <BilingualFieldGallery locale={locale} />
         <StatusBadgeGallery locale={locale} />
+        <SectionHeaderGallery locale={locale} />
+        <TrustEntryGallery locale={locale} />
+        <NewsCardEntryGallery locale={locale} />
+        <CautionCardEntryGallery locale={locale} />
+        <LocationCardGallery locale={locale} />
+        <ProgrammeRowGallery locale={locale} />
+        <VideoCardGallery locale={locale} />
         <FooterGallery locale={locale} />
         <EmptyErrorGallery locale={locale} />
       </div>

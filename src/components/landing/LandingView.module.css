@@ -1,13 +1,21 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--nel-space-48);
+}
+
+.surfaceSection {
+  background-color: var(--nel-color-surface);
+  padding-block: var(--nel-space-48);
+}
+
+.backgroundSection {
+  background-color: var(--nel-color-background);
   padding-block: var(--nel-space-48);
 }
 
 @media (min-width: 768px) {
-  .root {
-    gap: var(--nel-space-96);
+  .surfaceSection,
+  .backgroundSection {
     padding-block: var(--nel-space-96);
   }
 }
