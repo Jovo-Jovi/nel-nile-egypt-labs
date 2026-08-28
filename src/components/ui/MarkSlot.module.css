@@ -1,0 +1,19 @@
+.mark {
+  display: block;
+  inline-size: auto;
+}
+
+.fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--nel-space-12);
+  border-width: 1px;
+  border-style: dashed;
+  border-color: var(--nel-color-border);
+  border-radius: var(--nel-radius-md);
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}

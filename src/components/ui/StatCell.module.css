@@ -1,0 +1,25 @@
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nel-space-4);
+  text-align: center;
+  min-inline-size: 160px;
+}
+
+.number {
+  font-size: var(--nel-size-2xl);
+  font-weight: 600;
+  color: var(--nel-color-primary);
+  line-height: var(--nel-line-height-tight);
+}
+
+.label {
+  font-size: var(--nel-size-sm);
+  color: var(--nel-color-muted);
+}
+
+.sublabel {
+  font-size: var(--nel-size-xs);
+  color: var(--nel-color-muted);
+}

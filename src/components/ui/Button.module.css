@@ -1,0 +1,123 @@
+/* DESIGN_SYSTEM.md §10 Button, §11 States. */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nel-space-8);
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding-block: var(--nel-space-12);
+  padding-inline: var(--nel-space-24);
+  border-radius: var(--nel-radius-sm);
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  font-family: inherit;
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms, color 150ms, border-color 150ms;
+}
+
+.label {
+  line-height: 1;
+}
+
+/* primary */
+.primary {
+  background-color: var(--nel-color-primary);
+  color: var(--nel-color-surface);
+}
+.primary:hover,
+.primary[data-force-state="hover"] {
+  background-color: var(--nel-color-primary-strong);
+}
+.primary:active,
+.primary[data-force-state="active"] {
+  background-color: var(--nel-color-primary-strong);
+}
+
+/* secondary — outlined on surface */
+.secondary {
+  background-color: var(--nel-color-surface);
+  border-color: var(--nel-color-primary);
+  color: var(--nel-color-primary);
+}
+.secondary:hover,
+.secondary[data-force-state="hover"] {
+  background-color: var(--nel-color-background);
+}
+.secondary:active,
+.secondary[data-force-state="active"] {
+  background-color: var(--nel-color-background);
+}
+
+/* text */
+.text {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--nel-color-accent);
+  padding-inline: var(--nel-space-8);
+}
+.text:hover,
+.text[data-force-state="hover"] {
+  background-color: var(--nel-color-background);
+  text-decoration: underline;
+}
+.text:active,
+.text[data-force-state="active"] {
+  background-color: var(--nel-color-background);
+}
+
+/* focus — always visible, never removed */
+.button:focus-visible,
+.button[data-force-state="focus"] {
+  outline: 2px solid var(--nel-color-accent);
+  outline-offset: 2px;
+}
+
+/* disabled — muted text on background, never opacity */
+.button:disabled,
+.button[aria-disabled="true"],
+.button[data-force-state="disabled"] {
+  background-color: var(--nel-color-background);
+  border-color: var(--nel-color-border);
+  color: var(--nel-color-muted);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* loading — spinner replaces icon slot, label retained, non-interactive */
+.button[aria-busy="true"],
+.button[data-force-state="loading"] {
+  cursor: default;
+  pointer-events: none;
+}
+
+.spinner {
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: var(--nel-radius-full);
+  border: 2px solid currentColor;
+  border-inline-end-color: transparent;
+  animation: nel-button-spin 700ms linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+  .button {
+    transition: none;
+  }
+}
+
+@keyframes nel-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
