@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-66**
+**Next free id: CF-68**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -69,8 +69,10 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-61 | The landing-page mock sets dir and lang on a page-root wrapper rather than on <html>, because OD-05 bound 2 forbids creating locale routes and no locale segment exists. This is a mock-only deviation from I18N_MODEL.md §4. P03 sets both on <html> from the locale segment and the wrapper does not survive. | reviewer | OPEN | P03 |
 | CF-62 | All copy, the WhatsApp target and the portal href in the mock are synthetic placeholders. Real values come from SiteSettings and from the D-07 build-time constant at P03. No published business data entered application source (PR-16). | reviewer | OPEN | P03 |
 | CF-63 | Thirteen of the 24 components in DESIGN_SYSTEM.md §6 are not yet specified. §10 specifies eleven. Each remaining component is specified at the phase that builds it, by extending §10 rather than rewriting it. | reviewer | OPEN | P03 |
-| CF-64 | DESIGN_SYSTEM.md §9 specifies a four-cell stat band. Only three non-clinical structural counts exist — Branch, Programme, LabUnit. §9 is amended to three or four at its next revision. Rendering three centred rather than inventing a fourth was the correct call at P02-T09. | reviewer | OPEN | P03 |
+| CF-64 | DESIGN_SYSTEM.md §9 specifies a four-cell stat band. Only three non-clinical structural counts exist — Branch, Programme, LabUnit. §9 is amended to three or four at its next revision. Rendering three centred rather than inventing a fourth was the correct call at P02-T09. CLOSED at P02-T10: §9's four-cell stat band is superseded by the card band (News, Cautions, Locations, Programmes); the three-count deviation no longer exists. | reviewer | CLOSED at P02-T10 | `DESIGN_SYSTEM.md` v3 at P02-T10 |
 | CF-65 | The mark slot renders a labelled frame until a client-supplied SVG lands at public/mark/nel-mark.svg. No reconstruction was performed; the human supplies the file. OD-07 logo refinement remains undelivered. | client | OPEN | P02 |
+| CF-66 | Six of the 24 components in DESIGN_SYSTEM.md §6 remain unspecified. §10 specifies eighteen. Each remaining component is specified at the phase that builds it, by extending §10 rather than rewriting it. | reviewer | OPEN | P03 |
+| CF-67 | DESIGN_SYSTEM.md §12 gates seven classes of material as pending. Three need a client or clinical signature that no design task can supply: LabTest and Programme names and health cautions need the lab's written clinical sign-off; certification claims need the scheme, number, issuing body and expiry from a supplied document; News entries need an OD amending D-15 and D-16, which forbid a ninth dashboard module. | human | OPEN | P02 close-out |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
