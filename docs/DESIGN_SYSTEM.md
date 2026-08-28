@@ -7,7 +7,11 @@ verified against the font binaries. §5 elevation values ratified at the P02-T07
 §9, §10 and §11 authored at that verdict, after a mock built strictly from §3–§6 rendered
 correctly and looked like nothing — tokens do not compose a page.
 
-v3 adds the composition a reference design made obvious and the document lacked: a
+v4 adds the page wash, the decorative-layer rule that makes it legal, a crafted
+`pending` treatment, card hover and hover-reveal with flip refused on accessibility
+grounds, the drawn-SVG map, and the third-party brand-mark exception with the WhatsApp
+pairing measured. v3 added the composition a reference design made obvious and the
+document lacked: a
 full-bleed hero media column, a trust row, the four-card band, alternating neutral
 section backgrounds, single-family gradients, video poster rules, seven component
 specifications, two display type steps, and Bold 700 above `2xl`. It also adds **§12
@@ -65,7 +69,8 @@ laboratory" signal comes from restraint, rhythm and hierarchy. It does not come 
 gradients, blur, or motion. A component that needs an effect to look finished is not
 finished.
 
-**3. Elevation is a 1px border plus a soft shadow. Never translucency.** Three reasons,
+**3. Elevation is a 1px border plus a soft shadow. Never translucency on a surface that
+carries text.** Three reasons,
 and the first is disqualifying: a translucent surface makes contrast un-certifiable,
 because the effective contrast ratio depends on whatever happens to sit behind it, and
 AA is a floor this project does not negotiate. Second, `backdrop-filter` is expensive on
@@ -133,6 +138,15 @@ on telling them apart at a glance.
 **`success`, `warning` and `error` never render clinical or `Visitor` status.** OD-07
 bound 4. They exist for `Operator` feedback and for `Offer` validity and `Programme`
 publication state. This platform has no results, so it has no result state to colour.
+
+**Third-party brand marks are not design tokens.** A logo belonging to another
+organisation — the WhatsApp mark, and nothing else at present — renders in that
+organisation's own brand colour. It is a trademark reproduced for recognition, not a
+twelfth token, and D-29's one-family rule is unaffected: no layout, surface, border or
+text colour is ever drawn from it. Two constraints bind it. It appears only as the mark
+itself, never as a fill behind text unless that pairing is measured and recorded (§10,
+WhatsApp action). And it is the only such exception; a second one requires a decision,
+not a precedent.
 
 **Green and red are not sufficient signals on their own.** Every semantic state carries
 an icon or a text label alongside the colour. Roughly one man in twelve cannot
@@ -452,6 +466,17 @@ Text is never set over a photograph. A scrim makes contrast depend on the image 
 it, and §2 principle 3 rules out anything that makes contrast uncertifiable. Text sits
 beside imagery, not on it.
 
+### Decorative layers
+
+A purely decorative layer — one carrying no text and no interactive target — may use
+opacity freely. A page-level tinted wash, a soft radial glow behind the hero, a faint
+pattern: none of these has a contrast ratio to certify because nothing is read off them.
+
+The question is not "is it subtle", it is **"does anything have to be legible against it".**
+If yes, the layer is a surface and §2 principle 3 binds. If no, it is decoration and
+opacity is a free choice. A card at 90% opacity carrying a heading is a surface and is
+forbidden; a 6% indigo wash behind the whole page is decoration and is not.
+
 ### The landing hero
 
 Two columns at `md` and above, Arabic-first so the text column takes the inline-start
@@ -563,6 +588,14 @@ unless the text clears its floor against **both** stops, verified at each end an
 recorded — a single measurement in the middle proves nothing about the corners. It may
 never be applied to text itself (§9, the selective-colour headline).
 
+**The page wash.** One permitted page-level gradient: `background` at the block-start
+easing to `surface`, with a `primary` tint at no more than 6% opacity, fixed to the
+viewport and sitting behind everything. It is a decorative layer under §9 — nothing is
+read off it, because every text-bearing region sits on `background` or `surface` above
+it. Both stops are within 1.05:1 of each other, so no text ratio moves measurably across
+the page. This is the entire atmosphere budget for the site; there is no second wash and
+no per-section gradient.
+
 ### Video posters
 
 A video poster is a self-hosted `MediaAsset` or a §9 labelled frame. **Never a
@@ -621,6 +654,20 @@ centred at `sm` in `muted`. Never a spinner and never a broken-image icon.
 `SiteSettings` and opens it in a new browsing context. Not a form, no input, nothing
 posted (D-09, `BOUNDARY_MODEL.md` §2). The number is never a literal in source (PR-16).
 
+Carries the WhatsApp mark at 20px in its own brand green, inline-start of the label.
+
+**Two permitted treatments, and the brand green does not carry white text.** Measured:
+white on `#25D366` is **1.98** and fails AA outright; WhatsApp's own interface uses a
+darker teal for exactly this reason.
+
+| Treatment | Fill | Label | Ratio |
+|---|---|---|---|
+| Filled | `#25D366` | `text` `#1D1D35` | **8.28** |
+| Outlined | `surface` | `text` | inherits §10 secondary |
+
+Both carry the mark in `#25D366`. White-on-green is forbidden in either. The filled
+treatment is the landing hero's second action; the outlined treatment is the header.
+
 **Outbound `ResultsPortalLink` action.** `https://` anchor, `target="_blank"`,
 `rel="noopener noreferrer"`. **Never a frame, iframe or embed.** Framing that portal puts
 its login inside our origin where a `Visitor` cannot verify the address bar, which is a
@@ -650,10 +697,25 @@ fade is a gradient over text.
 Title at `base` weight 600 in `text`. Body at `sm` in `muted`, two lines. The icon
 encodes meaning and does not mirror. **Content is gated — see §12.**
 
-**Location card.** A 16:9 map frame at the block-start, radius 4px, then the head-office
+**Location card.** A 16:9 map at the block-start, radius 4px, then the head-office
 address at `sm` in `text` and the hotline at `sm` weight 600. One outlined action at the
-block-end. The map is a static image asset, never an embedded third-party map: an
-embedded map is an evidence-item-7 surface and discloses the `Visitor` on page load.
+block-end.
+
+**The map is a drawn SVG, not an embed and not a tile.** An embedded third-party map is
+an evidence-item-7 surface and discloses the `Visitor` on page load exactly as a video
+player does; a tile image from a map provider does the same unless self-hosted, and a
+self-hosted tile is a grey rectangle that looks like every other site.
+
+The drawn map is a simplified vector of Greater Cairo in the project's own tokens:
+`background` landmass, `border` for the Nile and the major axes, `muted` for district
+labels at `xs`. Four pins at 24px in `primary`, the head office pin in `accent` and one
+step larger. Each pin is a 44px target and an outbound link to that `Branch`. No API key,
+no tile request, no third-party script, no cookie exposure, and it reads as designed
+rather than generic.
+
+Geography is factual and unverified geography is a defect: pin coordinates come from the
+`Branch` records, and until those carry addresses the map renders `pending` under §12
+with its pins in indicative positions and the marker visible.
 
 **Programme row.** 32px icon in a `background` circle at the inline-start, title at
 `base` weight 600, subtitle at `sm` in `muted`, chevron at the inline-end. The chevron is
@@ -681,10 +743,24 @@ Six states, specified once, inherited by every interactive component.
 |---|---|
 | Default | as specified in §10 |
 | Hover | fill moves to `primary-strong`; outlined and text variants gain a `background` fill. 150ms (§5) |
+| Hover, cards | elevation 1 → 2, `border` shifts toward `primary`, `translateY(-2px)`. 150ms. No scale, no rotation, no perspective |
 | Focus | 2px `accent` outline at 2px offset, **always visible**, never removed. `:focus-visible` for pointer input, but never `outline: none` without a replacement |
 | Active | `primary-strong` fill, no transform, no scale |
 | Disabled | `muted` text on `background`, 1px `border`, `cursor: not-allowed`. **Not reduced opacity** — opacity makes the effective contrast depend on what sits behind, which §2 principle 3 rules out |
 | Loading | inline spinner replacing the icon slot, label retained, control non-interactive. Never a full-page overlay |
+
+**Hover-reveal, and why there is no flip.** Where a card holds detail beyond its summary,
+the detail expands in place: `grid-template-rows` from `0fr` to `1fr` at 250ms, the
+detail present in the DOM at all times, reachable by keyboard, announced by a screen reader,
+and mirroring correctly because it uses no physical axis.
+
+**A flip card is not permitted.** Content on the reverse face is unreachable by keyboard
+and invisible to assistive technology unless built with care that will not survive the
+first refactor, its rotation axis has to be reasoned about separately per locale, and
+this is a laboratory whose visitors include the elderly and the unwell. The delight is
+achievable without excluding them.
+
+All motion resolves to none under `prefers-reduced-motion`, including the §12 shimmer.
 
 Two states that are not interaction and are specified because they are always forgotten:
 
@@ -717,9 +793,27 @@ the component, and the same component renders all three.
 **`pending` treatment.** The component renders at full fidelity with its real spacing,
 type and elevation, so the layout is honest. Copy is synthetic and reads as synthetic.
 The region carries a marker: a 1px dashed `border` in `muted` and a `xs` label in `muted`
-naming what is awaited. A `pending` region is never styled to look finished — a
-placeholder that passes for real content is worse than an empty one, because nobody
-chases it.
+naming what is awaited.
+
+**Crafted, not cheap.** The first cut of this section said a `pending` region is "never
+styled to look finished", which was too blunt and forbade the right answer. There is a
+real difference between *looking finished* and *looking considered*. A `pending` region
+is built to the same standard as an approved one and is still unmistakably not real:
+
+- Real card geometry, real spacing, real elevation, the real icon for its class.
+- A **shimmer** across the neutral ramp — a slow sweep from `background` to `surface` and
+  back, 2000ms, `ease-in-out`, infinite. Neutral only; never `primary`, never `accent`.
+  It resolves to a static `background` fill under `prefers-reduced-motion`.
+- Content lines rendered as radius-4px bars in `background` at the real type sizes, so
+  the block occupies the space its copy will occupy. Bars, never lorem.
+- The marker retained at low emphasis: 1px dashed `border` in `muted` and an `xs` `muted`
+  label naming what is awaited.
+
+**What stays forbidden.** Removing the marker or the label. Realistic fake copy of any
+kind. A `pending` region that a client could mistake for delivered work — which is the
+original rule, correctly scoped: a placeholder that *passes for* real content is worse
+than an empty one, because nobody chases it. A beautiful placeholder that announces
+itself is the target.
 
 **What is `pending` by default, and why.** These are not stylistic judgements.
 
