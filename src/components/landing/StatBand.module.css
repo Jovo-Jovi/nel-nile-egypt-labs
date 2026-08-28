@@ -1,7 +1,0 @@
-.band {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--nel-space-32);
-  padding-block: var(--nel-space-24);
-}

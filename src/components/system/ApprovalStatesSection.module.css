@@ -1,0 +1,35 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+}
+
+.heading {
+  font-size: var(--nel-size-2xl);
+  font-weight: 600;
+  color: var(--nel-color-primary-strong);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}
+
+.standfirst {
+  font-size: var(--nel-size-base);
+  color: var(--nel-color-muted);
+  line-height: var(--nel-line-height-body);
+  margin-block: 0 var(--nel-space-16);
+  max-inline-size: 640px;
+}
+
+.withheldFrame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  min-inline-size: 200px;
+}
+
+.withheldNote {
+  font-size: var(--nel-size-xs);
+  color: var(--nel-color-muted);
+  font-style: italic;
+  margin-block: 0;
+}

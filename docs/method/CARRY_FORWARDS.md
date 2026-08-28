@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-68**
+**Next free id: CF-69**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -73,6 +73,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-65 | The mark slot renders a labelled frame until a client-supplied SVG lands at public/mark/nel-mark.svg. No reconstruction was performed; the human supplies the file. OD-07 logo refinement remains undelivered. | client | OPEN | P02 |
 | CF-66 | Six of the 24 components in DESIGN_SYSTEM.md §6 remain unspecified. §10 specifies eighteen. Each remaining component is specified at the phase that builds it, by extending §10 rather than rewriting it. | reviewer | OPEN | P03 |
 | CF-67 | DESIGN_SYSTEM.md §12 gates seven classes of material as pending. Three need a client or clinical signature that no design task can supply: LabTest and Programme names and health cautions need the lab's written clinical sign-off; certification claims need the scheme, number, issuing body and expiry from a supplied document; News entries need an OD amending D-15 and D-16, which forbid a ninth dashboard module. | human | OPEN | P02 close-out |
+| CF-68 | The landing preview renders 11 regions as §12 pending. Each clears only on a signature or a supplied asset, not on a design task. Enumerated in the P02-T11 report. | reviewer | OPEN | P02 close-out |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

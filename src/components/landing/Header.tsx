@@ -5,6 +5,7 @@ import { translate, type Locale } from "@/lib/catalog";
 import { MarkSlot } from "@/components/ui/MarkSlot";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
+import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import styles from "./Header.module.css";
 
 interface HeaderProps {
@@ -34,7 +35,9 @@ export function Header({ locale, onLocaleChange, forceElevated }: HeaderProps) {
   return (
     <header className={styles.header} data-elevated={elevated}>
       <div className={styles.markSlot}>
-        <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
+        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.mark" dense>
+          <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
+        </ApprovalGate>
       </div>
       <div className={styles.actions}>
         <LanguageSwitcher locale={locale} onChange={onLocaleChange} />

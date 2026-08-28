@@ -31,8 +31,11 @@ export const COLOUR_TOKENS: ColourTokenMeta[] = [
   { name: "error", cssVar: "--nel-color-error", originKey: "colour.error.origin", vsBackground: 6.27, vsSurface: 6.54, floor: 4.5 },
 ];
 
-// DESIGN_SYSTEM.md §4 — seven size steps. Values themselves are read live
-// from tokens.css; this only fixes the step order and use-case labelling.
+// DESIGN_SYSTEM.md §4 — v3's nine size steps. Values themselves are read
+// live from tokens.css; this only fixes the step order and use-case
+// labelling. 4xl and 5xl are new at v3; both are weight-700-only steps
+// (see the Bold 700 rule below), which is why the sample row below renders
+// them at that weight while xs–3xl stay at the body weight.
 export const TYPE_STEPS = [
   { step: "xs", cssVar: "--nel-size-xs" },
   { step: "sm", cssVar: "--nel-size-sm" },
@@ -41,6 +44,8 @@ export const TYPE_STEPS = [
   { step: "xl", cssVar: "--nel-size-xl" },
   { step: "2xl", cssVar: "--nel-size-2xl" },
   { step: "3xl", cssVar: "--nel-size-3xl" },
+  { step: "4xl", cssVar: "--nel-size-4xl" },
+  { step: "5xl", cssVar: "--nel-size-5xl" },
 ] as const;
 
 // DESIGN_SYSTEM.md §4 — the per-locale line-height fork, three contexts.

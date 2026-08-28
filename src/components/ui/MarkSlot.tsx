@@ -9,9 +9,11 @@ interface MarkSlotProps {
 }
 
 // The human supplies public/mark/nel-mark.svg (OD-07). No mark is drawn,
-// traced or generated here. Until the file lands, onError swaps in the §9
-// labelled-frame pattern; once the human adds the SVG it appears with no
-// code change.
+// traced or generated here. Until the file lands, onError swaps in a
+// plain text fallback; the caller wraps this component in an
+// ApprovalGate (§12 — "the mark" is one of the seven pending classes),
+// which supplies the dashed-border marker. This component no longer
+// carries its own placeholder styling, per this task's STEP 1.
 export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
   const [broken, setBroken] = useState(false);
 

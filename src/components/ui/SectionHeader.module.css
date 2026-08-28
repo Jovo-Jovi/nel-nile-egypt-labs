@@ -1,0 +1,15 @@
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--nel-space-16);
+  margin-block-end: var(--nel-space-16);
+}
+
+.title {
+  font-size: var(--nel-size-lg);
+  font-weight: 600;
+  color: var(--nel-color-text);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}

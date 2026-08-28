@@ -3,7 +3,9 @@ import { Container } from "@/components/ui/Container";
 import { ColourSection } from "./ColourSection";
 import { TypographySection } from "./TypographySection";
 import { SpaceSection } from "./SpaceSection";
+import { CompositionSection } from "./CompositionSection";
 import { ComponentGallery } from "./ComponentGallery";
+import { ApprovalStatesSection } from "./ApprovalStatesSection";
 import { AccessibilitySection } from "./AccessibilitySection";
 import styles from "./SystemView.module.css";
 
@@ -24,7 +26,9 @@ export function SystemView({ locale }: SystemViewProps) {
         <ColourSection locale={locale} />
         <TypographySection locale={locale} />
         <SpaceSection locale={locale} />
+        <CompositionSection locale={locale} />
         <ComponentGallery locale={locale} />
+        <ApprovalStatesSection locale={locale} />
         <AccessibilitySection locale={locale} />
       </div>
     </Container>
