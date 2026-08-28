@@ -1,32 +1,46 @@
 .root {
+  isolation: isolate;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--nel-color-background);
   color: var(--nel-color-text);
   line-height: var(--nel-line-height-body);
+  /* Owner preview override — rounder cards/header/controls for the
+     design-decision mock. Not a twelfth colour; radius-md was 8px. */
+  --nel-radius-sm: 8px;
+  --nel-radius-md: 16px;
 }
 
 .main {
   flex: 1;
 }
 
+@media (max-width: 1023px) {
+  .main {
+    padding-block-end: var(--nel-space-96);
+  }
+}
+
 /* DESIGN_SYSTEM.md v4 §9 "The page wash" — background easing to surface,
    a primary tint at no more than 6% opacity via color-mix (never a
    hardcoded second hex for the same value), fixed to the viewport,
-   painted first so every later sibling's own opaque fill sits above it.
-   No z-index is set: an un-positioned decorative layer that is first in
-   DOM paints behind every later, non-negative-z-index sibling by default
-   painting order, which is enough here and avoids a stray stacking
-   context. */
+   behind everything. A `position: fixed` layer with z-index auto paints
+   *after* in-flow siblings (CSS appendix E step 8 vs step 3), which is
+   how this overlay sat on top of the page. Isolation on `.root` keeps
+   the negative z-index inside this stacking context so the wash cannot
+   slip behind `body`; the wash then paints after `.root`'s own fill and
+   before every in-flow sibling. */
 .wash {
   position: fixed;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(
+    radial-gradient(
+      ellipse 80% 55% at 50% 0%,
       color-mix(in srgb, var(--nel-color-primary) 6%, transparent),
-      color-mix(in srgb, var(--nel-color-primary) 6%, transparent)
+      transparent 70%
     ),
     linear-gradient(to bottom, var(--nel-color-background), var(--nel-color-surface));
 }

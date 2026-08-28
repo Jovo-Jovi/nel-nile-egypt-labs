@@ -31,7 +31,7 @@
 }
 
 .toggleButton {
-  min-block-size: 32px;
+  min-block-size: 44px;
   padding-inline: var(--nel-space-16);
   border: none;
   border-radius: var(--nel-radius-full);

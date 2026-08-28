@@ -1,6 +1,7 @@
 .mark {
   display: block;
   inline-size: auto;
+  block-size: var(--nel-mark-size, 48px);
 }
 
 .fallback {

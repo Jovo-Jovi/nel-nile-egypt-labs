@@ -1,6 +1,60 @@
 .row {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: var(--nel-space-24);
   padding-block-start: var(--nel-space-16);
+}
+
+.creds {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nel-space-12);
+}
+
+.isoBadge {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-inline: var(--nel-space-16);
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-surface);
+  color: var(--nel-color-primary-strong);
+  font-size: var(--nel-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.isoNote {
+  color: color-mix(in srgb, var(--nel-color-surface) 78%, transparent);
+  font-size: var(--nel-size-xs);
+  max-inline-size: 18ch;
+}
+
+.row[data-tone="default"] .isoNote {
+  color: var(--nel-color-muted);
+}
+
+.hotlineChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nel-space-8);
+  min-block-size: 44px;
+  padding-inline: var(--nel-space-16);
+  border-radius: var(--nel-radius-full);
+  background-color: color-mix(in srgb, var(--nel-color-surface) 16%, transparent);
+  color: var(--nel-color-surface);
+  font-size: var(--nel-size-sm);
+  font-weight: 600;
+}
+
+.row[data-tone="default"] .hotlineChip {
+  background-color: var(--nel-color-background);
+  color: var(--nel-color-text);
+}
+
+.hotlineBar {
+  display: inline-flex;
+  inline-size: 72px;
 }

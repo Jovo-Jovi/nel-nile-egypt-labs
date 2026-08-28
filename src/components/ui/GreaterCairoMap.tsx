@@ -53,7 +53,12 @@ interface GreaterCairoMapProps {
 // fixed physical side in both locales.
 export function GreaterCairoMap({ ariaLabel, pinLabel, headOfficePinLabel, districtLabels }: GreaterCairoMapProps) {
   return (
-    <div className={styles.map} role="img" aria-label={ariaLabel} dir="ltr">
+    <div
+      className={styles.map}
+      role="img"
+      aria-label={`${ariaLabel}. ${headOfficePinLabel}. ${pinLabel}`}
+      dir="ltr"
+    >
       <svg
         className={styles.svg}
         viewBox="0 0 100 62.5"
@@ -106,16 +111,14 @@ export function GreaterCairoMap({ ariaLabel, pinLabel, headOfficePinLabel, distr
         ))}
       </svg>
       {PINS.map((pin) => (
-        <button
+        <span
           key={pin.id}
-          type="button"
-          className={pin.isHeadOffice ? styles.pinTargetHeadOffice : styles.pinTarget}
+          className={pin.isHeadOffice ? styles.pinMarkHeadOffice : styles.pinMark}
           style={{ insetInlineStart: `${pin.x}%`, insetBlockStart: `${pin.y}%` }}
-          aria-label={pin.isHeadOffice ? headOfficePinLabel : pinLabel}
-          disabled
+          aria-hidden="true"
         >
           <LocationPinIcon size={pin.isHeadOffice ? 28 : 24} />
-        </button>
+        </span>
       ))}
     </div>
   );

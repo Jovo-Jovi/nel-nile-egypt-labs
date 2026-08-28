@@ -1,4 +1,4 @@
-import { ImagePlaceholderIcon } from "./icons";
+import { LabScene } from "./LabScene";
 import { SkeletonBar } from "./SkeletonBar";
 import styles from "./NewsCardEntry.module.css";
 
@@ -22,7 +22,7 @@ export function NewsCardEntry({ date, title, excerpt, pending }: NewsCardEntryPr
   return (
     <div className={styles.entry}>
       <span className={styles.thumbnail} aria-hidden="true">
-        <ImagePlaceholderIcon size={20} />
+        <LabScene />
       </span>
       <div className={styles.body}>
         {pending ? (

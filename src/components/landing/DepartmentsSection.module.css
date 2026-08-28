@@ -2,6 +2,15 @@
   display: flex;
   flex-direction: column;
   gap: var(--nel-space-24);
+  scroll-margin-block-start: 96px;
+}
+
+.section[data-embedded="true"] {
+  gap: var(--nel-space-16);
+}
+
+.section[data-embedded="true"] .heading {
+  font-size: var(--nel-size-lg);
 }
 
 .heading {
@@ -23,6 +32,18 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--nel-space-16);
+}
+
+.iconWell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-primary);
+  color: var(--nel-color-surface);
 }
 
 @media (min-width: 768px) {

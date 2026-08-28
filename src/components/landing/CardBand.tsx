@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/catalog";
+import { translate, type Locale } from "@/lib/catalog";
 import { NewsCard } from "./NewsCard";
 import { CautionsCard } from "./CautionsCard";
 import { LocationsCard } from "./LocationsCard";
@@ -9,19 +9,37 @@ interface CardBandProps {
   locale: Locale;
 }
 
-// DESIGN_SYSTEM.md §9 "The card band" — directly under the hero, the
-// highest-value structure on the page. Four cards at lg+, two-by-two at
-// md, stacked below. Two of the four (Cautions, Programmes) carry
-// material that cannot render as approved without sign-off; News is
-// blocked on a ninth-module OD; Locations is blocked on SiteSettings.
-// The band is built now and gated (§12).
+const CHIPS = [
+  { href: "#news", labelKey: "news.heading" as const },
+  { href: "#cautions", labelKey: "cautions.heading" as const },
+  { href: "#locations", labelKey: "locations.heading" as const },
+  { href: "#programmes", labelKey: "programmes.heading" as const },
+];
+
 export function CardBand({ locale }: CardBandProps) {
   return (
-    <div className={styles.band}>
-      <NewsCard locale={locale} />
-      <CautionsCard locale={locale} />
-      <LocationsCard locale={locale} />
-      <ProgrammesCard locale={locale} />
+    <div className={styles.wrap}>
+      <nav className={styles.chips} aria-label={translate(locale, "band.tabs")}>
+        {CHIPS.map((chip) => (
+          <a key={chip.href} href={chip.href} className={styles.chip}>
+            {translate(locale, chip.labelKey)}
+          </a>
+        ))}
+      </nav>
+      <div className={styles.band}>
+        <div id="news" className={styles.anchor}>
+          <NewsCard locale={locale} />
+        </div>
+        <div id="cautions" className={styles.anchor}>
+          <CautionsCard locale={locale} />
+        </div>
+        <div id="locations" className={styles.anchor}>
+          <LocationsCard locale={locale} />
+        </div>
+        <div id="programmes" className={styles.anchor}>
+          <ProgrammesCard locale={locale} />
+        </div>
+      </div>
     </div>
   );
 }

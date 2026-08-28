@@ -1,0 +1,36 @@
+.dock {
+  position: fixed;
+  inset-inline: var(--nel-space-16);
+  inset-block-end: var(--nel-space-16);
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nel-space-8);
+  padding-block: var(--nel-space-8);
+  padding-inline: var(--nel-space-16);
+  border-radius: var(--nel-space-24);
+  border-width: 1px;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--nel-color-surface) 28%, transparent);
+  background-color: color-mix(in srgb, var(--nel-color-primary) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--nel-elevation-2-shadow);
+}
+
+@media (min-width: 1024px) {
+  .dock {
+    display: none;
+  }
+}
+
+.whatsapp a {
+  background-color: transparent;
+  border-color: color-mix(in srgb, var(--nel-color-surface) 55%, transparent);
+  color: var(--nel-color-surface);
+}
+
+.whatsapp a:hover {
+  background-color: color-mix(in srgb, var(--nel-color-surface) 12%, transparent);
+}

@@ -30,6 +30,7 @@ export function CardGallery({ locale }: GalleryProps) {
       <StateRow>
         <StateSample label={translate(locale, "state.default")}>
           <Card
+            lift
             heading={translate(locale, "gallery.card.title")}
             action={<Button variant="text">{translate(locale, "gallery.card.action")}</Button>}
           >
@@ -43,6 +44,7 @@ export function CardGallery({ locale }: GalleryProps) {
         </StateSample>
         <StateSample label={translate(locale, "state.hoverReveal")}>
           <Card
+            lift
             heading={translate(locale, "gallery.card.title")}
             detail={<p className={styles.emptyLine}>{translate(locale, "gallery.card.detail")}</p>}
             action={<Button variant="text">{translate(locale, "gallery.card.action")}</Button>}
@@ -62,12 +64,12 @@ export function HeaderGallery({ locale }: GalleryProps) {
       <StateRow>
         <StateSample label={translate(locale, "state.default")}>
           <div className={styles.headerFrame}>
-            <Header locale={locale} onLocaleChange={() => undefined} forceElevated={false} />
+            <Header locale={locale} onLocaleChange={() => undefined} forceElevated={false} showWhatsApp />
           </div>
         </StateSample>
         <StateSample label={translate(locale, "state.active")}>
           <div className={styles.headerFrame}>
-            <Header locale={locale} onLocaleChange={() => undefined} forceElevated={true} />
+            <Header locale={locale} onLocaleChange={() => undefined} forceElevated={true} showWhatsApp />
           </div>
         </StateSample>
       </StateRow>

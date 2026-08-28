@@ -20,36 +20,21 @@
   font-family: inherit;
 }
 
-/* 44px minimum target (§2 principle 4), centred on the indicative
-   coordinate. The visible pin icon is 24px/28px; the button's own
-   padding brings the hit area to the floor without changing the icon's
-   drawn size. */
-.pinTarget,
-.pinTargetHeadOffice {
+.pinMark,
+.pinMarkHeadOffice {
   position: absolute;
-  inline-size: 44px;
-  block-size: 44px;
+  inline-size: 28px;
+  block-size: 28px;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  border-radius: var(--nel-radius-full);
-  background: transparent;
   color: var(--nel-color-primary);
-  padding: 0;
-  cursor: not-allowed;
+  pointer-events: none;
 }
 
-.pinTargetHeadOffice {
-  color: var(--nel-color-accent);
-}
-
-.pinTarget:disabled,
-.pinTargetHeadOffice:disabled {
-  color: var(--nel-color-primary);
-}
-
-.pinTargetHeadOffice:disabled {
+.pinMarkHeadOffice {
+  inline-size: 32px;
+  block-size: 32px;
   color: var(--nel-color-accent);
 }

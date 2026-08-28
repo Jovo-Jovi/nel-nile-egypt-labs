@@ -1,5 +1,8 @@
+import type { ReactNode } from "react";
 import { PlayIcon } from "./icons";
 import { SkeletonBar } from "./SkeletonBar";
+import { Card } from "./Card";
+import { LabScene } from "./LabScene";
 import styles from "./VideoCard.module.css";
 
 interface VideoCardProps {
@@ -8,6 +11,7 @@ interface VideoCardProps {
   title: string;
   description: string;
   playLabel: string;
+  poster?: ReactNode;
   // DESIGN_SYSTEM.md v4 §12 "Crafted, not cheap" — title and description
   // render as bars when pending. The poster is the §9 labelled-frame
   // pattern (its own label, play affordance and duration badge are
@@ -25,16 +29,19 @@ interface VideoCardProps {
 // already unverifiable. The play triangle encodes meaning and does not
 // mirror. Nothing loads before a click, and this mock has no real video
 // to load, so the affordance is not wired to a handler.
-export function VideoCard({ posterLabel, duration, title, description, playLabel, pending }: VideoCardProps) {
+export function VideoCard({ posterLabel, duration, title, description, playLabel, pending, poster }: VideoCardProps) {
+  const posterFrame = (
+    <div className={styles.poster} style={{ aspectRatio: "16 / 9" }} role="img" aria-label={posterLabel}>
+      {poster ?? <LabScene />}
+      <button type="button" className={styles.playButton} aria-label={playLabel} disabled>
+        <PlayIcon size={20} />
+      </button>
+      <span className={styles.durationBadge}>{duration}</span>
+    </div>
+  );
+
   return (
-    <div className={styles.card}>
-      <div className={styles.poster} style={{ aspectRatio: "16 / 9" }}>
-        <span className={styles.posterLabel}>{posterLabel}</span>
-        <button type="button" className={styles.playButton} aria-label={playLabel} disabled>
-          <PlayIcon size={20} />
-        </button>
-        <span className={styles.durationBadge}>{duration}</span>
-      </div>
+    <Card imageSlot={posterFrame}>
       {pending ? (
         <div className={styles.textSkeleton}>
           <SkeletonBar size="base" widthPercent={75} />
@@ -46,6 +53,6 @@ export function VideoCard({ posterLabel, duration, title, description, playLabel
           <p className={styles.description}>{description}</p>
         </>
       )}
-    </div>
+    </Card>
   );
 }

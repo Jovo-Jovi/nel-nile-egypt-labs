@@ -9,13 +9,14 @@
   border-color: var(--nel-color-border);
   border-radius: var(--nel-radius-md);
   box-shadow: var(--nel-elevation-1-shadow);
+  overflow: hidden;
   transition: box-shadow 150ms, border-color 150ms, transform 150ms;
 }
 
-.card:hover {
+.card[data-lift="true"]:hover {
   box-shadow: var(--nel-elevation-2-shadow);
   border-color: var(--nel-color-primary);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 .detailReveal {
@@ -25,8 +26,8 @@
   transition: grid-template-rows 250ms;
 }
 
-.card:hover .detailReveal,
-.card:focus-within .detailReveal {
+.card[data-lift="true"]:hover .detailReveal,
+.card[data-lift="true"]:focus-within .detailReveal {
   grid-template-rows: 1fr;
 }
 

@@ -1,0 +1,101 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  scroll-margin-block-start: 96px;
+}
+
+.heading {
+  font-size: var(--nel-size-2xl);
+  font-weight: 700;
+  color: var(--nel-color-primary-strong);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}
+
+.standfirst {
+  font-size: var(--nel-size-base);
+  color: var(--nel-color-muted);
+  line-height: var(--nel-line-height-body);
+  margin-block: 0;
+  max-inline-size: 60ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nel-space-16);
+  margin-block-start: var(--nel-space-8);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--nel-space-24);
+  }
+}
+
+.iconWell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-primary);
+  color: var(--nel-color-surface);
+}
+
+.body {
+  margin-block: 0;
+}
+
+.subheading {
+  margin-block: var(--nel-space-16) 0;
+  color: var(--nel-color-primary-strong);
+  font-size: var(--nel-size-lg);
+  font-weight: 600;
+}
+
+.partners {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--nel-space-8);
+}
+
+@media (min-width: 768px) {
+  .partners {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--nel-space-16);
+  }
+}
+
+.partnerTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nel-space-8);
+  min-block-size: 96px;
+  padding: var(--nel-space-12);
+  border-radius: var(--nel-radius-md);
+  background-color: var(--nel-color-background);
+  border-width: 1px;
+  border-style: dashed;
+  border-color: var(--nel-color-border);
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-xs);
+  font-weight: 600;
+  text-align: center;
+}
+
+.partnerMark {
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-surface);
+  border-width: 1px;
+  border-style: dashed;
+  border-color: var(--nel-color-border);
+}

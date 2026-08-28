@@ -1,0 +1,117 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  scroll-margin-block-start: 96px;
+}
+
+.heading {
+  font-size: var(--nel-size-xl);
+  font-weight: 600;
+  color: var(--nel-color-primary-strong);
+  line-height: var(--nel-line-height-heading);
+  margin-block: 0;
+}
+
+.standfirst {
+  font-size: var(--nel-size-base);
+  color: var(--nel-color-muted);
+  line-height: var(--nel-line-height-body);
+  margin-block: 0;
+  max-inline-size: 60ch;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nel-space-24);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--nel-space-24);
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+}
+
+.media {
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--nel-radius-md);
+}
+
+.kicker {
+  margin-block: var(--nel-space-8) 0;
+  color: var(--nel-color-accent);
+  font-size: var(--nel-size-xs);
+  font-weight: 600;
+}
+
+.date {
+  margin-block: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-xs);
+}
+
+.title {
+  margin-block: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-lg);
+  font-weight: 600;
+  line-height: var(--nel-line-height-heading);
+}
+
+.excerpt {
+  margin-block: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-sm);
+  line-height: var(--nel-line-height-body);
+}
+
+.caution {
+  display: flex;
+  gap: var(--nel-space-16);
+  align-items: flex-start;
+  margin-block-start: var(--nel-space-8);
+  padding: var(--nel-space-24);
+  border-radius: var(--nel-radius-md);
+  background-color: color-mix(in srgb, var(--nel-color-warning) 10%, var(--nel-color-surface));
+  border-width: 1px;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--nel-color-warning) 28%, var(--nel-color-border));
+}
+
+.cautionIcon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--nel-color-warning);
+}
+
+.cautionKicker {
+  margin-block: 0;
+  color: var(--nel-color-warning);
+  font-size: var(--nel-size-xs);
+  font-weight: 600;
+}
+
+.cautionTitle {
+  margin-block: var(--nel-space-4) 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  line-height: var(--nel-line-height-heading);
+}
+
+.cautionBody {
+  margin-block: var(--nel-space-8) 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-sm);
+  line-height: var(--nel-line-height-body);
+}

@@ -1,8 +1,7 @@
 import { translate, type Locale } from "@/lib/catalog";
-import { ImageFrame } from "@/components/ui/ImageFrame";
+import { StockPhoto } from "@/components/ui/StockPhoto";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
-import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { TrustRow } from "./TrustRow";
 import styles from "./Hero.module.css";
 
@@ -10,37 +9,36 @@ interface HeroProps {
   locale: Locale;
 }
 
-// DESIGN_SYSTEM.md §9 "The landing hero" — two columns at md+, Arabic-
-// first (text at inline-start, media at inline-end); one column below md,
-// text first. The media may bleed to the inline-end viewport edge — this
-// section renders outside any Container so the media column's outer edge
-// is the viewport edge, while the text column's own padding keeps it
-// visually aligned with the site's standard container. Text never
-// crosses into the media: no scrim, no overlay, no "safe" opacity.
-// Headline is 4xl weight 700, two lines, the second line in solid accent
-// — never a gradient (§9 "The selective-colour headline"). Order inside
-// the text column: eyebrow, headline, standfirst, the two actions, the
-// trust row.
+// Billboard with the headline on the photograph (Al Borg banner
+// treatment). Type sits on a primary-strong wash from inline-start so
+// white copy meets AA; the wash is a colour mix of existing tokens, not
+// a twelfth colour. Stock photography is judgment-only.
 export function Hero({ locale }: HeroProps) {
   return (
-    <section className={styles.hero}>
-      <div className={styles.text}>
-        <p className={styles.eyebrow}>{translate(locale, "hero.eyebrow")}</p>
-        <h1 className={styles.headline}>
-          <span className={styles.headlineLine}>{translate(locale, "hero.headlineLine1")}</span>
-          <span className={styles.headlineAccentLine}>{translate(locale, "hero.headlineLine2")}</span>
-        </h1>
-        <p className={styles.standfirst}>{translate(locale, "hero.standfirst")}</p>
-        <div className={styles.actionsRow}>
-          <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" />
-          <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappFilled" />
+    <section className={styles.hero} id="home">
+      <div className={styles.stage}>
+        <div className={styles.photo}>
+          <StockPhoto slot="hero" alt={translate(locale, "hero.photoAlt")} />
         </div>
-        <TrustRow locale={locale} />
+        <div className={styles.scrim} aria-hidden="true" />
+        <div className={styles.copy}>
+          <p className={styles.eyebrow}>{translate(locale, "hero.eyebrow")}</p>
+          <h1 className={styles.headline}>
+            <span className={styles.headlineLine}>{translate(locale, "hero.headlineLine1")}</span>
+            <span className={styles.headlineAccentLine}>{translate(locale, "hero.headlineLine2")}</span>
+          </h1>
+          <p className={styles.standfirst}>{translate(locale, "hero.standfirst")}</p>
+          <div className={styles.actionsRow}>
+            <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" />
+            <span className={styles.heroWhatsapp}>
+              <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappOutlined" />
+            </span>
+          </div>
+        </div>
+        <p className={styles.stockNote}>{translate(locale, "hero.stockNote")}</p>
       </div>
-      <div className={styles.media}>
-        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography">
-          <ImageFrame ratio="4:3" label={translate(locale, "hero.imageFrameLabel")} />
-        </ApprovalGate>
+      <div className={styles.trust}>
+        <TrustRow locale={locale} tone="onPrimary" />
       </div>
     </section>
   );

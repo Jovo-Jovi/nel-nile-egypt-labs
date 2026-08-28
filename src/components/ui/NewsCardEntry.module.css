@@ -10,9 +10,10 @@
   flex-shrink: 0;
   inline-size: 64px;
   block-size: 64px;
+  overflow: hidden;
   border-radius: var(--nel-radius-sm);
   background-color: var(--nel-color-background);
-  color: var(--nel-color-muted);
+  color: var(--nel-color-primary);
 }
 
 .body {

@@ -1,0 +1,17 @@
+Preview-only stock photographs for layout judgment.
+
+These files are Unsplash License stills (https://unsplash.com/license), not
+Nile Egypt Labs photography, not Al Borg or NRL assets, and not a
+substitute for client-supplied images. They must not ship as production
+content. No patient-identifiable medical record is depicted as a result.
+
+hero.jpg is an owner-attached preview still (layout judgment only), not
+Unsplash and not a production NEL photograph.
+
+  lab-clean.jpg     photo-1582719471384-894fbb16e074
+  microscope.jpg    photo-1532187863486-abf9dbad1b69
+  samples.jpg       photo-1579154204601-01588f351e67
+  clinic.jpg        photo-1516549655169-df83a0774514
+  stethoscope.jpg   photo-1576091160399-112ba8d25d1d
+  care.jpg          photo-1576091160550-2173dba999ef
+  family.jpg        photo-1511895426328-dc8714191300

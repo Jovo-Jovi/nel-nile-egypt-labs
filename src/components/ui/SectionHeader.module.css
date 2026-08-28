@@ -13,3 +13,7 @@
   line-height: var(--nel-line-height-heading);
   margin-block: 0;
 }
+
+.header[data-tone="onPrimary"] .title {
+  color: var(--nel-color-surface);
+}
