@@ -25,13 +25,17 @@
   }
 }
 
+.wellGate {
+  max-inline-size: 1360px;
+  margin-inline: auto;
+  --nel-gate-radius: var(--nel-preview-well);
+}
+
 .well {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   min-block-size: min(88vh, 48rem);
-  max-inline-size: 1360px;
-  margin-inline: auto;
   border-radius: var(--nel-preview-well);
   box-shadow: var(--nel-elevation-2-shadow);
   background-color: var(--nel-color-primary-strong);
@@ -43,11 +47,10 @@
   inset: 0;
 }
 
-.photo img {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-  object-position: 62% center;
+.photo {
+  /* Luminance cap the veil was certified against. The labelled frame is
+     `background` and sits under this filter, so it is darker than the
+     white-pixel cap. */
   filter: brightness(0.58);
 }
 
@@ -349,10 +352,11 @@
   border-end-start-radius: calc(var(--nel-preview-well) * 1.1);
 }
 
-.offerPhoto img {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
+.pendingCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  padding-block-end: var(--nel-space-24);
 }
 
 .offerPhoto::after {
@@ -398,18 +402,11 @@
 }
 
 .storyMain {
+  position: relative;
   overflow: hidden;
   border-radius: var(--nel-preview-well);
   aspect-ratio: 4 / 3;
   box-shadow: var(--nel-elevation-2-shadow);
-}
-
-.storyMain img,
-.storyFloat img,
-.storyFloatAlt img {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
 }
 
 .storyFloat,
@@ -557,6 +554,7 @@
 }
 
 .map {
+  position: relative;
   overflow: hidden;
   border-radius: var(--nel-preview-well);
   border-width: 1px;
@@ -640,15 +638,10 @@
 }
 
 .featurePhoto {
+  position: relative;
   overflow: hidden;
   border-radius: var(--nel-preview-well);
   aspect-ratio: 16 / 9;
-}
-
-.featurePhoto img {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
 }
 
 .feature h3 {
@@ -750,11 +743,6 @@
   box-shadow: var(--nel-elevation-2-shadow);
 }
 
-.filmPoster img {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-}
 
 .playMark {
   position: absolute;
@@ -882,15 +870,26 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .photo img {
-    filter: brightness(0.58);
+  .skip {
+    transition: none;
   }
 
-  .skip,
-  .reasons li,
-  .cards li,
-  .indexStack li,
-  .offerPhoto,
+  .reasons li {
+    transition: none;
+  }
+
+  .cards li {
+    transition: none;
+  }
+
+  .indexStack li {
+    transition: none;
+  }
+
+  .offerPhoto {
+    transition: none;
+  }
+
   .filmPoster {
     transition: none;
   }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { translate, type Locale } from "@/lib/catalog";
+import { MarkSlot } from "@/components/ui/MarkSlot";
 import styles from "./LoadingScreen.module.css";
 
 interface LoadingScreenProps {
@@ -22,12 +23,9 @@ export function LoadingScreen({ locale }: LoadingScreenProps) {
 
   return (
     <div className={styles.screen} role="status" aria-live="polite">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/mark/nel-mark.png"
-        alt={translate(locale, "load.label")}
-        className={styles.logo}
-      />
+      <div className={styles.logo}>
+        <MarkSlot blockSize={96} fallbackLabel={translate(locale, "load.label")} />
+      </div>
     </div>
   );
 }

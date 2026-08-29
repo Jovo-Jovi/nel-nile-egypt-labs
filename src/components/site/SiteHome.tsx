@@ -1,7 +1,9 @@
 import { translate, type Locale } from "@/lib/catalog";
 import type { CatalogKey } from "@/lib/catalog";
 import { Isolate } from "@/components/ui/Isolate";
-import { StockPhoto, type StockSlot } from "@/components/ui/StockPhoto";
+import { ImageFrame } from "@/components/ui/ImageFrame";
+import { ApprovalGate } from "@/components/ui/ApprovalGate";
+import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import { GreaterCairoMap } from "@/components/ui/GreaterCairoMap";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
@@ -19,39 +21,55 @@ const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }
   { id: "maadi", x: 56, y: 74, key: "locations.map.district.maadi" },
 ];
 
-const DEPARTMENTS: { key: CatalogKey; slot: StockSlot; index: string }[] = [
-  { key: "departments.immunology", slot: "microscope", index: "01" },
-  { key: "departments.chemistry", slot: "samples", index: "02" },
-  { key: "departments.haematology", slot: "labClean", index: "03" },
-  { key: "departments.molecularBiology", slot: "clinic", index: "04" },
+const DEPARTMENTS: { key: CatalogKey; index: string }[] = [
+  { key: "departments.immunology", index: "01" },
+  { key: "departments.chemistry", index: "02" },
+  { key: "departments.haematology", index: "03" },
+  { key: "departments.molecularBiology", index: "04" },
 ];
 
+const VIDEO_ENTRIES = [
+  { duration: "video.entry1.duration", title: "video.entry1.title" },
+  { duration: "video.entry2.duration", title: "video.entry2.title" },
+  { duration: "video.entry3.duration", title: "video.entry3.title" },
+] as const;
+
 export function SiteHome({ locale }: SiteHomeProps) {
+  const photographyLabel = translate(locale, "hero.imageFrameLabel");
+  const posterLabel = translate(locale, "video.posterLabel");
+
   return (
     <div className={styles.page}>
       <section className={styles.hero} id="home">
-        <div className={styles.well}>
-          <div className={styles.photo}>
-            <StockPhoto slot="hero" alt={translate(locale, "hero.photoAlt")} />
-          </div>
-          <div className={styles.veil} aria-hidden="true" />
-          <div className={styles.copy}>
-            <p className={styles.eyebrow}>{translate(locale, "hero.eyebrow")}</p>
-            <h1 className={styles.headline}>
-              <span className={styles.headlineLead}>{translate(locale, "hero.headlineLine1")}</span>
-              <span className={styles.headlineFollow}>{translate(locale, "hero.headlineLine2")}</span>
-            </h1>
-            <p className={styles.standfirst}>{translate(locale, "hero.standfirst")}</p>
-            <div className={styles.actions}>
-              <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" pill />
-              <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappFilled" pill />
+        <ApprovalGate
+          locale={locale}
+          state="pending"
+          pendingLabelKey="approval.pending.photography"
+          className={styles.wellGate}
+        >
+          <div className={styles.well}>
+            <div className={styles.photo}>
+              <ImageFrame label={photographyLabel} showLabel={false} />
             </div>
+            <div className={styles.veil} aria-hidden="true" />
+            <div className={styles.copy}>
+              <p className={styles.eyebrow}>{translate(locale, "hero.eyebrow")}</p>
+              <h1 className={styles.headline}>
+                <span className={styles.headlineLead}>{translate(locale, "hero.headlineLine1")}</span>
+                <span className={styles.headlineFollow}>{translate(locale, "hero.headlineLine2")}</span>
+              </h1>
+              <p className={styles.standfirst}>{translate(locale, "hero.standfirst")}</p>
+              <div className={styles.actions}>
+                <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" pill />
+                <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappFilled" pill />
+              </div>
+            </div>
+            <a className={styles.skip} href="#departments">
+              <ScrollDownIcon size={22} />
+              <span className={styles.srOnly}>{translate(locale, "departments.heading")}</span>
+            </a>
           </div>
-          <a className={styles.skip} href="#departments">
-            <ScrollDownIcon size={22} />
-            <span className={styles.srOnly}>{translate(locale, "departments.heading")}</span>
-          </a>
-        </div>
+        </ApprovalGate>
       </section>
 
       <section className={styles.offer} id="departments">
@@ -67,7 +85,9 @@ export function SiteHome({ locale }: SiteHomeProps) {
                 {translate(locale, tile.key)}
               </p>
               <div className={styles.offerPhoto}>
-                <StockPhoto slot={tile.slot} alt={translate(locale, "stock.alt.equipment")} />
+                <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
+                  <ImageFrame label={photographyLabel} />
+                </ApprovalGate>
               </div>
             </li>
           ))}
@@ -88,13 +108,19 @@ export function SiteHome({ locale }: SiteHomeProps) {
         </div>
         <div className={styles.storyMedia}>
           <div className={styles.storyMain}>
-            <StockPhoto slot="family" alt={translate(locale, "stock.alt.about")} />
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
+              <ImageFrame label={photographyLabel} />
+            </ApprovalGate>
           </div>
           <div className={styles.storyFloat}>
-            <StockPhoto slot="microscope" alt={translate(locale, "stock.alt.equipment")} />
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
+              <ImageFrame label={photographyLabel} />
+            </ApprovalGate>
           </div>
           <div className={styles.storyFloatAlt}>
-            <StockPhoto slot="care" alt={translate(locale, "stock.alt.about")} />
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
+              <ImageFrame label={photographyLabel} />
+            </ApprovalGate>
           </div>
         </div>
       </section>
@@ -154,17 +180,19 @@ export function SiteHome({ locale }: SiteHomeProps) {
           <p className={styles.prose}>{translate(locale, "branches.standfirst")}</p>
         </div>
         <div className={styles.map}>
-          <GreaterCairoMap
-            ariaLabel={translate(locale, "locations.map.ariaLabel")}
-            pinLabel={translate(locale, "locations.map.pinLabel")}
-            headOfficePinLabel={translate(locale, "locations.map.headOfficePinLabel")}
-            districtLabels={DISTRICT_LABEL_KEYS.map(({ id, x, y, key }) => ({
-              id,
-              x,
-              y,
-              label: translate(locale, key),
-            }))}
-          />
+          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData" fill>
+            <GreaterCairoMap
+              ariaLabel={translate(locale, "locations.map.ariaLabel")}
+              pinLabel={translate(locale, "locations.map.pinLabel")}
+              headOfficePinLabel={translate(locale, "locations.map.headOfficePinLabel")}
+              districtLabels={DISTRICT_LABEL_KEYS.map(({ id, x, y, key }) => ({
+                id,
+                x,
+                y,
+                label: translate(locale, key),
+              }))}
+            />
+          </ApprovalGate>
         </div>
       </section>
 
@@ -202,31 +230,51 @@ export function SiteHome({ locale }: SiteHomeProps) {
         <div className={styles.magazine}>
           <article className={styles.feature}>
             <div className={styles.featurePhoto}>
-              <StockPhoto slot="labClean" alt={translate(locale, "stock.alt.news")} />
+              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
+                <ImageFrame label={photographyLabel} />
+              </ApprovalGate>
             </div>
-            <div>
-              <p className={styles.kicker}>{translate(locale, "newsShowcase.item1.kicker")}</p>
-              <h3>{translate(locale, "newsShowcase.item1.title")}</h3>
-              <p className={styles.prose}>{translate(locale, "newsShowcase.item1.excerpt")}</p>
-            </div>
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
+              <div className={styles.pendingCopy}>
+                <SkeletonBar size="xs" widthPercent={28} />
+                <SkeletonBar size="xl" widthPercent={82} />
+                <SkeletonBar size="base" widthPercent={100} />
+                <SkeletonBar size="base" widthPercent={68} />
+              </div>
+            </ApprovalGate>
           </article>
           <ol className={styles.indexStack}>
             <li>
-              <p className={styles.kicker}>{translate(locale, "newsShowcase.item2.kicker")}</p>
-              <h3>{translate(locale, "newsShowcase.item2.title")}</h3>
-              <p>{translate(locale, "newsShowcase.item2.excerpt")}</p>
+              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
+                <div className={styles.pendingCopy}>
+                  <SkeletonBar size="xs" widthPercent={24} />
+                  <SkeletonBar size="lg" widthPercent={78} />
+                  <SkeletonBar size="sm" widthPercent={92} />
+                  <SkeletonBar size="sm" widthPercent={58} />
+                </div>
+              </ApprovalGate>
             </li>
             <li>
-              <p className={styles.kicker}>{translate(locale, "newsShowcase.item3.kicker")}</p>
-              <h3>{translate(locale, "newsShowcase.item3.title")}</h3>
-              <p>{translate(locale, "newsShowcase.item3.excerpt")}</p>
+              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
+                <div className={styles.pendingCopy}>
+                  <SkeletonBar size="xs" widthPercent={24} />
+                  <SkeletonBar size="lg" widthPercent={74} />
+                  <SkeletonBar size="sm" widthPercent={88} />
+                  <SkeletonBar size="sm" widthPercent={54} />
+                </div>
+              </ApprovalGate>
             </li>
           </ol>
         </div>
         <aside className={styles.caution}>
-          <p className={styles.kicker}>{translate(locale, "newsShowcase.caution.kicker")}</p>
-          <p>{translate(locale, "newsShowcase.caution.title")}</p>
-          <p className={styles.prose}>{translate(locale, "newsShowcase.caution.body")}</p>
+          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.clinical">
+            <div className={styles.pendingCopy}>
+              <SkeletonBar size="xs" widthPercent={20} />
+              <SkeletonBar size="base" widthPercent={72} />
+              <SkeletonBar size="base" widthPercent={100} />
+              <SkeletonBar size="base" widthPercent={48} />
+            </div>
+          </ApprovalGate>
         </aside>
       </section>
 
@@ -234,25 +282,28 @@ export function SiteHome({ locale }: SiteHomeProps) {
         <p className={styles.kicker}>{translate(locale, "video.heading")}</p>
         <h2 className={styles.sectionTitle}>{translate(locale, "video.standfirst")}</h2>
         <div className={styles.film}>
-          {(
-            [
-              ["clinic", "video.entry1.duration", "video.entry1.title"],
-              ["care", "video.entry2.duration", "video.entry2.title"],
-              ["family", "video.entry3.duration", "video.entry3.title"],
-            ] as const
-          ).map(([slot, duration, title]) => (
-            <article key={slot} className={styles.filmTile}>
-              <div className={styles.filmPoster}>
-                <StockPhoto slot={slot} alt={translate(locale, "stock.alt.video")} />
-                <span className={styles.playMark} aria-hidden="true">
-                  <PlayIcon size={20} />
-                </span>
-                <span className={styles.duration}>
-                  <Isolate>{translate(locale, duration)}</Isolate>
-                </span>
-              </div>
-              <h3>{translate(locale, title)}</h3>
-            </article>
+          {VIDEO_ENTRIES.map((entry) => (
+            <ApprovalGate
+              key={entry.title}
+              locale={locale}
+              state="pending"
+              pendingLabelKey="approval.pending.videoAsset"
+            >
+              <article className={styles.filmTile}>
+                <div className={styles.filmPoster}>
+                  <ImageFrame label={posterLabel} />
+                  <span className={styles.playMark} aria-hidden="true">
+                    <PlayIcon size={20} />
+                  </span>
+                  <span className={styles.duration}>
+                    <Isolate>{translate(locale, entry.duration)}</Isolate>
+                  </span>
+                </div>
+                <div className={styles.pendingCopy}>
+                  <SkeletonBar size="base" widthPercent={70} />
+                </div>
+              </article>
+            </ApprovalGate>
           ))}
         </div>
       </section>

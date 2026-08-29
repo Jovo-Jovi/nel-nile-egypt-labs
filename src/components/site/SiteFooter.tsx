@@ -5,26 +5,15 @@ import {
   buildWhatsAppPlaceholderUrl,
 } from "@/lib/placeholders";
 import { MarkSlot } from "@/components/ui/MarkSlot";
+import { ApprovalGate } from "@/components/ui/ApprovalGate";
+import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
-import {
-  FacebookMarkIcon,
-  InstagramMarkIcon,
-  XMarkIcon,
-  YoutubeMarkIcon,
-} from "@/components/ui/icons";
 import styles from "./SiteFooter.module.css";
 
 interface SiteFooterProps {
   locale: Locale;
 }
-
-const SOCIAL = [
-  { key: "footer.social.facebook" as const, Icon: FacebookMarkIcon },
-  { key: "footer.social.instagram" as const, Icon: InstagramMarkIcon },
-  { key: "footer.social.x" as const, Icon: XMarkIcon },
-  { key: "footer.social.youtube" as const, Icon: YoutubeMarkIcon },
-];
 
 export function SiteFooter({ locale }: SiteFooterProps) {
   return (
@@ -34,7 +23,9 @@ export function SiteFooter({ locale }: SiteFooterProps) {
           <div className={styles.brand}>
             <a href="#home" className={styles.lockup}>
               <span className={styles.mark}>
-                <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
+                <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.mark" dense>
+                  <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
+                </ApprovalGate>
               </span>
               <span className={styles.brandText}>
                 <span className={styles.brandName}>{translate(locale, "header.markFallback")}</span>
@@ -42,15 +33,6 @@ export function SiteFooter({ locale }: SiteFooterProps) {
               </span>
             </a>
             <p className={styles.blurb}>{translate(locale, "about.body")}</p>
-            <ul className={styles.social}>
-              {SOCIAL.map(({ key, Icon }) => (
-                <li key={key}>
-                  <span className={styles.socialBtn} aria-label={translate(locale, key)}>
-                    <Icon size={18} />
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
           <nav className={styles.column} aria-label={translate(locale, "footer.sitemap")}>
             <h2 className={styles.heading}>{translate(locale, "footer.sitemap")}</h2>
@@ -76,14 +58,16 @@ export function SiteFooter({ locale }: SiteFooterProps) {
             <a href="#lab-to-lab" className={styles.link}>
               {translate(locale, "footer.labToLab")}
             </a>
-            <span className={styles.meta}>
-              <span>{translate(locale, "footer.hotlineLabel")}</span>
-              <span>{translate(locale, "footer.awaitingValue")}</span>
-            </span>
-            <span className={styles.meta}>
-              <span>{translate(locale, "footer.addressLabel")}</span>
-              <span>{translate(locale, "footer.awaitingValue")}</span>
-            </span>
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+              <span className={styles.meta}>
+                <span>{translate(locale, "footer.hotlineLabel")}</span>
+                <SkeletonBar size="sm" widthPercent={56} />
+              </span>
+              <span className={styles.meta}>
+                <span>{translate(locale, "footer.addressLabel")}</span>
+                <SkeletonBar size="sm" widthPercent={78} />
+              </span>
+            </ApprovalGate>
           </nav>
           <nav className={styles.column} aria-label={translate(locale, "footer.media")}>
             <h2 className={styles.heading}>{translate(locale, "footer.media")}</h2>
