@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Thirty-four decisions. Seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07). A decision is in force when it appears here. Conversation does not amend this file.
+Thirty-six decisions. Eight of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -187,6 +187,21 @@ brand guidelines · naming or positioning · any full rebrand.
 **Does not decide:** the number of chromatic families, or whether the refined mark
 needs the lab's written approval before launch. Both are carried forward.
 
+### OD-08 — The composition is promoted, not replaced
+
+**Status:** SIGNED
+**Signed:** 29 August 2026
+**Amends:** OD-05 bound 4, which read that the landing-page mock "is not a P03 deliverable, does not satisfy any part of G3, and is replaced wholesale at P03." That bound is superseded.
+**Decides:** the composition approved by the client on 29 August 2026 and recorded in `docs/PAGE_REPORT.md` becomes the **production baseline for the public site**. It is carried forward into P03 and refined in place rather than discarded. `DESIGN_SYSTEM.md` v5 is its specification; where the two disagree, v5 wins and `PAGE_REPORT.md` is amended, never the reverse.
+**What promotion changes:**
+1. G3 applies to this surface. It is no longer exempt.
+2. `DESIGN_SYSTEM.md` §12 approval gates are restored before any `Visitor` can reach it. An ungated composition was correct for a review session and is not correct for a served page.
+3. No stock photography ships. `public/preview-stock/` is removed at the production pass; every image slot returns to a §9 labelled frame until client photography lands.
+4. The mark ships as vector. The 83×100 raster is a review placeholder and does not satisfy §7, which requires 16px favicon and 180px app icon.
+5. Copy moves from the compiled catalogue to the data layer at the wiring phase for every field an `Operator` may edit. Chrome strings stay in the catalogue (`I18N_MODEL.md` §8).
+**What promotion does not change:** the boundary gate and the clinical gate, both non-waivable. No route beyond the existing placeholder until P03 opens routing. No `LabTest` or `Programme` name, no medical instruction, no certification claim without a verified source. OD-03's freeze and its 15 September 2026 lapse are untouched.
+**Does not decide:** the ninth dashboard module the client has requested for news, posts and cautions. That remains forbidden by D-15 and D-16 and requires its own OD and its own price.
+
 ---
 
 ## Decision log
@@ -326,3 +341,11 @@ IBM Plex Sans Arabic, SIL OFL 1.1, self-hosted, one family for both locales. Sel
 ### D-34 — Atmosphere, motion, map and the brand-mark exception
 
 `DESIGN_SYSTEM.md` v4, authored at P02-T12. Corrects two rules that were written too broadly. §2 principle 3 read "never translucency" and now reads "never translucency on a surface that carries text": a decorative layer nothing is read off has no ratio to certify, which permits the single page-level wash §9 now specifies — `background` easing to `surface` with a `primary` tint at no more than 6%, fixed to the viewport, the site's entire atmosphere budget. §12 read that a `pending` region is "never styled to look finished", which forbade the right answer; it now requires a `pending` region to be built to the same standard as an approved one while remaining unmistakably not real — real geometry and icon, a 2000ms neutral shimmer, content as bars at true type sizes, the marker retained. Removing the marker or writing realistic fake copy stays forbidden. Adds card hover at elevation 1 → 2 and hover-reveal via `grid-template-rows`; **refuses flip cards**, because content on a reverse face is unreachable by keyboard and invisible to assistive technology, and this is a laboratory. Replaces the Location card's static map image with a drawn SVG of Greater Cairo in project tokens — no embed, no tile request, no API key, no third-party disclosure — rendering `pending` until `Branch` records carry addresses. Adds a named exception to D-29: a third-party brand mark renders in its own brand colour and is not a design token. The WhatsApp mark is the only such exception; white text on `#25D366` measures 1.98 and is forbidden, so the filled treatment pairs it with `text` `#1D1D35` at 8.28. D-29's one-family rule is otherwise unaffected.
+
+### D-35 — Composition ratified
+
+`DESIGN_SYSTEM.md` v5, authored at P02-T14, absorbs the owner-approved composition of 29 August 2026 so that `PAGE_REPORT.md` describes an implementation rather than acting as a second authority. Ratified: the certified hero veil, a fifth radius value at `32px` for wells, the loading screen, the floating header pill, inset wells, the full-bleed band with its actions on a `surface` plate, the footer island and its full anatomy, numbered stills running in reading order, the decorative lattice, and the magazine and tabbed blocks. Tab state is not a route. §12 now states when approval gates may be omitted — a design-decision mock reviewed and discarded — and when they may not, which is anything a `Visitor` can reach. Social marks render monochrome in `surface` rather than in brand colour, which resolves CF-70 and keeps §3's third-party exception at exactly one, the WhatsApp mark; a mark with no destination does not render.
+
+### D-36 — Text over media
+
+`DESIGN_SYSTEM.md` §9 previously banned text over media outright. The ban existed to protect the §8 contrast floor and forbade cases that satisfy it. Replaced with the certification condition: the veil is flat rather than a gradient, the image carries a luminance cap, the worst-case composite is computed and recorded, and no type enters a fade zone. Ratified against the approved hero — `primary-strong` at 74% over `brightness(0.58)`, worst-case composite `#383B8E`, `surface` text at 9.52:1, which is AAA and holds for any photograph substituted. Text still never sits on an unveiled photograph.
