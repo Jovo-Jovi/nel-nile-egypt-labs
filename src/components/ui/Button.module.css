@@ -23,6 +23,10 @@
   transition: background-color 150ms, color 150ms, border-color 150ms;
 }
 
+.button[data-pill="true"] {
+  border-radius: var(--nel-radius-full);
+}
+
 .label {
   line-height: 1;
 }

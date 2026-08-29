@@ -14,15 +14,23 @@
 .intro {
   display: flex;
   flex-direction: column;
-  gap: var(--nel-space-8);
+  gap: var(--nel-space-12);
+  padding-block-end: var(--nel-space-24);
+  border-block-end-width: 1px;
+  border-block-end-style: solid;
+  border-block-end-color: var(--nel-color-border);
 }
 
 .heading {
   font-size: var(--nel-size-3xl);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--nel-color-primary-strong);
   line-height: var(--nel-line-height-heading);
   margin-block: 0;
+  padding-inline-start: var(--nel-space-12);
+  border-inline-start-width: 3px;
+  border-inline-start-style: solid;
+  border-inline-start-color: var(--nel-color-accent);
 }
 
 .standfirst {

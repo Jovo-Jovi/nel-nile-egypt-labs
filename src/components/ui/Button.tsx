@@ -33,6 +33,7 @@ interface ButtonProps {
   // (currently only the WhatsApp mark), never a chevron, so it never
   // mirrors.
   icon?: ReactNode;
+  pill?: boolean;
 }
 
 export function Button({
@@ -46,6 +47,7 @@ export function Button({
   forceState,
   disabled,
   icon,
+  pill,
 }: ButtonProps) {
   const isLoading = forceState === "loading";
   const isDisabled = Boolean(disabled) || forceState === "disabled";
@@ -68,6 +70,7 @@ export function Button({
         aria-label={ariaLabel}
         aria-disabled={isDisabled || isLoading || undefined}
         data-force-state={forceState}
+        data-pill={pill || undefined}
         onClick={isDisabled || isLoading ? (event) => event.preventDefault() : onClick}
       >
         {inner}
@@ -83,6 +86,7 @@ export function Button({
       aria-label={ariaLabel}
       aria-busy={isLoading || undefined}
       data-force-state={forceState}
+      data-pill={pill || undefined}
       onClick={onClick}
     >
       {inner}

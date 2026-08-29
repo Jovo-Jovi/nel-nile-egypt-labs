@@ -1,4 +1,16 @@
-.headerFrame,
+.headerFrame {
+  inline-size: 100%;
+  min-inline-size: 320px;
+  max-inline-size: 480px;
+  padding: var(--nel-space-12);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  border-radius: var(--nel-radius-md);
+  overflow: visible;
+  background-color: var(--nel-color-primary-strong);
+}
+
 .footerFrame {
   inline-size: 100%;
   min-inline-size: 320px;

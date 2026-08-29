@@ -2,7 +2,7 @@
 // encode meaning do not. Every icon below except ChevronIcon encodes
 // meaning (a place, a list, a flask, a caution, a play control) and never
 // mirrors between locales. ChevronIcon encodes direction and does mirror
-// — see ProgrammeRow.module.css.
+// — see ProgrammeRow when that primitive is present.
 //
 // All icons are decorative, aria-hidden, and always paired with a visible
 // text label alongside them (DESIGN_SYSTEM.md §3 — colour is never the
@@ -140,6 +140,22 @@ export function ChevronIcon({ size = 16 }: IconProps) {
   return (
     <svg viewBox="0 0 16 16" width={size} height={size} aria-hidden="true" focusable="false">
       <path d="M6 3 11 8 6 13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// Meaning-encoding — scroll toward block-end. Does not mirror.
+export function ScrollDownIcon({ size = 20 }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
+      <path
+        d="M6 10 12 16 18 10"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

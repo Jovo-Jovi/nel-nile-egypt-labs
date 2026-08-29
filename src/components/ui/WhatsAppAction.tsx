@@ -12,9 +12,10 @@ interface WhatsAppActionProps {
   label: string;
   variant: ButtonVariant;
   forceState?: ButtonForcedState;
+  pill?: boolean;
 }
 
-export function WhatsAppAction({ label, variant, forceState }: WhatsAppActionProps) {
+export function WhatsAppAction({ label, variant, forceState, pill }: WhatsAppActionProps) {
   return (
     <Button
       variant={variant}
@@ -22,6 +23,7 @@ export function WhatsAppAction({ label, variant, forceState }: WhatsAppActionPro
       target="_blank"
       rel="noopener noreferrer"
       forceState={forceState}
+      pill={pill}
       icon={<WhatsAppMarkIcon size={20} />}
     >
       {label}
