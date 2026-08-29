@@ -1,0 +1,38 @@
+.root {
+  isolation: isolate;
+  position: relative;
+  min-block-size: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--nel-color-background);
+  color: var(--nel-color-text);
+  line-height: var(--nel-line-height-body);
+  --nel-header-stack: calc(var(--nel-space-12) + 56px);
+  --nel-preview-well: 2rem;
+}
+
+@media (min-width: 768px) {
+  .root {
+    --nel-header-stack: calc(var(--nel-space-12) + 72px);
+  }
+}
+
+.hex {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  color: var(--nel-color-primary);
+  opacity: 0.12;
+}
+
+.hex svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}

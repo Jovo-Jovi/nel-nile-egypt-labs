@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SkeletonBar } from "./SkeletonBar";
 import styles from "./MarkSlot.module.css";
 
 interface MarkSlotProps {
@@ -8,19 +9,21 @@ interface MarkSlotProps {
   fallbackLabel: string;
 }
 
-// The human supplies public/mark/nel-mark.svg (OD-07). No mark is drawn,
-// traced or generated here. Until the file lands, onError swaps in a
-// plain text fallback; the caller wraps this component in an
-// ApprovalGate (§12 — "the mark" is one of the seven pending classes),
-// which supplies the dashed-border marker. This component no longer
-// carries its own placeholder styling, per this task's STEP 1.
+// Owner-supplied lockup at public/mark/nel-mark.png. Callers may override
+// size via `--nel-mark-size` on a parent. Until the file loads, onError
+// swaps in a crafted placeholder (DESIGN_SYSTEM.md v4 §12).
 export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
   const [broken, setBroken] = useState(false);
 
   if (broken) {
     return (
-      <span className={styles.fallback} style={{ blockSize }}>
-        {fallbackLabel}
+      <span
+        className={styles.fallback}
+        style={{ blockSize, inlineSize: Math.round(blockSize * 0.83) }}
+        role="img"
+        aria-label={fallbackLabel}
+      >
+        <SkeletonBar size="lg" widthPercent={100} />
       </span>
     );
   }
@@ -31,10 +34,9 @@ export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
     // failed request", so a plain <img> is used here.
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/mark/nel-mark.svg"
+      src="/mark/nel-mark.png"
       alt={fallbackLabel}
       className={styles.mark}
-      style={{ blockSize }}
       onError={() => setBroken(true)}
     />
   );

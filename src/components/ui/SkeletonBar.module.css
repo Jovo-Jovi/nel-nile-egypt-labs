@@ -1,0 +1,28 @@
+/* DESIGN_SYSTEM.md v4 §12 — the shimmer is a slow temporal sweep across
+   the neutral ramp, background to surface and back, 2000ms, ease-in-out,
+   infinite. Neutral only — never primary, never accent. Resolves to a
+   static background fill under prefers-reduced-motion. */
+
+.bar {
+  display: block;
+  border-radius: var(--nel-radius-sm);
+  background-color: var(--nel-color-background);
+  animation: nel-pending-shimmer 2000ms ease-in-out infinite;
+}
+
+@keyframes nel-pending-shimmer {
+  0%,
+  100% {
+    background-color: var(--nel-color-background);
+  }
+  50% {
+    background-color: var(--nel-color-surface);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    animation: none;
+    background-color: var(--nel-color-background);
+  }
+}

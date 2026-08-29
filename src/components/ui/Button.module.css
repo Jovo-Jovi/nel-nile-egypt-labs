@@ -23,6 +23,10 @@
   transition: background-color 150ms, color 150ms, border-color 150ms;
 }
 
+.button[data-pill="true"] {
+  border-radius: var(--nel-radius-full);
+}
+
 .label {
   line-height: 1;
 }
@@ -70,6 +74,41 @@
 }
 .text:active,
 .text[data-force-state="active"] {
+  background-color: var(--nel-color-background);
+}
+
+/* DESIGN_SYSTEM.md v4 §10 "WhatsApp action" — the third-party brand-mark
+   exception (§3). #25D366 is not a token: it never enters this file as
+   a border, text or surface colour, only as this one literal fill.
+   White-on-#25D366 measures 1.98 and fails AA outright, so the label is
+   the `text` token (#1D1D35) at 8.28, never white. */
+.whatsappFilled {
+  background-color: #25d366;
+  color: var(--nel-color-text);
+}
+.whatsappFilled:hover,
+.whatsappFilled[data-force-state="hover"] {
+  filter: brightness(0.94);
+}
+.whatsappFilled:active,
+.whatsappFilled[data-force-state="active"] {
+  filter: brightness(0.88);
+}
+
+/* Outlined — inherits the secondary variant's fill and border exactly
+   (surface fill, 1px primary border); only the label swaps from
+   primary to text, per the measured ratio table (§10). */
+.whatsappOutlined {
+  background-color: var(--nel-color-surface);
+  border-color: var(--nel-color-primary);
+  color: var(--nel-color-text);
+}
+.whatsappOutlined:hover,
+.whatsappOutlined[data-force-state="hover"] {
+  background-color: var(--nel-color-background);
+}
+.whatsappOutlined:active,
+.whatsappOutlined[data-force-state="active"] {
   background-color: var(--nel-color-background);
 }
 

@@ -4,7 +4,7 @@ import "@/styles/tokens.css";
 import "@/styles/globals.css";
 
 // P03 replaces this — CONTENT_MODEL §3c. No locale segment exists yet, so
-// lang/dir are not set here — see the page-root wrapper in PreviewRoot.tsx.
+// lang/dir are not set here — see the page-root wrapper in SiteRoot.tsx.
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html>

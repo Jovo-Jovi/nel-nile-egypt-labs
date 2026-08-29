@@ -10,9 +10,10 @@ interface ResultsPortalLinkActionProps {
   label: string;
   variant: ButtonVariant;
   forceState?: ButtonForcedState;
+  pill?: boolean;
 }
 
-export function ResultsPortalLinkAction({ label, variant, forceState }: ResultsPortalLinkActionProps) {
+export function ResultsPortalLinkAction({ label, variant, forceState, pill }: ResultsPortalLinkActionProps) {
   return (
     <Button
       variant={variant}
@@ -20,6 +21,7 @@ export function ResultsPortalLinkAction({ label, variant, forceState }: ResultsP
       target="_blank"
       rel="noopener noreferrer"
       forceState={forceState}
+      pill={pill}
     >
       {label}
     </Button>

@@ -1,0 +1,21 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--nel-color-surface);
+}
+
+.logo {
+  display: block;
+  block-size: 96px;
+  inline-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo {
+    animation: none;
+  }
+}

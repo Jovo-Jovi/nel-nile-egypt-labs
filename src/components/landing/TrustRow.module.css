@@ -1,6 +1,0 @@
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--nel-space-24);
-  padding-block-start: var(--nel-space-16);
-}
