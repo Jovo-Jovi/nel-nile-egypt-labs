@@ -7,7 +7,14 @@ verified against the font binaries. §5 elevation values ratified at the P02-T07
 §9, §10 and §11 authored at that verdict, after a mock built strictly from §3–§6 rendered
 correctly and looked like nothing — tokens do not compose a page.
 
-v4 adds the page wash, the decorative-layer rule that makes it legal, a crafted
+v5 absorbs the owner-approved composition of 29 August 2026: the certified hero veil, the
+well radius, the loading screen, the floating header pill, inset wells, the full-bleed
+band, the footer island and its full anatomy, numbered stills, the decorative lattice, the
+magazine and tabbed blocks, and a ruling on social marks. It replaces §9's blanket ban on
+text over media with the certification condition that ban was reaching for, and states in
+§12 when approval gates may be omitted and when they may not.
+
+v4 added the page wash, the decorative-layer rule that makes it legal, a crafted
 `pending` treatment, card hover and hover-reveal with flip refused on accessibility
 grounds, the drawn-SVG map, and the third-party brand-mark exception with the WhatsApp
 pairing measured. v3 added the composition a reference design made obvious and the
@@ -295,9 +302,14 @@ These do not depend on colour or on face selection, and they are fixed here.
 Nine steps. Every margin, padding and gap uses one; no arbitrary value enters a
 component. Expressed as logical properties only (`I18N_MODEL.md` §4).
 
-**Radius scale.** Four values: `0` for full-bleed edges · `4px` for inputs and small
-controls · `8px` for cards and raised areas · `full` for pills and avatars. Radius is uniform
-per component; no component mixes two.
+**Radius scale.** Five values: `0` for full-bleed edges · `4px` for inputs and small
+controls · `8px` for cards and raised areas · **`32px` for wells** · `full` for pills and
+avatars. Radius is uniform per component; no component mixes two.
+
+`32px` is the well radius, added at P02-T14 after the owner-approved composition used it
+throughout. A well is a large inset region — the hero, an inset section — not a card. The
+distinction is size: below roughly 400px inline size, a region uses `8px` and is a card.
+Nothing between `8px` and `32px` exists, and a sixth value requires a decision.
 
 **Elevation.** Three levels, each a 1px `border` plus a shadow. No blur surface, no
 translucency, per §2 principle 3.
@@ -486,11 +498,28 @@ The media **may bleed to the inline-end viewport edge**, escaping the container 
 text column stays inside it. This is the only full-bleed element on the page and it is
 what gives the hero its scale.
 
-**Text never crosses into the media.** Not with a scrim, not with a gradient overlay, not
-at a "safe" opacity. The moment text sits on an image its contrast depends on a file the
-client can replace, and §8 criterion 1 stops being verifiable. Where a reference design
-appears to put text on a photograph and still reads well, that is the particular
-photograph, not a rule.
+**Text over media is permitted only behind a certified veil.** The original rule banned
+it outright, which was too broad: it existed to protect §8 criterion 1 and ended up
+forbidding cases that satisfy it. The condition, not the ban:
+
+1. The veil is **flat** — one uniform colour at one opacity across the whole region that
+   carries type. A gradient veil is forbidden, because the ratio then varies across the
+   glyph run and a single measurement proves nothing.
+2. The image carries a **luminance cap** — a CSS `brightness()` filter — so the brightest
+   possible pixel beneath the veil is known rather than assumed.
+3. The **worst-case composite is computed and recorded**: veil colour at its opacity over
+   a white pixel at the filter's cap. Text must clear its §8 floor against that composite,
+   not against the veil alone and not against a representative photograph.
+4. Type sits only on the uniform region. Where a veil fades — to reveal the image at one
+   edge — no type enters the fade.
+
+Ratified at P02-T14 against the owner-approved hero: `primary-strong` at 74% over an
+image at `brightness(0.58)`. Worst case composite `#383B8E`, `surface` text **9.52:1** —
+AAA. The photograph can be swapped for any other without moving the ratio below the floor,
+which is the property the original ban was reaching for.
+
+Text still never sits on an **unveiled** photograph, and a veil that fails its worst-case
+computation is not a veil, it is a tint.
 
 Order inside the text column: eyebrow (`sm`, `accent`, weight 600) · headline (`4xl`,
 weight 700, two lines, the second line in `accent`) · standfirst (`lg`, `muted`, max
@@ -516,6 +545,64 @@ a source.** A certification badge names a scheme, a number and an issuing body, 
 does not render until those are verified against a document the client supplies. An
 unverified accreditation claim on a laboratory site is a regulatory exposure, not a
 design element. Claims with no verifiable source render under §12 `pending`.
+
+### Page furniture, ratified from the owner-approved composition
+
+Approved 29 August 2026 and absorbed at P02-T14. Each is specified here so it is a system
+element rather than a one-page improvisation.
+
+**Loading screen.** The mark lockup centred on `surface`, held 1200ms maximum, then
+faded. It covers a first paint, never a data fetch — nothing on the public site waits on
+a request. It is skipped entirely under `prefers-reduced-motion`, and it never appears on
+a repeat navigation within a session.
+
+**Floating header pill.** `surface` fill, `radius-full`, 1px `border`, elevation 1,
+detached from the viewport edge by `16px` inline and block. Compacts after **24px** of
+scroll: block size 72px → 60px from `md`, transition 150ms. Below `md` the nav collapses
+to a disclosure; the language switcher never collapses (§10).
+
+**Inset well.** A `surface` region at radius `32px` inset from the page `background`,
+holding a whole section. Padding `48px` at `md` and above, `24px` below. Used to group a
+section without giving it a colour of its own — this is the sanctioned alternative to the
+alternating fills, not an addition to them. A page carries no more than four.
+
+**Full-bleed band.** One `primary-strong` region spanning the viewport, `surface` type,
+used once per page as a closing emphasis before the footer. Any action inside it sits on
+a `surface` plate rather than on the band, so button contrast is measured against
+`surface` and not against the band.
+
+**Footer island.** A `primary-strong` region at radius `32px` sitting on page
+`background` with inline and block margin, rather than a full-bleed slab. Contents:
+mark lockup at 32px · social marks · three link columns · a hairline legal bar.
+
+**Numbered stills.** A row of media frames each carrying a two-digit index at `xs` weight
+600 in `accent`, above its label. Indices are Western digits in both locales (D-25) and
+run in **reading order**, so they begin at the inline-start in each locale and the numeral
+sequence mirrors with the layout.
+
+**Decorative lattice.** A geometric pattern in `primary` at no more than 12% opacity, no
+type on it, purely decorative under §9. It is a decorative layer and carries no ratio.
+One per page.
+
+**Magazine block.** One featured media frame plus two index entries plus one note. The
+featured frame takes 60% of the inline axis at `lg` and above; below that the block
+stacks in source order.
+
+**Tabbed block.** In-page tabs switching between prepared regions. Tabs are 44px targets,
+the selected tab carries a 2px `accent` underline on the block-end edge, and the region
+it reveals is `surface` at radius `8px`. **Tab state is not a route** and does not enter the
+URL — OD-05 bound 2 permits no route beyond the placeholder.
+
+### Social marks
+
+The footer carries third-party social marks. §3 permits one third-party brand mark in its
+own brand colour — the WhatsApp mark — and CF-70 states that a second requires a decision.
+
+**Decided here: social marks render monochrome in `surface`, never in brand colour.** A
+social mark in a footer is wayfinding, not endorsement, and monochrome treatment keeps
+§3's exception at exactly one. Marks are 20px, 44px targets, and each carries an
+accessible label naming the destination. A mark with no destination does not render — an
+inert social icon is furniture pretending to be a link.
 
 ### The card band
 
@@ -729,9 +816,26 @@ in privacy-enhanced mode; nothing loads before the click (D-13).
 **Trust entry.** 24px icon in `primary`, label at `sm` weight 600 in `text`, qualifier at
 `xs` in `muted`. No card, no border. **Every claim needs a verified source — see §12.**
 
-**Footer.** `background` fill, `border` 1px on the block-start edge only. Mark at 32px,
-`SiteSettings`-sourced contact block, locale-appropriate column order. No newsletter
-signup, no contact form, nothing that collects anything.
+**Footer.** A `primary-strong` island at radius `32px` on page `background`, per §9.
+Nothing in the footer collects: no newsletter, no contact form, no `tel:` link.
+
+Anatomy, in block order:
+
+| Region | Contents |
+|---|---|
+| Brand | mark lockup at 32px in the light variant · social marks, monochrome `surface` (§9) |
+| Sitemap column | in-page anchors only, `surface` links |
+| Contact column | WhatsApp action · `ResultsPortalLink` action · Lab-to-Lab entry · hotline and address, both `pending` until `SiteSettings` carries them |
+| Media column | departments · videos · privacy |
+| Legal bar | hairline `border` at 20% · notice · privacy · two action chips |
+
+Three columns at `md` and above, stacked below, in reading order per locale. Type is
+`surface` throughout; every pairing measured against `primary-strong`, not against page
+`background`.
+
+**No certification, standards or compliance chip renders in the footer** — or anywhere —
+without a verified source under §12. A footer is where unverified badges accumulate
+because nobody reads it, which is exactly why the rule is stated here.
 
 ---
 
@@ -832,6 +936,19 @@ itself is the target.
 A `pending` region never carries a real clinical string "just to show the shape". If the
 placeholder needs to look like a `Programme` name, the placeholder is the problem, not
 the gate.
+
+**When gates may be omitted, and when they may not.** A composition built solely to judge
+layout — a design-decision mock reviewed with the client and thrown away — may render its
+regions ungated, because the subject of review is the composition and dashed frames
+obscure it. That is what the 29 August owner mock did, and the choice was correct and
+disclosed in its own page report.
+
+**Anything a `Visitor` can reach renders its gates.** The moment a composition is served
+outside a review session, every region in the table above carries its state and its
+marker. An ungated preview and a production page are the same code with one value
+changed, which is the entire reason §12 exists as a mechanism rather than a styling
+convention. A composition that has dropped its gates is recorded as such in its report,
+and restoring them is a task, not an assumption.
 
 **A whole page of `pending` regions is still a preview, not a deliverable.** OD-05 bound
 4 governs the mock and is not softened by how finished it looks. Anything shown to the

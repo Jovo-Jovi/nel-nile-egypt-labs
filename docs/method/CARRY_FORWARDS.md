@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-72**
+**Next free id: CF-75**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -75,8 +75,11 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-67 | DESIGN_SYSTEM.md §12 gates seven classes of material as pending. Three need a client or clinical signature that no design task can supply: LabTest and Programme names and health cautions need the lab's written clinical sign-off; certification claims need the scheme, number, issuing body and expiry from a supplied document; News entries need an OD amending D-15 and D-16, which forbid a ninth dashboard module. | human | OPEN | P02 close-out |
 | CF-68 | The landing preview renders 11 regions as §12 pending. Each clears only on a signature or a supplied asset, not on a design task. Enumerated in the P02-T11 report. | reviewer | OPEN | P02 close-out |
 | CF-69 | The drawn SVG map in DESIGN_SYSTEM.md §10 needs Branch coordinates. It renders pending with indicative pins until Branch records carry verified addresses. Unverified geography is a defect, not a placeholder. | client | OPEN | P03 |
-| CF-70 | DESIGN_SYSTEM.md §3 permits exactly one third-party brand mark, the WhatsApp mark, in its own brand colour. A second such mark requires a decision and does not follow from this precedent. | reviewer | OPEN | P03 |
+| CF-70 | DESIGN_SYSTEM.md §3 permits exactly one third-party brand mark, the WhatsApp mark, in its own brand colour. A second such mark requires a decision and does not follow from this precedent. CLOSED at P02-T14: social marks ruled monochrome; §3's exception stays at one. | reviewer | CLOSED at P02-T14 | DESIGN_SYSTEM.md v5 at P02-T14 |
 | CF-71 | The P02-T13 preview renders 12 regions as §12 pending, each with the crafted treatment. Each clears only on a signature or a supplied asset, not on a design task. Enumerated in the P02-T13 report. | reviewer | OPEN | P02 close-out |
+| CF-72 | public/preview-stock/ holds 1.6MB of Unsplash stills wired through StockPhoto.tsx and deployed. Preview-only by their own NOTICE.txt and by DESIGN_SYSTEM.md §9. They are removed at the production pass and every slot returns to a labelled frame until client photography lands. | reviewer | OPEN | P02-T15 |
+| CF-73 | DESIGN_SYSTEM.md §12 approval gates are absent from src/components/site/. ApprovalGate is used zero times there. Correct for a review mock, not correct for a served page under OD-08. Restored at the production pass. | reviewer | OPEN | P02-T15 |
+| CF-74 | public/mark/nel-mark.png is an 83x100 raster. §7 requires the mark to work at 16px favicon and 180px app icon, which a raster that size cannot. The human supplies the SVG; it drops into public/mark/nel-mark.svg with no code change. | client | OPEN | P02-T15 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
