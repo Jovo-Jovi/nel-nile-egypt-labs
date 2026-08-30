@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-79**
+**Next free id: CF-80**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -39,7 +39,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-31 | SESSION_CONTEXT.md drifted from CARRY_FORWARDS.md and from merged PR #3/#4 — phase, gate, done-steps verdicts and open-CF list all disagreed. Regenerated at T03V. Root cause: no task regenerated it after T02-A or T02-H. | reviewer | CLOSED at T03V | `SESSION_CONTEXT.md` at T03V |
 | CF-32 | An operational weakness assessment of the third-party results portal was published in two tracked files. Struck at T03V under OD-04 condition 2; the assessment is already public in history at 45ef104 and is not retractable by a later commit. | reviewer | CLOSED at T03V | `BOUNDARY_MODEL.md` / `CARRY_FORWARDS.md` at T03V |
 | CF-33 | P01 lists repo and CI before schema. Neither landed before the P01-T03 schema fence was issued, which had no migrations path to resolve and no build to fail. Toolchain, CI and migrations path landed at T03A. | reviewer | CLOSED at T03A | `package.json` / `.github/workflows/ci.yml` / `supabase/` at T03A |
-| CF-34 | Build machine has no local Postgres and no container runtime, and the shell has no elevation. The migration authoring and verification route is undecided. Blocks P01-T03-R. | human | OPEN | P01-T03-R |
+| CF-34 | Build machine has no local Postgres and no container runtime, and the shell has no elevation. The migration authoring and verification route is undecided. Blocks P01-T03-R. Resolved: the route needs no local database. P01-T03-R is unblocked. | human | CLOSED at P02-T17 | P01-T03-R |
 | CF-35 | DECISIONS.md:7 decision count carried an UNRATIFIED residual-repair label from T03V. Ratified at the T03V verdict against computed heading counts; label removed at T03A. | reviewer | CLOSED at T03A | `DECISIONS.md` at T03A |
 | CF-36 | Root route renders a build placeholder and contradicts CONTENT_MODEL §3c, which specifies that / renders no content and redirects to /ar. Replaced at P03. | builder | OPEN | P03 |
 | CF-37 | Supabase project created 25 Aug 2026. Plan tier, inactivity-pausing behaviour and backup posture are not confirmed against P07 cutover requirements. | human | OPEN | P07 cutover |
@@ -84,6 +84,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-76 | `next-env.d.ts` is tracked and Next.js rewrites it on every build, changing `./.next/dev/types/` to `./.next/types/`. Every fence carries "git status --porcelain → 0 lines" as a Done-when, so a reviewer running a build after a clean commit sees a phantom failure. Same class as CF-40. Needs a resolution that does not break the Next.js type reference. | reviewer | OPEN | P03 |
 | CF-77 | `docs/PAGE_REPORT.md` is a second authority and has already drifted: it describes four social marks that D-35 ruled monochrome and that render nowhere. DESIGN_SYSTEM v5 §9 now specifies the composition. `PAGE_REPORT.md` is reduced to an implementation index — file path to section reference, no design statements — or deleted. Keeping it as written is not an option. | reviewer | OPEN | P03 |
 | CF-78 | The Supabase and Postgres best-practice skills available to the builder will suggest audit columns, `created_by` references, user tables and soft deletes keyed to a person. This system holds no personal data of any kind (`BOUNDARY_MODEL.md` §2, non-waivable) and `patient` is a forbidden identifier. Those suggestions will look like hygiene and will be boundary defects. Watch for them when CF-34 clears and P01-T03-R opens. | reviewer | OPEN | P01-T03-R |
+| CF-79 | No staging database exists. Branching is unavailable on the current plan and the linked remote is the only database, so every push lands on it. OD-10 accepts this with six controls. A second free project used purely as a scratch shadow would supply a rehearsal at no cost, subject to the plan's active-project limit; a paid plan would supply real branching. Both are commercial calls and belong with CF-37. | human | OPEN | P03 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

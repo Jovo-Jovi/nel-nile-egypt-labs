@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Thirty-seven decisions. Nine of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09). A decision is in force when it appears here. Conversation does not amend this file.
+Forty decisions. Ten of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -238,6 +238,48 @@ needs the lab's written approval before launch. Both are carried forward.
 
 ---
 
+### OD-10 — Migration route, and no staging database
+
+**Status:** SIGNED
+**Signed:** 29 August 2026
+**Resolves:** CF-34, open since P01. The blocker was that the migration authoring and verification route was undecided, because the build machine has no local Postgres, no container runtime, and no shell elevation. `P01-T03-R` has been blocked on it for the entire life of P02.
+**Evidence:** the `P01-T03-E` environment probe, 29 August 2026. Every command below was run and its exit code recorded; secrets redacted under OD-04 condition 1.
+
+**Decides: migrations are hand-authored and pushed to the linked remote. No local database is used at any point.**
+
+| Step | Command | Needs Docker | Probe outcome |
+|---|---|---|---|
+| 1. Create the file | `supabase migration new <name>` | no | file write only |
+| 2. Author the SQL | by hand, from `CONTENT_MODEL.md` and `DATA_MODEL.md` | no | — |
+| 3. Rehearse | `supabase db push --dry-run` | no | exit 0, reached the remote |
+| 4. Apply | `supabase db push` | no | not run at the probe; the apply path |
+| 5. Verify | `supabase migration list` + MCP `list_tables` | no | exit 0, both read the remote |
+
+**`supabase db diff` is not on the critical path.** It builds a local shadow database and needs Docker, which this machine does not have. It is a *generation* convenience, not an apply or verify step. Migrations on this project are written, not generated.
+
+Also unavailable and not required: `supabase start`, `stop`, `db start`, `db reset`, `status`, `test`. Each inspects or builds a local container.
+
+**Region confirmed.** `eu-central-2`, reported identically by CLI `projects list`, MCP `get_project`, and the linked-project payload. Matches the OD-01 amendment of 26 August 2026. Not a finding. CF-39 — Zurich sits outside the EU and `Operator` accounts arrive at P05 — is unaffected and stays open.
+
+**Accepted risk: there is no staging database, and every push lands on production.**
+
+This is the material consequence of the route and it is recorded as an acceptance, not an oversight. The organisation is on the **free** plan, so Supabase branching is unavailable (MCP `get_organization` → plan `free`; `list_branches` → empty). With no branching and no local shadow, the linked remote is the only database that exists. A migration cannot be tried anywhere before it lands.
+
+**Controls, binding on every migration from T03-R onward:**
+
+1. **Every migration ships with a verified reverse.** A `down` path is authored at the same time as the `up`, in the same task, and the reverse is stated in the task report. A migration whose reverse is "restore from backup" is not reversible.
+2. **`--dry-run` before every apply, without exception**, and its output is quoted in the report. The probe showed it reaches the remote and reports `upToDate`; it is the only rehearsal available.
+3. **One migration per task.** No task applies two. A failed push is then unambiguous about what failed.
+4. **Additive before destructive.** Within P01 to P03 no migration drops a column, drops a table, or narrows a type. Destructive changes wait for a separate OD once real records exist.
+5. **Verify by reading, never by assuming.** After every push, `migration list` and MCP `list_tables` are both run and their output quoted. A push that exits 0 is not evidence that the schema is what the migration intended.
+6. **No `db reset`, ever, on the linked project.** It is skipped by fence rule in every task, as it was in the probe.
+
+**Does not decide:** whether to move to a paid plan. Branching would supply a real staging database and remove the accepted risk above, and CF-37 already tracks plan tier against P07 for pausing and backups. That is a commercial call for the human, and it belongs in the same conversation as the quotation rather than here.
+
+**Does not decide:** any table, column, type, constraint or policy. `DATA_MODEL.md` fixes the schema and `SECURITY_MODEL.md` fixes RLS; neither is authored yet, and no migration is authored before both exist for the objects it touches.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze
@@ -387,3 +429,15 @@ IBM Plex Sans Arabic, SIL OFL 1.1, self-hosted, one family for both locales. Sel
 ### D-37 — Announcements and Clinical notices
 
 OD-09, drafted 29 August 2026, awaiting signature and price. Two dashboard modules, not one, taking the total from eight to ten. The client requested posts, news and cautions together; they cannot share a module, because a caution from a laboratory is a medical description that passes the clinical gate and an announcement is not. One module would mean one publish action, and the first clinical entry routed through an operational workflow would bypass the gate by convenience rather than by decision. `ClinicalNotice` carries a sign-off record as a field — who signed, when, against which version — and publication requires it, which makes the clinical gate a schema constraint rather than a policy anyone has to remember. Editing signed text clears the record and returns the notice to `pending`. `Announcement` publication records an affirmation that the copy carries no medical instruction; that is an audit control and not a guarantee, and it is stated as such. Neither entity collects anything from a `Visitor`. Both are bilingual or neither publishes. Amends D-15 and D-16. Priced as A3 and A4 in `docs/QUOTATION_AMENDMENTS.md`.
+
+### D-38 — Migration route
+
+OD-10, signed 29 August 2026, resolving CF-34. Migrations are hand-authored and pushed to the linked remote; no local database is used. `supabase migration new` writes the file, the SQL is written from `CONTENT_MODEL.md` and `DATA_MODEL.md`, `db push --dry-run` rehearses, `db push` applies, and `migration list` with MCP `list_tables` verifies. `db diff` is a generation convenience and is not on the critical path. The route was established by the P01-T03-E probe, which recorded an exit code for every command. The accepted risk is that no staging database exists on the current plan, so every push lands on the only database there is; OD-10 carries six binding controls, of which the first is that every migration ships with a verified reverse authored in the same task.
+
+### D-39 — Row-level security
+
+`SECURITY_MODEL.md` §3. RLS is enabled on every table in the application schema without exception, because the publishable key ships in the browser by design and RLS is the only thing protecting anything behind it. Two policy shapes: published-read, granting anonymous `SELECT` on published rows and no write of any kind; and Operator-write, granting an authenticated `Operator` full access to the same tables. There is no per-`Operator` partition — a two-account system does not need a permission matrix and inventing one produces untraceable mistakes rather than impossible ones. An unpublished row never leaves the database, which makes `DESIGN_SYSTEM.md` §12 and the clinical gate policies rather than rendering choices: a front-end that forgets to check still shows nothing. The `service_role` key is never used by the application; if a task appears to need it, the policy is wrong.
+
+### D-40 — No attribution at the database layer
+
+`SECURITY_MODEL.md` §5. No table holds a name, phone number, email, address, date of birth or identifier of any `Visitor` or any patient. No column stores a medical or diagnostic value. **No audit column references a person** — no `created_by`, no `updated_by`, no `deleted_by`, no `owner_id` — and no soft delete is keyed to a human; timestamps are permitted and attribution is not. No analytics, telemetry or event table exists. Postgres and Supabase best-practice guidance recommends the opposite and is correct for systems with public accounts; this one has a `Visitor` who is never persisted and an `Operator` who exists only in the auth schema. CF-78 tracks the risk and this decision is what gets quoted back at a suggestion that looks obviously right.
