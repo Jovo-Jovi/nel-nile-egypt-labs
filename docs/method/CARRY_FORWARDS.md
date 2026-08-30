@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-75**
+**Next free id: CF-76**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -77,9 +77,10 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-69 | The drawn SVG map in DESIGN_SYSTEM.md §10 needs Branch coordinates. It renders pending with indicative pins until Branch records carry verified addresses. Unverified geography is a defect, not a placeholder. | client | OPEN | P03 |
 | CF-70 | DESIGN_SYSTEM.md §3 permits exactly one third-party brand mark, the WhatsApp mark, in its own brand colour. A second such mark requires a decision and does not follow from this precedent. CLOSED at P02-T14: social marks ruled monochrome; §3's exception stays at one. | reviewer | CLOSED at P02-T14 | DESIGN_SYSTEM.md v5 at P02-T14 |
 | CF-71 | The P02-T13 preview renders 12 regions as §12 pending, each with the crafted treatment. Each clears only on a signature or a supplied asset, not on a design task. Enumerated in the P02-T13 report. | reviewer | OPEN | P02 close-out |
-| CF-72 | public/preview-stock/ holds 1.6MB of Unsplash stills wired through StockPhoto.tsx and deployed. Preview-only by their own NOTICE.txt and by DESIGN_SYSTEM.md §9. They are removed at the production pass and every slot returns to a labelled frame until client photography lands. | reviewer | OPEN | P02-T15 |
-| CF-73 | DESIGN_SYSTEM.md §12 approval gates are absent from src/components/site/. ApprovalGate is used zero times there. Correct for a review mock, not correct for a served page under OD-08. Restored at the production pass. | reviewer | OPEN | P02-T15 |
+| CF-72 | public/preview-stock/ holds 1.6MB of Unsplash stills wired through StockPhoto.tsx and deployed. Preview-only by their own NOTICE.txt and by DESIGN_SYSTEM.md §9. They are removed at the production pass and every slot returns to a labelled frame until client photography lands. CLOSED at P02-T15: `public/preview-stock/` deleted in full; every slot is a §9 labelled frame gated pending on client photography. | reviewer | CLOSED at P02-T15 | P02-T15 |
+| CF-73 | DESIGN_SYSTEM.md §12 approval gates are absent from src/components/site/. ApprovalGate is used zero times there. Correct for a review mock, not correct for a served page under OD-08. Restored at the production pass. CLOSED at P02-T15: every region in §12's pending table routes through ApprovalGate with the crafted treatment. | reviewer | CLOSED at P02-T15 | P02-T15 |
 | CF-74 | public/mark/nel-mark.png is an 83x100 raster. §7 requires the mark to work at 16px favicon and 180px app icon, which a raster that size cannot. The human supplies the SVG; it drops into public/mark/nel-mark.svg with no code change. | client | OPEN | P02-T15 |
+| CF-75 | The promoted composition renders 21 regions as §12 pending under OD-08. Each clears on a signature or a supplied asset. Enumerated in the P02-T15 report. | reviewer | OPEN | P03 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

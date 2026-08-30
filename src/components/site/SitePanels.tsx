@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { translate, type Locale } from "@/lib/catalog";
+import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
+import { ApprovalGate } from "@/components/ui/ApprovalGate";
+import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import styles from "./SitePanels.module.css";
 
 interface SitePanelsProps {
@@ -45,6 +47,12 @@ const PANELS = [
   },
 ] as const;
 
+function panelGateKey(id: (typeof PANELS)[number]["id"]): CatalogKey {
+  if (id === "programmes") return "approval.pending.clinical";
+  if (id === "branches") return "approval.pending.businessData";
+  return "approval.pending.newsModule";
+}
+
 export function SitePanels({ locale }: SitePanelsProps) {
   const [active, setActive] = useState<(typeof PANELS)[number]["id"]>("programmes");
   const panel = PANELS.find((item) => item.id === active) ?? PANELS[0];
@@ -68,18 +76,16 @@ export function SitePanels({ locale }: SitePanelsProps) {
       <div className={styles.panel} role="tabpanel">
         <h3 className={styles.title}>{translate(locale, panel.title)}</h3>
         <p className={styles.body}>{translate(locale, panel.body)}</p>
-        <ul className={styles.list}>
-          {panel.items.map((pair, index) => (
-            <li key={`${panel.id}-${index}`}>
-              <strong>
-                {"numbered" in panel && panel.numbered
-                  ? `${translate(locale, pair[0])} ${index + 1}`
-                  : translate(locale, pair[0])}
-              </strong>
-              <span>{translate(locale, pair[1])}</span>
-            </li>
-          ))}
-        </ul>
+        <ApprovalGate locale={locale} state="pending" pendingLabelKey={panelGateKey(panel.id)}>
+          <ul className={styles.list}>
+            {panel.items.map((_, index) => (
+              <li key={`${panel.id}-${index}`}>
+                <SkeletonBar size="base" widthPercent={72} />
+                <SkeletonBar size="sm" widthPercent={88} />
+              </li>
+            ))}
+          </ul>
+        </ApprovalGate>
       </div>
     </div>
   );

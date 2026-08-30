@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { translate, type Locale } from "@/lib/catalog";
 import { HEADER_NAV } from "@/lib/previewNav";
 import { MarkSlot } from "@/components/ui/MarkSlot";
+import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
@@ -72,7 +73,9 @@ export function SiteHeader({ locale, onLocaleChange }: SiteHeaderProps) {
           {navOpen ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
         </button>
         <a href="#home" className={styles.markSlot} onClick={closeNav}>
-          <MarkSlot blockSize={48} fallbackLabel={translate(locale, "header.markFallback")} />
+          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.mark" dense>
+            <MarkSlot blockSize={48} fallbackLabel={translate(locale, "header.markFallback")} />
+          </ApprovalGate>
         </a>
         <nav className={styles.desktopNav} aria-label={translate(locale, "header.nav.label")}>
           {renderNavLinks("desktop")}

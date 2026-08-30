@@ -9,13 +9,5 @@
 }
 
 .logo {
-  display: block;
-  block-size: 96px;
-  inline-size: auto;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo {
-    animation: none;
-  }
+  --nel-mark-size: 96px;
 }

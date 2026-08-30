@@ -42,6 +42,7 @@
 }
 
 .markSlot {
+  position: relative;
   display: flex;
   align-items: center;
   min-inline-size: 44px;
@@ -272,8 +273,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sidebar,
-  .desktopNav .navLink,
+  .sidebar {
+    transition: none;
+  }
+
+  .desktopNav .navLink {
+    transition: none;
+  }
+
   .menuButton {
     transition: none;
   }

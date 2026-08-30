@@ -1,12 +1,12 @@
-# NEL public mock — page report
+# NEL public site — page report
 
 **Route:** `/` only (no locale segment). Entry: `SiteRoot`.  
-**Status:** owner design-decision mock, not a production page.  
+**Status:** production baseline for the public site under OD-08, refined in place. G3 applies.  
 **Locales:** `ar` (default, `dir="rtl"`) and `en` (`dir="ltr"`), switched in the header. `dir` and `lang` sit on the page-root wrapper, not on `<html>`.  
 **Typeface:** IBM Plex Sans Arabic, both scripts.  
 **Date of this report:** 29 August 2026. Copy and behaviour are taken from `src/components/site/`, not from memory.
 
-This is a **new public composition**. The previous landing/gallery tree under `src/components/landing` and `PreviewRoot` is gone. Same mark (`/mark/nel-mark.png`), same eleven colour tokens, same catalogue strings, same outbound contracts (Results Portal HTTPS, WhatsApp `wa.me`). No booking form. No invented LabTest names.
+`DESIGN_SYSTEM.md` v5 §9 governs this surface; this file describes an implementation of that specification, not a second authority. Same mark slot (`/mark/nel-mark.svg`, labelled-frame fallback until the SVG lands), same eleven colour tokens, same catalogue strings, same outbound contracts (Results Portal HTTPS, WhatsApp `wa.me`). No booking form. No invented LabTest names.
 
 ---
 
@@ -33,7 +33,7 @@ Eleven tokens. No twelfth colour. WhatsApp green `#25D366` is a brand-mark excep
 - Hero photograph sits under a **flat** `primary-strong` veil (74% mix) across the **copy column** (0–44% of the well), then a single-hue fade to 22% mix in the photo-only zone (`to inline-end`). Type is `surface` and does not sit on the fade. Image `brightness(0.58)`. Named §9 deviation: text on a uniform indigo field over photography. No stock caption under the well.
 - Hex lattice is decorative, `primary` stroke at 12% opacity, no type on it.
 - Header pill and dock-less chrome are solid `surface`. Compact after 24px scroll: tighter bar (60px from 768px).
-- **No §12 dashed pending frames on this mock.** Catalogue copy still renders. `ApprovalGate` is unused under `src/components/site/`. The public frontend is judged as a finished composition, not a review overlay.
+- **§12 pending frames restored.** Catalogue copy that is unsigned material renders as crafted bars. `ApprovalGate` wraps every region in §12's pending table. A `Visitor` can reach this surface, so gates are required (OD-08).
 
 ---
 
@@ -128,6 +128,6 @@ Logical CSS properties throughout. Arabic line-height 1.75 body / 1.40 headings;
 
 ---
 
-## 7. What this mock is for
+## 7. What this implementation is
 
-Judge the cinematic well, pill chrome, numbered stills, inset wells, magazine insights, and tabbed about block — NEL palette and mark only. Dashed §12 markers are omitted on this mock. It is **not** signed content, **not** a G3 deliverable, and **not** a change to `DESIGN_SYSTEM.md` until those choices are frozen.
+This is the **production baseline** for the public site, promoted under OD-08 from the owner-approved composition of 29 August 2026. `DESIGN_SYSTEM.md` v5 is the specification; this file describes the implementation. G3 applies. §12 dashed pending markers are present: every region in §12's pending table renders through `ApprovalGate` with the crafted treatment. It is **not** signed content. Unsigned material clears on a signature or a supplied asset, not on a further design task.

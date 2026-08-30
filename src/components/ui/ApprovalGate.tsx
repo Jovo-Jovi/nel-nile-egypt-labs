@@ -19,10 +19,22 @@ interface ApprovalGateProps {
   // tighter frame than a full card. The marker itself — dashed border,
   // muted, xs label — is unchanged.
   dense?: boolean;
+  // Media slots already have an approved size (aspect-ratio or inset).
+  // `fill` paints the marker on that box so occupancy does not grow.
+  fill?: boolean;
+  className?: string;
   children: ReactNode;
 }
 
-export function ApprovalGate({ locale, state, pendingLabelKey, dense, children }: ApprovalGateProps) {
+export function ApprovalGate({
+  locale,
+  state,
+  pendingLabelKey,
+  dense,
+  fill,
+  className,
+  children,
+}: ApprovalGateProps) {
   // withheld — nothing renders. Not an empty frame, not a comment left in
   // the DOM for a screenshot to catch: the region is genuinely absent.
   if (state === "withheld") {
@@ -38,8 +50,11 @@ export function ApprovalGate({ locale, state, pendingLabelKey, dense, children }
   // and elevation are unchanged; the only addition is the §12 marker: a
   // 1px dashed border in muted and an xs muted label naming what is
   // awaited.
+  const frameClass = dense ? styles.pendingDense : fill ? styles.pendingFill : styles.pending;
+  const joined = className ? `${frameClass} ${className}` : frameClass;
+
   return (
-    <div className={dense ? styles.pendingDense : styles.pending} data-approval-state="pending">
+    <div className={joined} data-approval-state="pending">
       <div className={styles.pendingContent}>{children}</div>
       {pendingLabelKey ? (
         <p className={styles.pendingLabel}>{translate(locale, pendingLabelKey)}</p>

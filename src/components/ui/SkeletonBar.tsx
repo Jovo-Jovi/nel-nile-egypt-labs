@@ -6,7 +6,7 @@ import styles from "./SkeletonBar.module.css";
 // the space its copy will occupy. Bars, never lorem — no pending entry
 // component below passes real or placeholder sentence text through this
 // primitive, only a size step and a width.
-export type SkeletonBarSize = "xs" | "sm" | "base" | "lg";
+export type SkeletonBarSize = "xs" | "sm" | "base" | "lg" | "xl";
 
 interface SkeletonBarProps {
   size: SkeletonBarSize;
@@ -21,6 +21,7 @@ const BLOCK_SIZE_VAR: Record<SkeletonBarSize, string> = {
   sm: "var(--nel-size-sm)",
   base: "var(--nel-size-base)",
   lg: "var(--nel-size-lg)",
+  xl: "var(--nel-size-xl)",
 };
 
 export function SkeletonBar({ size, widthPercent }: SkeletonBarProps) {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { SkeletonBar } from "./SkeletonBar";
 import styles from "./MarkSlot.module.css";
 
 interface MarkSlotProps {
@@ -9,9 +8,10 @@ interface MarkSlotProps {
   fallbackLabel: string;
 }
 
-// Owner-supplied lockup at public/mark/nel-mark.png. Callers may override
-// size via `--nel-mark-size` on a parent. Until the file loads, onError
-// swaps in a crafted placeholder (DESIGN_SYSTEM.md v4 §12).
+// Slot for public/mark/nel-mark.svg. Callers may override size via
+// `--nel-mark-size` on a parent. Until the SVG loads, onError swaps in a
+// §9 labelled frame (DESIGN_SYSTEM.md §7 / §12, CF-74). The 83×100 raster
+// is not referenced and does not satisfy §7.
 export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
   const [broken, setBroken] = useState(false);
 
@@ -23,7 +23,7 @@ export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
         role="img"
         aria-label={fallbackLabel}
       >
-        <SkeletonBar size="lg" widthPercent={100} />
+        <span className={styles.fallbackLabel}>{fallbackLabel}</span>
       </span>
     );
   }
@@ -34,7 +34,7 @@ export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
     // failed request", so a plain <img> is used here.
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/mark/nel-mark.png"
+      src="/mark/nel-mark.svg"
       alt={fallbackLabel}
       className={styles.mark}
       onError={() => setBroken(true)}
