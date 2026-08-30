@@ -61,19 +61,20 @@ on a verbal expansion of an unsigned scope.
 | P02-T14 | `DESIGN_SYSTEM.md` v5 landed byte-exact from the reviewer-authored payload (document 8, still), superseding v4 rather than merging it. Branched `p02-t14` from `origin/main` at `b7e33486a789a30368da68fa2bcc53660f735d59` (the commit that merges `owner-public-site`). STEP 0 verified before overwrite: `git hash-object docs/DESIGN_SYSTEM.md` → `61cf47b99ed1fa788d7b80183ba1c81929192c7c`, line count 857 — both matched the expected outgoing v4 state. Landed file's blob SHA (`a55c553c5287a9514b50c92e8941ec0e64143aaf`) confirmed identical to the attachment's; landed line count 974, `grep -c "^## §"` → 13. STEP 2 counts, each verified against its own section: §3 eleven colour token rows, §4 nine size steps, §5 five radius values (`0` · `4px` · `8px` · `32px` · `full`) and three elevation levels, §6 total 24 = 14 public + 10 dashboard (counted from the two lists), §8 six accessibility criteria, §10 eighteen specification headings enumerated by name (Button, Card, Header, Language switcher, Stat cell, Image frame, WhatsApp action, Outbound `ResultsPortalLink` action, Bilingual field pair, `StatusState` badge, Section header, News card entry, Caution card entry, Location card, Programme row, Video card, Trust entry, Footer), §11 seven interaction state rows, §12 three approval-state rows, §12 seven pending-material rows. v5 absorbs the owner-approved composition of 29 August 2026. OD-08 signed, amending OD-05 bound 4 — the composition is the production baseline for the public site and is refined in place rather than discarded. D-35 and D-36 landed, DECISIONS.md now 36 decisions / 8 ODs (`grep -c "^### D-"` → 36, `grep -c "^### OD-"` → 8, `grep -c "^### OD-08"` → 1). PR-30 landed; next-free id PR-31. CF-70 CLOSED at P02-T14 (social marks ruled monochrome; §3's exception stays at one); CF-72, CF-73, CF-74 landed OPEN (reviewer / reviewer / client, P02-T15); next-free id advanced to CF-75; CF-59, CF-60, CF-65, CF-67, CF-68 and CF-69 correctly left open — open count 44 → 46 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 46). `src/`, `public/`, `PAGE_REPORT.md`, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` untouched — the production pass is P02-T15 | pushed — verdict at push | 2026-08-29 |
 | P02-T15 | Production pass on the promoted composition under OD-08. Branched `p02-t15` from `6250ba1` (P02-T14 landing; `origin/main` still at `b7e3348`, T14 not yet merged). §12 gates restored through `ApprovalGate` with the crafted treatment — **21 pending regions**, enumerated in the task report. `public/preview-stock/` removed in full; every photography slot is a §9 labelled frame gated pending. Hero veil retained over a `background` frame under the existing `brightness(0.58)` cap; worst-case composite unchanged (`#383B8E`, `surface` 9.52:1). Mark slot points at `public/mark/nel-mark.svg`; the SVG was not supplied, so the existing `onError` labelled-frame fallback renders and CF-74 stays open — no mark was drawn and the 83×100 raster is not referenced. Social marks with no destination do not render (D-35). `PAGE_REPORT.md` status header and §7 rewritten as the production baseline; §9-governs line added. CF-72 and CF-73 CLOSED; CF-75 landed OPEN; next-free id CF-76. Open count 46 − 2 + 1 = 45. `docs/DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` untouched; DECISIONS.md unchanged at 36 decisions / 8 ODs | pushed — verdict at push | 2026-08-29 |
 | P02-T16 | Document-only task. Branched `p02-t16` from `origin/main` at `3750c9d` (the commit that merges `p02-t15`). `docs/QUOTATION_AMENDMENTS.md` landed byte-exact from the reviewer-authored payload (blob SHA confirmed identical, `c211140b`); it was a new file, none existed before this task. OD-09 (Announcements and Clinical notices — two dashboard modules, `Announcement` and `ClinicalNotice`) landed **DRAFT**, awaiting the human's signature and a price, inserted after the OD-08 block per the STEP 2 anchor (confirmed exactly one occurrence). D-15 and D-16 amended so neither contradicts OD-09: Lab-to-Lab stays a static page with no dashboard module of its own; the module list stands at ten, the first eight fixed at P00, the last two — Announcements and Clinical notices — unpriced additions that do not take effect until signed. D-37 landed, recording OD-09's rationale and its A3/A4 pricing home in `QUOTATION_AMENDMENTS.md`. DECISIONS.md now 37 decisions / 9 ODs (`grep -c "^### D-"` → 37, `grep -c "^### OD-"` → 9). PR-31 landed (skills/tooling are never authority); next-free id PR-32. CF-76..CF-78 landed OPEN (reviewer / reviewer / reviewer, all P03 or P01-T03-R) — open count 45 → 48 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 48); next-free id CF-79. CF-17, CF-18, CF-49, CF-50, CF-67 and CF-74 correctly left open — none clears on a document. **PR-25 note:** `grep -c "no ninth dashboard module" docs/DECISIONS.md` → 1, not 0 as the fence's Done-when states — the one hit is inside the OD-09 payload's own `**Amends:**` line, landed verbatim per STEP 2's "no edits" instruction; the fence's own mandated text trips its own assertion. Reported, not resolved by editing the mandated text (PR-18/PR-25). `src/`, `public/` and `PAGE_REPORT.md` untouched; no `Announcement` or `ClinicalNotice` entity, schema or migration created; no price set anywhere | pushed — verdict at push | 2026-08-30 |
+| P02-T17 | Document-only task, closing CF-34. Branched `p02-t17` from `origin/main` at `cf624c0` (the commit that merges `p02-t16`). Both PR-29 attachments verified against all six named checks before any edit. **STEP 1** — `docs/SECURITY_MODEL.md` landed byte-exact from the reviewer-authored payload; the file did not exist before this task. `git hash-object` on the payload and on the landed file both read `6fde2b807d5274a84b986675e564c3054970e17e`; 196 lines, `grep -c "^## §"` → 9. Document 5 authored (`SECURITY_MODEL.md`; precedence: `PRODUCT_BRIEF`, `GLOSSARY`, `DECISIONS`, `SCOPE`, `CONTENT_MODEL` and `BOUNDARY_MODEL` all outrank it). **STEP 2** — the STEP 2 anchor (`**Does not decide:** the dashboard's own chrome language (CF-52, deferred to`) confirmed to occur exactly once in `DECISIONS.md` before editing. OD-10 (migration route, and no staging database) landed **SIGNED**, inserted verbatim after the OD-09 block and its trailing `---`, before `## Decision log`; a line-range diff of the inserted block against the payload is empty. **STEP 3** — D-38 (migration route), D-39 (row-level security) and D-40 (no attribution at the database layer) appended verbatim, resolving CF-34 and recording `SECURITY_MODEL.md` §3 and §5 as decisions. DECISIONS.md now 40 decisions / 10 ODs (`grep -c "^### D-"` → 40, `grep -c "^### OD-"` → 10, `grep -c "^### OD-10"` → 1); line 7's count prose updated to match, not hand-counted. **STEP 4** — CF-34 CLOSED at P02-T17, resolved by OD-10 and the P01-T03-E probe, Item cell appended per the fence's exact text. CF-79 landed OPEN (human, P03): no staging database exists on the free plan, a scratch-shadow project or a paid-plan branching upgrade are the two commercial options, both tied to CF-37. Next-free id advanced to CF-80. Open count 48 → 48 (48 base, −1 CF-34 closure, +1 CF-79 addition — `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 48). CF-37, CF-39 and CF-78 correctly left open — none of the three clears at this task. **STEP 5** — this document regenerated: this row, the open-CF list, the OD-10 SIGNED entry in the resolved-OD prose, `SECURITY_MODEL.md` recorded as document 5, CF-34 removed from the Next-action blocker text, and Next action retargeted to `DATA_MODEL.md` authoring, then P01-T03-R. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. `src/`, `public/`, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md`, `DESIGN_SYSTEM.md` and `GLOSSARY.md` untouched; no `supabase` command run, no migration authored or applied, no table, policy or role created, no price set anywhere | pushed — verdict at push | 2026-08-31 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 6 of P02-T16):
+Computed by (run after STEP 4 of P02-T17):
 `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md`
 
 **Open — 48:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
-CF-28 · CF-34 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 ·
-CF-51 · CF-52 · CF-54 · CF-58 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63 · CF-65 ·
-CF-66 · CF-67 · CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-76 · CF-77 · CF-78
+CF-28 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
+CF-52 · CF-54 · CF-58 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63 · CF-65 · CF-66 ·
+CF-67 · CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-76 · CF-77 · CF-78 · CF-79
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -124,6 +125,16 @@ reviewer, P03) and CF-78 (Supabase/Postgres skill suggestions that read as
 hygiene but are boundary defects, reviewer, P01-T03-R) landed OPEN. CF-17,
 CF-18, CF-49, CF-50, CF-67 and CF-74 were correctly left open — every one of
 them clears on a signature or a supplied asset, not on this document task.
+
+**Closed at P02-T17:** CF-34 (no local Postgres, no container runtime, no
+shell elevation — resolved by OD-10: migrations are hand-authored and pushed
+to the linked remote, no local database is used at any point; P01-T03-R is
+unblocked). CF-79 landed OPEN (human, P03): no staging database exists on
+the organisation's free plan, so every push lands on the only database that
+exists; OD-10 accepts this with six binding controls; a scratch-shadow free
+project or a paid-plan branching upgrade would both remove the risk and both
+are commercial calls that join CF-37. CF-37, CF-39 and CF-78 were correctly
+left open — none of the three clears on a document.
 
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
@@ -185,7 +196,12 @@ CF-73 are CLOSED at P02-T15. CF-74 stays OPEN: the SVG was not supplied;
 the slot uses the `onError` labelled-frame fallback and the 83×100 raster
 is not referenced. CF-75 is landed at P02-T15, OPEN, P03: the promoted
 composition renders 21 regions as §12 pending under OD-08, each clearing
-on a signature or a supplied asset, enumerated in the P02-T15 report.
+on a signature or a supplied asset, enumerated in the P02-T15 report. CF-34
+is CLOSED at P02-T17: OD-10 decides the route and no local database is used
+at any point, and `P01-T03-R` is unblocked. CF-79 is landed at P02-T17, OPEN,
+P03: OD-10's accepted risk that no staging database exists on the free plan,
+tracked alongside CF-37 as a commercial decision on a scratch-shadow project
+or a paid-plan upgrade.
 
 ---
 
@@ -207,7 +223,13 @@ composition is promoted, not replaced, amending OD-05 bound 4) is SIGNED
 D-15 and D-16) is DRAFT** — drafted 29 August 2026, awaiting the human's
 signature and a price. It does not take effect until the quotation carrying
 A3 and A4 in `docs/QUOTATION_AMENDMENTS.md` is signed; no `Announcement` or
-`ClinicalNotice` entity, schema or module exists. Gate-0 document
+`ClinicalNotice` entity, schema or module exists. **OD-10 (migration route,
+and no staging database) is SIGNED** 29 August 2026 — migrations are
+hand-authored and pushed to the linked remote, no local database is used at
+any point; see `DECISIONS.md` OD-10. It resolves CF-34, so `P01-T03-R` is no
+longer blocked; six binding controls apply from T03-R onward, and the
+accepted-risk carry-forward (no staging database on the free plan) is
+tracked as CF-79. Gate-0 document
 set (`PRODUCT_BRIEF` · `GLOSSARY`
 frozen, §6 superseded in part · `SCOPE` · `DECISIONS` authored ·
 `CONTENT_MODEL` authored and amended · `BOUNDARY_MODEL` frozen, amended under
@@ -217,11 +239,15 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**CF-34.** No local Postgres, no container runtime, no shell elevation. This
-is the sole blocker on P01-T03-R, and P01-T03-R is the schema task — nothing
-wires until it lands. Every phase after P01 depends on the schema P01-T03-R
-produces, so CF-34 is the single blocking dependency on the whole build, not
-one open item among many.
+**`DATA_MODEL.md` authoring, then P01-T03-R.** OD-10 resolves CF-34 — no
+local Postgres, no container runtime, no shell elevation — by deciding that
+migrations are hand-authored and pushed to the linked remote, with no local
+database used at any point. `DATA_MODEL.md` (document 7) fixes the table,
+column and type detail that OD-10 and `SECURITY_MODEL.md` both defer to; no
+migration is authored before both `DATA_MODEL.md` and `SECURITY_MODEL.md`
+exist for the objects it touches. P01-T03-R is the schema task — nothing
+wires until it lands — and every phase after P01 depends on the schema it
+produces.
 
 **Quotation amendment, now with a landed schedule.** `docs/QUOTATION_AMENDMENTS.md`
 is landed (§1–§7, this task) and OD-09 (Announcements and Clinical notices,
