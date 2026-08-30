@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-76**
+**Next free id: CF-79**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -81,6 +81,9 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-73 | DESIGN_SYSTEM.md §12 approval gates are absent from src/components/site/. ApprovalGate is used zero times there. Correct for a review mock, not correct for a served page under OD-08. Restored at the production pass. CLOSED at P02-T15: every region in §12's pending table routes through ApprovalGate with the crafted treatment. | reviewer | CLOSED at P02-T15 | P02-T15 |
 | CF-74 | public/mark/nel-mark.png is an 83x100 raster. §7 requires the mark to work at 16px favicon and 180px app icon, which a raster that size cannot. The human supplies the SVG; it drops into public/mark/nel-mark.svg with no code change. | client | OPEN | P02-T15 |
 | CF-75 | The promoted composition renders 21 regions as §12 pending under OD-08. Each clears on a signature or a supplied asset. Enumerated in the P02-T15 report. | reviewer | OPEN | P03 |
+| CF-76 | `next-env.d.ts` is tracked and Next.js rewrites it on every build, changing `./.next/dev/types/` to `./.next/types/`. Every fence carries "git status --porcelain → 0 lines" as a Done-when, so a reviewer running a build after a clean commit sees a phantom failure. Same class as CF-40. Needs a resolution that does not break the Next.js type reference. | reviewer | OPEN | P03 |
+| CF-77 | `docs/PAGE_REPORT.md` is a second authority and has already drifted: it describes four social marks that D-35 ruled monochrome and that render nowhere. DESIGN_SYSTEM v5 §9 now specifies the composition. `PAGE_REPORT.md` is reduced to an implementation index — file path to section reference, no design statements — or deleted. Keeping it as written is not an option. | reviewer | OPEN | P03 |
+| CF-78 | The Supabase and Postgres best-practice skills available to the builder will suggest audit columns, `created_by` references, user tables and soft deletes keyed to a person. This system holds no personal data of any kind (`BOUNDARY_MODEL.md` §2, non-waivable) and `patient` is a forbidden identifier. Those suggestions will look like hygiene and will be boundary defects. Watch for them when CF-34 clears and P01-T03-R opens. | reviewer | OPEN | P01-T03-R |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

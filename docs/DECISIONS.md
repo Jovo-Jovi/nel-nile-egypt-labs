@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Thirty-six decisions. Eight of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08). A decision is in force when it appears here. Conversation does not amend this file.
+Thirty-seven decisions. Nine of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -204,6 +204,40 @@ needs the lab's written approval before launch. Both are carried forward.
 
 ---
 
+### OD-09 — Announcements and Clinical notices
+
+**Status:** DRAFT — awaiting the human's signature and a price
+**Drafted:** 29 August 2026
+**Amends:** `D-15`, which states there is "no ninth dashboard module", and `D-16`, which enumerates eight. Both are superseded to the extent stated here and in no other respect.
+**Requested by:** the client, 29 August 2026, alongside four other dashboard capabilities. The other four — video links and descriptions, the hero image, other page images, and Operator login — are already in scope and are **not** part of this OD.
+
+**Decides:** two modules, not one. Ten in total.
+
+| # | Module | Entity | Gate |
+|---|---|---|---|
+| 9 | Announcements | `Announcement` | operational |
+| 10 | Clinical notices | `ClinicalNotice` | **clinical, non-waivable** |
+
+**Why two and not one.** The client asked for "posts and news" and "cautions" together. They cannot share a module. A caution from a medical laboratory — fasting hours, medication guidance, sample-collection instruction — is a **medical description** and passes the clinical gate. An announcement — a new branch, changed hours, an equipment arrival — does not. One module means one editor screen and one publish action, and the first time a clinical entry is published through an operational workflow the gate has been bypassed by convenience rather than by decision. Separating them makes the workflow difference structural rather than a matter of the `Operator` remembering.
+
+**`Announcement`.** Bilingual by rule (`ar` and `en` required, `I18N_MODEL.md` §8). Fields: title, body, publication date, optional `MediaAsset`, `StatusState` for draft and published, display order. Published by any `Operator`. Surfaces in the §9 card band and on its own listing.
+
+**`ClinicalNotice`.** Bilingual by rule. Fields: title, body, optional `MediaAsset`, `StatusState`, display order, **and a sign-off record** — who signed, when, and against which version of the text. Publication requires that record. Without it the entity exists, the module edits it, and the public surface renders it `pending` under `DESIGN_SYSTEM.md` §12. **This is the clinical gate expressed as a schema constraint rather than a policy anyone has to remember.**
+
+**Bounds:**
+1. **`Announcement` carries no clinical copy.** Publication requires the `Operator` to affirm that the text contains no medical instruction, and the affirmation is recorded with the publish action. This is an audit control and **not a guarantee** — a text box cannot be prevented from holding a sentence. It exists so that a clinical entry published as an announcement is a traceable act rather than an invisible one, and so the correct route is the obvious one.
+2. **Neither entity collects anything from a `Visitor`.** No comments, no reactions, no subscription, no share tracking. `BOUNDARY_MODEL.md` §2 is unaffected.
+3. **Neither carries a `LabTest` name, a `Programme` name or a count of LabTests** without the same clinical sign-off those names require elsewhere. A `ClinicalNotice` is not a route around the naming gate.
+4. **Both are bilingual or neither publishes.** A missing locale blocks publication; it never falls back (`I18N_MODEL.md` §8).
+5. **The clinical sign-off record is immutable once written.** Editing the text of a signed `ClinicalNotice` clears the record and returns the notice to `pending`. A signature covers the words that were signed and nothing later.
+6. **Media follows §12.** Any `MediaAsset` on either entity is client-supplied; no stock imagery ships (`DESIGN_SYSTEM.md` §9).
+
+**Commercial position:** both modules are additions to the draft quotation and are unpriced. Recorded as A3 and A4 in `docs/QUOTATION_AMENDMENTS.md`. This OD does not take effect until the quotation carrying them is signed.
+
+**Does not decide:** the dashboard's own chrome language (CF-52, deferred to `ADMIN_SPEC.md`) · whether an `Announcement` can be scheduled for future publication · retention or archival of either entity · any schema detail beyond the fields above, which `DATA_MODEL.md` fixes when CF-34 clears and P01-T03-R resumes.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze
@@ -264,11 +298,11 @@ One page carrying up to two clearly labelled outbound links, Visitor entry and L
 
 ### D-15 — Lab-to-Lab
 
-In scope. Static page, copy sourced from `SiteSettings`, no ninth dashboard module. A managed partner-laboratory list is a priced change.
+In scope. Static page, copy sourced from `SiteSettings`, no dashboard module of its own. A managed partner-laboratory list is a priced change. The "no ninth module" clause is superseded by OD-09, which adds Announcements and Clinical notices as modules 9 and 10; Lab-to-Lab remains a static page and is not among them.
 
 ### D-16 — Dashboard modules
 
-Eight: Offers · Videos · Equipment · Branches · Programmes · LabUnits · Site Settings · Media Library. Login is authentication, not a module. Activity log is a platform feature. The quotation's incoming-message inbox is struck per D-09.
+Ten, as amended by OD-09: Offers · Videos · Equipment · Branches · Programmes · LabUnits · Site Settings · Media Library · Announcements · Clinical notices. The first eight were fixed at P00; the last two are additions requiring a signed price and do not take effect until the quotation carrying them is signed. Login is authentication, not a module. Activity log is a platform feature. The quotation's incoming-message inbox is struck per D-09.
 
 ### D-17 — Portal coupling
 
@@ -349,3 +383,7 @@ IBM Plex Sans Arabic, SIL OFL 1.1, self-hosted, one family for both locales. Sel
 ### D-36 — Text over media
 
 `DESIGN_SYSTEM.md` §9 previously banned text over media outright. The ban existed to protect the §8 contrast floor and forbade cases that satisfy it. Replaced with the certification condition: the veil is flat rather than a gradient, the image carries a luminance cap, the worst-case composite is computed and recorded, and no type enters a fade zone. Ratified against the approved hero — `primary-strong` at 74% over `brightness(0.58)`, worst-case composite `#383B8E`, `surface` text at 9.52:1, which is AAA and holds for any photograph substituted. Text still never sits on an unveiled photograph.
+
+### D-37 — Announcements and Clinical notices
+
+OD-09, drafted 29 August 2026, awaiting signature and price. Two dashboard modules, not one, taking the total from eight to ten. The client requested posts, news and cautions together; they cannot share a module, because a caution from a laboratory is a medical description that passes the clinical gate and an announcement is not. One module would mean one publish action, and the first clinical entry routed through an operational workflow would bypass the gate by convenience rather than by decision. `ClinicalNotice` carries a sign-off record as a field — who signed, when, against which version — and publication requires it, which makes the clinical gate a schema constraint rather than a policy anyone has to remember. Editing signed text clears the record and returns the notice to `pending`. `Announcement` publication records an affirmation that the copy carries no medical instruction; that is an audit control and not a guarantee, and it is stated as such. Neither entity collects anything from a `Visitor`. Both are bilingual or neither publishes. Amends D-15 and D-16. Priced as A3 and A4 in `docs/QUOTATION_AMENDMENTS.md`.
