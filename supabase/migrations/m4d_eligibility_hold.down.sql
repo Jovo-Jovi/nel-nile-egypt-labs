@@ -1,0 +1,19 @@
+-- M4d reverse — the eligibility hold.
+--
+-- OD-10 control 1: every migration ships with a reverse authored in the same task
+-- as its forward. This file is NOT applied. It exists so that the reverse is
+-- written while the forward is fresh rather than reconstructed under pressure.
+--
+-- It carries no leading timestamp, so the Supabase CLI does not treat it as a
+-- migration and db push does not pick it up — the CLI prints a Skipping
+-- migration line for it on every invocation. Running it is a deliberate,
+-- separate act by a human.
+--
+-- Reverse of 20260831111557_m4d_eligibility_hold.sql. cascade is absent because
+-- there is no statement here that could take cascade. The forward migration
+-- asserted a state and set no value, so there is nothing to undo. A reverse
+-- that wrote eligibility_audience would be a write this task is forbidden to
+-- make.
+--
+-- This file is a historical record that the hold was reversible by doing
+-- nothing, not a procedure.
