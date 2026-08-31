@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Naming guard
+        run: npm run guard:naming
+
       - name: Lint
         run: npm run lint
 

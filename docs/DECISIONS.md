@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-five decisions. Ten of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-six decisions. Eleven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -310,6 +310,27 @@ is out of scope for this control and, if one is ever needed, requires its own de
 
 ---
 
+### OD-11 — Auth and MFA move to P05
+
+**Status:** SIGNED
+**Signed:** 31 August 2026
+**Amends:** the P00 phase map. `P01` reads "Foundation — repo, CI, schema, RLS, Auth, MFA, seed import" and becomes "Foundation — repo, CI, schema, RLS, seed import". `P05` gains them.
+**Occasioned by:** the G1 assessment, which failed on two phase-map entries with no evidence rather than on any defect in the work done.
+
+**Decides:** `Operator` authentication and MFA are built at P05, alongside the dashboard they exist to serve. G1 closes on foundation. G5 gains them as exit criteria.
+
+**Why, in order of weight:**
+
+1. **The document that specifies them is unauthored.** `SECURITY_MODEL.md` §9 defers the MFA factor type, the enrolment flow and the recovery procedure to `ADMIN_SPEC.md`, which is document 9 and does not exist. Building authentication at P01 means either authoring `ADMIN_SPEC.md` four phases early or deciding those three things in code, and this project does not decide things in code.
+2. **It would trigger CF-39 early, and CF-39 is an adequacy question rather than a technical one.** `SECURITY_MODEL.md` §6 states that the Zurich region's position outside the EU "becomes live at P05 when accounts are created rather than now while none exist". Creating two `Operator` accounts at P01 puts two real staff email addresses into a non-EU jurisdiction before the quotation carrying that work is signed.
+3. **The placement looks inherited rather than decided.** The phase map was written at P00, before the dashboard was scoped and before `SECURITY_MODEL.md` or `ADMIN_SPEC.md` were contemplated. Authentication sat in "Foundation" because it sounds foundational, not because anything at P01 through P04 needs it. Nothing does: the public site is anonymous by construction and holds no session.
+
+**Does not weaken D-08.** Minimum two `Operator` accounts, MFA required and not optional, enrolment before access. Unchanged in every respect except when.
+
+**Does not weaken any gate.** G1's non-waivable Boundary gate is untouched and was assessed as PASS on its own terms. G5 carries Boundary and Bilingual as before, and now carries Auth and MFA as exit criteria.
+
+**Does not decide:** the MFA factor type, the enrolment flow, or the recovery procedure — `ADMIN_SPEC.md`, authored one step ahead of P05. Nor whether `eu-central-2` remains acceptable once accounts exist; that is CF-39, live at P05 and unaffected by this OD except that it now goes live when it was always meant to.
+
 ## Decision log
 
 ### D-01 — Scope freeze
@@ -491,3 +512,7 @@ OD-10, signed 29 August 2026, resolving CF-34. Migrations are hand-authored and 
 ### D-45 — Transactional rehearsal
 
 OD-10 control 7, added at P01-T03-R-M3. Every migration is executed inside `begin; … rollback;` before `db push`, and the output is quoted in the task report. Postgres DDL is transactional, so this parses, plans, type-checks, resolves every reference and enforces every constraint, then leaves nothing behind — a real rehearsal where `db push --dry-run` is only a listing of filenames. The gap was demonstrated rather than predicted: a migration carrying forty-six literal line-number gutter artefacts passed both `guard:naming`, which blanks comments and never parses, and `db push --dry-run`, and was rejected by Postgres at parse on the only database that exists. A failed rehearsal is a HALT and the push is not attempted.
+
+### D-46 — G1 and the phase map
+
+OD-11, signed 31 August 2026. `Operator` authentication and MFA move from P01 to P05, alongside the dashboard they serve. The G1 assessment failed on two phase-map entries that had no evidence rather than on any defect: `SECURITY_MODEL.md` §9 defers the MFA factor type, enrolment flow and recovery procedure to `ADMIN_SPEC.md`, which is document 9 and unauthored, so building authentication at P01 would mean deciding those three things in code; and §6 places CF-39's adequacy question live at P05 when accounts are created, so building early would put two staff email addresses into a non-EU jurisdiction before the quotation carrying that work is signed. The placement was inherited from a P00 map written before the dashboard was scoped — nothing at P01 through P04 needs authentication, because the public site is anonymous by construction and holds no session. D-08 is unchanged in every respect except when: minimum two accounts, MFA required, enrolment before access. G1 then closes on foundation — repo, CI, schema, RLS, seed import — with its non-waivable Boundary gate assessed as PASS on its own terms: RLS on all eight tables, sixteen policies of which every anonymous one is `for select`, `anon` holding SELECT and nothing else, no attribution column, no personal-data column, and nothing published.
