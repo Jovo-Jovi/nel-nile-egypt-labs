@@ -192,7 +192,7 @@ needs the lab's written approval before launch. Both are carried forward.
 **Status:** SIGNED
 **Signed:** 29 August 2026
 **Amends:** OD-05 bound 4, which read that the landing-page mock "is not a P03 deliverable, does not satisfy any part of G3, and is replaced wholesale at P03." That bound is superseded.
-**Decides:** the composition approved by the client on 29 August 2026 and recorded in `docs/PAGE_REPORT.md` becomes the **production baseline for the public site**. It is carried forward into P03 and refined in place rather than discarded. `DESIGN_SYSTEM.md` v5 is its specification; where the two disagree, v5 wins and `PAGE_REPORT.md` is amended, never the reverse.
+**Decides:** the composition approved by the client on 29 August 2026 and recorded in `docs/research/16-owner-approved-composition.md` becomes the **production baseline for the public site**. It is carried forward into P03 and refined in place rather than discarded. `DESIGN_SYSTEM.md` v5 is its specification; where the two disagree, v5 wins and `PAGE_REPORT.md` is amended, never the reverse.
 **What promotion changes:**
 1. G3 applies to this surface. It is no longer exempt.
 2. `DESIGN_SYSTEM.md` §12 approval gates are restored before any `Visitor` can reach it. An ungated composition was correct for a review session and is not correct for a served page.
