@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "guard:naming": "node scripts/guard/naming.mjs",
+    "guard:design": "node scripts/guard/design.mjs",
     "postinstall": "next telemetry disable"
   },
   "repository": {

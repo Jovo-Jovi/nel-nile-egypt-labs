@@ -4,7 +4,7 @@
   gap: var(--nel-space-24);
   padding: var(--nel-space-24);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   box-shadow: var(--nel-elevation-1-shadow);
 }
 

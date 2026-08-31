@@ -1,6 +1,6 @@
 # NEL — Design System
 
-**Status:** v3, COMPLETE and landable. §3 values derive from
+**Status:** v5, COMPLETE and landable. §3 values derive from
 `docs/research/15-mark-colour-sampling.md`, landed at P02-X02; OD-07 bound 1 is
 discharged. §4 typefaces selected at the P02-X02-A verdict against the four criteria,
 verified against the font binaries. §5 elevation values ratified at the P02-T07 verdict.
