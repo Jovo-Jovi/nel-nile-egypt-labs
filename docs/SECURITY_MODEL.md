@@ -1,6 +1,6 @@
 # NEL — Security Model
 
-**Status:** AUTHORED at P02-T18 · 29 August 2026
+**Status:** AUTHORED at P02-T17 · 29 August 2026
 **Vocabulary:** frozen `GLOSSARY.md` · 2026-08-25, as superseded in part by its §7.
 **Precedence:** document 5. `PRODUCT_BRIEF.md`, `GLOSSARY.md`, `DECISIONS.md`, `SCOPE.md`,
 `CONTENT_MODEL.md` and `BOUNDARY_MODEL.md` all outrank it. Where this document appears to
