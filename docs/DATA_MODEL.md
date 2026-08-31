@@ -1,6 +1,7 @@
 # NEL — Data Model
 
-**Status:** AUTHORED at P02-T18 · 29 August 2026
+**Status:** v3 · AUTHORED at P02-T18 · §10 amended at P01-T03-R-M1 · §5, §6, §7, §8, §9
+amended at P01-T03-R-M3 to `CONTENT_MODEL.md` §3a, which outranks this document
 **Vocabulary:** frozen `GLOSSARY.md` · 2026-08-25, as superseded in part by its §7.
 **Precedence:** document 7. Everything above it wins on conflict, and a conflict is raised
 as a formal amendment rather than reconciled in SQL. `SECURITY_MODEL.md` (document 5) and
@@ -146,7 +147,16 @@ other. A ninth string is a data change nobody reviewed.
 
 This is the most consequential decision in this document.
 
-`"LabTest"."eligibility_audience"` is `EligibilityAudience not null default 'unreviewed'`.
+`"ProgrammeLabTest"."eligibility_audience"` is `EligibilityAudience not null default
+'unreviewed'`.
+
+**It sits on the membership row, not on `"LabTest"`.** The first cut of this document put
+it on the test. `CONTENT_MODEL.md` §3a assigns `eligibility` to `ProgrammeLabTest`, and
+§3b step 4 reads it *"for each row in the set"* — those rows are membership rows.
+`CONTENT_MODEL.md` is document 4 and this file is document 7, so the higher document wins
+and this one is amended. Corrected at P01-T03-R-M3 after the builder reported the
+divergence rather than reconciling it. The control is unchanged by the move: the default
+is still `unreviewed` and the filter still fails closed.
 
 **A row whose eligibility is `unreviewed` never renders on the public site, in any tier,
 for any audience selection.** It is visible in the dashboard, editable, and absent from
@@ -157,8 +167,10 @@ default would put PSA on a Gold page and on a Platinum — Female page from the 
 migration, because `all` is exactly what F1 describes as the harm. **A safe-looking
 default is how this class of defect ships.**
 
-So: all 72 rows begin `unreviewed`, all 72 are therefore withheld from the public site,
-and each becomes visible only when a human sets its value. That is the same shape as the
+So: all 121 membership rows begin `unreviewed`, every one is therefore withheld from the
+public site, and each becomes visible only when a human sets its value. The count is 121
+rather than 72 because eligibility is a property of a test *within a programme tier*: the
+seed carries PSA twice, at Silver and at Platinum — Male, and each membership is judged. That is the same shape as the
 clinical gate and it is deliberate — the eligibility of a clinical analysis is a clinical
 judgement, and it belongs with the sign-off that governs the name.
 
@@ -179,10 +191,10 @@ and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 
 | # | Table | Notable columns beyond §3's common set |
 |---|---|---|
-| 1 | `"Programme"` | `slug` unique · `name_ar` · `name_en` · `tier_note_ar` · `tier_note_en`. **No price column** (D-04) |
-| 2 | `"ProgrammeTier"` | `"Programme"` fk · `tier_axis` · `audience_axis` · unique on the triple |
-| 3 | `"ProgrammeLabTest"` | `"Programme"` fk · `"LabTest"` fk · `tier_axis` · `audience_axis` · `source_name` · unique on the quadruple |
-| 4 | `"LabTest"` | `slug` unique · `name_ar` · `name_en` · `aliases text[]` · `eligibility_audience` · `note_ar` · `note_en` · `qa_flag` · `"LabUnit"` fk nullable |
+| 1 | `"Programme"` | `slug` unique · `name_ar` · `name_en` · `description_ar` · `description_en` · `preparation_notes_ar` · `preparation_notes_en`. **No price column** (D-04) |
+| 2 | `"ProgrammeTier"` | `"Programme"` fk `on delete cascade` · `tier_axis` · `audience_axis` · unique on the triple |
+| 3 | `"ProgrammeLabTest"` | **`"ProgrammeTier"` fk** `on delete cascade` · `"LabTest"` fk `on delete restrict` · `source_name` · `eligibility_audience` · `note_ar` · `note_en` · unique on the pair |
+| 4 | `"LabTest"` | `slug` unique · `name_ar` · `name_en` · `aliases text[]` · `qa_flag` · `"LabUnit"` fk nullable |
 | 5 | `"LabUnit"` | `slug` unique · `name_ar` · `name_en` · `description_ar` · `description_en` |
 | 6 | `"Branch"` | `name_ar` · `name_en` · `address_ar` · `address_en` · `is_head_office boolean` · `latitude` · `longitude` nullable · `hours_ar` · `hours_en` · `whatsapp_e164` |
 | 7 | `"Offer"` | `title_ar` · `title_en` · `body_ar` · `body_en` · `price_amount numeric(10,2)` · `price_currency` · `valid_from date` · `valid_to date` · `"MediaAsset"` fk nullable |
@@ -192,6 +204,18 @@ and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 | 11 | `"MediaAsset"` | `storage_path` · `alt_ar` · `alt_en` · `width` · `height` · `byte_size` · `mime_type` |
 | 12 | `"Announcement"` | title, body, `published_at`. **Does not exist until OD-09 is signed** |
 | 13 | `"ClinicalNotice"` | title, body, plus `signed_by`, `signed_at`, `signed_text_hash`. **Does not exist until OD-09 is signed** |
+
+**Row 3 belongs to a `"ProgrammeTier"`, not to a `"Programme"` with loose axis columns.**
+`CONTENT_MODEL.md` §3a states it and §3a's relationship table makes `ProgrammeTier` →
+`ProgrammeLabTest` one-to-many. It is also the better shape: axis values live in exactly
+one place, so no membership row can carry an axis pair that no tier row matches. The
+unique constraint is therefore on (`"ProgrammeTier"`, `"LabTest"`) — a pair, not a
+quadruple — and the axes reach a membership through its tier.
+
+**Row 1 carries `description` and `preparation_notes` pairs**, which `CONTENT_MODEL.md`
+§3a lists and the first cut of this document omitted. `tier_note` was this document's own
+invention and is dropped; the note a §3b step 4 exclusion shows belongs to the membership
+row, which is where row 3 now carries `note_ar` and `note_en`.
 
 Rows 12 and 13 are listed for completeness and are not created by any migration before
 OD-09 leaves DRAFT.
@@ -231,6 +255,10 @@ Platinum cumulate in that order · Platinum additionally matches `AudienceAxis` 
 eligibility filter applies after the union and never to the Children branch · and rows
 whose eligibility is `unreviewed` are excluded unconditionally (§5).
 
+It reaches memberships **through `"ProgrammeTier"`** (§6 row 3): the axes are columns of
+the tier, so the union is a join across tier rows of one `"Programme"` rather than a
+filter on axis columns repeated per membership.
+
 **The function is `security definer` with a fixed `search_path`**, so it cannot be
 subverted by a caller's schema. It reads only published rows.
 
@@ -245,8 +273,9 @@ violate:
 | Rule | Mechanism |
 |---|---|
 | Every membership points at a real `LabTest` | foreign key, `on delete restrict` |
-| Every membership points at a real `Programme` | foreign key, `on delete cascade` |
-| No duplicate membership | unique on (`Programme`, `LabTest`, `tier_axis`, `audience_axis`) |
+| Every membership points at a real `ProgrammeTier` | foreign key, `on delete cascade` |
+| Every tier points at a real `Programme` | foreign key, `on delete cascade` |
+| No duplicate membership | unique on (`ProgrammeTier`, `LabTest`) |
 | 121 rows in, 72 distinct `LabTest` out | asserted **inside the seed migration**, which aborts on any other figure |
 | One `SiteSettings` row | unique index on a constant expression |
 | At most one head office | partial unique index on `is_head_office` where true |
@@ -265,8 +294,9 @@ decoration.
 
 - `slug` on `"Programme"`, `"LabTest"`, `"LabUnit"` — unique, and the lookup path for
   every detail page.
-- `("Programme", tier_axis, audience_axis)` on `"ProgrammeLabTest"` — the function in §7
-  reads on exactly this.
+- `("Programme", tier_axis, audience_axis)` on `"ProgrammeTier"` — the function in §7
+  selects tier rows on exactly this, then joins to `"ProgrammeLabTest"` on the tier key,
+  which the unique constraint in §8 already indexes.
 - Publication state on every published table, because RLS filters on it for every
   anonymous read.
 - Bilingual search across `name_ar`, `name_en` and `aliases` — **deferred.**
@@ -285,7 +315,7 @@ in the same task.
 |---|---|---|
 | M1 | the four enum types, the common column conventions, the CI naming guard | drop types |
 | M2 | `"LabUnit"`, `"Branch"`, `"MediaAsset"`, `"SiteSettings"` — the independent tables, each with RLS enabled | drop tables |
-| M3 | `"Programme"`, `"LabTest"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and their keys, each with RLS enabled | drop tables |
+| M3 | `"Programme"`, `"LabTest"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and their keys, each with RLS enabled, plus the grant revoke across all eight tables | drop tables, restore grants |
 | M4 | the §7 function, the RLS policies, and the seed load with its 121→72 assertion | drop function and policies; truncate |
 
 **M4 is the only one that loads data and the only one that can fail on what it loads.**

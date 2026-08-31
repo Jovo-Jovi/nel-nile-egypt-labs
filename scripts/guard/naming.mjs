@@ -12,6 +12,11 @@
 // guard would pass the folded form — the very thing D-41 exists to reject. The
 // matched text is reported as found, so a reader sees which form tripped it.
 //
+// Also fails on any line matching /^\s*\d+\s*\|/ — a known class of editor
+// gutter artefacts (literal `    10|` prefixes). Cheap and specific; OD-10
+// control 7 (transactional rehearsal) is the real parse check and this does
+// not substitute for it.
+//
 // Usage:
 //   node scripts/guard/naming.mjs              scan supabase/migrations/**/*.sql
 //   node scripts/guard/naming.mjs --stdin      scan SQL piped on stdin
@@ -140,6 +145,24 @@ function positionOf(starts, offset) {
   return { line: low + 1, column: offset - starts[low] + 1 };
 }
 
+const GUTTER_PATTERN = /^\s*\d+\s*\|/;
+
+function findGutterArtefacts(sql, label) {
+  const findings = [];
+  const sourceLines = sql.split("\n");
+  for (let i = 0; i < sourceLines.length; i += 1) {
+    const line = sourceLines[i];
+    if (GUTTER_PATTERN.test(line)) {
+      findings.push({
+        label,
+        line: i + 1,
+        text: line.trim(),
+      });
+    }
+  }
+  return findings;
+}
+
 function findUnquotedNames(sql, label) {
   const scannable = blankUnscannableSpans(sql);
   const starts = lineStartOffsets(sql);
@@ -196,25 +219,44 @@ function readStdin() {
   }
 }
 
-function report(findings, scannedLabel) {
-  if (findings.length === 0) {
+function report(nameFindings, gutterFindings, scannedLabel) {
+  const failed = nameFindings.length > 0 || gutterFindings.length > 0;
+  if (!failed) {
     process.stdout.write(`guard:naming — PASS. ${scannedLabel}\n`);
     return 0;
   }
 
   process.stdout.write(`guard:naming — FAIL. ${scannedLabel}\n`);
-  process.stdout.write(
-    `${findings.length} unquoted entity or type name reference(s) found. ` +
-      "D-41 requires quoted PascalCase.\n\n",
-  );
-  for (const finding of findings) {
+
+  if (nameFindings.length > 0) {
     process.stdout.write(
-      `  ${finding.label}:${finding.line}:${finding.column}  ` +
-        `found \`${finding.found}\`, expected \`"${finding.expected}"\`\n` +
-        `      ${finding.text}\n`,
+      `${nameFindings.length} unquoted entity or type name reference(s) found. ` +
+        "D-41 requires quoted PascalCase.\n\n",
     );
+    for (const finding of nameFindings) {
+      process.stdout.write(
+        `  ${finding.label}:${finding.line}:${finding.column}  ` +
+          `found \`${finding.found}\`, expected \`"${finding.expected}"\`\n` +
+          `      ${finding.text}\n`,
+      );
+    }
+    process.stdout.write("\n");
   }
-  process.stdout.write("\n");
+
+  if (gutterFindings.length > 0) {
+    process.stdout.write(
+      `${gutterFindings.length} line-number gutter artefact(s) found. ` +
+        "A line matching /^\\s*\\d+\\s*\\|/ is a copy-paste of an editor gutter, not SQL.\n\n",
+    );
+    for (const finding of gutterFindings) {
+      process.stdout.write(
+        `  ${finding.label}:${finding.line}  gutter artefact\n` +
+          `      ${finding.text}\n`,
+      );
+    }
+    process.stdout.write("\n");
+  }
+
   return 1;
 }
 
@@ -223,15 +265,25 @@ function main() {
 
   if (argv.includes("--stdin")) {
     const sql = readStdin();
-    const findings = findUnquotedNames(sql, "<stdin>");
-    return report(findings, "Scanned 1 inline SQL fragment from stdin.");
+    const nameFindings = findUnquotedNames(sql, "<stdin>");
+    const gutterFindings = findGutterArtefacts(sql, "<stdin>");
+    return report(
+      nameFindings,
+      gutterFindings,
+      "Scanned 1 inline SQL fragment from stdin.",
+    );
   }
 
   const sqlFlag = argv.indexOf("--sql");
   if (sqlFlag !== -1) {
     const sql = argv[sqlFlag + 1] ?? "";
-    const findings = findUnquotedNames(sql, "<inline>");
-    return report(findings, "Scanned 1 inline SQL fragment from --sql.");
+    const nameFindings = findUnquotedNames(sql, "<inline>");
+    const gutterFindings = findGutterArtefacts(sql, "<inline>");
+    return report(
+      nameFindings,
+      gutterFindings,
+      "Scanned 1 inline SQL fragment from --sql.",
+    );
   }
 
   const paths = collectSqlPaths(MIGRATIONS_DIR);
@@ -243,10 +295,13 @@ function main() {
     return 0;
   }
 
-  const findings = [];
+  const nameFindings = [];
+  const gutterFindings = [];
   for (const path of paths) {
     const sql = readFileSync(path, "utf8");
-    findings.push(...findUnquotedNames(sql, relative(".", path).split(sep).join("/")));
+    const label = relative(".", path).split(sep).join("/");
+    nameFindings.push(...findUnquotedNames(sql, label));
+    gutterFindings.push(...findGutterArtefacts(sql, label));
   }
 
   const names = paths.map((p) => relative(".", p).split(sep).join("/")).join(", ");
@@ -255,7 +310,7 @@ function main() {
       ? `Scanned 0 .sql files under ${MIGRATIONS_DIR}${sep}.`
       : `Scanned ${paths.length} .sql file(s): ${names}.`;
 
-  return report(findings, scannedLabel);
+  return report(nameFindings, gutterFindings, scannedLabel);
 }
 
 process.exit(main());
