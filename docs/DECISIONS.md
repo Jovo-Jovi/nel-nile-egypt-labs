@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty decisions. Ten of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-three decisions. Ten of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -441,3 +441,15 @@ OD-10, signed 29 August 2026, resolving CF-34. Migrations are hand-authored and 
 ### D-40 — No attribution at the database layer
 
 `SECURITY_MODEL.md` §5. No table holds a name, phone number, email, address, date of birth or identifier of any `Visitor` or any patient. No column stores a medical or diagnostic value. **No audit column references a person** — no `created_by`, no `updated_by`, no `deleted_by`, no `owner_id` — and no soft delete is keyed to a human; timestamps are permitted and attribution is not. No analytics, telemetry or event table exists. Postgres and Supabase best-practice guidance recommends the opposite and is correct for systems with public accounts; this one has a `Visitor` who is never persisted and an `Operator` who exists only in the auth schema. CF-78 tracks the risk and this decision is what gets quoted back at a suggestion that looks obviously right.
+
+### D-41 — Schema naming
+
+`DATA_MODEL.md` §2. Tables and columns carrying an entity name are quoted PascalCase, matching `CONTENT_MODEL.md` §3a exactly. Postgres folds unquoted identifiers to lower case, and `GLOSSARY.md` §3 makes lowercase use of a canonical entity name a defect rather than a style preference, so quoting is the only way the schema can carry the vocabulary the project froze. The cost is accepted and stated: every reference must quote, and a query written as `select * from programme` fails with *relation does not exist*. That is a loud immediate failure at the first query rather than a silent divergence between schema and glossary. A CI guard rejects any migration containing an unquoted reference to an entity name. Ordinary attribute columns are lower snake case, and bilingual pairs are `_ar` then `_en`, Arabic first.
+
+### D-42 — Eligibility fails closed
+
+`DATA_MODEL.md` §5. `"LabTest"."eligibility_audience"` is an enum of `unreviewed`, `all`, `male`, `female`, defaulting to `unreviewed`, and an `unreviewed` row never renders on the public site in any tier for any audience selection. `CONTENT_MODEL.md` §3b step 4 reads an eligibility field that no LabTest record possesses — the restriction survives only inside free-text `source_name` strings written in 2018 — so the filter that prevents a named harm vector is specified and unimplementable against current data. Defaulting to `all` would match §3b's wording and would place PSA, which the seed carries at Silver and which unions upward into Gold and Platinum, on a page a woman selects. A safe-looking default is how that class of defect ships. All seventy-two rows therefore begin withheld, and each becomes visible only when a human records a clinical judgement alongside the sign-off that governs its name. The consequence is accepted: until eligibility is reviewed, Programme detail pages list no LabTest rows.
+
+### D-43 — Cumulation is a database function
+
+`DATA_MODEL.md` §7. `CONTENT_MODEL.md` §3b defines a four-step rule whose first and fourth steps are both named harm vectors — Children must never inherit, and an inherited row must be filtered by audience. It is implemented once, as a `security definer` SQL function with a fixed `search_path` reading only published rows and excluding `unreviewed` rows unconditionally. Every caller uses it. One implementation can be tested; three cannot be kept identical, and the third written under time pressure is where a child's page gains a tumour marker. The function sits below the front-end, so a component that forgets the rule cannot bypass it — there is no unfiltered query to call.

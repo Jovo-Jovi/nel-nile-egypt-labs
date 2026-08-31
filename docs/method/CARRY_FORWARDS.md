@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-80**
+**Next free id: CF-83**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -85,6 +85,9 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-77 | `docs/PAGE_REPORT.md` is a second authority and has already drifted: it describes four social marks that D-35 ruled monochrome and that render nowhere. DESIGN_SYSTEM v5 §9 now specifies the composition. `PAGE_REPORT.md` is reduced to an implementation index — file path to section reference, no design statements — or deleted. Keeping it as written is not an option. | reviewer | OPEN | P03 |
 | CF-78 | The Supabase and Postgres best-practice skills available to the builder will suggest audit columns, `created_by` references, user tables and soft deletes keyed to a person. This system holds no personal data of any kind (`BOUNDARY_MODEL.md` §2, non-waivable) and `patient` is a forbidden identifier. Those suggestions will look like hygiene and will be boundary defects. Watch for them when CF-34 clears and P01-T03-R opens. | reviewer | OPEN | P01-T03-R |
 | CF-79 | No staging database exists. Branching is unavailable on the current plan and the linked remote is the only database, so every push lands on it. OD-10 accepts this with six controls. A second free project used purely as a scratch shadow would supply a rehearsal at no cost, subject to the plan's active-project limit; a paid plan would supply real branching. Both are commercial calls and belong with CF-37. | human | OPEN | P03 |
+| CF-80 | All seventy-two LabTest records have no Arabic name. I18N_MODEL.md §8 requires every Visitor-facing string in both locales and makes a missing one a failure rather than a fallback. Producing them is Opus-class work under the model rule and each then requires the lab's clinical sign-off. Unscheduled and unpriced; belongs in the quotation conversation. | human | OPEN | P03 |
+| CF-81 | Eligibility is unset on all seventy-two LabTest records and defaults to unreviewed, so Programme detail pages list nothing until a clinical judgement is recorded per row. The judgement travels with the name sign-off and is not a developer decision. | client | OPEN | P03 |
+| CF-82 | Five LabTest records carry QA flags from the 2018 extraction — ast, esr, fsh, app-afp, creatinine-urea-combined. The flags are stored on the row and the clinical gate governs their resolution. Two are HIGH: FSH appears in a thyroid-described tier and is very likely TSH, and APP is very likely AFP. | client | OPEN | P03 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

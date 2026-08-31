@@ -62,19 +62,21 @@ on a verbal expansion of an unsigned scope.
 | P02-T15 | Production pass on the promoted composition under OD-08. Branched `p02-t15` from `6250ba1` (P02-T14 landing; `origin/main` still at `b7e3348`, T14 not yet merged). §12 gates restored through `ApprovalGate` with the crafted treatment — **21 pending regions**, enumerated in the task report. `public/preview-stock/` removed in full; every photography slot is a §9 labelled frame gated pending. Hero veil retained over a `background` frame under the existing `brightness(0.58)` cap; worst-case composite unchanged (`#383B8E`, `surface` 9.52:1). Mark slot points at `public/mark/nel-mark.svg`; the SVG was not supplied, so the existing `onError` labelled-frame fallback renders and CF-74 stays open — no mark was drawn and the 83×100 raster is not referenced. Social marks with no destination do not render (D-35). `PAGE_REPORT.md` status header and §7 rewritten as the production baseline; §9-governs line added. CF-72 and CF-73 CLOSED; CF-75 landed OPEN; next-free id CF-76. Open count 46 − 2 + 1 = 45. `docs/DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` untouched; DECISIONS.md unchanged at 36 decisions / 8 ODs | pushed — verdict at push | 2026-08-29 |
 | P02-T16 | Document-only task. Branched `p02-t16` from `origin/main` at `3750c9d` (the commit that merges `p02-t15`). `docs/QUOTATION_AMENDMENTS.md` landed byte-exact from the reviewer-authored payload (blob SHA confirmed identical, `c211140b`); it was a new file, none existed before this task. OD-09 (Announcements and Clinical notices — two dashboard modules, `Announcement` and `ClinicalNotice`) landed **DRAFT**, awaiting the human's signature and a price, inserted after the OD-08 block per the STEP 2 anchor (confirmed exactly one occurrence). D-15 and D-16 amended so neither contradicts OD-09: Lab-to-Lab stays a static page with no dashboard module of its own; the module list stands at ten, the first eight fixed at P00, the last two — Announcements and Clinical notices — unpriced additions that do not take effect until signed. D-37 landed, recording OD-09's rationale and its A3/A4 pricing home in `QUOTATION_AMENDMENTS.md`. DECISIONS.md now 37 decisions / 9 ODs (`grep -c "^### D-"` → 37, `grep -c "^### OD-"` → 9). PR-31 landed (skills/tooling are never authority); next-free id PR-32. CF-76..CF-78 landed OPEN (reviewer / reviewer / reviewer, all P03 or P01-T03-R) — open count 45 → 48 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 48); next-free id CF-79. CF-17, CF-18, CF-49, CF-50, CF-67 and CF-74 correctly left open — none clears on a document. **PR-25 note:** `grep -c "no ninth dashboard module" docs/DECISIONS.md` → 1, not 0 as the fence's Done-when states — the one hit is inside the OD-09 payload's own `**Amends:**` line, landed verbatim per STEP 2's "no edits" instruction; the fence's own mandated text trips its own assertion. Reported, not resolved by editing the mandated text (PR-18/PR-25). `src/`, `public/` and `PAGE_REPORT.md` untouched; no `Announcement` or `ClinicalNotice` entity, schema or migration created; no price set anywhere | pushed — verdict at push | 2026-08-30 |
 | P02-T17 | Document-only task, closing CF-34. Branched `p02-t17` from `origin/main` at `cf624c0` (the commit that merges `p02-t16`). Both PR-29 attachments verified against all six named checks before any edit. **STEP 1** — `docs/SECURITY_MODEL.md` landed byte-exact from the reviewer-authored payload; the file did not exist before this task. `git hash-object` on the payload and on the landed file both read `6fde2b807d5274a84b986675e564c3054970e17e`; 196 lines, `grep -c "^## §"` → 9. Document 5 authored (`SECURITY_MODEL.md`; precedence: `PRODUCT_BRIEF`, `GLOSSARY`, `DECISIONS`, `SCOPE`, `CONTENT_MODEL` and `BOUNDARY_MODEL` all outrank it). **STEP 2** — the STEP 2 anchor (`**Does not decide:** the dashboard's own chrome language (CF-52, deferred to`) confirmed to occur exactly once in `DECISIONS.md` before editing. OD-10 (migration route, and no staging database) landed **SIGNED**, inserted verbatim after the OD-09 block and its trailing `---`, before `## Decision log`; a line-range diff of the inserted block against the payload is empty. **STEP 3** — D-38 (migration route), D-39 (row-level security) and D-40 (no attribution at the database layer) appended verbatim, resolving CF-34 and recording `SECURITY_MODEL.md` §3 and §5 as decisions. DECISIONS.md now 40 decisions / 10 ODs (`grep -c "^### D-"` → 40, `grep -c "^### OD-"` → 10, `grep -c "^### OD-10"` → 1); line 7's count prose updated to match, not hand-counted. **STEP 4** — CF-34 CLOSED at P02-T17, resolved by OD-10 and the P01-T03-E probe, Item cell appended per the fence's exact text. CF-79 landed OPEN (human, P03): no staging database exists on the free plan, a scratch-shadow project or a paid-plan branching upgrade are the two commercial options, both tied to CF-37. Next-free id advanced to CF-80. Open count 48 → 48 (48 base, −1 CF-34 closure, +1 CF-79 addition — `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 48). CF-37, CF-39 and CF-78 correctly left open — none of the three clears at this task. **STEP 5** — this document regenerated: this row, the open-CF list, the OD-10 SIGNED entry in the resolved-OD prose, `SECURITY_MODEL.md` recorded as document 5, CF-34 removed from the Next-action blocker text, and Next action retargeted to `DATA_MODEL.md` authoring, then P01-T03-R. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. `src/`, `public/`, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md`, `DESIGN_SYSTEM.md` and `GLOSSARY.md` untouched; no `supabase` command run, no migration authored or applied, no table, policy or role created, no price set anywhere | pushed — verdict at push | 2026-08-31 |
+| P02-T18 | Document-only task. Branched `p02-t18` from `origin/main` at `27cf2dd` (the commit that merges `p02-t17`). PR-29 attachment `payload-DATA_MODEL.md` verified against all six named checks before any edit. **STEP 1** — `docs/DATA_MODEL.md` landed byte-exact from the reviewer-authored payload; the file did not exist before this task. `git hash-object` on the payload and on the landed file both read `78ef7778887fac301678606819da41266b035518`; 313 lines, `grep -c "^## §"` → 11. Document 7 authored (`DATA_MODEL.md`; `SECURITY_MODEL.md` and `CONTENT_MODEL.md` both outrank it). **STEP 2** — seed figures verified against `data/seed/catalogue.json`, each with its command, none disagreed: `programme_tests`/`tests`/`programmes` 121 72 9; LabTests empty `name_ar` 72; empty `name_en` 0; Programmes empty `name_ar` 0; distinct `tier` strings 8, all present in §4's mapping table; PSA membership rows 2 (Silver and Platinum — Male, both `general-checkup`); `eligibility`/`note` fields absent from every LabTest. **STEP 3** — `docs/SECURITY_MODEL.md` status line repaired from `AUTHORED at P02-T18` to `AUTHORED at P02-T17` (the document was landed at T17 with the wrong task id; T17 correctly did not correct it). **STEP 4** — D-41 (schema naming), D-42 (eligibility fails closed) and D-43 (cumulation is a database function) appended verbatim. DECISIONS.md now 43 decisions / 10 ODs (`grep -c "^### D-"` → 43, `grep -c "^### OD-"` → 10). **STEP 5** — CF-80, CF-81, CF-82 landed OPEN (human / client / client, all P03). Next-free id advanced to CF-83. Open count 48 → 51 (48 base, plus (a)(b)(c), no closures — `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 51). **STEP 6** — this document regenerated: this row, the open-CF list, `DATA_MODEL.md` recorded as document 7, Next action retargeted to P01-T03-R migration M1. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. `src/`, `public/`, `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md`, `DESIGN_SYSTEM.md` and `GLOSSARY.md` untouched; `SECURITY_MODEL.md` touched only at STEP 3; no `supabase` command run, no migration authored or applied, no table, type, function, policy or index created, no eligibility value or Arabic name set on any LabTest | pushed — verdict at push | 2026-08-31 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 4 of P02-T17):
+Computed by (run after STEP 5 of P02-T18):
 `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md`
 
-**Open — 48:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 51:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
 CF-52 · CF-54 · CF-58 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63 · CF-65 · CF-66 ·
-CF-67 · CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-76 · CF-77 · CF-78 · CF-79
+CF-67 · CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-76 · CF-77 · CF-78 · CF-79 ·
+CF-80 · CF-81 · CF-82
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -135,6 +137,16 @@ exists; OD-10 accepts this with six binding controls; a scratch-shadow free
 project or a paid-plan branching upgrade would both remove the risk and both
 are commercial calls that join CF-37. CF-37, CF-39 and CF-78 were correctly
 left open — none of the three clears on a document.
+
+**Closed at P02-T18:** none. CF-80, CF-81 and CF-82 landed OPEN (human /
+client / client, all P03): all seventy-two LabTest records have no Arabic
+name; eligibility defaults to `unreviewed` so Programme detail pages list
+nothing until a clinical judgement is recorded per row; five LabTest records
+carry QA flags from the 2018 extraction (`ast`, `esr`, `fsh`, `app-afp`,
+`creatinine-urea-combined`), two of them HIGH. None of the three clears on
+this document. CF-14, CF-01 and CF-25 correctly left open — CF-80 sits
+alongside CF-14 rather than closing it, and the clinical gate still owns
+the names, the eligibility judgement and the flagged rows.
 
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
@@ -201,7 +213,13 @@ is CLOSED at P02-T17: OD-10 decides the route and no local database is used
 at any point, and `P01-T03-R` is unblocked. CF-79 is landed at P02-T17, OPEN,
 P03: OD-10's accepted risk that no staging database exists on the free plan,
 tracked alongside CF-37 as a commercial decision on a scratch-shadow project
-or a paid-plan upgrade.
+or a paid-plan upgrade. CF-80, CF-81 and CF-82 are landed at P02-T18, OPEN,
+P03: the seventy-two missing Arabic LabTest names (Opus-class, then clinical
+sign-off, unscheduled and unpriced); eligibility unset and defaulting to
+`unreviewed` so no LabTest row renders on a Programme detail page until a
+clinical judgement is recorded; and five QA-flagged LabTest records whose
+resolution is a clinical call, two of them HIGH (FSH very likely TSH, APP
+very likely AFP).
 
 ---
 
@@ -229,7 +247,8 @@ hand-authored and pushed to the linked remote, no local database is used at
 any point; see `DECISIONS.md` OD-10. It resolves CF-34, so `P01-T03-R` is no
 longer blocked; six binding controls apply from T03-R onward, and the
 accepted-risk carry-forward (no staging database on the free plan) is
-tracked as CF-79. Gate-0 document
+tracked as CF-79. `DATA_MODEL.md` (document 7) is authored at P02-T18.
+Gate-0 document
 set (`PRODUCT_BRIEF` · `GLOSSARY`
 frozen, §6 superseded in part · `SCOPE` · `DECISIONS` authored ·
 `CONTENT_MODEL` authored and amended · `BOUNDARY_MODEL` frozen, amended under
@@ -239,25 +258,25 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**`DATA_MODEL.md` authoring, then P01-T03-R.** OD-10 resolves CF-34 — no
-local Postgres, no container runtime, no shell elevation — by deciding that
-migrations are hand-authored and pushed to the linked remote, with no local
-database used at any point. `DATA_MODEL.md` (document 7) fixes the table,
-column and type detail that OD-10 and `SECURITY_MODEL.md` both defer to; no
-migration is authored before both `DATA_MODEL.md` and `SECURITY_MODEL.md`
-exist for the objects it touches. P01-T03-R is the schema task — nothing
-wires until it lands — and every phase after P01 depends on the schema it
-produces.
+**P01-T03-R, migration M1** — the enum types and the CI naming guard, per
+`DATA_MODEL.md` §10. `DATA_MODEL.md` is authored (document 7);
+`SECURITY_MODEL.md` is authored (document 5). Both exist for the objects M1
+touches. M1 creates the four enum types (`ProgrammeTierAxis`, `AudienceAxis`,
+`EligibilityAudience`, `PublicationState`), the common column conventions,
+and the CI naming guard that rejects an unquoted entity-name reference in a
+migration. No table is created at M1. OD-10's six binding controls apply
+from T03-R onward.
 
 **Quotation amendment, now with a landed schedule.** `docs/QUOTATION_AMENDMENTS.md`
-is landed (§1–§7, this task) and OD-09 (Announcements and Clinical notices,
+is landed (§1–§7) and OD-09 (Announcements and Clinical notices,
 two dashboard modules — `Announcement` and `ClinicalNotice`, priced as A3 and
 A4) is DRAFT, awaiting the human's signature and a price. CF-17, CF-18,
 CF-49, CF-50, CF-51 and CF-67 remain open against the draft quotation; none
 of them clears on a document, only on a signature or a supplied asset. CF-74
-stays open until the human supplies `public/mark/nel-mark.svg`. CF-59,
-CF-60, CF-65, CF-66, CF-68, CF-69, CF-71, CF-75, CF-76, CF-77 and CF-78
-remain open.
+stays open until the human supplies `public/mark/nel-mark.svg`. CF-80, CF-81
+and CF-82 are open against the seed: missing Arabic LabTest names, unset
+eligibility, and five QA-flagged rows. CF-59, CF-60, CF-65, CF-66, CF-68,
+CF-69, CF-71, CF-75, CF-76, CF-77, CF-78 and CF-79 remain open.
 
 ---
 
