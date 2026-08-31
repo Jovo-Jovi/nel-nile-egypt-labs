@@ -353,7 +353,7 @@ much as the conclusion here, because a wrong justification is how someone later 
 - The SQL text of any migration. Written per task against these rules.
 - The Arabic names of the 72 `LabTest` records (F3). Opus-class work, then the lab's
   sign-off. Unscheduled and unpriced.
-- The eligibility value of any `LabTest` (F2). A clinical judgement, taken with the
+- The eligibility value of any `ProgrammeLabTest` membership (F2). A clinical judgement, taken with the
   sign-off that governs the name. Until then every row is `unreviewed` and withheld.
 - Whether the five QA-flagged `LabTest` records are corrected before or after first
   publication. `ast`, `esr`, `fsh`, `app-afp`, `creatinine-urea-combined` — the flags are

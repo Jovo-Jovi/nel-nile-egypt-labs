@@ -9,14 +9,12 @@ been stalled on CF-34 for the whole life of P02; OD-10 resolved it at P02-T17 an
 M1 is the first migration applied. Schema work is live.
 **Gate:** G1 — not reached
 **Repo:** `Jovo-Jovi/nel-nile-egypt-labs` · branch `main` · PUBLIC (OD-04)
-**Schema:** M1 and M2 applied 31 August 2026 — four enum types in `public`, and
-**four tables** (`"LabUnit"`, `"Branch"`, `"SiteSettings"`, `"MediaAsset"`) with
-**RLS enabled on all four and zero policies**, which denies every request
-including the `Operator`'s until M4 (CF-85). **M3 is not applied** — the files
-authored at P01-T03-R-M3 were deleted at P01-T03-R-M3A rather than repaired,
-because `DATA_MODEL.md` v3 changed the shape and a repaired file would carry the
-old structure's assumptions. Nothing from them was ever applied (`migration list`
-showed `remote:""`). M3 and M4 outstanding (`DATA_MODEL.md` §10).
+**Schema:** M1, M2 and M3 applied 31 August 2026 — four enum types in `public`,
+and **eight tables** (`"LabUnit"`, `"Branch"`, `"SiteSettings"`, `"MediaAsset"`,
+`"LabTest"`, `"Programme"`, `"ProgrammeTier"`, `"ProgrammeLabTest"`) with **RLS
+enabled on all eight, zero policies, and SELECT-only grants** to `anon` and
+`authenticated`. Nobody writes, including the `Operator`, until M4 (CF-85,
+CF-88). M4 outstanding (`DATA_MODEL.md` §10).
 
 ---
 
@@ -77,20 +75,21 @@ on a verbal expansion of an unsigned scope.
 | P01-T03-R-M2 | **The first migration that creates a table.** Branched `p01-t03-r-m2` from `origin/main` at `98edaeb` (the commit that merges `p01-t03-r-m1`). PR-29 attachment `payload-DATA_MODEL-v2.md` verified against all four named checks before any edit: first line `# NEL — Data Model`, 334 lines, `grep -c "^## §"` → 11, `grep -Fc "RLS is enabled in the same statement block"` → 1. **STEP 1** — `docs/DATA_MODEL.md` replaced byte-exact. Outgoing state verified first: `git hash-object docs/DATA_MODEL.md` → `78ef7778887fac301678606819da41266b035518`, 313 lines — both matched. Landed blob (`59505499e4a50ffedc73509cf94b39b8ea508b66`) confirmed identical to the attachment's; landed 334 lines, 11 `^## §`. v2 rewrites §10: **enabling RLS and granting policies are two different things**, RLS goes in the same statement block as the `create table` in M2 and M3, policies land in M4, and the first cut's justification ("so that no table exists unprotected between migrations") is recorded as backwards. **STEP 2** — OD-08's trailing clause amended, the fragment confirmed to occur exactly once before editing (the count was first run with PowerShell-mangled backticks and re-run with hex-escaped ones, PR-24); `scripts/README.md` gained the `scripts/guard/` build-tooling paragraph verbatim. CF-77's Item cell deliberately untouched. **STEP 3** — `npx supabase migration new m2_independent_tables` wrote `supabase/migrations/20260831090539_m2_independent_tables.sql`; SQL authored by hand per §6 rows 5, 6, 10, 11. Four tables in the stated order, `"LabUnit"` · `"Branch"` · `"SiteSettings"` · `"MediaAsset"`, each with the §3 common set (`id uuid primary key default gen_random_uuid()`, `created_at`/`updated_at timestamptz not null default now()`, `publication_state public."PublicationState" not null default 'draft'`, `display_order integer not null default 0`) and **`alter table … enable row level security` in the same statement block as its `create table`**. **No policy, no function, no grant, no role, and no attribution column** anywhere. 62 columns total; bilingual columns nullable in storage per §3 rule 6. `"SiteSettings"` field list taken from `CONTENT_MODEL.md` §3a line 88, which outranks `DATA_MODEL.md`, bounded by §6 row 10's inventory: `hotline`, `whatsapp_e164` and the four social URLs are **single** columns, not bilingual pairs, because `I18N_MODEL.md` §5 fixes Western digits in both locales uniformly and §6 lists "the WhatsApp number · social URLs · any `SiteSettings` value containing Latin" among the Latin runs isolated at render — one stored value, isolated, both locales; §6 row 6 settles the same question the same way on `"Branch"`, where `whatsapp_e164` is single and `hours` is a pair. The four social columns are the four platforms the lab actually holds an account on per `docs/research/11-research-findings.md` §5 (Facebook, Instagram, LinkedIn, YouTube; TikTok and X recorded as not found), matching the four social marks in `docs/research/16-owner-approved-composition.md:76`; all four nullable because no canonical URL is settled (CF-10) and D-35 renders no mark without a destination. `map` is **not** created: `CONTENT_MODEL.md` §3a lists it, §6 row 10 and the fence do not, and `DESIGN_SYSTEM.md` §10 draws the map from `"Branch"` coordinates, so nothing is stored — reported as an observation, not repaired. 13 bilingual check constraints (2 `"LabUnit"` · 3 `"Branch"` · 7 `"SiteSettings"` · 1 `"MediaAsset"`), each of the form `publication_state <> 'published' or (both not null)`, so a draft may be half-written and the constraint bites only at the transition to published. §8's two unique indexes: a partial unique index on `"Branch" (is_head_office) where is_head_office`, and `"SiteSettings" ((true))` — a unique index on a constant expression, the documented Postgres singleton idiom, confirmed against the PostgreSQL sources before it was written rather than assumed. §9: `publication_state` indexed on each of the four; no separate `slug` index, the unique constraint on `"LabUnit"."slug"` already supplies one; bilingual search deferred (CF-54). **STEP 4** — the reverse authored in the same task under OD-10 control 1 as `supabase/migrations/m2_independent_tables.down.sql`, dropping the four tables in reverse creation order, **`cascade` deliberately absent on every statement per M1's precedent** — the refusal is the control. It states per table why the drop is safe now (nothing references any of the four; `"LabTest"`/`"Equipment"`'s inbound keys to `"LabUnit"` and `"Offer"`/`"Equipment"`/`"Video"`'s to `"MediaAsset"` belong to tables no migration has created) **and states plainly that after M3 or M4 it will not be** — M3 gives `"LabTest"` a `"LabUnit"` foreign key, after which the bare drop fails and must not be edited to add `cascade`; M4 loads the seed, after which "the tables hold no data" is false and OD-10 control 4 puts destruction behind its own OD. Not applied; the CLI confirms it is inert, printing `Skipping migration m2_independent_tables.down.sql... (file name must match pattern "<timestamp>_name.sql")` on every invocation. **STEP 5** — (a) `npm run guard:naming` → exit 0, `Scanned 4 .sql file(s)`. (b) `npx supabase db push --dry-run` → exit 0, `Would push these migrations: • 20260831090539_m2_independent_tables.sql`, `{"upToDate":false,"dryRun":true,"migrations":["20260831090539_m2_independent_tables.sql"],…}` — **exactly one** migration and M1 absent, so M1 is recorded as applied. (c) `npx supabase db push` → exit 0, `Applying migration 20260831090539_m2_independent_tables.sql...`. (d) `npx supabase migration list` → two rows, `local` and `remote` agreeing on both (`20260831082725`, `20260831090539`). (e) MCP `list_tables` on `public` → **exactly 4 tables**, `public.LabUnit` · `public.Branch` · `public.SiteSettings` · `public.MediaAsset`, each `"rls_enabled":true`, each `"rows":0`. (f) read back read-only via MCP `execute_sql`: `pg_class.relrowsecurity` → **true on all four**; `pg_policies` for `public` → **0 rows** (and 0 in every schema); the full 62-column list per table matching the migration exactly, with an assertive probe returning `attribution_columns_exact` **0** for `created_by`/`updated_by`/`deleted_by`/`owner_id` and `<none>` for a wider pattern also covering `_by$`, `user_id`, `patient`, `visitor`, `operator`, `email`, `phone`, `dob`, `date_of_birth`, `national_id`, `ssn` and `result`; 11 indexes (4 primary keys, `"LabUnit_slug_key"`, 4 `publication_state`, and §8's two uniques with `pg_get_indexdef` quoted) and all 13 check constraints with `pg_get_constraintdef` quoted. (g) **the empirical anonymous `select` could not be executed, and is reported rather than asserted.** `set local role anon` through MCP `execute_sql` returns `ERROR: 42501: permission denied to set role "anon"`: the MCP connects as `supabase_read_only_user`, which is not a member of `anon` and which itself carries `rolbypassrls = true`, so no MCP-mediated read is an RLS-subject read at all. The publishable-key REST path would be the real anonymous route and needs a provider tool this fence does not name, which PR-20 forbids, so it was not taken and no key was fetched. **Separately, the test as written cannot discriminate at M2:** all four tables hold 0 rows, so a zero-row anonymous read is equally consistent with an RLS deny and an empty table. It becomes discriminating at M4, when rows exist. The deny is therefore established **formally and by reading**, which is what OD-10 control 5 asks for: RLS is on for all four, **zero** policies exist in `public`, and `anon` has `rolbypassrls = false`, `rolsuper = false`, owns **0** tables in `public` and is named by **0** policies — under Postgres's documented absence of any implicit allow that is a complete deny for both reads and writes. **Finding, reported and not repaired:** `anon` and `authenticated` each hold the full `arwdDxtm` privilege set on all four new tables, granted by `postgres` at creation through the project's default privileges, even though `auto_expose_new_tables` is unset in `config.toml` (that field governs the local stack, not the linked remote). §10's justification is therefore **live rather than hypothetical** — RLS being on is the only control — and it has an M4 consequence: `SECURITY_MODEL.md` §3 forbids anonymous `INSERT`/`UPDATE`/`DELETE` "ever", and with the grants already present that prohibition rests entirely on M4's published-read policy being written `for select` and never `for all`. Described for the reviewer to allocate; no id was invented (PR-02). **Boundary check, the headline:** four tables, RLS on all four, zero policies, zero attribution columns, and no column holding a name, phone number, email, address, date of birth or identifier of any `Visitor` or patient — quoted from the column read-back, not asserted. `"Branch"."whatsapp_e164"` and `"SiteSettings"."hotline"` are the lab's published business contact points and belong in the database rather than in source (PR-16). **STEP 6** — CF-85 landed OPEN (reviewer, M4): the four tables deny every request including the `Operator`'s until M4 lands the two policy shapes, recorded so the state is not mistaken for a fault. Next-free id advanced to CF-86. Open count 51 → 52 (51 base, +1 addition, no closures — `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 52). CF-78 is the CF this task was warned by and it holds: no audit column, no user table and no soft delete keyed to a person was created, and the boundary probe proves it. CF-83 correctly left open — M2's reverse is authored and unapplied, so still no reverse on this project has ever been executed. **PR-25 note:** `grep -c "PAGE_REPORT" docs/DECISIONS.md` reads **1**, not 0 as the fence's Done-when states. The one hit is D-35's ratification prose at `DECISIONS.md:423`, which STEP 2 does not name — STEP 2 names only OD-08's trailing clause. P01-T03-R-M1's report already disclosed this hit. It states its rationale against the path that existed when the decision was taken, which is exactly the reasoning STEP 2c uses to protect CF-77's Item cell, so it was not edited: an unlisted edit attributed to a ruling is a PR-18 violation. Reported, not resolved by editing. DECISIONS.md unchanged at 43 decisions / 10 ODs (`grep -c "^### D-"` → 43, `grep -c "^### OD-"` → 10) — this task lands no decision; OD-08's edit is a path amendment. `git ls-files supabase/migrations/ \| wc -l` → 4. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. No project ref, key, JWT or connection string appeared in any CLI output; the ref the MCP calls required was read from the gitignored `supabase/.temp/project-ref` and is `[redacted under OD-04 condition 1]` here and in the report. `data/seed/`, `src/`, `public/`, `SECURITY_MODEL.md`, `CONTENT_MODEL.md`, `DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` all untouched; no `db reset`, `db diff`, `start`, `stop` or `test` run; `auto_expose_new_tables` not set; no `"Programme"`, `"LabTest"`, `"ProgrammeTier"` or `"ProgrammeLabTest"` created; no seed data loaded; the reverse not applied; M3 not authored | pushed — verdict at push | 2026-08-31 |
 | P01-T03-R-M3 | **HALTED at STEP 5c. `db push` failed and no second push was attempted, per the fence's own instruction.** Branched `p01-t03-r-m3` from `origin/main` at `544b6bc` (the commit that merges `p01-t03-r-m2`, PR #26). **STEP 1** — PR-32 landed verbatim as the last table row in `docs/method/PRECEDENTS.md`; the PR live maximum was computed as 31 before allocating (`Select-String` over `\*\*PR-(\d+)\*\*`, maximum 31, next-free line read `PR-32`), and next-free advanced to PR-33. `grep -c "PR-32"` → 1. The CF live maximum was computed as 85 in the same step, so neither STOP condition on a live maximum fired. **STEP 2/3/4** — `npx supabase migration new m3_catalogue_tables` wrote `supabase/migrations/20260831094526_m3_catalogue_tables.sql`; its SQL authored by hand per `DATA_MODEL.md` §6 rows 1–4 as four tables in dependency order (`"LabTest"`, `"Programme"`, `"ProgrammeTier"`, `"ProgrammeLabTest"`), each with the §3 common set and `enable row level security` in the same statement block, no attribution column of any kind (D-40), no price column on `"Programme"` (D-04), `eligibility_audience` defaulting to `'unreviewed'` (D-42, §5), the three deliberately differing delete actions (`set null` toward `"LabUnit"`, `cascade` toward `"Programme"`, `restrict` toward `"LabTest"`), unique on the `"ProgrammeTier"` triple and the `"ProgrammeLabTest"` quadruple (§8), the §9 `("Programme", tier_axis, audience_axis)` index plus `publication_state` on each of the four, and the STEP 3 grant revoke across all eight tables with `select` granted back to `anon` and `authenticated` and nothing else, followed by `alter default privileges`. Reverse authored in the same task as `supabase/migrations/m3_catalogue_tables.down.sql`, no leading timestamp, `cascade` absent, stating per table why the drop is safe at M3 and why M4's 121 membership rows and §7 function make it unsafe afterwards. **Two bilingual pairs take a both-or-neither form rather than M2's both-not-null form** — `"LabTest"."note_ar"`/`note_en` and `"Programme"."tier_note_ar"`/`tier_note_en` — because §5 makes the note pair conditional and the strong form would make a published row with eligibility `all` unpublishable; reported as a judgement for the reviewer to rule on. **STEP 5** — (a) `npm run guard:naming` → exit 0, `Scanned 6 .sql file(s)`. (b) `npx supabase db push --dry-run` → exit 0, `Would push these migrations: • 20260831094526_m3_catalogue_tables.sql`, exactly one. (c) **`npx supabase db push` → exit 1.** `ERROR: syntax error at or near "10" (SQLSTATE 42601)` at statement 0. **Cause: a builder authoring defect.** 46 literal line-number gutter prefixes of the form `    10|` had been written into the two SQL files — 34 in the forward file, 12 in the reverse — landing on every tenth line and corrupting real DDL lines, not only comments (`    90|create table public."LabTest" (` and `   100|  "LabUnit" uuid,` among them). **Neither gate before it can catch this class:** `scripts/guard/naming.mjs` blanks `--` comments and never parses SQL, and `db push --dry-run` lists files without parsing them, so on a project with no staging database (OD-10, CF-79) the first parse of any migration happens on the only database there is. The fence's STEP 5 says "If (c) fails, stop. Do not retry or amend and re-push in this task" and its STOP block makes a failed `db push` a HALT, so **no second push was attempted.** **Verified by reading that the failure landed nothing** (OD-10 control 5): `npx supabase migration list` → `{"local":"20260831094526","remote":""}` alongside M1 and M2 both local-and-remote, so M3 is unrecorded; MCP `list_tables` on `public` → still **exactly 4** tables, each `"rls_enabled":true`, each `"rows":0`; and a read-only `pg_class.relacl` query returned `{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}` unchanged on all four, so the grant revoke did not partially apply. The whole migration is one statement batch that aborted at parse, before any DDL. **After the halt** the 46 artefacts were removed from both files and the repair verified — 0 remaining by pattern search, 0 pipe characters anywhere in either file, `npm run guard:naming` → exit 0 again, `db push --dry-run` → still exactly one pending migration — but **the repaired SQL has never been executed and is unverified by execution.** **STEP 6 executed nothing, deliberately.** CF-86's mandated text ("Eight tables exist with RLS enabled, zero policies, and SELECT-only grants") and CF-85's mandated appendix ("Grants revoked at M3: anon and authenticated hold SELECT only on all eight tables") both assert a state that does not exist, and landing either would put a false statement into the ledger — PR-15, and PR-32, which this same task landed one step earlier. `docs/method/CARRY_FORWARDS.md` is untouched; next-free stays CF-86 and the open count stays **52**, unchanged. **Three findings are described for the reviewer to allocate; no id was invented (PR-02):** (i) the project has no pre-apply syntax check of any kind, and this task is the demonstration; (ii) `information_schema.role_table_grants`, which the fence names as STEP 3's proof, returns **zero rows** through the MCP connection regardless of the real grants, because the view is restricted to currently-enabled roles and the MCP user is neither grantor nor a member of `anon`/`authenticated` — `pg_class.relacl` and `has_table_privilege` are the authoritative substitutes, and this is the same class of defect as M2's undiscriminating anonymous-read check; (iii) `pg_default_acl` carries **two** entries granting `arwdDxtm` on tables in `public`, one from `postgres` and one from `supabase_admin`, so a single bare `alter default privileges` narrows only the first. **STEP 7** — this row; the `**Schema:**` line records M3 as authored and unapplied; Next action set to the M3 reissue rather than to M4. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. `git ls-files supabase/migrations/ \| wc -l` → 6. DECISIONS.md unchanged at 43 decisions / 10 ODs — this task lands no decision. No project ref, key, JWT or connection string appeared in any output; the ref the MCP calls required was read from the gitignored `supabase/.temp/project-ref` and is `[redacted under OD-04 condition 1]` here and in the report. `data/seed/`, `src/`, `public/`, `DATA_MODEL.md`, `SECURITY_MODEL.md`, `CONTENT_MODEL.md`, `DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` all untouched; no `db reset`, `db diff`, `start`, `stop` or `test` run; no policy and no function created; no seed data loaded; no eligibility value and no Arabic name set on any row; the reverse not applied; M4 not authored | halted at STEP 5c — verdict at push | 2026-08-31 |
 | P01-T03-R-M3A | **Documents only. No SQL authored, no supabase command run, no push attempted.** Branched `p01-t03-r-m3a` from `p01-t03-r-m3` at `80316be`, not from `origin/main` — p01-t03-r-m3 has not been merged (`origin/main` still at `544b6bc`, the P01-T03-R-M2 merge), so its PR-32 and its authored SQL were not orphaned. **STEP 1** — `docs/DATA_MODEL.md` replaced byte-exact from `payload-DATA_MODEL-v3.md`. Outgoing blob verified first: `git hash-object` → `59505499e4a50ffedc73509cf94b39b8ea508b66`, 334 lines — both matched. Landed blob (`688a16ba0080e39a9663bc9f09dbbac134c62e48`) confirmed identical to the attachment's; landed 364 lines, `grep -c "^## §"` → 11. **STEP 2** — v3 verified field by field against `CONTENT_MODEL.md` §3a, which outranks it; every check agreed, each reported with the line it was read from. **STEP 3** — OD-10 control 7 inserted verbatim after control 6; the preamble states no count; the text following it now enumerates seven controls. **STEP 4** — D-44 and D-45 appended; DECISIONS.md now 45 decisions / 10 ODs (`grep -c "^### D-"` → 45, `grep -c "^### OD-"` → 10). **STEP 5** — `scripts/guard/naming.mjs` extended to fail on `^\s*\d+\s*\|` in `supabase/migrations/**/*.sql`; proved both directions from stdin, no scratch file. **STEP 6** — both M3 SQL files deleted rather than repaired, because the shape changed; `git ls-files supabase/migrations/` → 4. Nothing was ever applied from them (`remote:""`). **STEP 7** — CF-86 and CF-87 landed OPEN (reviewer / reviewer, P03 / M3 reissue). Next-free id advanced to CF-88. Open count 52 → 54 (52 base, plus (a)(b), no closures). **STEP 8** — this row; `DATA_MODEL.md` recorded as v3; OD-10 recorded as carrying seven controls; the `**Schema:**` line unchanged at four tables; Next action set to the M3 reissue against v3. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. `CONTENT_MODEL.md`, `SECURITY_MODEL.md`, `DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` untouched; `data/seed/`, `src/` and `public/` untouched; no `supabase` command run; no table, type, function, policy, grant or role created; M3 reissue not authored | pushed — verdict at push | 2026-08-31 |
+| P01-T03-R-M3B | **The catalogue tables, reissued against `DATA_MODEL.md` v3, and the first exercise of OD-10 control 7.** Branched `p01-t03-r-m3b` from `origin/p01-t03-r-m3a` at `f5174dc`, not from `origin/main` — M3A is unmerged (`origin/main` still at `544b6bc`, the P01-T03-R-M2 merge). **STEP 1** — five reviewer corrections, each anchor unique before editing: OD-10 control 2 now states that `--dry-run` lists filenames and does not read them, and that control 7 is the rehearsal that parses (`grep -c "only rehearsal available" docs/DECISIONS.md` → 0); D-38 and CF-79 and this document's standing "six binding controls" each become seven; `DATA_MODEL.md` §11 moves the F2 eligibility deferral from any `LabTest` onto the `ProgrammeLabTest` membership. **STEP 2/3/4** — `npx supabase migration new m3_catalogue_tables` wrote `supabase/migrations/20260831104408_m3_catalogue_tables.sql`; SQL authored by hand against v3 §6 rows 1–4. Four tables in dependency order (`"LabTest"`, `"Programme"`, `"ProgrammeTier"`, `"ProgrammeLabTest"`), each with the §3 common set and `enable row level security` in the same statement block, no attribution column of any kind (D-40). `"LabTest"` carries `slug`, `name_ar`, `name_en`, `aliases text[] not null default '{}'`, `qa_flag`, and a nullable `"LabUnit"` fk `on delete set null` — no note, no eligibility. `"Programme"` carries `slug`, `name` and `description` pairs, and `preparation_notes` — no price (D-04), no `tier_note`. `"ProgrammeTier"` carries a `"Programme"` fk `on delete cascade`, both axes, unique on the triple. `"ProgrammeLabTest"` carries a `"ProgrammeTier"` fk `on delete cascade` and a `"LabTest"` fk `on delete restrict`, `source_name`, `eligibility_audience public."EligibilityAudience" not null default 'unreviewed'`, and a `note` pair; unique on (`"ProgrammeTier"`, `"LabTest"`) — a pair, not a quadruple; **no `"Programme"` foreign key and no axis column**. Bilingual checks bite only where `publication_state = 'published'`: both-not-null for name and description; both-or-neither for `preparation_notes` and the membership `note` pair. §9: the unique on `"ProgrammeTier" ("Programme", tier_axis, audience_axis)` is the named index, plus `publication_state` on each of the four. Grant revoke across all eight: `anon` and `authenticated` hold `SELECT` only; `alter default privileges` narrows the `postgres` granting role, with a comment that `pg_default_acl` also carries `supabase_admin`. Reverse authored in the same task as `supabase/migrations/m3_catalogue_tables.down.sql`, no leading timestamp, `cascade` absent, stating per table why the drop is safe today and that after M4 it will not be. **STEP 5** — (a) `npm run guard:naming` → exit 0, `Scanned 6 .sql file(s)`. (b) **control 7:** the full migration text executed inside `begin; … rollback;` via `npx supabase db query --linked --file` against a gitignored rehearsal file; exit 0, empty rows, then MCP `list_tables` still **exactly 4** tables, so the rehearsal parsed and left nothing behind. (c) `npx supabase db push --dry-run` → exit 0, `Would push these migrations: • 20260831104408_m3_catalogue_tables.sql`, exactly one. (d) `npx supabase db push` → exit 0, `Applying migration 20260831104408_m3_catalogue_tables.sql...`. (e) `npx supabase migration list` → three rows, local and remote agreeing on `20260831082725`, `20260831090539`, `20260831104408`. (f) MCP `list_tables` on `public` → **exactly 8**, all `rls_enabled: true`, all 0 rows. (g) read back via MCP `execute_sql`: every foreign key quoted — `"ProgrammeLabTest"` → `"ProgrammeTier"` `ON DELETE CASCADE`, → `"LabTest"` `ON DELETE RESTRICT`, they differ, and **no key from `"ProgrammeLabTest"` to `"Programme"` exists**; unique on `"ProgrammeLabTest"` is `UNIQUE ("ProgrammeTier", "LabTest")` — two columns; `relrowsecurity` true on all eight; `pg_policies` in `public` → 0 rows; `pg_class.relacl` is `anon=r/postgres,authenticated=r/postgres` on all eight and `has_table_privilege` is `SELECT` true / `INSERT` `UPDATE` `DELETE` `TRUNCATE` `REFERENCES` `TRIGGER` false for both roles; `"ProgrammeLabTest"."eligibility_audience"` default `'unreviewed'::"EligibilityAudience"`; column list has no attribution column on any of the eight, no `note` or `eligibility_audience` on `"LabTest"`, no `tier_note` or price on `"Programme"`. Anonymous row-level read not attempted — tables are empty and the MCP user carries `rolbypassrls`; deferred to M4. **STEP 6** — CF live maximum 87 (next-free was CF-88). CF-88 landed OPEN (reviewer, M4): eight tables, RLS on, zero policies, SELECT-only grants; nobody writes, including the Operator, until M4. CF-85's Item cell appended with the grant-revoke sentence; left OPEN. Next-free id advanced to CF-89. Open count 54 → 55 (54 base, plus (a), no closures — `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 55). **STEP 7** — this row; the `**Schema:**` line records eight tables, RLS on, zero policies, SELECT-only grants; Next action set to **M4**. `grep -c "^### D-"` docs/DECISIONS.md → 45 (unchanged). `git ls-files supabase/migrations/` → 6. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. No project ref, key, JWT or connection string appeared in any output; the ref the MCP calls required was read from the gitignored `supabase/.temp/project-ref` and is `[redacted under OD-04 condition 1]` here and in the report. `data/seed/`, `src/`, `public/`, `CONTENT_MODEL.md`, `SECURITY_MODEL.md`, `DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` all untouched; `DATA_MODEL.md` touched only at STEP 1e; no `db reset`, `db diff`, `start`, `stop` or `test` run; no policy and no function created; no seed data loaded; no eligibility value and no Arabic name set on any row; the reverse not applied; M4 not authored | pushed — verdict at push | 2026-08-31 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 7 of P01-T03-R-M3A):
+Computed by (run after STEP 7 of P01-T03-R-M3B):
 `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md`
 
-**Open — 54:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 55:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
 CF-52 · CF-54 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63 · CF-65 · CF-66 · CF-67 ·
 CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-76 · CF-78 · CF-79 · CF-80 · CF-81 ·
-CF-82 · CF-83 · CF-84 · CF-85 · CF-86 · CF-87
+CF-82 · CF-83 · CF-84 · CF-85 · CF-86 · CF-87 · CF-88
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -147,7 +146,7 @@ shell elevation — resolved by OD-10: migrations are hand-authored and pushed
 to the linked remote, no local database is used at any point; P01-T03-R is
 unblocked). CF-79 landed OPEN (human, P03): no staging database exists on
 the organisation's free plan, so every push lands on the only database that
-exists; OD-10 accepts this with six binding controls; a scratch-shadow free
+exists; OD-10 accepts this with seven binding controls; a scratch-shadow free
 project or a paid-plan branching upgrade would both remove the risk and both
 are commercial calls that join CF-37. CF-37, CF-39 and CF-78 were correctly
 left open — none of the three clears on a document.
@@ -213,6 +212,22 @@ plus (a)(b), no closures). CF-85 correctly left open — four tables, RLS on,
 zero policies, unchanged, because nothing was applied. CF-81 correctly left
 open — D-44 moves the column onto the membership row, it does not record a
 clinical judgement.
+
+**Closed at P01-T03-R-M3B:** none. CF-88 landed OPEN (reviewer, M4): eight
+tables exist with RLS enabled, zero policies, and SELECT-only grants to
+`anon` and `authenticated`; nobody writes, including the `Operator`, until
+M4 grants insert/update/delete to authenticated alongside the Operator-write
+policy. Intended between M3 and M4; recorded so it is not mistaken for a
+fault. CF-85's Item cell appended with the grant-revoke sentence and left
+OPEN. Open count 54 → 55 (54 base, plus (a), no closures —
+`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 55).
+CF-83 correctly left open — M3's reverse is authored and unapplied, so no
+reverse on this project has yet been executed. CF-84 correctly left open —
+the guard still runs only because a task invokes it. CF-87 correctly left
+open — the grant-revoke proof used `pg_class.relacl` and
+`has_table_privilege` as it requires. CF-81 correctly left open — the
+column now exists on the membership row at the `'unreviewed'` default; no
+clinical judgement was recorded.
 
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
@@ -302,7 +317,9 @@ every future model document is verified field by field against the document
 above it before it lands (the ranking failure that reached authored SQL);
 and `information_schema.role_table_grants` is not readable through the MCP
 connection, so `pg_class.relacl` and `has_table_privilege` are the
-authoritative substitutes for the reissue's grant-revoke proof.
+authoritative substitutes for the reissue's grant-revoke proof. CF-88 is
+landed at P01-T03-R-M3B, OPEN, reviewer-owned, M4: eight tables, RLS on,
+zero policies, SELECT-only grants; nobody writes until M4.
 
 ---
 
@@ -344,9 +361,11 @@ migration applied (control 3); nothing dropped or narrowed, four tables added
 (control 4); verification by reading `migration list`, MCP `list_tables` and
 read-only queries against `pg_class`, `pg_policies`, `information_schema.columns`,
 `pg_index` and `pg_constraint` (control 5); and no `db reset` (control 6).
-**Control 7 (transactional rehearsal) was added at P01-T03-R-M3A** and has not
-yet been exercised — that task ran no `supabase` command. CF-79's accepted risk
-is now realised twice: both pushes landed on the only database there is.
+**Control 7 (transactional rehearsal) was added at P01-T03-R-M3A and first
+exercised at P01-T03-R-M3B:** the full M3 text ran inside `begin; … rollback;`
+before `db push`, quoted, and left the four existing tables untouched. CF-79's
+accepted risk is now realised three times: M1, M2 and M3 each landed on the
+only database there is.
 `DATA_MODEL.md` (document 7) is authored at P02-T18, **amended at P01-T03-R-M2**
 (§10 v2: enabling RLS and granting policies are two different things) and
 **amended at P01-T03-R-M3A to v3** — §5, §6, §7, §8 and §9 corrected against
@@ -364,44 +383,30 @@ OD-04 §3 only) is closed; phase has moved to P01.
 
 ## Next action
 
-**P01-T03-R, migration M3 — reissue against `DATA_MODEL.md` v3.** The M3 SQL
-authored at P01-T03-R-M3 was built to the superseded shape and was **deleted at
-P01-T03-R-M3A rather than repaired**, because the shape changed and a repaired
-file would carry the old structure's assumptions. Nothing from those files was
-ever applied (`migration list` showed `remote:""`). The reissue authors against
-v3, then rehearses inside `begin; … rollback;` (OD-10 control 7) before any
-`db push`. It does not push the deleted files.
+**P01-T03-R, migration M4.** The §7 cumulation function, the two
+`SECURITY_MODEL.md` §3 policy shapes (published-read `for select` only, and
+Operator-write), `INSERT`/`UPDATE`/`DELETE` granted to `authenticated`
+alongside that write policy, and the seed load with its 121→72 assertion.
+M4 is the only migration that loads data and the only one that can fail on
+what it loads. Eligibility stays at the `'unreviewed'` default; no Arabic
+`LabTest` name is invented.
 
-v3 §6 row 3: `"ProgrammeLabTest"` carries a `"ProgrammeTier"` fk (`on delete
-cascade`) and a `"LabTest"` fk (`on delete restrict`), and **no `"Programme"`
-fk**. Unique on the pair, not a quadruple. Axis values live on `"ProgrammeTier"`
-only. §5 places `eligibility_audience` on `"ProgrammeLabTest"`, default
-`'unreviewed'` (D-42's control survives the move). §6 row 1 carries
-`description` and `preparation_notes` pairs; `tier_note` is dropped. §6 row 4
-(`"LabTest"`) is `slug · name_ar · name_en · aliases · qa_flag` plus a nullable
-`"LabUnit"` fk — no note, no eligibility. §7's function reaches memberships
-through `"ProgrammeTier"`. §9 indexes `("Programme", tier_axis, audience_axis)`
-on `"ProgrammeTier"`. Every M3 table still carries `enable row level security`
-in the same statement block; policies still land at M4.
+M1, M2 and M3 are applied: four enum types and **eight tables**, RLS on all
+eight, **zero policies**, **SELECT-only** grants to `anon` and
+`authenticated`. Between M3 and M4 nobody writes, including the `Operator`
+(CF-85, CF-88). A published-read policy written `for all` rather than `for
+select` would still be a defect even with the grants narrowed, and remains
+the M4 control `SECURITY_MODEL.md` §3 names.
 
-**CF-87 binds the reissue's grant-revoke proof:**
-`information_schema.role_table_grants` returns zero rows through the MCP
-connection for `anon` and `authenticated`; read `pg_class.relacl` or
-`has_table_privilege` instead.
-
-M1 and M2 remain applied: four enum types and **four tables**, RLS on, zero
-policies. OD-10's seven controls bind the reissue. `npm run guard:naming` now
-also fails on gutter artefacts (`^\s*\d+\s*\|`); control 7 is the real parse
-check and the gutter rule does not substitute for it. The guard still has no
-CI or hook behind it (CF-84). **M3's reverse must account for M2:** dropping
-`"LabTest"` is safe, but M2's reverse becomes unrunnable the moment M3 gives
-`"LabTest"` its `"LabUnit"` foreign key.
-
-The M2 grant finding is still live: `anon` and `authenticated` hold the full
-`arwdDxtm` privilege set on every table in `public`. M3's grant revoke is the
-fix and it has not applied. A published-read policy written `for all` rather
-than `for select` would expose anonymous writes that `SECURITY_MODEL.md` §3
-forbids outright.
+OD-10's seven controls bind M4, including control 7 (transactional
+rehearsal), first exercised at P01-T03-R-M3B. `npm run guard:naming` still
+has no CI or hook behind it (CF-84). **M2's reverse is already unrunnable:**
+M3 gave `"LabTest"` a `"LabUnit"` foreign key. **M3's reverse becomes
+unrunnable the moment M4 loads the seed or creates the §7 function.** CF-87
+still binds grant proofs: `information_schema.role_table_grants` returns
+zero rows through the MCP connection; read `pg_class.relacl` or
+`has_table_privilege`. An anonymous row-level read is deferred to M4,
+when rows exist and the check can discriminate.
 
 **Quotation amendment, now with a landed schedule.** `docs/QUOTATION_AMENDMENTS.md`
 is landed (§1–§7) and OD-09 (Announcements and Clinical notices,
@@ -413,12 +418,13 @@ stays open until the human supplies `public/mark/nel-mark.svg`. CF-80, CF-81
 and CF-82 are open against the seed: missing Arabic LabTest names, unset
 eligibility, and five QA-flagged rows. CF-59, CF-60, CF-65, CF-66, CF-68,
 CF-69, CF-71, CF-75, CF-76, CF-78 and CF-79 remain open, and CF-83, CF-84,
-CF-85, CF-86 and CF-87 join them against the migration route and the document
-ranking: no reverse has ever been executed, the naming guard has no hook or
-workflow behind it, the four applied tables deny every request until M4 lands
-the policy shapes, model documents must be verified against the document above
-them before they land, and the MCP connection cannot read
-`information_schema.role_table_grants`.
+CF-85, CF-86, CF-87 and CF-88 join them against the migration route and the
+document ranking: no reverse has ever been executed, the naming guard has no
+hook or workflow behind it, the eight applied tables deny every request
+until M4 lands the policy shapes, model documents must be verified against
+the document above them before they land, the MCP connection cannot read
+`information_schema.role_table_grants`, and nobody writes until M4 grants
+the write verbs.
 
 ---
 
