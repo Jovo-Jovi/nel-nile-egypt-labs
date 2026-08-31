@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { requireLocale, StaticShellPage } from "@/components/site/StaticShellPage";
+import { requireLocale } from "@/components/site/StaticShellPage";
+import { SiteHome } from "@/components/site/SiteHome";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -11,7 +12,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
-  return (
-    <StaticShellPage locale={locale} titleKey="page.home.title" pendingLabelKey="approval.pending.businessData" />
-  );
+  return <SiteHome locale={locale} />;
 }

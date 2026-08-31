@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-98**
+**Next free id: CF-100**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -41,7 +41,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-33 | P01 lists repo and CI before schema. Neither landed before the P01-T03 schema fence was issued, which had no migrations path to resolve and no build to fail. Toolchain, CI and migrations path landed at T03A. | reviewer | CLOSED at T03A | `package.json` / `.github/workflows/ci.yml` / `supabase/` at T03A |
 | CF-34 | Build machine has no local Postgres and no container runtime, and the shell has no elevation. The migration authoring and verification route is undecided. Blocks P01-T03-R. Resolved: the route needs no local database. P01-T03-R is unblocked. | human | CLOSED at P02-T17 | P01-T03-R |
 | CF-35 | DECISIONS.md:7 decision count carried an UNRATIFIED residual-repair label from T03V. Ratified at the T03V verdict against computed heading counts; label removed at T03A. | reviewer | CLOSED at T03A | `DECISIONS.md` at T03A |
-| CF-36 | Root route renders a build placeholder and contradicts CONTENT_MODEL §3c, which specifies that / renders no content and redirects to /ar. Replaced at P03. | builder | OPEN | P03 |
+| CF-36 | Root route renders a build placeholder and contradicts CONTENT_MODEL §3c, which specifies that / renders no content and redirects to /ar. Replaced at P03. Closed at P03-T01-F: `/` is a `next.config.ts` redirect to `/ar`, renders no content, and no `index.html` is emitted. | builder | CLOSED at P03-T01-F | P03 |
 | CF-37 | Supabase project created 25 Aug 2026. Plan tier, inactivity-pausing behaviour and backup posture are not confirmed against P07 cutover requirements. | human | OPEN | P07 cutover |
 | CF-38 | OD-04 condition 2 was violated in three tracked files the T03V fence did not name. Swept at T03B. The clause is already public in history from the 26 Aug 2026 visibility change and is not retractable by a later commit. Reopened at the T03B verdict: the T03B sweep tested one phrase and left cell 1 of 08-form-review-and-next-steps.md:187 in place. | reviewer | CLOSED at T03B-F | T03B-F |
 | CF-39 | Supabase project region eu-central-2 (Zurich) is outside the EU. From P05 the Auth schema holds Operator email addresses — lab staff personal data, not patient data. Adequacy position not assessed by this project. | human | OPEN | P05 |
@@ -103,6 +103,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-95 | §5 fixes 150ms and 250ms; `src/` carries 200ms (`SiteHeader.module.css:199`) and 700ms (`Button.module.css:146`) and never uses 250ms. Whether a spinner rotation is a §5 transition, and whether §5 needs a third value, is a document decision. | reviewer | OPEN | P02 close-out |
 | CF-96 | `"Offer"`, `"Equipment"` and `"Video"` — `DATA_MODEL.md` §6 rows 7, 8 and 9 — have no table and no migration; three of §3d's eight dashboard modules and three of §3c's twelve static routes have no backing entity. M5 creates them with RLS in the create-table block, the two §3 policy shapes, and SELECT-only grants to `anon`. | reviewer | OPEN | M5 |
 | CF-97 | `/{locale}/programmes/{slug}` renders zero of its eighteen URLs because every Programme is `draft`; the 42-URL total in §3c is reachable only after publication, which is a clinical-gate act. | reviewer | OPEN | P06 |
+| CF-98 | No gate detects an unreferenced file under `src/`. Dead files have now survived two tasks — two `system/` stylesheets at P02-T19, and ten files at P03-T01, which reached `main`. A reachability check belongs in `guard:design` or alongside it; whether it is a fifth rule or a separate guard is open. | reviewer | OPEN | P03 |
+| CF-99 | `generateStaticParams` on `/{locale}/programmes/{slug}` returns `[]` from either a published-only query with zero rows or the null-config early return, and the two are indistinguishable on a machine with no Supabase env configured. D-42's fail-closed behaviour on this route is established by construction, not by execution — the class of CF-87 and the M2 zero-row read. It discriminates when a Programme is published; no row is published to make it do so. | reviewer | OPEN | P06 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
