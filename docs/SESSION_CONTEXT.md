@@ -8,7 +8,7 @@
 OD-11 moved Auth and MFA to P05. G1 PASSED 31 August 2026 on foundation —
 repo, CI, schema, RLS, seed import. P02 design work ran ahead of P01 under
 OD-05 and is already landed.
-**Gate:** G2 — not reached
+**Gate:** G2 — ASSESSED 1 September 2026, FAILED on lint rules and token drift
 **Repo:** `Jovo-Jovi/nel-nile-egypt-labs` · branch `main` · PUBLIC (OD-04)
 **Schema:** M1, M2, M3 and M4 applied 31 August 2026 — four enum types in
 `public`, **eight tables** (`"LabUnit"`, `"Branch"`, `"SiteSettings"`,
@@ -82,20 +82,22 @@ on a verbal expansion of an unsigned scope.
 | P01-T03-R-M3B | **The catalogue tables, reissued against `DATA_MODEL.md` v3, and the first exercise of OD-10 control 7.** Branched `p01-t03-r-m3b` from `origin/p01-t03-r-m3a` at `f5174dc`, not from `origin/main` — M3A is unmerged (`origin/main` still at `544b6bc`, the P01-T03-R-M2 merge). **STEP 1** — five reviewer corrections, each anchor unique before editing: OD-10 control 2 now states that `--dry-run` lists filenames and does not read them, and that control 7 is the rehearsal that parses (`grep -c "only rehearsal available" docs/DECISIONS.md` → 0); D-38 and CF-79 and this document's standing "six binding controls" each become seven; `DATA_MODEL.md` §11 moves the F2 eligibility deferral from any `LabTest` onto the `ProgrammeLabTest` membership. **STEP 2/3/4** — `npx supabase migration new m3_catalogue_tables` wrote `supabase/migrations/20260831104408_m3_catalogue_tables.sql`; SQL authored by hand against v3 §6 rows 1–4. Four tables in dependency order (`"LabTest"`, `"Programme"`, `"ProgrammeTier"`, `"ProgrammeLabTest"`), each with the §3 common set and `enable row level security` in the same statement block, no attribution column of any kind (D-40). `"LabTest"` carries `slug`, `name_ar`, `name_en`, `aliases text[] not null default '{}'`, `qa_flag`, and a nullable `"LabUnit"` fk `on delete set null` — no note, no eligibility. `"Programme"` carries `slug`, `name` and `description` pairs, and `preparation_notes` — no price (D-04), no `tier_note`. `"ProgrammeTier"` carries a `"Programme"` fk `on delete cascade`, both axes, unique on the triple. `"ProgrammeLabTest"` carries a `"ProgrammeTier"` fk `on delete cascade` and a `"LabTest"` fk `on delete restrict`, `source_name`, `eligibility_audience public."EligibilityAudience" not null default 'unreviewed'`, and a `note` pair; unique on (`"ProgrammeTier"`, `"LabTest"`) — a pair, not a quadruple; **no `"Programme"` foreign key and no axis column**. Bilingual checks bite only where `publication_state = 'published'`: both-not-null for name and description; both-or-neither for `preparation_notes` and the membership `note` pair. §9: the unique on `"ProgrammeTier" ("Programme", tier_axis, audience_axis)` is the named index, plus `publication_state` on each of the four. Grant revoke across all eight: `anon` and `authenticated` hold `SELECT` only; `alter default privileges` narrows the `postgres` granting role, with a comment that `pg_default_acl` also carries `supabase_admin`. Reverse authored in the same task as `supabase/migrations/m3_catalogue_tables.down.sql`, no leading timestamp, `cascade` absent, stating per table why the drop is safe today and that after M4 it will not be. **STEP 5** — (a) `npm run guard:naming` → exit 0, `Scanned 6 .sql file(s)`. (b) **control 7:** the full migration text executed inside `begin; … rollback;` via `npx supabase db query --linked --file` against a gitignored rehearsal file; exit 0, empty rows, then MCP `list_tables` still **exactly 4** tables, so the rehearsal parsed and left nothing behind. (c) `npx supabase db push --dry-run` → exit 0, `Would push these migrations: • 20260831104408_m3_catalogue_tables.sql`, exactly one. (d) `npx supabase db push` → exit 0, `Applying migration 20260831104408_m3_catalogue_tables.sql...`. (e) `npx supabase migration list` → three rows, local and remote agreeing on `20260831082725`, `20260831090539`, `20260831104408`. (f) MCP `list_tables` on `public` → **exactly 8**, all `rls_enabled: true`, all 0 rows. (g) read back via MCP `execute_sql`: every foreign key quoted — `"ProgrammeLabTest"` → `"ProgrammeTier"` `ON DELETE CASCADE`, → `"LabTest"` `ON DELETE RESTRICT`, they differ, and **no key from `"ProgrammeLabTest"` to `"Programme"` exists**; unique on `"ProgrammeLabTest"` is `UNIQUE ("ProgrammeTier", "LabTest")` — two columns; `relrowsecurity` true on all eight; `pg_policies` in `public` → 0 rows; `pg_class.relacl` is `anon=r/postgres,authenticated=r/postgres` on all eight and `has_table_privilege` is `SELECT` true / `INSERT` `UPDATE` `DELETE` `TRUNCATE` `REFERENCES` `TRIGGER` false for both roles; `"ProgrammeLabTest"."eligibility_audience"` default `'unreviewed'::"EligibilityAudience"`; column list has no attribution column on any of the eight, no `note` or `eligibility_audience` on `"LabTest"`, no `tier_note` or price on `"Programme"`. Anonymous row-level read not attempted — tables are empty and the MCP user carries `rolbypassrls`; deferred to M4. **STEP 6** — CF live maximum 87 (next-free was CF-88). CF-88 landed OPEN (reviewer, M4): eight tables, RLS on, zero policies, SELECT-only grants; nobody writes, including the Operator, until M4. CF-85's Item cell appended with the grant-revoke sentence; left OPEN. Next-free id advanced to CF-89. Open count 54 → 55 (54 base, plus (a), no closures — `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 55). **STEP 7** — this row; the `**Schema:**` line records eight tables, RLS on, zero policies, SELECT-only grants; Next action set to **M4**. `grep -c "^### D-"` docs/DECISIONS.md → 45 (unchanged). `git ls-files supabase/migrations/` → 6. `npm run lint`, `npm run typecheck` and `npm run build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. No project ref, key, JWT or connection string appeared in any output; the ref the MCP calls required was read from the gitignored `supabase/.temp/project-ref` and is `[redacted under OD-04 condition 1]` here and in the report. `data/seed/`, `src/`, `public/`, `CONTENT_MODEL.md`, `SECURITY_MODEL.md`, `DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` all untouched; `DATA_MODEL.md` touched only at STEP 1e; no `db reset`, `db diff`, `start`, `stop` or `test` run; no policy and no function created; no seed data loaded; no eligibility value and no Arabic name set on any row; the reverse not applied; M4 not authored | pushed — verdict at push | 2026-08-31 |
 | P01-T03-R-M4 | **The function, the policies, and the seed. P01-T03-R recorded as complete.** Branched `p01-t03-r-m4` from `origin/main` at `927cf53` (the commit that merges `p01-t03-r-m3b`, PR #29). Four migration files, one `db push`, OD-10 control 3 overridden for M4 alone. CF live maximum computed as 88 before allocating (next-free was CF-89). **M4a** — `public."programmeLabTests"("programme" uuid, tier, audience) returns table(...)` carrying every `"LabTest"` column plus `note_ar`/`note_en`. `security definer`, `set search_path = public, pg_temp`, `stable`. Children returns and never unions, before step 4; Silver/Gold/Platinum cumulate; `none` does not; eligibility filter after the union never on Children; `unreviewed` excluded unconditionally; published on every table it touches; memberships reached through `"ProgrammeTier"`. §7's `setof "LabTest"` cannot carry the per-row note; the table shape is a document divergence (PR-18), `DATA_MODEL.md` not edited. Parameter `"programme"` is quoted so the naming guard, which is case-insensitive, does not treat it as an unquoted entity. **M4b** — two §3 shapes on all eight tables: published-read `for select` to `anon`, Operator-write `for all` to `authenticated`; `grant insert, update, delete` to `authenticated`; execute on the function to `anon` and `authenticated` after revoking `PUBLIC`. **M4c** — seed from `data/seed/catalogue.json` via `python -X utf8`; 9 / 72 / 14 / 121, all `draft`; 121→72 assertion inside the transaction; a ninth tier string would have aborted (eight matched §4). **M4d** — asserts all 121 memberships `eligibility_audience = 'unreviewed'`; sets nothing. Each reverse authored, no leading timestamp, `cascade` absent. **STEP 5** — (a) `npm run guard:naming` → exit 0, `Scanned 14 .sql file(s)`. (b) control 7: all four files inside `begin; … rollback;`; exit 0, empty rows; MCP `list_tables` immediately after still **eight tables, all `rows`: 0**. (c) `db push --dry-run` → exactly four. (d) `db push` → exit 0, all four applied. (e) `migration list` → seven rows, local and remote agreeing. **STEP 6** — `"Programme"` 9 · `"LabTest"` 72 · `"ProgrammeLabTest"` 121 · `"ProgrammeTier"` 14; `count(distinct "LabTest")` → 72; all 121 `unreviewed`; all catalogue rows `draft`; `pg_policies` 16 rows, every anonymous `cmd = SELECT`, `n_anon_all` → 0; `has_table_privilege` — `anon` SELECT only, `authenticated` SELECT/INSERT/UPDATE/DELETE, all eight. Anonymous row-level read **unexecuted**: MCP connects as `supabase_read_only_user` with `rolbypassrls = true` (CF-87, M2 precedent); no weaker substitute. Three function assertions quoted individually, all empty; assertion 3 across 9×5×3 = 135 combinations → `nonempty` 0, `max_n` 0. Assertions 1 and 2 are masked by D-42 (and additionally by every row being `draft`); they become discriminating only when eligibility is reviewed. No eligibility value was set. **STEP 7** — CF-85 and CF-88 CLOSED; CF-89 and CF-90 landed OPEN (reviewer / client, both P03). Next-free id advanced to CF-91. Open count 55 − 2 + 2 = 55. `git ls-files supabase/migrations/` → 14. `npm run lint`, `typecheck` and `build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. No project ref, key, JWT or connection string is quoted; the ref MCP required was read from the gitignored `supabase/.temp/project-ref` and is `[redacted under OD-04 condition 1]`. `data/seed/`, `src/`, `public/`, `DATA_MODEL.md`, `CONTENT_MODEL.md`, `SECURITY_MODEL.md`, `DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` all untouched; no `db reset`, `db diff`, `start`, `stop` or `test` run; no row published; no eligibility value set; no Arabic `name_ar` written; none of the five QA-flagged records corrected; the reverses not applied | pushed — verdict at push | 2026-08-31 |
 | P01-T04 | Lands OD-11, records the G1 verdict, and closes CF-84. Branched `p01-t04` from `origin/main` at `5bb6a3f` (the commit that merges `p01-t03-r-m4`, PR #30). PR-29 attachment `payload-OD-11.md` verified before any edit: first line `### OD-11 — Auth and MFA move to P05`, 20 lines, `grep -Fc "Does not weaken D-08."` → 1. **STEP 1** — the named OD-10 MFA-factor-type anchor (`**Does not decide:** the MFA factor type, enrolment flow or recovery procedure.`) is absent from `DECISIONS.md` (0 hits, and not inside OD-10). Inserted after OD-10's final line (`**Does not decide:** any table, column, type, constraint or policy. …`) and its trailing `---`, before `## Decision log`. OD-11 landed **SIGNED**, byte-exact against the payload (20 lines). **STEP 2** — all three phase-map anchors unique (1 each) before editing. P01 contents lose Auth and MFA; P05 gains `Auth and MFA (OD-11)`; Gate recorded `G1 — PASSED 31 August 2026`. **STEP 3** — D-46 appended; count line updated to forty-six decisions, eleven ODs (`grep -c "^### D-"` → 46, `grep -c "^### OD-"` → 11). **STEP 4** — `npm run guard:naming` wired into `.github/workflows/ci.yml` as a step named "Naming guard" immediately before lint, same job. `grep -c "guard:naming"` → 1. The file's `pull_request_target` prohibition, `head.repo.full_name` gate and absence of any `secrets.*` step reference are untouched. CF-84 CLOSED at P01-T04. **STEP 5** — CF live maximum computed as 90 before allocating (`re.findall` over `^\| CF-(\d+) \|`, max 90, next-free was CF-91). CF-91 landed OPEN (reviewer, P05): `ADMIN_SPEC.md` is document 9 and unauthored. Next-free advanced to CF-92. Open count 55 − 1 (CF-84) + 1 (CF-91) = 55. **STEP 6** — this document regenerated: this row, the open-CF list, phase set to P02, Gate to G2, `**Schema:**` line unchanged, Next action retargeted to the G2 assessment. **OD-03 lapses 15 September 2026**; by its own text no further build task is issued after that date until a new freeze is signed. `npm run guard:naming`, `lint`, `typecheck` and `build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. `DATA_MODEL.md`, `SECURITY_MODEL.md`, `CONTENT_MODEL.md`, `DESIGN_SYSTEM.md`, `I18N_MODEL.md`, `BOUNDARY_MODEL.md` and `GLOSSARY.md` untouched; `src/`, `public/` and `data/seed/` untouched; no `supabase` command run; no migration authored or applied; no authentication, MFA, `Operator` account or session built; `ADMIN_SPEC.md` not authored | pushed — verdict at push | 2026-08-31 |
+| P02-T19 | Closes the G2 FAIL on lint rules and token drift. Branched `p02-t19` from `origin/main` at `2310f27` (the commit that merges `p01-t04`, PR #31). **STEP 0 counts before any edit:** CF live maximum 91 (`re.findall` over `^\| CF-(\d+) \|`, next-free CF-92); `--nel-preview-well` 34 hits in 4 files under `src/`; `**Status:** v3, COMPLETE and landable.` occurs exactly once (`grep -Fc` → 1); `grep -c "pull_request_target" .github/workflows/ci.yml` → 1; `StaticGallery`/`SystemView` references → 0. **STEP 1** — `scripts/guard/design.mjs` authored, modelled on `scripts/guard/naming.mjs`: blanks `/* */` and `//` comments while preserving offsets; exits non-zero on any finding; prints `file:line:col` and the matched text; PASS line names the file count. Four rules over `src/**`: R1 physical properties in `.css`/`.tsx`/`.ts`; R2 Eastern Arabic-Indic digits U+0660–U+0669 and Extended U+06F0–U+06F9, any file; R3 boundary host elements in `.tsx` (`<form` `<iframe` `<embed` `<input` `<textarea` `<select`), not skippable by flag; R4 colour literals in a CSS declaration outside `src/styles/tokens.css` or a `style=` object in `.tsx`, allowlist `#25D366` only. No vocabulary rule over `src/`. Proved all four from stdin, no scratch file: R1 FAIL exit **1** (`margin-left`), R1 PASS exit **0** (`margin-inline-start`); R2 FAIL exit **1** (U+0660), R2 PASS exit **0** (Western digits); R3 FAIL exit **1** (`<form>`), R3 PASS exit **0** (`<button>`); R4 FAIL exit **1** (`#ffffff` in a declaration), R4 PASS exit **0** (comment `#ffffff` blanked, `#25D366` allowlisted). **STEP 2** — `"guard:design"` added to `package.json`; CI step `Design guard` inserted immediately after `Naming guard` and before `Lint`, same job. `grep -c "guard:design" .github/workflows/ci.yml` → 1. `pull_request_target` count unchanged at 1. No `secrets.` reference introduced; `head.repo.full_name` gate and `permissions: contents: read` untouched. **STEP 3** — `src/styles/tokens.css`: `--nel-radius-well: 32px` added in §5's order (none · sm · md · well · full); every `--nel-preview-well` replaced (34 → 0) and the local `2rem` declaration at `SiteRoot.module.css:11` deleted; literal `150ms` at `Button.module.css:23` and `LanguageSwitcher.module.css:16` replaced with `var(--nel-duration)`; §5 elevation comment rewritten so it no longer claims the shadows are not document values; §4 comment clause about the System view deleted. No colour, size, spacing or line-height VALUE changed; only (a) added a declaration. **STEP 4** — `docs/DESIGN_SYSTEM.md` status line `v3` → `v5`; `git diff --stat origin/main -- docs/DESIGN_SYSTEM.md` → 1 file changed, 1 insertion, 1 deletion. The historical `v3` at lines 20 and 705 untouched (PR-32). **STEP 5** — `src/components/system/StaticGallery.module.css` and `SystemView.module.css` deleted after 0-reference confirmation; directory removed. `git ls-files src/components/system/` → 0. **STEP 6** — CF live maximum 91 before allocating. CF-92 (System view gone, §8 criteria 1–3 unprovable on a rendered surface, reviewer, P03), CF-93 (`PRODUCT_BRIEF.md` unauthored stub recorded as closed in Gate-0, reviewer, P03), CF-94 (production baseline at `7bb0f87`/`605f27f` with no task id, reviewer, P03), CF-95 (200ms and 700ms in `src/` vs §5's 150ms/250ms, reviewer, P02 close-out) landed OPEN in that order. CF-76 Item cell appended, remains OPEN. Next-free advanced to CF-96. Open count 55 + 4 − 0 = 59 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 59). **STEP 7** — this document regenerated: this row; Gate recorded `G2 — ASSESSED 1 September 2026, FAILED on lint rules and token drift`; open-CF list; Gate-0 sentence corrected so `PRODUCT_BRIEF.md` is a stub tracked by CF-93; Next action set to the G2 re-assessment. No historical done-step edited (PR-32). `npm run guard:naming`, `guard:design`, `lint`, `typecheck` and `build` all exit 0; `python -X utf8 data/seed/verify_seed.py` → `121 -> 72`, PASS. Prerendered `/` carries `dir="rtl"` and `lang="ar"`; 0 `<form>`/`<iframe>`/`<embed>`/`<input>`; exactly two absolute external URLs (WhatsApp and portal-placeholder action links). `I18N_MODEL.md`, `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md`, `SECURITY_MODEL.md`, `DATA_MODEL.md`, `GLOSSARY.md` and `DECISIONS.md` untouched; no vocabulary rule over `src/`; no sixth radius; no `supabase` command; no migration; `PRODUCT_BRIEF.md` not authored; System view not restored | pushed — verdict at push | 2026-09-01 |
 
 ---
 
 ## Open carry-forwards
 
-Computed by (run after STEP 5 of P01-T04):
+Computed by (run after STEP 6 of P02-T19):
 `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md`
 
-**Open — 55:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 59:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-36 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
 CF-52 · CF-54 · CF-59 · CF-60 · CF-61 · CF-62 · CF-63 · CF-65 · CF-66 · CF-67 ·
 CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-76 · CF-78 · CF-79 · CF-80 · CF-81 ·
-CF-82 · CF-83 · CF-86 · CF-87 · CF-89 · CF-90 · CF-91
+CF-82 · CF-83 · CF-86 · CF-87 · CF-89 · CF-90 · CF-91 · CF-92 · CF-93 · CF-94 ·
+CF-95
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -259,6 +261,15 @@ document 9 and unauthored; it is authored one step ahead of P05, and CF-39's
 adequacy question goes live with it. Open count 55 − 1 + 1 = 55
 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 55).
 
+**Closed at P02-T19:** none. CF-92, CF-93, CF-94 and CF-95 landed OPEN
+(reviewer / reviewer / reviewer / reviewer; P03 / P03 / P03 / P02 close-out):
+the System view is gone so §8 criteria 1–3 have no rendered surface; 
+`PRODUCT_BRIEF.md` is an unauthored stub that Gate-0 recorded as closed;
+the production baseline at `7bb0f87`/`605f27f` has no task id; §5's 150ms/250ms
+does not match 200ms/700ms in `src/`. CF-76's Item cell was appended and it
+stays OPEN. Open count 55 + 4 − 0 = 59
+(`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 59).
+
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
@@ -353,7 +364,13 @@ P01-T03-R-M4, both OPEN: the §7 assertions are masked by `unreviewed` until
 eligibility is reviewed; nothing is published. CF-91 is landed at P01-T04,
 OPEN, reviewer-owned, P05: `ADMIN_SPEC.md` is document 9 and unauthored;
 OD-11 moved Auth and MFA to P05 and `SECURITY_MODEL.md` §9 defers the MFA
-factor type, enrolment flow and recovery procedure to it.
+factor type, enrolment flow and recovery procedure to it. CF-92, CF-93,
+CF-94 and CF-95 are landed at P02-T19, all OPEN: no rendered surface now
+exercises the full token set after the System view was deleted at `605f27f`;
+`PRODUCT_BRIEF.md` is document 1 and an unauthored stub; `7bb0f87` and
+`605f27f` authored the production baseline with no task id; §5 fixes 150ms
+and 250ms while `src/` carries 200ms and 700ms and never uses 250ms. CF-76
+stays OPEN, its Item cell appended with a re-test note.
 
 ---
 
@@ -415,21 +432,28 @@ the only database there is. **P01-T03-R is complete.**
 membership row; `"Programme"` carries `description` and `preparation_notes`
 pairs; `tier_note` is dropped.
 Gate-0 document
-set (`PRODUCT_BRIEF` · `GLOSSARY`
+set (`GLOSSARY`
 frozen, §6 superseded in part · `SCOPE` · `DECISIONS` authored ·
 `CONTENT_MODEL` authored and amended · `BOUNDARY_MODEL` frozen, amended under
-OD-04 §3 only) is closed; phase has moved to P02.
+OD-04 §3 only) is closed except `PRODUCT_BRIEF.md`, which remains an
+unauthored stub reading "Do not build against it" and is tracked by CF-93;
+phase has moved to P02.
 
 ---
 
 ## Next action
 
-**G2 assessment.** P01 is closed. G1 PASSED 31 August 2026 on foundation —
-repo, CI, schema, RLS, seed import — after OD-11 moved Auth and MFA to P05.
-P02's phase-map entry is "Design system — tokens, RTL primitives, lint
-rules". The evidence a reviewer will read against it is `DESIGN_SYSTEM.md`
-v5, `I18N_MODEL.md`, `src/styles/`, the naming guard, and the promoted
-composition under OD-08.
+**G2 re-assessment.** G2 was assessed 1 September 2026 and FAILED on lint
+rules and token drift. P02-T19 landed the missing lint artefact
+(`scripts/guard/design.mjs`, `npm run guard:design`, CI step `Design guard`)
+and reconciled `src/styles/tokens.css` with `DESIGN_SYSTEM.md` §5 (five
+radii including `--nel-radius-well: 32px`, `--nel-preview-well` removed,
+`150ms` literals replaced with `var(--nel-duration)`). The evidence a
+reviewer will re-read against P02's phase-map entry ("tokens, RTL
+primitives, lint rules") is `DESIGN_SYSTEM.md` v5, `I18N_MODEL.md`,
+`src/styles/`, the naming guard, the design guard, and the promoted
+composition under OD-08. CF-59 and CF-60 still hold the rendered half of
+the bilingual standard; this task closed only the static half.
 
 **OD-03 lapses 15 September 2026.** By its own text, if that date arrives
 with no signed quotation, the freeze expires and no further build task is
@@ -454,8 +478,10 @@ stays open until the human supplies `public/mark/nel-mark.svg`. CF-80, CF-81
 and CF-82 are open against the seed: missing Arabic LabTest names, unset
 eligibility, and five QA-flagged rows. CF-59, CF-60, CF-65, CF-66, CF-68,
 CF-69, CF-71, CF-75, CF-76, CF-78 and CF-79 remain open, and CF-83, CF-86,
-CF-87, CF-89, CF-90 and CF-91 join them against the migration route, the
-document ranking, the unpublished seed, and the unauthored admin spec.
+CF-87, CF-89, CF-90, CF-91, CF-92, CF-93, CF-94 and CF-95 join them against
+the migration route, the document ranking, the unpublished seed, the
+unauthored admin spec, the missing System view, the `PRODUCT_BRIEF.md` stub,
+the untasked production baseline, and the extra motion durations.
 
 ---
 

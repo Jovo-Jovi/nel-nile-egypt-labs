@@ -13,7 +13,7 @@
   font-weight: 600;
   letter-spacing: 0;
   cursor: pointer;
-  transition: background-color 150ms, border-color 150ms;
+  transition: background-color var(--nel-duration), border-color var(--nel-duration);
 }
 
 .switcher:hover,

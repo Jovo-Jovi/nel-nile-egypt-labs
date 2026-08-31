@@ -20,7 +20,7 @@
   padding-inline: var(--nel-space-24);
   background-color: var(--nel-color-primary-strong);
   color: var(--nel-color-surface);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
 }
 
 @media (min-width: 768px) {

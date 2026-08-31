@@ -28,7 +28,7 @@
 .wellGate {
   max-inline-size: 1360px;
   margin-inline: auto;
-  --nel-gate-radius: var(--nel-preview-well);
+  --nel-gate-radius: var(--nel-radius-well);
 }
 
 .well {
@@ -36,7 +36,7 @@
   isolation: isolate;
   overflow: hidden;
   min-block-size: min(88vh, 48rem);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   box-shadow: var(--nel-elevation-2-shadow);
   background-color: var(--nel-color-primary-strong);
 }
@@ -210,7 +210,7 @@
   max-inline-size: 1360px;
   padding-block: var(--nel-space-48);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   box-shadow: var(--nel-elevation-1-shadow);
 }
 
@@ -325,31 +325,31 @@
 }
 
 .offerTile:nth-child(1) .offerPhoto {
-  border-start-start-radius: var(--nel-preview-well);
-  border-start-end-radius: calc(var(--nel-preview-well) * 1.7);
-  border-end-end-radius: var(--nel-preview-well);
-  border-end-start-radius: calc(var(--nel-preview-well) * 0.8);
+  border-start-start-radius: var(--nel-radius-well);
+  border-start-end-radius: calc(var(--nel-radius-well) * 1.7);
+  border-end-end-radius: var(--nel-radius-well);
+  border-end-start-radius: calc(var(--nel-radius-well) * 0.8);
 }
 
 .offerTile:nth-child(2) .offerPhoto {
-  border-start-start-radius: calc(var(--nel-preview-well) * 1.6);
-  border-start-end-radius: var(--nel-preview-well);
-  border-end-end-radius: calc(var(--nel-preview-well) * 1.5);
-  border-end-start-radius: var(--nel-preview-well);
+  border-start-start-radius: calc(var(--nel-radius-well) * 1.6);
+  border-start-end-radius: var(--nel-radius-well);
+  border-end-end-radius: calc(var(--nel-radius-well) * 1.5);
+  border-end-start-radius: var(--nel-radius-well);
 }
 
 .offerTile:nth-child(3) .offerPhoto {
-  border-start-start-radius: var(--nel-preview-well);
-  border-start-end-radius: calc(var(--nel-preview-well) * 0.9);
-  border-end-end-radius: calc(var(--nel-preview-well) * 1.8);
-  border-end-start-radius: var(--nel-preview-well);
+  border-start-start-radius: var(--nel-radius-well);
+  border-start-end-radius: calc(var(--nel-radius-well) * 0.9);
+  border-end-end-radius: calc(var(--nel-radius-well) * 1.8);
+  border-end-start-radius: var(--nel-radius-well);
 }
 
 .offerTile:nth-child(4) .offerPhoto {
-  border-start-start-radius: calc(var(--nel-preview-well) * 1.4);
-  border-start-end-radius: calc(var(--nel-preview-well) * 1.6);
-  border-end-end-radius: var(--nel-preview-well);
-  border-end-start-radius: calc(var(--nel-preview-well) * 1.1);
+  border-start-start-radius: calc(var(--nel-radius-well) * 1.4);
+  border-start-end-radius: calc(var(--nel-radius-well) * 1.6);
+  border-end-end-radius: var(--nel-radius-well);
+  border-end-start-radius: calc(var(--nel-radius-well) * 1.1);
 }
 
 .pendingCopy {
@@ -404,7 +404,7 @@
 .storyMain {
   position: relative;
   overflow: hidden;
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   aspect-ratio: 4 / 3;
   box-shadow: var(--nel-elevation-2-shadow);
 }
@@ -423,7 +423,7 @@
     inline-size: 46%;
     aspect-ratio: 1;
     overflow: hidden;
-    border-radius: var(--nel-preview-well);
+    border-radius: var(--nel-radius-well);
     border-width: 4px;
     border-style: solid;
     border-color: var(--nel-color-surface);
@@ -438,7 +438,7 @@
     inline-size: 32%;
     aspect-ratio: 4 / 5;
     overflow: hidden;
-    border-radius: var(--nel-preview-well);
+    border-radius: var(--nel-radius-well);
     border-width: 4px;
     border-style: solid;
     border-color: var(--nel-color-surface);
@@ -471,7 +471,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: var(--nel-color-border);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   box-shadow: var(--nel-elevation-1-shadow);
   transition:
     border-color var(--nel-duration),
@@ -519,7 +519,7 @@
   gap: var(--nel-space-8);
   padding: var(--nel-space-24);
   background-color: var(--nel-color-background);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   border-inline-start-width: 3px;
   border-inline-start-style: solid;
   border-inline-start-color: var(--nel-color-accent);
@@ -556,7 +556,7 @@
 .map {
   position: relative;
   overflow: hidden;
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   border-width: 1px;
   border-style: solid;
   border-color: var(--nel-color-border);
@@ -586,7 +586,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: var(--nel-color-border);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   box-shadow: var(--nel-elevation-1-shadow);
   transition:
     border-color var(--nel-duration),
@@ -630,7 +630,7 @@
   gap: var(--nel-space-16);
   padding: var(--nel-space-24);
   background-color: var(--nel-color-background);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
 }
 
 .feature .kicker {
@@ -640,7 +640,7 @@
 .featurePhoto {
   position: relative;
   overflow: hidden;
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   aspect-ratio: 16 / 9;
 }
 
@@ -673,7 +673,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: var(--nel-color-border);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   transition:
     border-color var(--nel-duration),
     box-shadow var(--nel-duration);
@@ -734,7 +734,7 @@
   position: relative;
   overflow: hidden;
   aspect-ratio: 16 / 9;
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   box-shadow: var(--nel-elevation-1-shadow);
   transition: box-shadow var(--nel-duration);
 }
@@ -854,7 +854,7 @@
   gap: var(--nel-space-16);
   padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-preview-well);
+  border-radius: var(--nel-radius-well);
   box-shadow: var(--nel-elevation-2-shadow);
 }
 

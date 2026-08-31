@@ -20,7 +20,7 @@
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 150ms, color 150ms, border-color 150ms;
+  transition: background-color var(--nel-duration), color var(--nel-duration), border-color var(--nel-duration);
 }
 
 .button[data-pill="true"] {

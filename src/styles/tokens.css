@@ -17,8 +17,7 @@
   /* §4 Size scale — nine steps (v3 adds 4xl/5xl). 4xl and 5xl step down two
      levels below md (to 2xl and 3xl respectively) — see the media query
      below — because a 56px/72px headline on a 360px phone is one word per
-     line. 5xl is reserved for lg and above; nothing in this build uses it,
-     it exists so the System view can show the complete nine-step scale.
+     line. 5xl is reserved for lg and above; nothing in this build uses it.
      The landing headline uses 5xl from 1024px. */
   --nel-size-xs: 12px;
   --nel-size-sm: 14px;
@@ -41,10 +40,11 @@
   --nel-space-64: 64px;
   --nel-space-96: 96px;
 
-  /* §5 Radius set — four values */
+  /* §5 Radius set — five values */
   --nel-radius-none: 0;
   --nel-radius-sm: 4px;
   --nel-radius-md: 8px;
+  --nel-radius-well: 32px;
   --nel-radius-full: 9999px;
 
   /* §4 Line-height fork, en/ar, computed from font metrics and copied verbatim */
@@ -56,11 +56,9 @@
   --nel-line-height-tight-ar: 1.25;
 
   /* §5 Elevation — three levels, each a 1px border plus a shadow, never
-     translucency. The document fixes the border width (1px) and describes
-     each shadow only qualitatively ("soft short" / "softer long"); it states
-     no blur/spread/opacity numbers. The box-shadow values below render that
-     description for this mock and are not values copied from the document —
-     flagged in the task report, not a §5 value. */
+     translucency. The border width (1px) and the box-shadow values below
+     are copied from the §5 table and were ratified there. Shadow colour is
+     the text token at low alpha, never neutral black. */
   --nel-elevation-0-border-width: 0;
   --nel-elevation-0-shadow: none;
   --nel-elevation-1-border-width: 1px;
