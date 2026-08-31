@@ -197,13 +197,15 @@ and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 | 4 | `"LabTest"` | `slug` unique · `name_ar` · `name_en` · `aliases text[]` · `qa_flag` · `"LabUnit"` fk nullable |
 | 5 | `"LabUnit"` | `slug` unique · `name_ar` · `name_en` · `description_ar` · `description_en` |
 | 6 | `"Branch"` | `name_ar` · `name_en` · `address_ar` · `address_en` · `is_head_office boolean` · `latitude` · `longitude` nullable · `hours_ar` · `hours_en` · `whatsapp_e164` |
-| 7 | `"Offer"` | `title_ar` · `title_en` · `body_ar` · `body_en` · `price_amount numeric(10,2)` · `price_currency` · `valid_from date` · `valid_to date` · `"MediaAsset"` fk nullable |
-| 8 | `"Equipment"` | `name_ar` · `name_en` · `description_ar` · `description_en` · `"LabUnit"` fk nullable · `"MediaAsset"` fk nullable |
-| 9 | `"Video"` | `youtube_id` · `title_ar` · `title_en` · `description_ar` · `description_en` · `is_featured boolean` · `"MediaAsset"` fk for the poster |
+| 7 | `"Offer"` | `title_ar` · `title_en` · `description_ar` · `description_en` · `valid_from date` · `valid_until date` · `price_amount numeric(10,2)` · `price_currency` · `"MediaAsset"` fk nullable · `"Programme"` fk nullable (D-18). No currency is hardcoded in application source and none is named here (CF-21); `price_currency` is stored per row with no default |
+| 8 | `"Equipment"` | `name_ar` · `name_en` · `description_ar` · `description_en` · `"MediaAsset"` fk nullable · `"Video"` fk nullable. No `"LabUnit"` foreign key: `CONTENT_MODEL.md` §3a line 78 does not list one, `/{locale}/equipment` is a flat listing, and grouping by department is an amendment if the dashboard ever wants it |
+| 9 | `"Video"` | `youtube_id` · `title_ar` · `title_en` · `description_ar` · `description_en` · `is_featured boolean` · `"MediaAsset"` fk nullable, the poster (D-13, `DESIGN_SYSTEM.md` §10, `CONTENT_MODEL.md` §3a as amended at M5A) |
 | 10 | `"SiteSettings"` | singleton, enforced by a one-row check. Hotline, WhatsApp, hours, social URLs, About and Privacy bodies, Lab-to-Lab copy, default SEO — every text field bilingual |
 | 11 | `"MediaAsset"` | `storage_path` · `alt_ar` · `alt_en` · `width` · `height` · `byte_size` · `mime_type` |
 | 12 | `"Announcement"` | title, body, `published_at`. **Does not exist until OD-09 is signed** |
 | 13 | `"ClinicalNotice"` | title, body, plus `signed_by`, `signed_at`, `signed_text_hash`. **Does not exist until OD-09 is signed** |
+
+Rows 7–9 were reconciled field by field against `CONTENT_MODEL.md` §3a at M5A under CF-86, naming the three changes: `body` → `description` and the added `"Programme"` fk on `"Offer"`, the dropped `"LabUnit"` fk and added `"Video"` fk on `"Equipment"`, and the `"MediaAsset"` poster on `"Video"` carried by a §3a amendment rather than kept silently.
 
 **Row 3 belongs to a `"ProgrammeTier"`, not to a `"Programme"` with loose axis columns.**
 `CONTENT_MODEL.md` §3a states it and §3a's relationship table makes `ProgrammeTier` →

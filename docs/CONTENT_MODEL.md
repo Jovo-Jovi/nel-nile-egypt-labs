@@ -77,7 +77,7 @@ The remaining 117 rows default to `audience` = `all`, `minAge` = null, no note. 
 
 **`Equipment`.** `name_ar` · `name_en` · `description_ar` · `description_en` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Video`.
 
-**`Video`.** `youtubeId` (YouTube host only) · `title_ar` · `title_en` · `description_ar` · `description_en` · `published` · `displayOrder` · `featured`. Rendered under D-13: privacy-enhanced mode, placeholder until the Visitor clicks. An autoloading embed voids `BOUNDARY_MODEL.md` §5.
+**`Video`.** `youtubeId` (YouTube host only) · `title_ar` · `title_en` · `description_ar` · `description_en` · `published` · `displayOrder` · `featured`. Rendered under D-13: privacy-enhanced mode, placeholder until the Visitor clicks. An autoloading embed voids `BOUNDARY_MODEL.md` §5. Optional `MediaAsset` as the poster. `DESIGN_SYSTEM.md` §10 requires a poster and D-13 forbids a YouTube-hosted thumbnail URL, so the poster cannot come from the video host and has no other home. Amended at M5A.
 
 **`Visitor`.** No fields. No table. No account.
 
