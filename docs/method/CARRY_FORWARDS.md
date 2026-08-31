@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-86**
+**Next free id: CF-88**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -91,6 +91,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-83 | M1's reverse is authored and unapplied. Every migration from M2 onward carries one under OD-10 control 1, and no reverse has been executed against the remote, so none is verified by execution. A reverse that has never run is a plan, not a guarantee. | reviewer | OPEN | P03 |
 | CF-84 | The naming guard runs as npm run guard:naming and is not yet wired into a pre-commit hook or a CI workflow. Until it is, it protects only the task that remembers to run it. | reviewer | OPEN | P03 |
 | CF-85 | Four tables exist with RLS enabled and no policies, so they deny every request including the Operator's. The dashboard cannot read or write until M4 lands the two policy shapes from SECURITY_MODEL.md §3. This is the intended state between M2 and M4 and is recorded so it is not mistaken for a fault. | reviewer | OPEN | M4 |
+| CF-86 | A reviewer document diverged from one that outranks it and the divergence reached authored SQL before a builder caught it. DATA_MODEL.md §6 contradicted CONTENT_MODEL.md §3a on three points. Every future model document is verified field by field against the document above it before it lands, not after. | reviewer | OPEN | P03 |
+| CF-87 | information_schema.role_table_grants returns zero rows through the MCP connection for anon and authenticated — the view is restricted to currently-enabled roles and the MCP user is neither grantor nor member. pg_class.relacl and has_table_privilege are the authoritative substitutes. Second reviewer-named proof that the connection cannot execute, after the M2 anonymous-read check. | reviewer | OPEN | M3 reissue |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

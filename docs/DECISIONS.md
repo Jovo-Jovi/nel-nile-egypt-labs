@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-three decisions. Ten of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-five decisions. Ten of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -274,6 +274,36 @@ This is the material consequence of the route and it is recorded as an acceptanc
 5. **Verify by reading, never by assuming.** After every push, `migration list` and MCP `list_tables` are both run and their output quoted. A push that exits 0 is not evidence that the schema is what the migration intended.
 6. **No `db reset`, ever, on the linked project.** It is skipped by fence rule in every task, as it was in the probe.
 
+**Control 7 — transactional rehearsal, added at P01-T03-R-M3.**
+
+Before every `db push`, the migration is executed inside a transaction that rolls back:
+
+```
+begin;
+  <the full migration text>
+rollback;
+```
+
+Postgres DDL is transactional, so this parses, plans, type-checks, resolves every
+reference and enforces every constraint, then leaves nothing behind. It is a real
+rehearsal where `db push --dry-run` is only a listing of filenames.
+
+The gap this closes was demonstrated rather than predicted. At P01-T03-R-M3 a migration
+carrying forty-six literal line-number gutter artefacts passed `guard:naming`, which
+blanks comments and never parses, and passed `db push --dry-run`, which reads filenames
+and not contents. Postgres rejected the whole batch at parse — on the only database that
+exists, because OD-10 accepts that no staging database is available. **The first parse of
+every migration was happening in production.**
+
+The rehearsal output is quoted in the task report. A rehearsal that errors is a HALT and
+the push is not attempted. A rehearsal that succeeds is not a guarantee the push will —
+the rollback discards state a later migration may depend on — but it removes every class
+of failure that parsing, planning and constraint checking can detect, which is the class
+that failed here.
+
+`create index concurrently` and any other statement Postgres forbids inside a transaction
+is out of scope for this control and, if one is ever needed, requires its own decision.
+
 **Does not decide:** whether to move to a paid plan. Branching would supply a real staging database and remove the accepted risk above, and CF-37 already tracks plan tier against P07 for pausing and backups. That is a commercial call for the human, and it belongs in the same conversation as the quotation rather than here.
 
 **Does not decide:** any table, column, type, constraint or policy. `DATA_MODEL.md` fixes the schema and `SECURITY_MODEL.md` fixes RLS; neither is authored yet, and no migration is authored before both exist for the objects it touches.
@@ -453,3 +483,11 @@ OD-10, signed 29 August 2026, resolving CF-34. Migrations are hand-authored and 
 ### D-43 — Cumulation is a database function
 
 `DATA_MODEL.md` §7. `CONTENT_MODEL.md` §3b defines a four-step rule whose first and fourth steps are both named harm vectors — Children must never inherit, and an inherited row must be filtered by audience. It is implemented once, as a `security definer` SQL function with a fixed `search_path` reading only published rows and excluding `unreviewed` rows unconditionally. Every caller uses it. One implementation can be tested; three cannot be kept identical, and the third written under time pressure is where a child's page gains a tumour marker. The function sits below the front-end, so a component that forgets the rule cannot bypass it — there is no unfiltered query to call.
+
+### D-44 — Membership belongs to a tier
+
+`DATA_MODEL.md` v3 §5, §6, §7, §8 and §9, corrected at P01-T03-R-M3 against `CONTENT_MODEL.md` §3a, which outranks it. `ProgrammeLabTest` belongs to a `ProgrammeTier` and a `LabTest`, not to a `Programme` with loose axis columns: axis values then live in exactly one place, so no membership row can carry an axis pair that no tier row matches, and the unique constraint is a pair rather than a quadruple. `eligibility_audience` sits on the membership row rather than on `LabTest`, because §3b step 4 reads it for each row in the rendered set and those rows are memberships — which also means 121 rows begin `unreviewed` rather than 72, since the seed carries PSA at both Silver and Platinum — Male and each membership is judged separately. `Programme` carries `description` and `preparationNotes` pairs that §3a lists and the first cut omitted; `tier_note` was this document's own invention and is dropped. D-42's control survives the move unchanged: the default is still `unreviewed` and the filter still fails closed. The divergence was found by the P01-T03-R-M3 builder, which built the shape the fence named and reported the conflict rather than reconciling it.
+
+### D-45 — Transactional rehearsal
+
+OD-10 control 7, added at P01-T03-R-M3. Every migration is executed inside `begin; … rollback;` before `db push`, and the output is quoted in the task report. Postgres DDL is transactional, so this parses, plans, type-checks, resolves every reference and enforces every constraint, then leaves nothing behind — a real rehearsal where `db push --dry-run` is only a listing of filenames. The gap was demonstrated rather than predicted: a migration carrying forty-six literal line-number gutter artefacts passed both `guard:naming`, which blanks comments and never parses, and `db push --dry-run`, and was rejected by Postgres at parse on the only database that exists. A failed rehearsal is a HALT and the push is not attempted.
