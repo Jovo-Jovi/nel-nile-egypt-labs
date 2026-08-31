@@ -268,7 +268,7 @@ This is the material consequence of the route and it is recorded as an acceptanc
 **Controls, binding on every migration from T03-R onward:**
 
 1. **Every migration ships with a verified reverse.** A `down` path is authored at the same time as the `up`, in the same task, and the reverse is stated in the task report. A migration whose reverse is "restore from backup" is not reversible.
-2. **`--dry-run` before every apply, without exception**, and its output is quoted in the report. The probe showed it reaches the remote and reports `upToDate`; it is the only rehearsal available.
+2. **`--dry-run` before every apply, without exception**, and its output is quoted in the report. The probe showed it reaches the remote and reports `upToDate`. It lists filenames and does not read them; control 7 is the rehearsal that parses.
 3. **One migration per task.** No task applies two. A failed push is then unambiguous about what failed.
 4. **Additive before destructive.** Within P01 to P03 no migration drops a column, drops a table, or narrows a type. Destructive changes wait for a separate OD once real records exist.
 5. **Verify by reading, never by assuming.** After every push, `migration list` and MCP `list_tables` are both run and their output quoted. A push that exits 0 is not evidence that the schema is what the migration intended.
@@ -462,7 +462,7 @@ OD-09, drafted 29 August 2026, awaiting signature and price. Two dashboard modul
 
 ### D-38 — Migration route
 
-OD-10, signed 29 August 2026, resolving CF-34. Migrations are hand-authored and pushed to the linked remote; no local database is used. `supabase migration new` writes the file, the SQL is written from `CONTENT_MODEL.md` and `DATA_MODEL.md`, `db push --dry-run` rehearses, `db push` applies, and `migration list` with MCP `list_tables` verifies. `db diff` is a generation convenience and is not on the critical path. The route was established by the P01-T03-E probe, which recorded an exit code for every command. The accepted risk is that no staging database exists on the current plan, so every push lands on the only database there is; OD-10 carries six binding controls, of which the first is that every migration ships with a verified reverse authored in the same task.
+OD-10, signed 29 August 2026, resolving CF-34. Migrations are hand-authored and pushed to the linked remote; no local database is used. `supabase migration new` writes the file, the SQL is written from `CONTENT_MODEL.md` and `DATA_MODEL.md`, `db push --dry-run` rehearses, `db push` applies, and `migration list` with MCP `list_tables` verifies. `db diff` is a generation convenience and is not on the critical path. The route was established by the P01-T03-E probe, which recorded an exit code for every command. The accepted risk is that no staging database exists on the current plan, so every push lands on the only database there is; OD-10 carries seven binding controls, of which the first is that every migration ships with a verified reverse authored in the same task.
 
 ### D-39 — Row-level security
 
