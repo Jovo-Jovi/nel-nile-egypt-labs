@@ -11,6 +11,7 @@
     "build": "next build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "guard:naming": "node scripts/guard/naming.mjs",
     "postinstall": "next telemetry disable"
   },
   "repository": {

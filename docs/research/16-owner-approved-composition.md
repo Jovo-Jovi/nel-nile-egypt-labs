@@ -1,3 +1,5 @@
+> Approval evidence only (PR-09). The record of the composition the client approved on 29 August 2026. Not a specification — `DESIGN_SYSTEM.md` §9 governs, and where the two disagree v5 wins. Moved from `docs/` at P01-T03-R-M1 so that `docs/` holds specifications only.
+
 # NEL public site — page report
 
 **Route:** `/` only (no locale segment). Entry: `SiteRoot`.  
