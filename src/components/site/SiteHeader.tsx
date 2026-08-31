@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { translate, type Locale } from "@/lib/catalog";
-import { HEADER_NAV } from "@/lib/previewNav";
+import { localeHref } from "@/lib/locale";
+import { HEADER_NAV } from "@/lib/siteNav";
 import { MarkSlot } from "@/components/ui/MarkSlot";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
@@ -13,10 +15,9 @@ import styles from "./SiteHeader.module.css";
 
 interface SiteHeaderProps {
   locale: Locale;
-  onLocaleChange: (locale: Locale) => void;
 }
 
-export function SiteHeader({ locale, onLocaleChange }: SiteHeaderProps) {
+export function SiteHeader({ locale }: SiteHeaderProps) {
   const [navOpen, setNavOpen] = useState(false);
   const [compact, setCompact] = useState(false);
 
@@ -54,9 +55,14 @@ export function SiteHeader({ locale, onLocaleChange }: SiteHeaderProps) {
 
   const renderNavLinks = (keyPrefix: string) =>
     HEADER_NAV.map((item) => (
-      <a key={`${keyPrefix}-${item.href}`} href={item.href} className={styles.navLink} onClick={closeNav}>
+      <Link
+        key={`${keyPrefix}-${item.suffix}`}
+        href={localeHref(locale, item.suffix)}
+        className={styles.navLink}
+        onClick={closeNav}
+      >
         {translate(locale, item.labelKey)}
-      </a>
+      </Link>
     ));
 
   return (
@@ -72,11 +78,11 @@ export function SiteHeader({ locale, onLocaleChange }: SiteHeaderProps) {
         >
           {navOpen ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
         </button>
-        <a href="#home" className={styles.markSlot} onClick={closeNav}>
+        <Link href={localeHref(locale, "")} className={styles.markSlot} onClick={closeNav}>
           <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.mark" dense>
             <MarkSlot blockSize={48} fallbackLabel={translate(locale, "header.markFallback")} />
           </ApprovalGate>
-        </a>
+        </Link>
         <nav className={styles.desktopNav} aria-label={translate(locale, "header.nav.label")}>
           {renderNavLinks("desktop")}
         </nav>
@@ -85,7 +91,7 @@ export function SiteHeader({ locale, onLocaleChange }: SiteHeaderProps) {
             <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" pill />
           </span>
           <WhatsAppAction label={translate(locale, "header.whatsappCompactLabel")} variant="whatsappOutlined" pill />
-          <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
+          <LanguageSwitcher locale={locale} />
         </div>
       </div>
       <button

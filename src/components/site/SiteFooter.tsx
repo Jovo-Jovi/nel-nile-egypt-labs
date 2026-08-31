@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { translate, type Locale } from "@/lib/catalog";
-import { HEADER_NAV } from "@/lib/previewNav";
+import { localeHref } from "@/lib/locale";
+import { FOOTER_MEDIA, HEADER_NAV } from "@/lib/siteNav";
 import {
   RESULTS_PORTAL_PLACEHOLDER_URL,
   buildWhatsAppPlaceholderUrl,
@@ -17,11 +19,11 @@ interface SiteFooterProps {
 
 export function SiteFooter({ locale }: SiteFooterProps) {
   return (
-    <footer className={styles.footer} id="contact">
+    <footer className={styles.footer}>
       <div className={styles.shell}>
         <div className={styles.grid}>
           <div className={styles.brand}>
-            <a href="#home" className={styles.lockup}>
+            <Link href={localeHref(locale, "")} className={styles.lockup}>
               <span className={styles.mark}>
                 <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.mark" dense>
                   <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
@@ -31,15 +33,15 @@ export function SiteFooter({ locale }: SiteFooterProps) {
                 <span className={styles.brandName}>{translate(locale, "header.markFallback")}</span>
                 <span className={styles.brandLine}>{translate(locale, "hero.eyebrow")}</span>
               </span>
-            </a>
+            </Link>
             <p className={styles.blurb}>{translate(locale, "about.body")}</p>
           </div>
           <nav className={styles.column} aria-label={translate(locale, "footer.sitemap")}>
             <h2 className={styles.heading}>{translate(locale, "footer.sitemap")}</h2>
             {HEADER_NAV.map((item) => (
-              <a key={item.href} href={item.href} className={styles.link}>
+              <Link key={item.suffix} href={localeHref(locale, item.suffix)} className={styles.link}>
                 {translate(locale, item.labelKey)}
-              </a>
+              </Link>
             ))}
           </nav>
           <nav className={styles.column} aria-label={translate(locale, "footer.contactHeading")}>
@@ -55,9 +57,9 @@ export function SiteFooter({ locale }: SiteFooterProps) {
             >
               {translate(locale, "hero.portalAction")}
             </a>
-            <a href="#lab-to-lab" className={styles.link}>
+            <Link href={localeHref(locale, "/lab-to-lab")} className={styles.link}>
               {translate(locale, "footer.labToLab")}
-            </a>
+            </Link>
             <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
               <span className={styles.meta}>
                 <span>{translate(locale, "footer.hotlineLabel")}</span>
@@ -71,18 +73,18 @@ export function SiteFooter({ locale }: SiteFooterProps) {
           </nav>
           <nav className={styles.column} aria-label={translate(locale, "footer.media")}>
             <h2 className={styles.heading}>{translate(locale, "footer.media")}</h2>
-            <a href="#departments" className={styles.link}>
-              {translate(locale, "header.nav.departments")}
-            </a>
-            <a href="#videos" className={styles.link}>
-              {translate(locale, "header.nav.videos")}
-            </a>
-            <span className={styles.linkMuted}>{translate(locale, "footer.privacy")}</span>
+            {FOOTER_MEDIA.map((item) => (
+              <Link key={item.suffix} href={localeHref(locale, item.suffix)} className={styles.link}>
+                {translate(locale, item.labelKey)}
+              </Link>
+            ))}
           </nav>
         </div>
         <div className={styles.bar}>
           <p className={styles.notice}>{translate(locale, "footer.notice")}</p>
-          <span className={styles.privacy}>{translate(locale, "footer.privacy")}</span>
+          <Link href={localeHref(locale, "/privacy-policy")} className={styles.privacy}>
+            {translate(locale, "footer.privacy")}
+          </Link>
           <div className={styles.chips}>
             <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" pill />
             <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappFilled" pill />

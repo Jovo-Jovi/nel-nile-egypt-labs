@@ -18,6 +18,9 @@
 //       presentation attributes (fill=, stroke=, stop-color=, flood-color=) and
 //       plain string constants are in scope. One allowlisted value: #25D366
 //       (case-insensitive), the D-34 §3 brand-mark exception.
+//       A `#` + 3/6 hex run that is an identifier reference is not a colour:
+//       fragment identifiers (`href="#cbc"`) and SVG `url(#id)` references
+//       (P03-T01; seed ids `cbc` and `cea` are hex-shaped).
 //
 // No vocabulary rule over src/. GLOSSARY.md §7 rules route segments and
 // Visitor-facing strings out of the forbidden set; a rule against the wrong
@@ -202,6 +205,46 @@ function findR3(source, scannable, starts, sourceLines, label) {
 const COLOR_FUNCTION_PATTERN = /(?:rgba|rgb|hsla|hsl)\(/g;
 const HEX_PATTERN = /#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})(?![0-9a-fA-F])/g;
 
+// A `#` + 3/6 hex run is a fragment or SVG paint-server reference, not a
+// colour, when it is the target of `href` / `xlink:href` or of `url()`.
+function isIdentifierHash(source, hashIndex) {
+  let p = hashIndex - 1;
+  if (p < 0) return false;
+
+  if (source[p] === '"' || source[p] === "'" || source[p] === "`") {
+    p -= 1;
+  }
+
+  while (p >= 0 && /\s/.test(source[p])) p -= 1;
+  if (p >= 0 && source[p] === "{") {
+    p -= 1;
+    while (p >= 0 && /\s/.test(source[p])) p -= 1;
+  }
+
+  if (p < 0) return false;
+
+  if (source[p] === "(") {
+    let q = p - 1;
+    while (q >= 0 && /\s/.test(source[q])) q -= 1;
+    if (q >= 2 && source.slice(q - 2, q + 1).toLowerCase() === "url") {
+      return true;
+    }
+  }
+
+  if (source[p] === "=") {
+    let q = p - 1;
+    while (q >= 0 && /\s/.test(source[q])) q -= 1;
+    if (q >= 3) {
+      const token = source.slice(Math.max(0, q - 24), q + 1).toLowerCase();
+      if (/(?:^|[^a-z0-9_])(?:xlink:)?href$/.test(token)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 function colorHitsInSpan(source, scannable, starts, sourceLines, label, from, to) {
   const findings = [];
   const span = scannable.slice(from, to);
@@ -211,7 +254,7 @@ function colorHitsInSpan(source, scannable, starts, sourceLines, label, from, to
     while (hit !== null) {
       const index = from + hit.index;
       const matched = source.slice(index, index + hit[0].length);
-      if (ALLOWED_HEX.test(matched)) {
+      if (ALLOWED_HEX.test(matched) || isIdentifierHash(source, index)) {
         hit = re.exec(span);
         continue;
       }
