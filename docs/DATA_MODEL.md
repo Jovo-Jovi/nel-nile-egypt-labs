@@ -185,7 +185,7 @@ page that shows a prostate marker to a woman is not.
 
 ## §6 Tables
 
-Eleven exist. Thirteen are listed — rows 12 and 13 wait on OD-09. `Visitor` and `ResultsPortalLink` are not tables — the first is never persisted,
+Eleven are specified, eight exist as of M4, and rows 7–9 await M5. Thirteen are listed — rows 12 and 13 wait on OD-09. `Visitor` and `ResultsPortalLink` are not tables — the first is never persisted,
 the second is a build-time constant (D-07). `Operator` lives in the provider's auth schema
 and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 

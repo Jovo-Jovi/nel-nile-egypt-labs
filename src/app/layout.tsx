@@ -3,12 +3,9 @@ import "@/styles/fonts.css";
 import "@/styles/tokens.css";
 import "@/styles/globals.css";
 
-// P03 replaces this — CONTENT_MODEL §3c. No locale segment exists yet, so
-// lang/dir are not set here — see the page-root wrapper in SiteRoot.tsx.
+// html/body live on the [locale] layout so lang/dir are set from the
+// segment (CF-61, I18N_MODEL.md §4). This root layout only loads global
+// styles and must not render a page at `/`.
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html>
-      <body>{children}</body>
-    </html>
-  );
+  return children;
 }

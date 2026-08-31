@@ -195,6 +195,12 @@
 
 .privacy {
   margin-inline-end: auto;
+  text-decoration: none;
+}
+
+.privacy:focus-visible {
+  outline: 2px solid var(--nel-color-accent);
+  outline-offset: 2px;
 }
 
 .chips {

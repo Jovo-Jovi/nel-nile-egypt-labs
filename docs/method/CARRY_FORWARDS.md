@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-96**
+**Next free id: CF-98**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -66,7 +66,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-58 | scripts/ is sanctioned for evidence tooling only. Application code, migrations and seed scripts do not live there. Revisit if P03 needs a build-tooling path. Resolved: scripts/guard/ is sanctioned for build tooling that gates a commit. scripts/ root remains evidence tooling. Application code and migrations live elsewhere. | reviewer | CLOSED at P01-T03-R-M1 | scripts/guard/ at P01-T03-R-M1 |
 | CF-59 | `DESIGN_SYSTEM.md` §3 ratios and §8 floor are computed against flat fills and font metrics. Those are necessary conditions, not evidence. Both are re-verified on rendered pages in both locales at the first gate that ships a screen. | reviewer | OPEN | P03 |
 | CF-60 | The rendered Arabic has not been read by anyone who reads clinical Arabic. The typeface was selected from measured metrics. If the lab's staff find the rendered Arabic wrong, that judgement outranks the metrics. Not the clinical gate, which governs LabTest content only. | client | OPEN | P02 landing-page mock |
-| CF-61 | The landing-page mock sets dir and lang on a page-root wrapper rather than on <html>, because OD-05 bound 2 forbids creating locale routes and no locale segment exists. This is a mock-only deviation from I18N_MODEL.md §4. P03 sets both on <html> from the locale segment and the wrapper does not survive. | reviewer | OPEN | P03 |
+| CF-61 | The landing-page mock sets dir and lang on a page-root wrapper rather than on <html>, because OD-05 bound 2 forbids creating locale routes and no locale segment exists. This is a mock-only deviation from I18N_MODEL.md §4. P03 sets both on <html> from the locale segment and the wrapper does not survive. CLOSED at P03-T01: `lang`/`dir` are set on `<html>` from the locale segment; the `SiteRoot` wrapper no longer carries them. | reviewer | CLOSED at P03-T01 | P03 |
 | CF-62 | All copy, the WhatsApp target and the portal href in the mock are synthetic placeholders. Real values come from SiteSettings and from the D-07 build-time constant at P03. No published business data entered application source (PR-16). | reviewer | OPEN | P03 |
 | CF-63 | Thirteen of the 24 components in DESIGN_SYSTEM.md §6 are not yet specified. §10 specifies eleven. Each remaining component is specified at the phase that builds it, by extending §10 rather than rewriting it. | reviewer | OPEN | P03 |
 | CF-64 | DESIGN_SYSTEM.md §9 specifies a four-cell stat band. Only three non-clinical structural counts exist — Branch, Programme, LabUnit. §9 is amended to three or four at its next revision. Rendering three centred rather than inventing a fourth was the correct call at P02-T09. CLOSED at P02-T10: §9's four-cell stat band is superseded by the card band (News, Cautions, Locations, Programmes); the three-count deviation no longer exists. | reviewer | CLOSED at P02-T10 | `DESIGN_SYSTEM.md` v3 at P02-T10 |
@@ -101,6 +101,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-93 | `docs/PRODUCT_BRIEF.md` is document 1 and an unauthored stub reading "Do not build against it", tracked by no carry-forward, while `SESSION_CONTEXT.md` records the Gate-0 set containing it as closed. Unlike `SCOPE.md` it is gated on nothing. | reviewer | OPEN | P03 |
 | CF-94 | `7bb0f87` and `605f27f` authored the production baseline with no task id, no Done-when, no verdict and no done-steps row; OD-08 and P02-T15 ratified the result retroactively. | reviewer | OPEN | P03 |
 | CF-95 | §5 fixes 150ms and 250ms; `src/` carries 200ms (`SiteHeader.module.css:199`) and 700ms (`Button.module.css:146`) and never uses 250ms. Whether a spinner rotation is a §5 transition, and whether §5 needs a third value, is a document decision. | reviewer | OPEN | P02 close-out |
+| CF-96 | `"Offer"`, `"Equipment"` and `"Video"` — `DATA_MODEL.md` §6 rows 7, 8 and 9 — have no table and no migration; three of §3d's eight dashboard modules and three of §3c's twelve static routes have no backing entity. M5 creates them with RLS in the create-table block, the two §3 policy shapes, and SELECT-only grants to `anon`. | reviewer | OPEN | M5 |
+| CF-97 | `/{locale}/programmes/{slug}` renders zero of its eighteen URLs because every Programme is `draft`; the 42-URL total in §3c is reachable only after publication, which is a clinical-gate act. | reviewer | OPEN | P06 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

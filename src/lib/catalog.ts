@@ -48,6 +48,20 @@ const ar = {
   "languageSwitcher.toAr": "التبديل إلى العربية",
   "languageSwitcher.toEn": "التبديل إلى الإنجليزية",
 
+  // Page titles — P03-T01 shells. Chrome only; no Programme or LabTest name.
+  "page.home.title": "الرئيسية",
+  "page.about.title": "عن المعمل",
+  "page.departments.title": "الأقسام",
+  "page.programmes.title": "البرامج",
+  "page.offers.title": "العروض",
+  "page.videos.title": "الفيديوهات",
+  "page.equipment.title": "الأجهزة",
+  "page.locations.title": "الفروع",
+  "page.contact.title": "تواصل",
+  "page.portal.title": "بوابة النتائج",
+  "page.privacyPolicy.title": "سياسة الخصوصية",
+  "page.labToLab.title": "معامل للمعامل",
+
   // §12 approval-state markers — one label per pending material class.
   // Named to the class, reused everywhere that class of material appears.
   "approval.pending.clinical": "قيد الانتظار — بانتظار توقيع الفريق الطبي بالمعمل كتابيًا",
@@ -432,6 +446,20 @@ const en = {
   "languageSwitcher.toAr": "Switch to Arabic",
   "languageSwitcher.toEn": "Switch to English",
 
+  // Page titles — P03-T01 shells. Chrome only; no Programme or LabTest name.
+  "page.home.title": "Home",
+  "page.about.title": "About",
+  "page.departments.title": "Departments",
+  "page.programmes.title": "Programmes",
+  "page.offers.title": "Offers",
+  "page.videos.title": "Videos",
+  "page.equipment.title": "Equipment",
+  "page.locations.title": "Locations",
+  "page.contact.title": "Contact",
+  "page.portal.title": "Results portal",
+  "page.privacyPolicy.title": "Privacy policy",
+  "page.labToLab.title": "Lab-to-Lab",
+
   // §12 approval-state markers — one label per pending material class.
   "approval.pending.clinical": "Pending — awaiting the lab's written clinical sign-off",
   "approval.pending.businessData": "Pending — awaiting the client's official contact data",
@@ -610,7 +638,7 @@ const en = {
   "footer.hotlineLabel": "Hotline",
   "footer.whatsappLabel": "WhatsApp",
   "footer.addressLabel": "Head office",
-  "footer.sitemap": "On this page",
+  "footer.sitemap": "Site sections",
   "footer.privacy": "Privacy policy",
   "footer.awaitingValue": "To be confirmed",
   "footer.labToLab": "Lab-to-Lab",
