@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-85**
+**Next free id: CF-86**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -90,6 +90,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-82 | Five LabTest records carry QA flags from the 2018 extraction — ast, esr, fsh, app-afp, creatinine-urea-combined. The flags are stored on the row and the clinical gate governs their resolution. Two are HIGH: FSH appears in a thyroid-described tier and is very likely TSH, and APP is very likely AFP. | client | OPEN | P03 |
 | CF-83 | M1's reverse is authored and unapplied. Every migration from M2 onward carries one under OD-10 control 1, and no reverse has been executed against the remote, so none is verified by execution. A reverse that has never run is a plan, not a guarantee. | reviewer | OPEN | P03 |
 | CF-84 | The naming guard runs as npm run guard:naming and is not yet wired into a pre-commit hook or a CI workflow. Until it is, it protects only the task that remembers to run it. | reviewer | OPEN | P03 |
+| CF-85 | Four tables exist with RLS enabled and no policies, so they deny every request including the Operator's. The dashboard cannot read or write until M4 lands the two policy shapes from SECURITY_MODEL.md §3. This is the intended state between M2 and M4 and is recorded so it is not mistaken for a fault. | reviewer | OPEN | M4 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -284,16 +284,37 @@ in the same task.
 | # | Creates | Reverse |
 |---|---|---|
 | M1 | the four enum types, the common column conventions, the CI naming guard | drop types |
-| M2 | `"LabUnit"`, `"Branch"`, `"MediaAsset"`, `"SiteSettings"` — the independent tables | drop tables |
-| M3 | `"Programme"`, `"LabTest"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and their keys | drop tables |
+| M2 | `"LabUnit"`, `"Branch"`, `"MediaAsset"`, `"SiteSettings"` — the independent tables, each with RLS enabled | drop tables |
+| M3 | `"Programme"`, `"LabTest"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and their keys, each with RLS enabled | drop tables |
 | M4 | the §7 function, the RLS policies, and the seed load with its 121→72 assertion | drop function and policies; truncate |
 
 **M4 is the only one that loads data and the only one that can fail on what it loads.**
 Its assertion aborts the transaction on any figure other than 121 and 72.
 
-RLS policies land in M4 rather than alongside each table, so that no table exists
-unprotected between migrations — a table created in M3 and left open until M4 would be
-readable by anyone holding the publishable key for as long as that gap lasted.
+**RLS is enabled in the same statement block that creates each table. Policies land in
+M4. These are two different things and conflating them is a security defect.**
+
+The first cut of this section said policies land in M4 "so that no table exists
+unprotected between migrations", which was backwards: if M2 creates tables and M4 grants
+them policies, those tables sit for two migrations with no policy at all. Corrected at
+P01-T03-R-M1 after `supabase/config.toml` surfaced the question.
+
+What actually makes the gap safe is that **a table with RLS enabled and no policy denies
+every request.** Postgres has no implicit allow. So:
+
+- `alter table ... enable row level security` is in the same `create table` block, in M2
+  and M3, never deferred.
+- Policies land in M4, when the shapes in `SECURITY_MODEL.md` §3 can be written against a
+  complete schema.
+- Between M2 and M4 the tables exist and are readable by nobody, including a holder of
+  the publishable key. That is the intended state, not a gap to be tolerated.
+
+**A table created without RLS in the same migration is a defect regardless of what the
+policies do later**, and `supabase/config.toml`'s `auto_expose_new_tables` is why: if that
+flag is ever set, a new table is granted to `anon` on creation, and the only thing
+standing between a grant and a public read is RLS being on. The justification matters as
+much as the conclusion here, because a wrong justification is how someone later moves
+`enable row level security` into M4 alongside the policies it appears to belong with.
 
 ---
 
