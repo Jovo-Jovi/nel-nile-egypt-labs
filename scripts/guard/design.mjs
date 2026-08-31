@@ -13,9 +13,11 @@
 //       file under src/.
 //   R3  Boundary host elements in .tsx: <form, <iframe, <embed, <input,
 //       <textarea, <select. Not skippable by flag — the boundary gate, executable.
-//   R4  Colour literals in a CSS declaration (src/**/*.css, excluding
-//       src/styles/tokens.css) or a style= object (src/**/*.tsx). One allowlisted
-//       value: #25D366 (case-insensitive), the D-34 §3 brand-mark exception.
+//   R4  Colour literals anywhere in src/**/*.css (excluding src/styles/tokens.css
+//       by exact path), src/**/*.tsx and src/**/*.ts, outside comments. SVG
+//       presentation attributes (fill=, stroke=, stop-color=, flood-color=) and
+//       plain string constants are in scope. One allowlisted value: #25D366
+//       (case-insensitive), the D-34 §3 brand-mark exception.
 //
 // No vocabulary rule over src/. GLOSSARY.md §7 rules route segments and
 // Visitor-facing strings out of the forbidden set; a rule against the wrong
@@ -42,8 +44,9 @@ const TSX = new Set([".tsx"]);
 // Blanked: `/* */` block comments and `//` line comments. `//` after `:` is left
 // intact so `http://` / `https://` URLs are not treated as comments.
 //
-// Strings are not blanked — a colour literal in a style= object lives in a string,
-// and a physical property in a declaration is not a comment.
+// Strings are not blanked — a colour literal in a style= object, an SVG
+// presentation attribute, or a string constant lives in a string, and a
+// physical property in a declaration is not a comment.
 function blankComments(source) {
   const chars = source.split("");
   const end = source.length;
@@ -229,91 +232,8 @@ function colorHitsInSpan(source, scannable, starts, sourceLines, label, from, to
   return findings;
 }
 
-function extractBraceSpan(source, openIndex) {
-  let depth = 0;
-  let i = openIndex;
-  let inString = null;
-  let escaped = false;
-  while (i < source.length) {
-    const c = source[i];
-    if (inString !== null) {
-      if (escaped) {
-        escaped = false;
-        i += 1;
-        continue;
-      }
-      if (c === "\\") {
-        escaped = true;
-        i += 1;
-        continue;
-      }
-      if (c === inString) inString = null;
-      i += 1;
-      continue;
-    }
-    if (c === "'" || c === '"' || c === "`") {
-      inString = c;
-      i += 1;
-      continue;
-    }
-    if (c === "{") {
-      depth += 1;
-    } else if (c === "}") {
-      depth -= 1;
-      if (depth === 0) return { start: openIndex, end: i + 1 };
-    }
-    i += 1;
-  }
-  return { start: openIndex, end: source.length };
-}
-
-function extractQuotedSpan(source, quoteIndex) {
-  const quote = source[quoteIndex];
-  let i = quoteIndex + 1;
-  let escaped = false;
-  while (i < source.length) {
-    const c = source[i];
-    if (escaped) {
-      escaped = false;
-      i += 1;
-      continue;
-    }
-    if (c === "\\") {
-      escaped = true;
-      i += 1;
-      continue;
-    }
-    if (c === quote) return { start: quoteIndex, end: i + 1 };
-    i += 1;
-  }
-  return { start: quoteIndex, end: source.length };
-}
-
-function findR4Css(source, scannable, starts, sourceLines, label) {
+function findR4(source, scannable, starts, sourceLines, label) {
   return colorHitsInSpan(source, scannable, starts, sourceLines, label, 0, scannable.length);
-}
-
-function findR4Style(source, scannable, starts, sourceLines, label) {
-  const findings = [];
-  const re = /style\s*=/g;
-  let hit = re.exec(scannable);
-  while (hit !== null) {
-    let i = hit.index + hit[0].length;
-    while (i < scannable.length && /[\s]/.test(scannable[i])) i += 1;
-    if (scannable[i] === "{") {
-      const span = extractBraceSpan(scannable, i);
-      findings.push(
-        ...colorHitsInSpan(source, scannable, starts, sourceLines, label, span.start, span.end),
-      );
-    } else if (scannable[i] === '"' || scannable[i] === "'") {
-      const span = extractQuotedSpan(scannable, i);
-      findings.push(
-        ...colorHitsInSpan(source, scannable, starts, sourceLines, label, span.start, span.end),
-      );
-    }
-    hit = re.exec(scannable);
-  }
-  return findings;
 }
 
 function scanFile(source, label, opts) {
@@ -332,11 +252,8 @@ function scanFile(source, label, opts) {
   if (asTsx) {
     findings.push(...findR3(source, scannable, starts, sourceLines, label));
   }
-  if (asCss && label !== TOKENS_PATH) {
-    findings.push(...findR4Css(source, scannable, starts, sourceLines, label));
-  }
-  if (asTsx) {
-    findings.push(...findR4Style(source, scannable, starts, sourceLines, label));
+  if ((asCss || asTsx || asTs) && label !== TOKENS_PATH) {
+    findings.push(...findR4(source, scannable, starts, sourceLines, label));
   }
 
   findings.sort(
