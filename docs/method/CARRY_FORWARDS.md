@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-101**
+**Next free id: CF-103**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -106,6 +106,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-98 | No gate detects an unreferenced file under `src/`. Dead files have now survived two tasks — two `system/` stylesheets at P02-T19, and ten files at P03-T01, which reached `main`. A reachability check belongs in `guard:design` or alongside it; whether it is a fifth rule or a separate guard is open. | reviewer | OPEN | P03 |
 | CF-99 | `generateStaticParams` on `/{locale}/programmes/{slug}` returns `[]` from either a published-only query with zero rows or the null-config early return, and the two are indistinguishable on a machine with no Supabase env configured. D-42's fail-closed behaviour on this route is established by construction, not by execution — the class of CF-87 and the M2 zero-row read. It discriminates when a Programme is published; no row is published to make it do so. | reviewer | OPEN | P06 |
 | CF-100 | Seventeen done-step rows in `SESSION_CONTEXT.md` carry unescaped pipe characters inside the Task cell of a four-column table, so they render with the wrong content in the Verdict and Date columns wherever Markdown is displayed. Content is recoverable by right-anchored parsing and is not lost. `guard:phases` R5 reports them and becomes blocking once they are escaped. | reviewer | OPEN | P05 |
+| CF-101 | `DESIGN_SYSTEM.md` line 704 says §6 enumerates 24 components; the tree carries 23 component files, including `StatusStateBadge` and the shared `EntityCard.module.css`, which §6 does not name. Reconcile the inventory against the tree before G3 asserts either figure. | reviewer | OPEN | P03 |
+| CF-102 | `PHASES.md` v2 pre-assigned task ids to unissued work. P03-T03's item described listing pages and was checked by an unrelated task, so the plan asserted work was complete that had not started, and the Programmes and Departments listings disappeared from it for two tasks. Repaired at P03-T05 STEP 1; the row records the failure mode so the guard's blind spot — it checks ids and verdicts, never descriptions — is on the record. | reviewer | CLOSED at P03-T05 | P03-T05 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

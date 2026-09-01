@@ -1,8 +1,13 @@
-// Published-only listings for Offer, Video and Equipment. Ordered by
-// display_order. Unpublished rows are never selected (PR-08). An empty
-// list is D-42 failing closed — the pass condition, not a gap to fill.
+// Published-only listings for Programme, LabUnit, Offer, Video and
+// Equipment. Ordered by display_order. Unpublished rows are never
+// selected: fetchAnonPublishedJson appends the filter where a caller
+// cannot omit it (PR-08). An empty list is D-42 failing closed — the
+// pass condition, not a gap to fill.
 // youtube_id is not selected: a listing must never emit a host thumbnail
 // or an autoloading embed (D-13, BOUNDARY_MODEL.md §5).
+// Programme listings select name and description only. No LabTest name,
+// membership, tier, preparation notes, or slug — the detail template is
+// later work, and a listing card is not a link.
 
 import { fetchAnonPublishedJson } from "./supabaseRest";
 
@@ -41,6 +46,22 @@ export type PublishedEquipment = {
   descriptionAr: string;
   descriptionEn: string;
   poster: MediaPoster | null;
+};
+
+export type PublishedProgramme = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+};
+
+export type PublishedLabUnit = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
 };
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -88,6 +109,12 @@ const VIDEO_SELECT =
 
 const EQUIPMENT_SELECT =
   `select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
+const PROGRAMME_SELECT =
+  "select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
+
+const LAB_UNIT_SELECT =
+  "select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
 
 function parseOffer(value: unknown): PublishedOffer | null {
   const row = asRecord(value);
@@ -156,6 +183,30 @@ function parseEquipment(value: unknown): PublishedEquipment | null {
   };
 }
 
+function parseNamedDescription(
+  value: unknown,
+): { id: string; nameAr: string; nameEn: string; descriptionAr: string; descriptionEn: string } | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const nameAr = asNonEmptyString(row.name_ar);
+  const nameEn = asNonEmptyString(row.name_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || nameAr === null || nameEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  return { id, nameAr, nameEn, descriptionAr, descriptionEn };
+}
+
+function parseProgramme(value: unknown): PublishedProgramme | null {
+  return parseNamedDescription(value);
+}
+
+function parseLabUnit(value: unknown): PublishedLabUnit | null {
+  return parseNamedDescription(value);
+}
+
 function mapPublished<T>(payload: unknown, parse: (value: unknown) => T | null): T[] {
   if (!Array.isArray(payload)) return [];
   const rows: T[] = [];
@@ -179,6 +230,16 @@ export async function listPublishedVideos(): Promise<PublishedVideo[]> {
 export async function listPublishedEquipment(): Promise<PublishedEquipment[]> {
   const payload = await fetchAnonPublishedJson("Equipment", EQUIPMENT_SELECT);
   return mapPublished(payload, parseEquipment);
+}
+
+export async function listPublishedProgrammes(): Promise<PublishedProgramme[]> {
+  const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT);
+  return mapPublished(payload, parseProgramme);
+}
+
+export async function listPublishedLabUnits(): Promise<PublishedLabUnit[]> {
+  const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_SELECT);
+  return mapPublished(payload, parseLabUnit);
 }
 
 const FORBIDDEN_POSTER = /youtube\.com|youtu\.be|ytimg\.com/i;
