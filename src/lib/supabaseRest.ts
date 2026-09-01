@@ -15,7 +15,7 @@ export function supabaseRestConfig(): SupabaseRestConfig | null {
   return { url: url.replace(/\/$/, ""), anonKey };
 }
 
-type PublishedTable = "Programme" | "Offer" | "Video" | "Equipment";
+type PublishedTable = "Programme" | "LabUnit" | "Offer" | "Video" | "Equipment";
 
 // Published-only. The publication_state filter is appended here so a
 // caller cannot omit it. Unpublished rows are never selected (PR-08).

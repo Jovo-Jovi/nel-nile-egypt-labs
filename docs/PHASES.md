@@ -148,48 +148,49 @@ in the project, and it should not be first.
 - [x] **M5A** — reconcile `DATA_MODEL.md` §6 rows 7–9 against `CONTENT_MODEL.md` §3a
 - [x] **P03-T02** — land `PHASES.md`, correct the P04 phase name
 - [x] **M5B** — create `"Offer"`, `"Equipment"`, `"Video"` with row-level security
-- [x] **P03-T03** — Programmes and Departments listing pages
+- [x] **P03-T03** — OD-12, `PHASES.md` v2, and the phases guard
 - [x] **M5C** — apply M5; eight tables become eleven
-- [ ] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
-- [ ] **P03-T05** — Branches page and the drawn map *(needs branch addresses)*
-- [ ] **P03-T06** — Contact, results portal, privacy policy, lab-to-lab
-- [ ] **P03-T07** — Programme detail template *(renders zero pages until P06)*
-- [ ] **G3** — rendered evidence in both locales on every page; boundary and bilingual gates
+- [x] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
+- [ ] Programmes and Departments listings
+- [ ] Branches page and the drawn map *(needs branch addresses)*
+- [ ] Contact, results portal, privacy policy, lab-to-lab
+- [ ] Programme detail template *(renders zero pages until P06)*
+- [ ] G3 — rendered evidence in both locales on every page; boundary and bilingual gates
 
 ### P05 — Admin dashboard · NEXT
 
-- [ ] **`ADMIN_SPEC.md`** — authored one step ahead (CF-91)
-- [ ] **P05-T01** — Auth, Operator accounts, MFA on at least two accounts (OD-11)
-- [ ] **P05-T02** — Site Settings and Media Library modules
-- [ ] **P05-T03** — Branches and LabUnits modules
-- [ ] **P05-T04** — Offers, Videos and Equipment modules
-- [ ] **P05-T05** — Programmes, tiers and memberships module
-- [ ] **G5** — the owner can edit every unlocked region himself
+- [ ] `ADMIN_SPEC.md` — authored one step ahead (CF-91)
+- [ ] Auth, Operator accounts, MFA on at least two accounts (OD-11)
+- [ ] Site Settings and Media Library modules
+- [ ] Branches and LabUnits modules
+- [ ] Offers, Videos and Equipment modules
+- [ ] Programmes, tiers and memberships module
+- [ ] G5 — the owner can edit every unlocked region himself
 
 ### P06 — Content and Arabic · LONGEST POLE
 
-- [ ] **72 Arabic `LabTest` names** — written and reviewed
-- [ ] **121 membership judgements** — which tests belong to which programme and tier
-- [ ] **5 QA-flagged records** — two high severity, resolved with the lab
-- [ ] **Written clinical sign-off** — not waivable by anyone, including the client
-- [ ] **Content entry** — through the dashboard, not through SQL
-- [ ] **G6** — clinical and bilingual gates
+- [ ] 72 Arabic `LabTest` names — written and reviewed
+- [ ] 121 membership judgements — which tests belong to which programme and tier
+- [ ] 5 QA-flagged records — two high severity, resolved with the lab
+- [ ] Written clinical sign-off — not waivable by anyone, including the client
+- [ ] Content entry — through the dashboard, not through SQL
+- [ ] G6 — clinical and bilingual gates
 
 ### P04 — Catalogue search · AFTER P06
 
-- [ ] **P04-T01** — static bilingual index over Programmes and LabTests
-- [ ] **P04-T02** — search on the البرامج page, both locales
-- [ ] **G4** — clinical, data integrity and bilingual gates
+- [ ] static bilingual index over Programmes and LabTests
+- [ ] search on the البرامج page, both locales
+- [ ] G4 — clinical, data integrity and bilingual gates
 
 ### P07 — Hardening and cutover · LAUNCH
 
-- [ ] **`CUTOVER_RUNBOOK.md`** — authored one step ahead
-- [ ] **P07-T01** — security headers
-- [ ] **P07-T02** — DNS move and redirects from the 2018 URLs
-- [ ] **P07-T03** — decommission the old site
-- [ ] **P07-T04** — revert the repository to private (OD-04)
-- [ ] **Owner handover** — unscoped, see §5
-- [ ] **G7 launch** — all four standards
+- [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
+- [ ] security headers
+- [ ] DNS move and redirects from the 2018 URLs
+- [ ] decommission the old site
+- [ ] revert the repository to private (OD-04)
+- [ ] Owner handover — unscoped, see §5
+- [ ] G7 launch — all four standards
 
 ---
 
@@ -204,6 +205,9 @@ from the first and that is how `CF-86` happened.
 - A **gate box** is checked if and only if the phase map's Gate cell for that phase reads
   `PASSED`.
 - A task with no done-step row is unchecked. A task not yet issued has no row.
+- A checklist item carries a task id only once that task has been issued. Until
+  then the item is id-less prose. `guard:phases` R1–R4 read `**<id>**` boxes; an
+  id-less item is ignored.
 
 **The Verdict cell is the weak link and this rule repairs it.** Verdicts are issued in review
 and, until now, were almost never written back: at v2 only one of the four most recent task
