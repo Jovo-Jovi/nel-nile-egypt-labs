@@ -98,6 +98,7 @@ The remaining 117 rows default to `audience` = `all`, `minAge` = null, no note. 
 | `LabTest` → `ProgrammeLabTest` | one to many | One `LabTest` appears on many slots. |
 | `Offer` → `Programme` | many to zero-or-one | Nullable. An `Offer` may reference one `Programme`; it is never required to (D-18). |
 | `Equipment` → `Video` | many to zero-or-one | Optional linked `Video`. |
+| `Video` → `MediaAsset` | many to zero-or-one | Optional. The poster. Amended at M5A. |
 | `Offer` → `MediaAsset` | many to zero-or-one | |
 | `Equipment` → `MediaAsset` | many to zero-or-one | |
 | `LabUnit` → `MediaAsset` | many to zero-or-one | |

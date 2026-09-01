@@ -148,7 +148,7 @@ in the project, and it should not be first.
 - [x] **M5A** — reconcile `DATA_MODEL.md` §6 rows 7–9 against `CONTENT_MODEL.md` §3a
 - [x] **P03-T02** — land `PHASES.md`, correct the P04 phase name
 - [ ] **M5B** — create `"Offer"`, `"Equipment"`, `"Video"` with row-level security
-- [ ] **P03-T03** — Programmes and Departments listing pages
+- [x] **P03-T03** — Programmes and Departments listing pages
 - [ ] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
 - [ ] **P03-T05** — Branches page and the drawn map *(needs branch addresses)*
 - [ ] **P03-T06** — Contact, results portal, privacy policy, lab-to-lab
