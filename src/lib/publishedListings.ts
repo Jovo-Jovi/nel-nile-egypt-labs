@@ -1,0 +1,197 @@
+// Published-only listings for Offer, Video and Equipment. Ordered by
+// display_order. Unpublished rows are never selected (PR-08). An empty
+// list is D-42 failing closed — the pass condition, not a gap to fill.
+// youtube_id is not selected: a listing must never emit a host thumbnail
+// or an autoloading embed (D-13, BOUNDARY_MODEL.md §5).
+
+import { fetchAnonPublishedJson } from "./supabaseRest";
+
+export type MediaPoster = {
+  storagePath: string;
+  altAr: string | null;
+  altEn: string | null;
+};
+
+export type PublishedOffer = {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  validFrom: string | null;
+  validUntil: string | null;
+  priceAmount: string | null;
+  priceCurrency: string | null;
+  poster: MediaPoster | null;
+};
+
+export type PublishedVideo = {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  poster: MediaPoster | null;
+};
+
+export type PublishedEquipment = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  poster: MediaPoster | null;
+};
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
+
+function asNonEmptyString(value: unknown): string | null {
+  return typeof value === "string" && value.length > 0 ? value : null;
+}
+
+function asOptionalString(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  return typeof value === "string" ? value : null;
+}
+
+function asPriceAmount(value: unknown): string | null {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value === "string" && value.length > 0) return value;
+  return null;
+}
+
+function parsePoster(value: unknown): MediaPoster | null {
+  const record = asRecord(value);
+  if (record === null) return null;
+  if (record.publication_state !== undefined && record.publication_state !== "published") {
+    return null;
+  }
+  const storagePath = asNonEmptyString(record.storage_path);
+  if (storagePath === null) return null;
+  return {
+    storagePath,
+    altAr: asOptionalString(record.alt_ar),
+    altEn: asOptionalString(record.alt_en),
+  };
+}
+
+const MEDIA_EMBED = "MediaAsset(storage_path,alt_ar,alt_en,publication_state)";
+
+const OFFER_SELECT =
+  `select=id,title_ar,title_en,description_ar,description_en,valid_from,valid_until,price_amount,price_currency,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
+const VIDEO_SELECT =
+  `select=id,title_ar,title_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
+const EQUIPMENT_SELECT =
+  `select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
+function parseOffer(value: unknown): PublishedOffer | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const titleAr = asNonEmptyString(row.title_ar);
+  const titleEn = asNonEmptyString(row.title_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || titleAr === null || titleEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  return {
+    id,
+    titleAr,
+    titleEn,
+    descriptionAr,
+    descriptionEn,
+    validFrom: asOptionalString(row.valid_from),
+    validUntil: asOptionalString(row.valid_until),
+    priceAmount: asPriceAmount(row.price_amount),
+    priceCurrency: asNonEmptyString(row.price_currency),
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function parseVideo(value: unknown): PublishedVideo | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const titleAr = asNonEmptyString(row.title_ar);
+  const titleEn = asNonEmptyString(row.title_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || titleAr === null || titleEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  return {
+    id,
+    titleAr,
+    titleEn,
+    descriptionAr,
+    descriptionEn,
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function parseEquipment(value: unknown): PublishedEquipment | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const nameAr = asNonEmptyString(row.name_ar);
+  const nameEn = asNonEmptyString(row.name_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || nameAr === null || nameEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  return {
+    id,
+    nameAr,
+    nameEn,
+    descriptionAr,
+    descriptionEn,
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function mapPublished<T>(payload: unknown, parse: (value: unknown) => T | null): T[] {
+  if (!Array.isArray(payload)) return [];
+  const rows: T[] = [];
+  for (const item of payload) {
+    const parsed = parse(item);
+    if (parsed !== null) rows.push(parsed);
+  }
+  return rows;
+}
+
+export async function listPublishedOffers(): Promise<PublishedOffer[]> {
+  const payload = await fetchAnonPublishedJson("Offer", OFFER_SELECT);
+  return mapPublished(payload, parseOffer);
+}
+
+export async function listPublishedVideos(): Promise<PublishedVideo[]> {
+  const payload = await fetchAnonPublishedJson("Video", VIDEO_SELECT);
+  return mapPublished(payload, parseVideo);
+}
+
+export async function listPublishedEquipment(): Promise<PublishedEquipment[]> {
+  const payload = await fetchAnonPublishedJson("Equipment", EQUIPMENT_SELECT);
+  return mapPublished(payload, parseEquipment);
+}
+
+const FORBIDDEN_POSTER = /youtube\.com|youtu\.be|ytimg\.com/i;
+
+export function posterSrc(poster: MediaPoster | null): string | null {
+  if (poster === null) return null;
+  const path = poster.storagePath;
+  if (FORBIDDEN_POSTER.test(path)) return null;
+  if (/^https:\/\//i.test(path)) return path;
+  return null;
+}
+
+export function posterAlt(locale: "ar" | "en", poster: MediaPoster | null): string | null {
+  if (poster === null) return null;
+  return locale === "ar" ? poster.altAr : poster.altEn;
+}

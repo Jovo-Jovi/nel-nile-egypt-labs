@@ -185,7 +185,7 @@ page that shows a prostate marker to a woman is not.
 
 ## §6 Tables
 
-Eleven are specified, eight exist as of M4, and rows 7–9 await M5. Thirteen are listed — rows 12 and 13 wait on OD-09. `Visitor` and `ResultsPortalLink` are not tables — the first is never persisted,
+Eleven are specified and eleven exist as of M5. Thirteen are listed — rows 12 and 13 still waiting on OD-09. `Visitor` and `ResultsPortalLink` are not tables — the first is never persisted,
 the second is a build-time constant (D-07). `Operator` lives in the provider's auth schema
 and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 
@@ -310,7 +310,7 @@ decoration.
 
 ## §10 Migration sequence
 
-Four migrations, one per task (OD-10 control 3). Each carries a verified reverse authored
+Five migrations, one per task (OD-10 control 3). Each carries a verified reverse authored
 in the same task.
 
 | # | Creates | Reverse |
@@ -319,6 +319,7 @@ in the same task.
 | M2 | `"LabUnit"`, `"Branch"`, `"MediaAsset"`, `"SiteSettings"` — the independent tables, each with RLS enabled | drop tables |
 | M3 | `"Programme"`, `"LabTest"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and their keys, each with RLS enabled, plus the grant revoke across all eight tables | drop tables, restore grants |
 | M4 | the §7 function, the RLS policies, and the seed load with its 121→72 assertion | drop function and policies; truncate |
+| M5 | `"Offer"`, `"Video"`, `"Equipment"` — each with RLS enabled in the create-table block and both §3 policy shapes | drop tables |
 
 **M4 is the only one that loads data and the only one that can fail on what it loads.**
 Its assertion aborts the transaction on any figure other than 121 and 72.
