@@ -19,12 +19,11 @@
 -- Both SECURITY_MODEL.md §3 policy shapes land in this file, per table,
 -- because these three tables are created after M4. Published-read: SELECT
 -- only, to anon, restricted to publication_state = 'published'.
--- Operator-write: for all, to authenticated. Grants match: SELECT to anon
--- and nothing else; insert, update and delete to authenticated so the
--- Operator-write policy has verbs to permit. M3's schema default already
--- grants SELECT on a new table to both roles; the named SELECT grant to
--- anon is the fence's match against SECURITY_MODEL.md §3, written rather
--- than inherited in silence.
+-- Operator-write: for all, to authenticated. Grants: SELECT to anon
+-- and nothing else; SELECT, INSERT, UPDATE and DELETE to authenticated.
+-- Both SELECT grants are named in this file rather than inherited from
+-- M3's schema default, so an Operator can read these three tables even
+-- if that default later is not what M3 intended.
 --
 -- Additive only (OD-10 control 4). This file does not rewrite, narrow or
 -- otherwise change any table that already exists. Foreign keys point at
@@ -228,7 +227,7 @@ grant select on table
   public."Equipment"
 to anon;
 
-grant insert, update, delete on table
+grant select, insert, update, delete on table
   public."Offer",
   public."Video",
   public."Equipment"
