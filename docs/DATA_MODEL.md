@@ -281,7 +281,7 @@ violate:
 | 121 rows in, 72 distinct `LabTest` out | asserted **inside the seed migration**, which aborts on any other figure |
 | One `SiteSettings` row | unique index on a constant expression |
 | At most one head office | partial unique index on `is_head_office` where true |
-| `valid_to >= valid_from` | check constraint on `"Offer"` |
+| `valid_until >= valid_from` | check constraint on `"Offer"` |
 | A published row is bilingually complete | partial check per bilingual pair, where state is `published` |
 
 The 121→72 assertion lives in the migration rather than in a spec, because a migration
