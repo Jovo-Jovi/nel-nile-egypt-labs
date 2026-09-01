@@ -1,6 +1,6 @@
 # NEL — Phases to launch and handover
 
-**Status:** AUTHORED at P03 · 1 September 2026
+**Status:** v2 — AUTHORED at P03 · 1 September 2026 · reordered under OD-12
 **Precedence:** navigational only. This document decides nothing. Where it disagrees with
 `PRODUCT_BRIEF.md`, `GLOSSARY.md`, `DECISIONS.md`, `SCOPE.md`, `CONTENT_MODEL.md`,
 `BOUNDARY_MODEL.md`, `SECURITY_MODEL.md`, `I18N_MODEL.md`, `DATA_MODEL.md`,
@@ -101,73 +101,129 @@ project has access to. The two are unrelated, and the naming should be read as
 decommission and reverting the repository to private. Nothing in it hands anything to the
 owner. See §5.
 
+**The order below is not the order the phases are numbered in.** `OD-12` reorders delivery to
+P03 → P05 → P06 → P04 → P07. Phases keep their identifiers and their gates — G4 is still P04's
+gate, it simply falls later — because renumbering would break every historical reference in
+`DECISIONS.md`, `CARRY_FORWARDS.md` and the done-steps table.
+
 ---
 
-## §3 The phases
+## §3 The phases, in delivery order
 
-| Phase | What it produces | Gate | Non-waivable | State |
-|---|---|---|---|---|
-| P00 Prepare | Documents, decisions, seed verified | G0 | — | **Closed** |
-| P01 Foundation | Repository, CI, database schema, row-level security, seed import | G1 | Boundary | **Closed** — G1 passed 31 Aug 2026 |
-| P02 Design system | Colour and type tokens, RTL primitives, executable lint rules | G2 | — | **Closed** — G2 passed 1 Sep 2026 |
-| P03 Public site | The thirteen pages, both locales, 42 URLs | G3 | Boundary · Bilingual | **Active** |
-| P04 Catalogue search | Bilingual search over Programmes and LabTests, page 4 | G4 | Clinical · Data integrity · Bilingual | Blocked on clinical sign-off |
-| P05 Admin dashboard | Eight modules, Operator accounts, login and MFA | G5 | Boundary · Bilingual | Not started · spec unwritten |
-| P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | Not started · longest pole |
-| P07 Hardening and cutover | Security headers, DNS, redirects, decommission old site, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | Not started · runbook unwritten |
+Delivery order under `OD-12`: **P03 → P05 → P06 → P04 → P07**.
 
-### P03 — Public site · active
+| Order | Phase | What it produces | Gate | Non-waivable | State |
+|---|---|---|---|---|---|
+| — | P00 Prepare | Documents, decisions, seed verified | G0 | — | **Closed** |
+| — | P01 Foundation | Repository, CI, schema, row-level security, seed import | G1 | Boundary | **Closed** — 31 Aug 2026 |
+| — | P02 Design system | Colour and type tokens, RTL primitives, executable lint rules | G2 | — | **Closed** — 1 Sep 2026 |
+| 1 | P03 Public site | The thirteen pages, both locales, 42 URLs | G3 | Boundary · Bilingual | **Active** |
+| 2 | P05 Admin dashboard | Eight modules, Operator accounts, login and MFA | G5 | Boundary · Bilingual | Next · spec unwritten |
+| 3 | P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | Longest pole |
+| 4 | P04 Catalogue search | Bilingual search over Programmes and LabTests | G4 | Clinical · Data integrity · Bilingual | After P06, by necessity |
+| 5 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | Runbook unwritten |
 
-Done: locale routing with Arabic default, `lang` and `dir` set from the URL, twelve static
-patterns rendering in both languages, the approved home composition live, and the Programme
-detail route failing closed with zero pages because nothing is published.
+### Why this order
 
-Remaining, in order:
+**P04 could not have been built where it was.** All 72 `LabTest` Arabic names are empty and
+twelve rows carry no Arabic alias either, so an Arabic query has nothing to match. P04's own
+non-waivable column already reads Clinical. Placing it before P06 asked for an index over
+empty fields. Moving it after P06 is a correction, not a preference.
 
-1. **M5** — create `"Offer"`, `"Equipment"` and `"Video"` with row-level security. Until this
-   lands, pages 5, 6 and 7 have nowhere to read from.
-2. **Listing pages** — Programmes, Offers, Videos, Equipment, Branches, Departments.
-3. **Programme detail** — the route exists; it renders when P06 publishes.
-4. **Contact, portal, privacy, lab-to-lab** — content from `SiteSettings`.
+**P06 needs the dashboard.** P06 is translation, entry and sign-off. The entry half needs
+somewhere to type. Without P05 first it means writing SQL by hand, which is the opposite of
+what the owner was promised.
 
-G3 requires rendered evidence in both locales on every page and proof that no page collects
-personal data or couples to the results portal beyond an outbound link.
+**P03 stays first.** Public site before dashboard, so that if the date forces a split the
+phasing already matches: a public site without a dashboard is launchable, a dashboard without
+a public site is invisible to a visitor. P05 also carries Auth and MFA, the highest-risk work
+in the project, and it should not be first.
 
-### P04 — Catalogue search
+---
 
-A static bilingual index over the catalogue, served on page 4. It cannot be built usefully
-before P06 for a measurable reason: **all 72 LabTest Arabic names are empty**, and twelve rows
-carry no Arabic alias either, so an Arabic query has nothing to match. The index is gated —
-no artefact is emitted at all while the clinical flag is off.
+### P03 — Public site · ACTIVE
 
-### P05 — Admin dashboard
+- [x] **P03-T01** — locale routing, `lang` and `dir` from the URL, twelve static patterns
+- [x] **P03-T01-F** — restore the approved home composition at `/{locale}`
+- [x] **M5A** — reconcile `DATA_MODEL.md` §6 rows 7–9 against `CONTENT_MODEL.md` §3a
+- [x] **P03-T02** — land `PHASES.md`, correct the P04 phase name
+- [ ] **M5B** — create `"Offer"`, `"Equipment"`, `"Video"` with row-level security
+- [ ] **P03-T03** — Programmes and Departments listing pages
+- [ ] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
+- [ ] **P03-T05** — Branches page and the drawn map *(needs branch addresses)*
+- [ ] **P03-T06** — Contact, results portal, privacy policy, lab-to-lab
+- [ ] **P03-T07** — Programme detail template *(renders zero pages until P06)*
+- [ ] **G3** — rendered evidence in both locales on every page; boundary and bilingual gates
 
-Eight modules, Operator accounts, login and MFA on at least two accounts. `ADMIN_SPEC.md` does
-not exist yet and is authored one step ahead of this phase, not sooner. Everything the summary
-promises the owner will edit himself — images, offers, videos, equipment, branch details,
-WhatsApp number, opening hours — becomes editable **here**, not before. Between now and P05
-the site renders gated regions with labelled frames rather than invented content, which is the
-`لا يوجد محتوى وهمي` promise in the summary.
+### P05 — Admin dashboard · NEXT
 
-### P06 — Content and Arabic · the longest pole
+- [ ] **`ADMIN_SPEC.md`** — authored one step ahead (CF-91)
+- [ ] **P05-T01** — Auth, Operator accounts, MFA on at least two accounts (OD-11)
+- [ ] **P05-T02** — Site Settings and Media Library modules
+- [ ] **P05-T03** — Branches and LabUnits modules
+- [ ] **P05-T04** — Offers, Videos and Equipment modules
+- [ ] **P05-T05** — Programmes, tiers and memberships module
+- [ ] **G5** — the owner can edit every unlocked region himself
 
-Four things, none of which a developer can do alone:
+### P06 — Content and Arabic · LONGEST POLE
 
-1. **72 Arabic LabTest names** written and reviewed. Mistranslating a test name on a
-   laboratory site is a clinical harm, so this is senior work and then goes to the lab.
-2. **121 membership judgements** — which tests belong in which programme and tier.
-3. **Five QA-flagged records**, two of them high severity, where the 2018 source is
-   internally inconsistent.
-4. **Written clinical sign-off.** Not waivable by anyone, including the client.
+- [ ] **72 Arabic `LabTest` names** — written and reviewed
+- [ ] **121 membership judgements** — which tests belong to which programme and tier
+- [ ] **5 QA-flagged records** — two high severity, resolved with the lab
+- [ ] **Written clinical sign-off** — not waivable by anyone, including the client
+- [ ] **Content entry** — through the dashboard, not through SQL
+- [ ] **G6** — clinical and bilingual gates
 
-Nothing renders until this lands — not one Programme page, not one test name. The database is
-already built to fail closed: every row is draft and returns nothing to anyone.
+### P04 — Catalogue search · AFTER P06
 
-### P07 — Hardening and cutover
+- [ ] **P04-T01** — static bilingual index over Programmes and LabTests
+- [ ] **P04-T02** — search on the البرامج page, both locales
+- [ ] **G4** — clinical, data integrity and bilingual gates
 
-Security headers, DNS move, redirects from the 2018 URLs, decommissioning the old site, and
-reverting the repository to private. `CUTOVER_RUNBOOK.md` does not exist yet and is authored
-one step ahead. **This phase currently contains no handover to the owner** — see §5.
+### P07 — Hardening and cutover · LAUNCH
+
+- [ ] **`CUTOVER_RUNBOOK.md`** — authored one step ahead
+- [ ] **P07-T01** — security headers
+- [ ] **P07-T02** — DNS move and redirects from the 2018 URLs
+- [ ] **P07-T03** — decommission the old site
+- [ ] **P07-T04** — revert the repository to private (OD-04)
+- [ ] **Owner handover** — unscoped, see §5
+- [ ] **G7 launch** — all four standards
+
+---
+
+## §3a The checklist rule
+
+Every box above is **derived, never hand-maintained**, because a second source of truth drifts
+from the first and that is how `CF-86` happened.
+
+- A **task box** is checked if and only if `docs/SESSION_CONTEXT.md` carries a done-step row
+  with that exact task id whose Verdict cell records a reviewer verdict — not the placeholder
+  `pushed — verdict at push`.
+- A **gate box** is checked if and only if the phase map's Gate cell for that phase reads
+  `PASSED`.
+- A task with no done-step row is unchecked. A task not yet issued has no row.
+
+**The Verdict cell is the weak link and this rule repairs it.** Verdicts are issued in review
+and, until now, were almost never written back: at v2 only one of the four most recent task
+rows carried a verdict, the rest still reading `pushed — verdict at push`. A verdict that
+lives only in a conversation is not a record.
+
+So: **every task fence records the preceding task's verdict as its first step**, before doing
+its own work, and updates that task's box here in the same commit. A task cannot begin until
+its predecessor's verdict is written down. This is the rule that keeps the checklist true
+without anyone maintaining it by hand.
+
+**Every task fence also states its phase and verifies this file's state for that phase before
+doing work.** A fence whose phase is closed, or whose predecessor box is unchecked, halts and
+reports rather than proceeding.
+
+`scripts/guard/phases.mjs` enforces all of the above in CI alongside the naming and design
+guards, and fails the build when a box disagrees with the done-steps table. It parses the
+table **from the right** — Date is the last cell, Verdict the one before it — because the Task
+cell frequently contains unescaped `|` characters. It also fails any done-step row whose pipe
+count does not match the four-column header, since such a row renders incorrectly wherever
+Markdown is displayed.
 
 ---
 

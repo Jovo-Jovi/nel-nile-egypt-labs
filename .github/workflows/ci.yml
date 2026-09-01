@@ -49,6 +49,9 @@ jobs:
       - name: Design guard
         run: npm run guard:design
 
+      - name: Phases guard
+        run: npm run guard:phases
+
       - name: Lint
         run: npm run lint
 
