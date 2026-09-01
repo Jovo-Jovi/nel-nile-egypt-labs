@@ -152,6 +152,7 @@ in the project, and it should not be first.
 - [x] **M5C** — apply M5; eight tables become eleven
 - [x] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
 - [ ] Programmes and Departments listings
+- [ ] **P03-T05-F** — Isolate whole Latin runs, not single words
 - [ ] Branches page and the drawn map *(needs branch addresses)*
 - [ ] Contact, results portal, privacy policy, lab-to-lab
 - [ ] Programme detail template *(renders zero pages until P06)*
