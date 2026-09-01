@@ -151,9 +151,9 @@ in the project, and it should not be first.
 - [x] **P03-T03** — OD-12, `PHASES.md` v2, and the phases guard
 - [x] **M5C** — apply M5; eight tables become eleven
 - [x] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
-- [ ] Programmes and Departments listings
-- [ ] **P03-T05-F** — Isolate whole Latin runs, not single words
-- [ ] Branches page and the drawn map *(needs branch addresses)*
+- [x] **P03-T05** — Programmes and Departments listings
+- [x] **P03-T05-F** — Isolate whole Latin runs, not single words
+- [ ] **P03-T06** — Branches page and the drawn map *(needs branch addresses)*
 - [ ] Contact, results portal, privacy policy, lab-to-lab
 - [ ] Programme detail template *(renders zero pages until P06)*
 - [ ] G3 — rendered evidence in both locales on every page; boundary and bilingual gates

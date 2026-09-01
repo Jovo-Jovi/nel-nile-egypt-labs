@@ -12,6 +12,7 @@ interface PublishedListingPageProps {
   titleKey: CatalogKey;
   pendingLabelKey: CatalogKey;
   isEmpty: boolean;
+  lead?: ReactNode;
   children: ReactNode;
 }
 
@@ -23,11 +24,13 @@ export function PublishedListingPage({
   titleKey,
   pendingLabelKey,
   isEmpty,
+  lead,
   children,
 }: PublishedListingPageProps) {
   return (
     <div className={shell.page}>
       <SectionHeader locale={locale} titleKey={titleKey} />
+      {lead}
       {isEmpty ? (
         <ApprovalGate locale={locale} state="pending" pendingLabelKey={pendingLabelKey}>
           <div className={shell.body}>
