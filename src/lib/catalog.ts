@@ -131,6 +131,7 @@ const ar = {
   "locations.map.district.giza": "الجيزة",
   "locations.map.district.cairo": "القاهرة",
   "locations.map.district.maadi": "المعادي",
+  "branch.headOffice": "المقر الرئيسي",
 
   // Card band — Programmes
   "programmes.heading": "البرامج",
@@ -530,6 +531,7 @@ const en = {
   "locations.map.district.giza": "Giza",
   "locations.map.district.cairo": "Cairo",
   "locations.map.district.maadi": "Maadi",
+  "branch.headOffice": "Head office",
 
   // Card band — Programmes
   "programmes.heading": "Programmes",

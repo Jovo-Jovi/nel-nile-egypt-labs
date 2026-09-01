@@ -23,8 +23,8 @@
 .pinMark,
 .pinMarkHeadOffice {
   position: absolute;
-  inline-size: 28px;
-  block-size: 28px;
+  inline-size: 44px;
+  block-size: 44px;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
@@ -34,7 +34,7 @@
 }
 
 .pinMarkHeadOffice {
-  inline-size: 32px;
-  block-size: 32px;
+  inline-size: 48px;
+  block-size: 48px;
   color: var(--nel-color-accent);
 }

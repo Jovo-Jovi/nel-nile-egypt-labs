@@ -7,25 +7,20 @@ import styles from "./GreaterCairoMap.module.css";
 // the major axes, muted district labels at xs. No tile request, no API
 // key, no third-party script, no embedded map.
 //
-// CF-69 — Branch records carry no verified addresses yet, so every pin
-// position below is indicative, not measured. They are not derived from
-// any Branch record and must never be read as real geography. Once
-// Branch records carry verified coordinates, this component is replaced
-// with one driven by that data — not amended in place.
-interface MapPin {
+// Pins come from published Branch rows (coordinates, name, head-office
+// flag). None are authored here. Zero published rows means zero pins.
+// CF-69 — the four addresses have not been supplied; an unverified pin
+// is a defect, not a placeholder (PR-16). This file holds viewBox
+// geometry for the drawing, never a location.
+
+export interface MapPin {
   id: string;
-  // Percentage position within the map's viewBox, indicative only.
+  name: string;
+  isHeadOffice: boolean;
+  // Percentage position within the map's viewBox, from a published row.
   x: number;
   y: number;
-  isHeadOffice?: boolean;
 }
-
-const PINS: MapPin[] = [
-  { id: "head-office", x: 46, y: 52, isHeadOffice: true },
-  { id: "branch-2", x: 30, y: 34 },
-  { id: "branch-3", x: 64, y: 40 },
-  { id: "branch-4", x: 58, y: 70 },
-];
 
 interface DistrictLabel {
   id: string;
@@ -39,6 +34,7 @@ interface GreaterCairoMapProps {
   pinLabel: string;
   headOfficePinLabel: string;
   districtLabels: DistrictLabel[];
+  pins?: MapPin[];
 }
 
 // I18N_MODEL.md §4 — "media assets whose own content is directional" is
@@ -51,14 +47,18 @@ interface GreaterCairoMapProps {
 // — the same isolation technique Isolate.tsx uses for a Latin run inside
 // Arabic text — so every logical inset-inline-* below resolves to a
 // fixed physical side in both locales.
-export function GreaterCairoMap({ ariaLabel, pinLabel, headOfficePinLabel, districtLabels }: GreaterCairoMapProps) {
+export function GreaterCairoMap({
+  ariaLabel,
+  pinLabel,
+  headOfficePinLabel,
+  districtLabels,
+  pins = [],
+}: GreaterCairoMapProps) {
+  const described =
+    pins.length === 0 ? ariaLabel : `${ariaLabel}. ${headOfficePinLabel}. ${pinLabel}`;
+
   return (
-    <div
-      className={styles.map}
-      role="img"
-      aria-label={`${ariaLabel}. ${headOfficePinLabel}. ${pinLabel}`}
-      dir="ltr"
-    >
+    <div className={styles.map} role="img" aria-label={described} dir="ltr">
       <svg
         className={styles.svg}
         viewBox="0 0 100 62.5"
@@ -110,9 +110,10 @@ export function GreaterCairoMap({ ariaLabel, pinLabel, headOfficePinLabel, distr
           </text>
         ))}
       </svg>
-      {PINS.map((pin) => (
+      {pins.map((pin) => (
         <span
           key={pin.id}
+          data-map-pin={pin.id}
           className={pin.isHeadOffice ? styles.pinMarkHeadOffice : styles.pinMark}
           style={{ insetInlineStart: `${pin.x}%`, insetBlockStart: `${pin.y}%` }}
           aria-hidden="true"

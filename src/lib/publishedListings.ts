@@ -1,8 +1,8 @@
-// Published-only listings for Programme, LabUnit, Offer, Video and
-// Equipment. Ordered by display_order. Unpublished rows are never
-// selected: fetchAnonPublishedJson appends the filter where a caller
-// cannot omit it (PR-08). An empty list is D-42 failing closed — the
-// pass condition, not a gap to fill.
+// Published-only listings for Programme, LabUnit, Offer, Video,
+// Equipment and Branch. Ordered by display_order. Unpublished rows are
+// never selected: fetchAnonPublishedJson appends the filter where a
+// caller cannot omit it (PR-08). An empty list is D-42 failing closed —
+// the pass condition, not a gap to fill.
 // youtube_id is not selected: a listing must never emit a host thumbnail
 // or an autoloading embed (D-13, BOUNDARY_MODEL.md §5).
 // Programme listings select name and description only. No LabTest name,
@@ -64,6 +64,23 @@ export type PublishedLabUnit = {
   descriptionEn: string;
 };
 
+export type PublishedBranch = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  isHeadOffice: boolean;
+  latitude: number | null;
+  longitude: number | null;
+};
+
+export type BranchMapPin = {
+  id: string;
+  name: string;
+  isHeadOffice: boolean;
+  x: number;
+  y: number;
+};
+
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
   return value as Record<string, unknown>;
@@ -81,6 +98,19 @@ function asOptionalString(value: unknown): string | null {
 function asPriceAmount(value: unknown): string | null {
   if (typeof value === "number" && Number.isFinite(value)) return String(value);
   if (typeof value === "string" && value.length > 0) return value;
+  return null;
+}
+
+function asBoolean(value: unknown): boolean {
+  return value === true;
+}
+
+function asCoordinate(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.length > 0) {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : null;
+  }
   return null;
 }
 
@@ -115,6 +145,9 @@ const PROGRAMME_SELECT =
 
 const LAB_UNIT_SELECT =
   "select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
+
+const BRANCH_SELECT =
+  "select=id,name_ar,name_en,is_head_office,latitude,longitude,publication_state,display_order&order=display_order.asc";
 
 function parseOffer(value: unknown): PublishedOffer | null {
   const row = asRecord(value);
@@ -207,6 +240,24 @@ function parseLabUnit(value: unknown): PublishedLabUnit | null {
   return parseNamedDescription(value);
 }
 
+function parseBranch(value: unknown): PublishedBranch | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const nameAr = asNonEmptyString(row.name_ar);
+  const nameEn = asNonEmptyString(row.name_en);
+  if (id === null || nameAr === null || nameEn === null) return null;
+  return {
+    id,
+    nameAr,
+    nameEn,
+    isHeadOffice: asBoolean(row.is_head_office),
+    latitude: asCoordinate(row.latitude),
+    longitude: asCoordinate(row.longitude),
+  };
+}
+
 function mapPublished<T>(payload: unknown, parse: (value: unknown) => T | null): T[] {
   if (!Array.isArray(payload)) return [];
   const rows: T[] = [];
@@ -240,6 +291,27 @@ export async function listPublishedProgrammes(): Promise<PublishedProgramme[]> {
 export async function listPublishedLabUnits(): Promise<PublishedLabUnit[]> {
   const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_SELECT);
   return mapPublished(payload, parseLabUnit);
+}
+
+export async function listPublishedBranches(): Promise<PublishedBranch[]> {
+  const payload = await fetchAnonPublishedJson("Branch", BRANCH_SELECT);
+  return mapPublished(payload, parseBranch);
+}
+
+// Pins are placed on the schematic only from published rows that carry
+// both coordinates. The drawing is not georeferenced (CF-69): converting
+// WGS84 into a viewBox point would invent a position, which this task
+// must not do. Coordinates are read so the field is not dropped; they
+// are not drawn. Address, phone and hours are not selected (PR-16).
+export function branchMapPins(rows: PublishedBranch[], locale: "ar" | "en"): BranchMapPin[] {
+  return rows.flatMap((row) => {
+    if (row.latitude === null || row.longitude === null) return [];
+    const name = locale === "ar" ? row.nameAr : row.nameEn;
+    if (name.length === 0) return [];
+    // CF-69 — the drawing is not georeferenced. A schematic x/y would be
+    // an invented position, which this task must not draw.
+    return [];
+  });
 }
 
 const FORBIDDEN_POSTER = /youtube\.com|youtu\.be|ytimg\.com/i;

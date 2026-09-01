@@ -7,6 +7,14 @@
   list-style: none;
 }
 
+.mapFrame {
+  aspect-ratio: 16 / 9;
+  inline-size: 100%;
+  border-radius: var(--nel-radius-sm);
+  overflow: hidden;
+  background-color: var(--nel-color-background);
+}
+
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));

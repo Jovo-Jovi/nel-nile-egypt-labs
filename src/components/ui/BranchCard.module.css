@@ -1,0 +1,28 @@
+/* DESIGN_SYSTEM.md §10 — head-office flag is a badge on the Branch card. */
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nel-space-8);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nel-space-4);
+  padding-block: var(--nel-space-4);
+  padding-inline: var(--nel-space-12);
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-background);
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-sm);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-tight);
+}
+
+.badgeIcon {
+  flex: none;
+  color: var(--nel-color-accent);
+}

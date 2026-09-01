@@ -1,5 +1,5 @@
 /* DESIGN_SYSTEM.md §10 Card. Shared by OfferCard, EquipmentCard,
-   ProgrammeCard and LabUnitCard. */
+   ProgrammeCard, LabUnitCard and BranchCard. */
 
 .card {
   display: flex;
