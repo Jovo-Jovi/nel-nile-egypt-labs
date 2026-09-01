@@ -149,6 +149,7 @@ in the project, and it should not be first.
 - [x] **P03-T02** — land `PHASES.md`, correct the P04 phase name
 - [x] **M5B** — create `"Offer"`, `"Equipment"`, `"Video"` with row-level security
 - [x] **P03-T03** — Programmes and Departments listing pages
+- [x] **M5C** — apply M5; eight tables become eleven
 - [ ] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
 - [ ] **P03-T05** — Branches page and the drawn map *(needs branch addresses)*
 - [ ] **P03-T06** — Contact, results portal, privacy policy, lab-to-lab
@@ -263,7 +264,7 @@ migration and two modules to P05.
 
 **`QUOTATION_AMENDMENTS.md` §5 is out of date and it is client-facing.** Blocker B6 still
 reads that there is no schema and that work cannot start. The schema has been live since M4 —
-eight tables, row-level security on every one, sixteen policies, seed loaded and verified.
+eleven tables, row-level security on every one, twenty-two policies, seed loaded and verified.
 Sent to the client today, that document understates the project badly.
 
 ---

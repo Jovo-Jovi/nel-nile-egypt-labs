@@ -1,0 +1,26 @@
+/* DESIGN_SYSTEM.md §10 StatusState badge — radius full, sm, weight 500,
+   padding 4px block 12px inline. Icon and text together; never colour alone. */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nel-space-4);
+  padding-block: var(--nel-space-4);
+  padding-inline: var(--nel-space-12);
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-background);
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-sm);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-tight);
+}
+
+.icon {
+  flex: none;
+  color: var(--nel-color-primary);
+}
+
+.expired .icon {
+  color: var(--nel-color-warning);
+}

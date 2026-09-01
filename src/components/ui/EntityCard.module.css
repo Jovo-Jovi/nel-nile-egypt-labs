@@ -1,0 +1,100 @@
+/* DESIGN_SYSTEM.md §10 Card. Shared by OfferCard and EquipmentCard. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--nel-color-surface);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  border-radius: var(--nel-radius-md);
+  box-shadow: var(--nel-elevation-1-shadow);
+  overflow: hidden;
+  transition:
+    border-color var(--nel-duration),
+    box-shadow var(--nel-duration),
+    transform var(--nel-duration);
+}
+
+.card:hover {
+  border-color: var(--nel-color-primary);
+  box-shadow: var(--nel-elevation-2-shadow);
+  transform: translateY(-2px);
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-start-start-radius: var(--nel-radius-md);
+  border-start-end-radius: var(--nel-radius-md);
+}
+
+.photo {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  padding: var(--nel-space-16);
+}
+
+.title {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-lg);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-heading);
+}
+
+.description {
+  margin: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-base);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-body);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nel-space-8);
+}
+
+.price {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.dates {
+  margin: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-sm);
+  letter-spacing: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+    transform: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+}

@@ -70,6 +70,8 @@ const ar = {
   "approval.pending.photography": "قيد الانتظار — بانتظار صور المعمل من العميل",
   "approval.pending.newsModule": "قيد الانتظار — بانتظار اعتماد وحدة تحكم تاسعة",
   "approval.pending.videoAsset": "قيد الانتظار — بانتظار ملفات الفيديو من العميل",
+  "offer.validity.current": "ساري",
+  "offer.validity.expired": "منتهٍ",
 
   // Hero
   "hero.eyebrow": "مختبرات تحاليل طبية",
@@ -467,6 +469,8 @@ const en = {
   "approval.pending.photography": "Pending — awaiting client-supplied photography",
   "approval.pending.newsModule": "Pending — awaiting a signed ninth dashboard module",
   "approval.pending.videoAsset": "Pending — awaiting client-supplied video assets",
+  "offer.validity.current": "Current",
+  "offer.validity.expired": "Expired",
 
   // Hero
   "hero.eyebrow": "Medical laboratory services",
