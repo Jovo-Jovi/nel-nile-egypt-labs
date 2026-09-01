@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-six decisions. Eleven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-six decisions. Twelve of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -330,6 +330,42 @@ is out of scope for this control and, if one is ever needed, requires its own de
 **Does not weaken any gate.** G1's non-waivable Boundary gate is untouched and was assessed as PASS on its own terms. G5 carries Boundary and Bilingual as before, and now carries Auth and MFA as exit criteria.
 
 **Does not decide:** the MFA factor type, the enrolment flow, or the recovery procedure — `ADMIN_SPEC.md`, authored one step ahead of P05. Nor whether `eu-central-2` remains acceptable once accounts exist; that is CF-39, live at P05 and unaffected by this OD except that it now goes live when it was always meant to.
+
+---
+
+### OD-12 — Delivery order
+
+**Status:** SIGNED — 1 September 2026
+**Amends:** the phase map's build-order note in `SESSION_CONTEXT.md`, which
+reads "Phase-1-first — public site before dashboard". That principle is
+retained; the note is extended, not replaced.
+**Requested by:** the human, 1 September 2026.
+
+**Decides:** phases are delivered in the order P03 → P05 → P06 → P04 → P07.
+
+Phases keep their identifiers and their gates. G4 remains P04's gate and G5
+remains P05's; only the order in which they are reached changes. Renumbering
+would invalidate every reference in `DECISIONS.md`, `CARRY_FORWARDS.md`,
+`PRECEDENTS.md` and the done-steps table.
+
+**Because:**
+
+1. P04 was not executable in its former position. All 72 `LabTest` Arabic
+   names are empty and twelve rows carry no Arabic alias, so an Arabic query
+   has nothing to match. P04's non-waivable column already reads Clinical.
+   Moving it after P06 is a correction.
+2. P06 is translation, entry and sign-off. The entry half needs the dashboard.
+   Without P05 first, P06 means hand-written SQL, which is the opposite of
+   what the client was promised.
+3. P03 remains first. A public site without a dashboard is launchable if the
+   date forces a split; a dashboard without a public site is invisible to a
+   Visitor. P05 also carries Auth and MFA under OD-11, the highest-risk work
+   in the project, and it is not placed first.
+
+**Does not decide:** `D-12` is unamended. Its milestones are named by phase,
+not by position, so 20% still falls at P05 exit — earlier in calendar terms,
+which is the practical effect. Nothing in scope changes; no phase gains or
+loses contents. OD-09 remains DRAFT and unpriced.
 
 ## Decision log
 

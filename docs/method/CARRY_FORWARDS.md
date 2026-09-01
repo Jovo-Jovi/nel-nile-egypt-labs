@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-100**
+**Next free id: CF-101**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -105,6 +105,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-97 | `/{locale}/programmes/{slug}` renders zero of its eighteen URLs because every Programme is `draft`; the 42-URL total in §3c is reachable only after publication, which is a clinical-gate act. | reviewer | OPEN | P06 |
 | CF-98 | No gate detects an unreferenced file under `src/`. Dead files have now survived two tasks — two `system/` stylesheets at P02-T19, and ten files at P03-T01, which reached `main`. A reachability check belongs in `guard:design` or alongside it; whether it is a fifth rule or a separate guard is open. | reviewer | OPEN | P03 |
 | CF-99 | `generateStaticParams` on `/{locale}/programmes/{slug}` returns `[]` from either a published-only query with zero rows or the null-config early return, and the two are indistinguishable on a machine with no Supabase env configured. D-42's fail-closed behaviour on this route is established by construction, not by execution — the class of CF-87 and the M2 zero-row read. It discriminates when a Programme is published; no row is published to make it do so. | reviewer | OPEN | P06 |
+| CF-100 | Seventeen done-step rows in `SESSION_CONTEXT.md` carry unescaped pipe characters inside the Task cell of a four-column table, so they render with the wrong content in the Verdict and Date columns wherever Markdown is displayed. Content is recoverable by right-anchored parsing and is not lost. `guard:phases` R5 reports them and becomes blocking once they are escaped. | reviewer | OPEN | P05 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
