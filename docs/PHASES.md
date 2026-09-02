@@ -163,6 +163,8 @@ in the project, and it should not be first.
 ### P05 — Admin dashboard · NEXT
 
 - [x] **P05-T00** — `ADMIN_SPEC.md` — authored one step ahead (CF-91)
+- [x] **P05-T01a** — close out the stale region statements
+- [ ] **P05-T01b** — two repairs; Auth halted before STEP 3
 - [ ] Auth, Operator accounts and MFA
 - [ ] Site Settings and Media Library modules
 - [ ] Branches and LabUnits modules

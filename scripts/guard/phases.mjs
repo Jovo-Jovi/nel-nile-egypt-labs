@@ -11,7 +11,8 @@
 //       reviewer verdict (filled, and not the placeholder). The box should
 //       have been checked.
 //   R4  A checked gate box `- [x] **G<n>**` whose phase-map Gate cell does
-//       not read `PASSED`.
+//       not read `PASSED`. Gate ids are `G` plus digits and nothing else, so
+//       `G3-R` is a task id and is evaluated by R1–R3.
 //   R5  A done-step row whose pipe count is not 5 (an unescaped `|` in a
 //       cell of the four-column table). Report-only until CF-100's seventeen
 //       rows are escaped; a later P05 task turns this rule blocking.
@@ -31,7 +32,7 @@ const PHASES_PATH = "docs/PHASES.md";
 const SESSION_PATH = "docs/SESSION_CONTEXT.md";
 const PLACEHOLDER_VERDICT = "pushed — verdict at push";
 const CHECKBOX_RE = /^- \[([ x])\] \*\*(.+?)\*\*/;
-const GATE_ID_RE = /^G(\d+)/;
+const GATE_ID_RE = /^G(\d+)$/;
 const TASK_STEP_SKIP = "—";
 
 function readUtf8(path) {
