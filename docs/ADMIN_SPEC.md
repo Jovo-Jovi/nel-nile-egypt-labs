@@ -36,8 +36,8 @@ clears them.
   `SECURITY_MODEL.md` §3's two shapes. The eleven existing tables already carry both.
 - Whether `"Announcement"` and `"ClinicalNotice"` exist. They do not. See §8.
 - Cutover headers, the CSP directive list, backup and retention. `CUTOVER_RUNBOOK.md`.
-- Whether `eu-central-2` is an acceptable region once Operator accounts exist. That is CF-39,
-  it goes live with this document, and it is the human's to answer. See §3f.
+- Hosting region. Recorded as D-47; remaining PDPL obligations as controller are CF-105.
+  See §3f.
 
 ---
 
@@ -120,7 +120,7 @@ absorb. That is accepted: the cost is a delay and a break-glass, not data loss.
 - Sign-out is reachable from every dashboard screen in one action.
 - No dashboard route is statically rendered, prerendered or cached at the edge.
 
-### §3f The region question — CF-39, live from here
+### §3f Hosting region — accepted
 
 The review is complete. The region is accepted. The decision is recorded in `DECISIONS.md`.
 The laboratory's own PDPL obligations as controller sit with the client.

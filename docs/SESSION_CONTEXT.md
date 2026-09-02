@@ -122,11 +122,12 @@ Computed by (run after M5B):
 
 **Open — 61:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
-CF-28 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
+CF-28 · CF-37 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
 CF-52 · CF-54 · CF-62 · CF-63 · CF-65 · CF-66 · CF-67 ·
 CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-78 · CF-79 · CF-80 · CF-81 ·
 CF-82 · CF-83 · CF-86 · CF-87 · CF-89 · CF-90 · CF-92 · CF-93 · CF-94 ·
-CF-95 · CF-96 · CF-97 · CF-98 · CF-99 · CF-100 · CF-101 · CF-103 · CF-104
+CF-95 · CF-96 · CF-97 · CF-98 · CF-99 · CF-100 · CF-101 · CF-103 · CF-104 ·
+CF-105
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -358,10 +359,9 @@ lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
 flag. CF-24 to CF-27 are document corrections owned by the reviewer, each
 closing at a numbered P01-T03 STEP 0 sub-step. CF-28 is the OD-04 visibility
-carry-forward, owned by the human, open until the G7 revert. CF-39 is the
-Zurich-region GDPR/FADP adequacy question, owned by the human, still OPEN:
-the region question is live from P05 entry, and the cheapest moment to move
-is before the first Operator account exists. CF-41 is the Node engine-version drift between the build machine and CI,
+carry-forward, owned by the human, open until the G7 revert. CF-39 is closed
+at P05-T01 under D-47; remaining PDPL obligations as controller are CF-105.
+CF-41 is the Node engine-version drift between the build machine and CI,
 owned by the builder. CF-45, CF-46 and CF-49 are `DESIGN_SYSTEM.md`
 dependencies raised at brand extraction under OD-06/OD-07: no editable
 original of the mark, the portal's painted login staying UNDETERMINED, and
@@ -533,10 +533,8 @@ nothing and must never be cited as authority. v2 is reordered under OD-12.
 
 ## Next action
 
-**P05-T01 — Auth, Operator accounts and MFA.** CF-39 should be answered before
-that task creates the first account: the region question is live from P05
-entry, and the cheapest moment to move is before any Operator account exists,
-after which it is a migration.
+**P05-T01b — Auth, enrolment and sessions, Opus only.** CF-39 is closed under
+D-47 and the region is settled.
 
 `ADMIN_SPEC.md` (document 9) is AUTHORED at P05-T00 and closes CF-91. P05
 build work can start. Coverage is now specified: the eight D-16 modules,
@@ -578,8 +576,7 @@ on the catalogue tables). **five reverses are authored and unapplied**
 the MCP user carries `rolbypassrls`, so that check remains unexecuted.
 CF-89 holds the three §7 assertions until eligibility is reviewed. CF-90
 holds publication until the clinical gate. CF-91 is CLOSED at P05-T00.
-CF-39 is live and should be answered before P05-T01 creates the first
-Operator account.
+CF-39 is closed under D-47 and the region is settled.
 
 **Quotation amendment, now with a landed schedule.** `docs/QUOTATION_AMENDMENTS.md`
 is landed (§1–§7) and OD-09 (Announcements and Clinical notices,
@@ -595,7 +592,8 @@ CF-87, CF-89, CF-90, CF-92, CF-93, CF-94, CF-95 and CF-104 join them against
 the migration route, the document ranking, the unpublished seed, the
 missing System view, the `PRODUCT_BRIEF.md` stub, the untasked production
 baseline, the extra motion durations, and the eighteen unpublished Programme
-detail URLs. CF-39 stays OPEN and is live from P05 entry.
+detail URLs. CF-39 is closed under D-47 and the region is settled. CF-105
+tracks the laboratory's remaining PDPL obligations as controller.
 
 ---
 

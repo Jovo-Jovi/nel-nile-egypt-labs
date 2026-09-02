@@ -163,7 +163,7 @@ in the project, and it should not be first.
 ### P05 — Admin dashboard · NEXT
 
 - [x] **P05-T00** — `ADMIN_SPEC.md` — authored one step ahead (CF-91)
-- [ ] Auth, Operator accounts, MFA on at least two accounts (OD-11)
+- [ ] Auth, Operator accounts and MFA
 - [ ] Site Settings and Media Library modules
 - [ ] Branches and LabUnits modules
 - [ ] Offers, Videos and Equipment modules
