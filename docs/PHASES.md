@@ -156,7 +156,8 @@ in the project, and it should not be first.
 - [x] **P03-T06** — Branches page and the drawn map *(needs branch addresses)*
 - [x] **P03-T07** — Contact, results portal, privacy policy, lab-to-lab
 - [x] **P03-T08** — Programme detail template *(renders zero pages until P06)*
-- [ ] G3 — rendered evidence in both locales on every page; boundary and bilingual gates
+- [x] **P03-T09** — remove console scaffolding, stage the G3 evidence pack
+- [x] G3 — rendered evidence in both locales on every page; boundary and bilingual gates
 
 ### P05 — Admin dashboard · NEXT
 
@@ -218,7 +219,8 @@ lives only in a conversation is not a record.
 So: **every task fence records the preceding task's verdict as its first step**, before doing
 its own work, and updates that task's box here in the same commit. A task cannot begin until
 its predecessor's verdict is written down. This is the rule that keeps the checklist true
-without anyone maintaining it by hand.
+without anyone maintaining it by hand. At a phase boundary the last task's verdict has no
+successor task, so the gate record carries it.
 
 **Every task fence also states its phase and verifies this file's state for that phase before
 doing work.** A fence whose phase is closed, or whose predecessor box is unchecked, halts and
