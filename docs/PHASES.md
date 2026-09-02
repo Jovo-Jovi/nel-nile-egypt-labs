@@ -153,8 +153,8 @@ in the project, and it should not be first.
 - [x] **P03-T04** — Offers, Videos and Equipment listing pages *(needs M5B)*
 - [x] **P03-T05** — Programmes and Departments listings
 - [x] **P03-T05-F** — Isolate whole Latin runs, not single words
-- [ ] **P03-T06** — Branches page and the drawn map *(needs branch addresses)*
-- [ ] Contact, results portal, privacy policy, lab-to-lab
+- [x] **P03-T06** — Branches page and the drawn map *(needs branch addresses)*
+- [ ] **P03-T07** — Contact, results portal, privacy policy, lab-to-lab
 - [ ] Programme detail template *(renders zero pages until P06)*
 - [ ] G3 — rendered evidence in both locales on every page; boundary and bilingual gates
 

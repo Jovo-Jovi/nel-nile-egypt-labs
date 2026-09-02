@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { translate, type CatalogKey } from "@/lib/catalog";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { requireLocale, StaticShellPage } from "@/components/site/StaticShellPage";
+import { requireLocale } from "@/components/site/StaticShellPage";
+import { CopyCard, InfoPage, PendingSlot } from "@/components/site/InfoPage";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -9,13 +11,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageMetadata(locale, "page.privacyPolicy.title", "/privacy-policy");
 }
 
+const CLAUSES: { title: CatalogKey; body: CatalogKey }[] = [
+  { title: "privacy.collects.title", body: "privacy.collects.body" },
+  { title: "privacy.stores.title", body: "privacy.stores.body" },
+  { title: "privacy.cookies.title", body: "privacy.cookies.body" },
+  { title: "privacy.portal.title", body: "privacy.portal.body" },
+  { title: "privacy.contact.title", body: "privacy.contact.body" },
+];
+
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
   return (
-    <StaticShellPage
-      locale={locale}
-      titleKey="page.privacyPolicy.title"
-      pendingLabelKey="approval.pending.businessData"
-    />
+    <InfoPage locale={locale} titleKey="page.privacyPolicy.title">
+      <CopyCard locale={locale} body={translate(locale, "privacy.standfirst")} />
+      {CLAUSES.map((clause) => (
+        <CopyCard
+          key={clause.title}
+          locale={locale}
+          title={translate(locale, clause.title)}
+          body={translate(locale, clause.body)}
+        />
+      ))}
+      <PendingSlot locale={locale} pendingLabelKey="approval.pending.legalFact" />
+    </InfoPage>
   );
 }
