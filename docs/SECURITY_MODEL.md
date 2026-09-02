@@ -191,6 +191,5 @@ both `Visitor`-initiated navigations to a new browsing context, neither a subres
   the two shapes in §3.
 - The MFA factor type, enrolment flow or recovery procedure. `ADMIN_SPEC.md`.
 - The cutover header values and the CSP directive list. `CUTOVER_RUNBOOK.md`.
-- Whether `eu-central-2` remains acceptable once `Operator` accounts exist. CF-39, live at
-  P05.
+- The hosting region is settled by D-47; CF-39 is closed.
 - Backup, retention and plan tier. CF-37, live at P07.
