@@ -122,15 +122,8 @@ absorb. That is accepted: the cost is a delay and a break-glass, not data loss.
 
 ### §3f The region question — CF-39, live from here
 
-The Supabase project is in `eu-central-2`, Zurich. Until now the database has held no personal
-data of any kind. **From the moment an Operator account exists, the `auth` schema holds lab
-staff email addresses** — personal data, though not patient data.
-
-This document does not resolve it. It records that the question is now live, that it is the
-human's to answer with the client, and that the possible answers are: accept the position and
-record why; move the project to an EU region before Operators are created, which is cheapest
-now and expensive later; or take the client's written acceptance. **The cheapest moment to
-move regions is before the first Operator account exists.** After that it is a migration.
+The review is complete. The region is accepted. The decision is recorded in `DECISIONS.md`.
+The laboratory's own PDPL obligations as controller sit with the client.
 
 ---
 

@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-six decisions. Twelve of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-seven decisions. Twelve of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -552,3 +552,7 @@ OD-10 control 7, added at P01-T03-R-M3. Every migration is executed inside `begi
 ### D-46 — G1 and the phase map
 
 OD-11, signed 31 August 2026. `Operator` authentication and MFA move from P01 to P05, alongside the dashboard they serve. The G1 assessment failed on two phase-map entries that had no evidence rather than on any defect: `SECURITY_MODEL.md` §9 defers the MFA factor type, enrolment flow and recovery procedure to `ADMIN_SPEC.md`, which is document 9 and unauthored, so building authentication at P01 would mean deciding those three things in code; and §6 places CF-39's adequacy question live at P05 when accounts are created, so building early would put two staff email addresses into a non-EU jurisdiction before the quotation carrying that work is signed. The placement was inherited from a P00 map written before the dashboard was scoped — nothing at P01 through P04 needs authentication, because the public site is anonymous by construction and holds no session. D-08 is unchanged in every respect except when: minimum two accounts, MFA required, enrolment before access. G1 then closes on foundation — repo, CI, schema, RLS, seed import — with its non-waivable Boundary gate assessed as PASS on its own terms: RLS on all eight tables, sixteen policies of which every anonymous one is `for select`, `anon` holding SELECT and nothing else, no attribution column, no personal-data column, and nothing published.
+
+### D-47 — Hosting region
+
+The Supabase project stays in `eu-central-2` (Zurich). The cross-border storage position was reviewed against Egypt's PDPL and accepted by the human on 2 September 2026, closing CF-39. No region migration is required and none is planned. The only personal data this system holds is the Operator email addresses in the Supabase `auth` schema; no public table holds personal or medical data about any Visitor or patient (D-40), and the patient results portal is a separate application this project never touches (D-07, D-17). Remaining PDPL obligations sit with the laboratory as controller and are tracked separately; they are not a build output and do not gate any phase of this project.
