@@ -110,7 +110,8 @@ on a verbal expansion of an unsigned scope.
 | P03-T07 | Contact, results portal, privacy policy, lab-to-lab. Branched `p03-t07` from `origin/main` at `73ceac1`. CF live maximum **102** (`re.findall` over CF-nn rows); PR live maximum **34**. **STEP 0** — P03-T06 Verdict cell set to `PASS at reviewer verdict — 1 September 2026`; PHASES.md P03-T06 box checked; the id-less Contact item became **P03-T07**, unchecked. **STEPS 1-4** — four public routes. SiteSettings joins the existing published-table union. Contact and lab-to-lab read published SiteSettings; zero published rows so WhatsApp is absent and there is no placeholder fallback. online-results is two allowlisted outbound anchors, both the D-07 placeholder, inside the section-12 pending treatment, never framed. Privacy policy is catalogue copy of the implemented no-personal-data posture; unsigned legal facts (controller, DPO, regulator, retention, lawful basis, certification) render pending, CF-06 stays OPEN. IsolatedCopy on every copy field. **STEP 5** — this row. Next action is the Programme detail template, unissued, no task id. Open CF 62 + 0 − 0 = 62. Catalogue ar=355 en=355 identical. Build: 25 static HTML excluding `_global-error.html`. 24 locale pages: 0 form, input, textarea, select, iframe, embed, onSubmit, FormData, action=, mailto:. Absolute URLs only the WhatsApp placeholder and the portal placeholder. Portal anchors 82, all 82 carry target=_blank and rel=noopener noreferrer. Pending markers 4 per page per locale on the four routes. 0 of 90 nonempty seeded names in src or the 24 pages. Reachability universe 76, unreachable 0. D headings 46, OD headings 12, migrations 16, unchanged. Five guards and verify_seed.py exit 0. No supabase command; no migration; SiteHome untouched. | PASS at reviewer verdict — 1 September 2026 | 2026-09-02 |
 | P03-T08 | Programme detail template at `/{locale}/programmes/[slug]`. Branched `p03-t08` from `origin/main` at `f5c8dfe`. CF live maximum **102** (`re.findall` over CF-nn rows); PR live maximum **34**. **STEP 0** — P03-T07 Verdict cell set to `PASS at reviewer verdict — 1 September 2026`; PHASES.md P03-T07 box checked; the id-less Programme detail item became **P03-T08**, unchecked. **STEPS 1-4** — membership only via POST `/rest/v1/rpc/programmeLabTests` with one AxisSelection per call; no membership-table join; no TypeScript union; Children is a peer slot passed through as Children. PR-08 flag read only at `src/lib/clinicalFlag.ts:9` (`NEL_LABTEST_CONTENT === "on"`); unset in this build so the LabTest list is withheld. Catalogue chrome only. IsolatedCopy on name, description, notes, labels, empty copy. **STEP 5** — this row. Next action is G3, unissued, no task id. Open CF 62 + 0 - 0 = 62; CF-81, CF-82, CF-89, CF-90 stay OPEN. Catalogue ar=366 en=366 identical. Build: 25 static HTML excluding `_global-error.html`; `generateStaticParams` logged `[]` twice; 0 programme detail pages. 24 locale pages: ten boundary tokens all 0; only the two action links; portal anchors 82, all 82 carry target=_blank and rel=noopener noreferrer. 0 of 90 nonempty seeded Programme/LabTest names in `src/`, in `src/lib/catalog.ts`, or in the 24 pages. `rg ProgrammeLabTest src` → 0. Reachability universe 84, unreachable 0. D headings 46, OD headings 12, migrations 16, unchanged. Five guards and verify_seed.py exit 0. No supabase command; no migration; no eligibility value set; no row published. | PASS at reviewer verdict — 1 September 2026 | 2026-09-02 |
 | P03-T09 | Remove the scaffolding and stage the G3 evidence pack. Branched `p03-t09` from `origin/main` at the P03-T08 merge `35358f9`. CF live maximum **102** (`re.findall` over CF-nn rows); PR live maximum **34**. **STEP 0** — P03-T08 Verdict cell set to `PASS at reviewer verdict — 1 September 2026`; PHASES.md P03-T08 box checked. **STEP 1** — both `console.log` calls deleted from the Programme detail page; `git grep -n "console\." -- src` → no matches. **STEP 2/3** — `docs/research/g3-evidence.md` landed. Every figure has its command beside it. The human-acts section is headed `WHAT A HUMAN MUST DO BEFORE G3` and lists CF-59 and CF-60 only; neither is marked satisfied. **STEP 4** — this row. Next action is **G3, blocked on CF-59 and CF-60**, both human acts. P03 route work is complete. Open CF 62 + 0 − 0 = 62; CF-59 and CF-60 stay OPEN. Build: 25 static HTML excluding `_global-error.html`; 0 programme detail pages; 24 locale pages byte-comparable to the previous build after stripping content hashes. Catalogue ar=366 en=366 identical, 0 duplicate keys. Ten boundary tokens all 0; nine tracking tokens all 0; portal anchors 82, all 82 carry target=_blank and rel=noopener noreferrer. Reachability universe 84, unreachable 0. D headings 46, OD headings 12, migrations 16, unchanged. Five guards and verify_seed.py exit 0 (`121 -> 72`). No supabase command. | PASS at reviewer verdict — 2 September 2026 | 2026-09-02 |
-| G3-R | Records the G3 gate, closes CF-59 and CF-60 on the human's attestation, lands CF-103 and CF-104, and opens P05. Branched `g3-r` from `origin/main` at `d6cc074`. CF live maximum **102** (re.findall over CF-nn rows); PR live maximum **34**. **STEP 0** — P03-T09 Verdict cell set to PASS at reviewer verdict — 2 September 2026; PHASES.md gained a checked P03-T09 box after P03-T08 and before the G3 line; section 3a records that at a phase boundary the last task's verdict has no successor task, so the gate record carries it. **STEP 1** — PHASES.md G3 box checked; Gate line and P03 phase-map Gate cell recorded; Phase set to P05, noting P03 closed at G3 and that P05 is next under OD-12. guard:phases exit 0 after the checked G3 box and the phase-map Gate cell. **STEP 2** — CF-59 and CF-60 CLOSED at G3; Item cells appended, not rewritten; recorded as attestation, not measurement. **STEP 3** — CF-103 OPEN (client, P06) and CF-104 OPEN (reviewer, G6). Open CF 62 + 2 − 2 = 62. **STEP 4** — Next action is author docs/ADMIN_SPEC.md (document 9, CF-91), reviewer-authored, one step ahead of P05, covering the eight D-16 modules, Operator accounts, and the MFA factor type, enrolment flow and recovery procedure that SECURITY_MODEL.md section 9 defers to P05, landing before any P05 build task issues. D headings 46, OD headings 12, migrations 16, unchanged. src/, public/, data/seed/ untouched. Five guards and verify_seed.py exit 0 (121 -> 72). Build: 25 static HTML excluding _global-error.html. | pushed — verdict at push | 2026-09-02 |
+| G3-R | Records the G3 gate, closes CF-59 and CF-60 on the human's attestation, lands CF-103 and CF-104, and opens P05. Branched `g3-r` from `origin/main` at `d6cc074`. CF live maximum **102** (re.findall over CF-nn rows); PR live maximum **34**. **STEP 0** — P03-T09 Verdict cell set to PASS at reviewer verdict — 2 September 2026; PHASES.md gained a checked P03-T09 box after P03-T08 and before the G3 line; section 3a records that at a phase boundary the last task's verdict has no successor task, so the gate record carries it. **STEP 1** — PHASES.md G3 box checked; Gate line and P03 phase-map Gate cell recorded; Phase set to P05, noting P03 closed at G3 and that P05 is next under OD-12. guard:phases exit 0 after the checked G3 box and the phase-map Gate cell. **STEP 2** — CF-59 and CF-60 CLOSED at G3; Item cells appended, not rewritten; recorded as attestation, not measurement. **STEP 3** — CF-103 OPEN (client, P06) and CF-104 OPEN (reviewer, G6). Open CF 62 + 2 − 2 = 62. **STEP 4** — Next action is author docs/ADMIN_SPEC.md (document 9, CF-91), reviewer-authored, one step ahead of P05, covering the eight D-16 modules, Operator accounts, and the MFA factor type, enrolment flow and recovery procedure that SECURITY_MODEL.md section 9 defers to P05, landing before any P05 build task issues. D headings 46, OD headings 12, migrations 16, unchanged. src/, public/, data/seed/ untouched. Five guards and verify_seed.py exit 0 (121 -> 72). Build: 25 static HTML excluding _global-error.html. | PASS at reviewer verdict — 2 September 2026 | 2026-09-02 |
+| P05-T00 | Lands `ADMIN_SPEC.md` byte-exact, repairs R4, closes CF-91. Branched `p05-t00` from `origin/main` at `1e2f78d`. CF live maximum **104** (`re.findall` over CF-nn rows); PR live maximum **34**. **STEP 0** — G3-R Verdict cell set to `PASS at reviewer verdict — 2 September 2026`; PHASES.md gained a checked **G3-R** box under P03, noting it recorded the gate. **STEP 1** — `docs/ADMIN_SPEC.md` landed byte-exact from the reviewer-authored attachment; `git hash-object` → `dc21fd2341141ddb50a8b8351eac760db07491e2`; `python -X utf8` splitlines → 310; `grep -c '^## §'` → 9. Document 9 AUTHORED. **STEP 2** — restored the bold id on all five gate boxes (G3, G5, G6, G4, G7), trailing text unchanged; `G7 launch` keeps `launch` after the bold id. §3a amended: a gate box always carries its bold id, checked or not, because a gate is never issued and its id is permanent; only task items drop their id while unissued. **STEP 3** — FILE MODE in `%TEMP%\nel-p05-t00-r4`, not stdin: checked `**G5**` while the phase-map G5 cell does not read PASSED → exit **1**, `docs/PHASES.md:171  R4`; unmodified tree → exit **0**. R1–R4 evaluated **14** boxes before the repair and **20** after (14 task ids + **G3-R** + five gate ids). **STEP 4** — CF-91 CLOSED at P05-T00; Item cell appended, not rewritten; `ADMIN_SPEC.md` is authored, closes `SECURITY_MODEL.md` §9's three deferrals (MFA factor type, enrolment flow, recovery procedure), and CF-39 goes live with it. CF-39 appended and stays OPEN (human): the region question is live from P05 entry; the cheapest moment to move is before the first Operator account exists, after which it is a migration. **STEP 5** — this row; open-CF list; `ADMIN_SPEC.md` recorded as document 9, AUTHORED; Next action **P05-T01 — Auth, Operator accounts and MFA**, noting CF-39 should be answered before that task creates the first account. Open CF 62 + 0 − 1 = 61 (`grep -cE` over OPEN status → 61). `grep -c "^### D-"` → 46, `grep -c "^### OD-"` → 12, `git ls-files supabase/migrations/` → 16, unchanged. `src/`, `public/`, `data/seed/` untouched. No `supabase` command; no migration; no Operator account; OD-09 not signed; CF-39 not moved. | pushed — verdict at push | 2026-09-02 |
 
 ---
 
@@ -119,12 +120,12 @@ on a verbal expansion of an unsigned scope.
 Computed by (run after M5B):
 `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md`
 
-**Open — 62:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 61:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-37 · CF-39 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
 CF-52 · CF-54 · CF-62 · CF-63 · CF-65 · CF-66 · CF-67 ·
 CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-78 · CF-79 · CF-80 · CF-81 ·
-CF-82 · CF-83 · CF-86 · CF-87 · CF-89 · CF-90 · CF-91 · CF-92 · CF-93 · CF-94 ·
+CF-82 · CF-83 · CF-86 · CF-87 · CF-89 · CF-90 · CF-92 · CF-93 · CF-94 ·
 CF-95 · CF-96 · CF-97 · CF-98 · CF-99 · CF-100 · CF-101 · CF-103 · CF-104
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
@@ -344,14 +345,23 @@ URLs do not render because every Programme is draft, G3 certified 24, and
 the eighteen render when P06 publishes. Open count 62 + 2 − 2 = 62
 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 62).
 
+**Closed at P05-T00:** CF-91 (`ADMIN_SPEC.md` authored as document 9; it closes
+`SECURITY_MODEL.md` §9's three deferrals — MFA factor type, enrolment flow,
+recovery procedure — and CF-39 goes live with it). CF-39 appended and stays
+OPEN, owner human: the region question is live from P05 entry; the cheapest
+moment to move is before the first Operator account exists, after which it
+is a migration. Open count 62 + 0 − 1 = 61
+(`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 61).
+
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
 flag. CF-24 to CF-27 are document corrections owned by the reviewer, each
 closing at a numbered P01-T03 STEP 0 sub-step. CF-28 is the OD-04 visibility
 carry-forward, owned by the human, open until the G7 revert. CF-39 is the
-Zurich-region GDPR/FADP adequacy question, owned by the human, open until
-P05. CF-41 is the Node engine-version drift between the build machine and CI,
+Zurich-region GDPR/FADP adequacy question, owned by the human, still OPEN:
+the region question is live from P05 entry, and the cheapest moment to move
+is before the first Operator account exists. CF-41 is the Node engine-version drift between the build machine and CI,
 owned by the builder. CF-45, CF-46 and CF-49 are `DESIGN_SYSTEM.md`
 dependencies raised at brand extraction under OD-06/OD-07: no editable
 original of the mark, the portal's painted login staying UNDETERMINED, and
@@ -434,10 +444,10 @@ authoritative substitutes for the reissue's grant-revoke proof. CF-88 is
 landed at P01-T03-R-M3B, CLOSED at P01-T03-R-M4: write grants and the
 Operator-write policy now exist. CF-89 and CF-90 are landed at
 P01-T03-R-M4, both OPEN: the §7 assertions are masked by `unreviewed` until
-eligibility is reviewed; nothing is published. CF-91 is landed at P01-T04,
-OPEN, reviewer-owned, P05: `ADMIN_SPEC.md` is document 9 and unauthored;
-OD-11 moved Auth and MFA to P05 and `SECURITY_MODEL.md` §9 defers the MFA
-factor type, enrolment flow and recovery procedure to it. CF-92, CF-93,
+eligibility is reviewed; nothing is published. CF-91 is landed at P01-T04
+and CLOSED at P05-T00: `ADMIN_SPEC.md` is document 9 and AUTHORED; it closes
+`SECURITY_MODEL.md` §9's three deferrals — MFA factor type, enrolment flow,
+recovery procedure — and CF-39 goes live with it. CF-92, CF-93,
 CF-94 and CF-95 are landed at P02-T19, all OPEN: no rendered surface now
 exercises the full token set after the System view was deleted at `605f27f`;
 `PRODUCT_BRIEF.md` is document 1 and an unauthored stub; `7bb0f87` and
@@ -506,6 +516,9 @@ the only database there is. **P01-T03-R is complete.**
 `"ProgrammeTier"` and a `"LabTest"`; `eligibility_audience` sits on the
 membership row; `"Programme"` carries `description` and `preparation_notes`
 pairs; `tier_note` is dropped.
+`ADMIN_SPEC.md` (document 9) is AUTHORED at P05-T00. It closes the three
+`SECURITY_MODEL.md` §9 deferrals (MFA factor type, enrolment flow, recovery
+procedure) and takes CF-39 live.
 Gate-0 document
 set (`GLOSSARY`
 frozen, §6 superseded in part · `SCOPE` · `DECISIONS` authored ·
@@ -520,12 +533,15 @@ nothing and must never be cited as authority. v2 is reordered under OD-12.
 
 ## Next action
 
-**Author `docs/ADMIN_SPEC.md`** (document 9, CF-91), one step ahead of P05 as
-the method requires. It is reviewer-authored and lands before any P05 build
-task issues. Coverage: the eight D-16 modules (Offers, Videos, Equipment,
-Branches, Programmes, LabUnits, Site Settings, Media Library), Operator
-accounts, and the MFA factor type, enrolment flow and recovery procedure
-that `SECURITY_MODEL.md` §9 defers to P05.
+**P05-T01 — Auth, Operator accounts and MFA.** CF-39 should be answered before
+that task creates the first account: the region question is live from P05
+entry, and the cheapest moment to move is before any Operator account exists,
+after which it is a migration.
+
+`ADMIN_SPEC.md` (document 9) is AUTHORED at P05-T00 and closes CF-91. P05
+build work can start. Coverage is now specified: the eight D-16 modules,
+Operator accounts, and the MFA factor type, enrolment flow and recovery
+procedure that `SECURITY_MODEL.md` §9 deferred.
 
 **P03's route work is complete** and P03 closed at G3, 2 September 2026, on
 the public site. Twelve static patterns and one dynamic template, both
@@ -561,8 +577,9 @@ on the catalogue tables). **five reverses are authored and unapplied**
 (CF-83). CF-87 still binds grant proofs and the anonymous row-level read:
 the MCP user carries `rolbypassrls`, so that check remains unexecuted.
 CF-89 holds the three §7 assertions until eligibility is reviewed. CF-90
-holds publication until the clinical gate. CF-91 holds `ADMIN_SPEC.md`,
-authored one step ahead of P05, and is the next action.
+holds publication until the clinical gate. CF-91 is CLOSED at P05-T00.
+CF-39 is live and should be answered before P05-T01 creates the first
+Operator account.
 
 **Quotation amendment, now with a landed schedule.** `docs/QUOTATION_AMENDMENTS.md`
 is landed (§1–§7) and OD-09 (Announcements and Clinical notices,
@@ -574,11 +591,11 @@ stays open until the human supplies `public/mark/nel-mark.svg`. CF-80, CF-81
 and CF-82 are open against the seed: missing Arabic LabTest names, unset
 eligibility, and five QA-flagged rows. CF-65, CF-66, CF-68,
 CF-69, CF-71, CF-75, CF-78, CF-79 and CF-103 remain open, and CF-83, CF-86,
-CF-87, CF-89, CF-90, CF-91, CF-92, CF-93, CF-94, CF-95 and CF-104 join them against
+CF-87, CF-89, CF-90, CF-92, CF-93, CF-94, CF-95 and CF-104 join them against
 the migration route, the document ranking, the unpublished seed, the
-unauthored admin spec, the missing System view, the `PRODUCT_BRIEF.md` stub,
-the untasked production baseline, the extra motion durations, and the
-eighteen unpublished Programme detail URLs.
+missing System view, the `PRODUCT_BRIEF.md` stub, the untasked production
+baseline, the extra motion durations, and the eighteen unpublished Programme
+detail URLs. CF-39 stays OPEN and is live from P05 entry.
 
 ---
 
