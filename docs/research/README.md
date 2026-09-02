@@ -23,6 +23,7 @@ These justify decisions. When someone asks in month three why the hotline is
 | `14-brand-extraction-portal-login.md` | Site 1 supplement — the results portal `/Login/` static HTML and bundled global CSS, authorised under OD-06 | 26 Aug 2026 |
 | `15-mark-colour-sampling.md` | Pixel-level colour sampling of the two committed mark binaries — favicon (source of record) and Facebook cover (corroboration), no network access | 27 Aug 2026 |
 | `16-owner-approved-composition.md` | Approval evidence for the composition the client approved on 29 August 2026, promoted under OD-08. Not a specification — `DESIGN_SYSTEM.md` §9 governs. Moved here from `docs/` at P01-T03-R-M1 | 29 Aug 2026 |
+| `g3-evidence.md` | Computed facts a build can prove at P03 exit. Not a model document, not a G3 verdict. CF-59 and CF-60 are named as absent | 2 Sep 2026 |
 
 ## Still to land here
 
