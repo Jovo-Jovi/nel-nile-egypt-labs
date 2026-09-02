@@ -154,8 +154,8 @@ in the project, and it should not be first.
 - [x] **P03-T05** — Programmes and Departments listings
 - [x] **P03-T05-F** — Isolate whole Latin runs, not single words
 - [x] **P03-T06** — Branches page and the drawn map *(needs branch addresses)*
-- [ ] **P03-T07** — Contact, results portal, privacy policy, lab-to-lab
-- [ ] Programme detail template *(renders zero pages until P06)*
+- [x] **P03-T07** — Contact, results portal, privacy policy, lab-to-lab
+- [ ] **P03-T08** — Programme detail template *(renders zero pages until P06)*
 - [ ] G3 — rendered evidence in both locales on every page; boundary and bilingual gates
 
 ### P05 — Admin dashboard · NEXT

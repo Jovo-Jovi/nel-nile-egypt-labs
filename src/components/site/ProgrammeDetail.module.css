@@ -1,0 +1,130 @@
+/* DESIGN_SYSTEM.md §10 Card / §12. Logical properties only. */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+}
+
+.title {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-lg);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-heading);
+}
+
+.description {
+  margin: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-base);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-body);
+}
+
+.axis {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+}
+
+.axisLabel {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-sm);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.axisList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nel-space-8);
+  margin-block: 0;
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.axisChip {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-block: var(--nel-space-12);
+  padding-inline: var(--nel-space-24);
+  border-radius: var(--nel-radius-full);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-color-primary);
+  background-color: var(--nel-color-surface);
+  color: var(--nel-color-primary);
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.lists {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-24);
+}
+
+.listHeading {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-lg);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-heading);
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  scroll-margin-block-start: var(--nel-space-24);
+}
+
+.slotHeading {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-heading);
+}
+
+.rowList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  margin-block: 0;
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  padding: var(--nel-space-16);
+}
+
+.emptyTitle {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-heading);
+}
+
+.emptyBody {
+  margin: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-base);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-body);
+}
