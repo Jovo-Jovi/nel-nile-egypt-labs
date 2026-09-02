@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-105**
+**Next free id: CF-106**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -44,7 +44,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-36 | Root route renders a build placeholder and contradicts CONTENT_MODEL §3c, which specifies that / renders no content and redirects to /ar. Replaced at P03. Closed at P03-T01-F: `/` is a `next.config.ts` redirect to `/ar`, renders no content, and no `index.html` is emitted. | builder | CLOSED at P03-T01-F | P03 |
 | CF-37 | Supabase project created 25 Aug 2026. Plan tier, inactivity-pausing behaviour and backup posture are not confirmed against P07 cutover requirements. | human | OPEN | P07 cutover |
 | CF-38 | OD-04 condition 2 was violated in three tracked files the T03V fence did not name. Swept at T03B. The clause is already public in history from the 26 Aug 2026 visibility change and is not retractable by a later commit. Reopened at the T03B verdict: the T03B sweep tested one phrase and left cell 1 of 08-form-review-and-next-steps.md:187 in place. | reviewer | CLOSED at T03B-F | T03B-F |
-| CF-39 | Supabase project region eu-central-2 (Zurich) is outside the EU. From P05 the Auth schema holds Operator email addresses — lab staff personal data, not patient data. Adequacy position not assessed by this project. The region question is live from P05 entry; the cheapest moment to move is before the first Operator account exists, after which it is a migration. | human | OPEN | P05 |
+| CF-39 | Supabase project region eu-central-2 (Zurich) is outside the EU. From P05 the Auth schema holds Operator email addresses — lab staff personal data, not patient data. Adequacy position not assessed by this project. The region question is live from P05 entry; the cheapest moment to move is before the first Operator account exists, after which it is a migration. Closed on the human's attestation, 2 September 2026: the cross-border storage position was reviewed against the applicable Egyptian PDPL requirements and the position accepted. `eu-central-2` is an accepted hosting location for this project and no region migration is required. Recorded as an attestation by the row's owner, not as a legal opinion held by this project. See the hosting decision in `DECISIONS.md`. | human | CLOSED at P05-T01 | P05 |
 | CF-40 | tsconfig.tsbuildinfo is written by tsc --noEmit under incremental:true and is not covered by .gitignore; next build re-adds incremental:true on every run. | builder | CLOSED at T03B | `.gitignore` at T03B |
 | CF-41 | Node engine drift: eslint-visitor-keys@5.0.1 requires ^22.13.0; the build machine and .github/workflows/ci.yml both pin 22.12.0. Non-fatal now, fatal on a future dependency bump. | builder | OPEN | — |
 | CF-42 | P02-X01 brand extraction was run without a reviewer-issued fence and assessed the results portal, which BOUNDARY_MODEL.md §3 places behind separate written scope and authorisation. The fetch stopped correctly at the 302 and no patient data was seen, but the authorisation was absent and the collection fences are self-attested. CLOSED at P02-T04: OD-06 supplies the written scope, retroactively covering both fetches. | reviewer | CLOSED at P02-T04 | `DECISIONS.md` (OD-06) at P02-T04 |
@@ -110,6 +110,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-102 | `PHASES.md` v2 pre-assigned task ids to unissued work. P03-T03's item described listing pages and was checked by an unrelated task, so the plan asserted work was complete that had not started, and the Programmes and Departments listings disappeared from it for two tasks. Repaired at P03-T05 STEP 1; the row records the failure mode so the guard's blind spot — it checks ids and verdicts, never descriptions — is on the record. | reviewer | CLOSED at P03-T05 | P03-T05 |
 | CF-103 | Every Arabic string rendering at G3 is chrome. P06 introduces 72 LabTest names and all content entry, none read by anyone. CF-60's clause that the lab's staff judgement outranks the metrics stays live and applies to that Arabic. | client | OPEN | P06 |
 | CF-104 | Eighteen of `CONTENT_MODEL.md` §3c's 42 URLs do not render because every Programme is draft. G3 certified 24. The eighteen render when P06 publishes. | reviewer | OPEN | G6 |
+| CF-105 | The laboratory's own PDPL obligations as controller — licensing, processing records, DPO where required — sit with the client and are not a build output. The Executive Regulations' grace period ends in late October or early November 2026, which may fall near G7 launch. Tracked so the date stays visible after CF-39's closure; this project's contribution is the Operator email addresses alone, and the client's existing patient results portal is a materially larger exposure. | client | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -145,7 +145,7 @@ What binds it:
 - The minimum viable set: an email and a factor. No name, no phone, no photograph, no
   role description, no last-seen.
 - Two accounts, not ten. The exposure scales with the number and the number is two.
-- **CF-39 stays open**: the project sits in `eu-central-2`, which is Zurich, outside the
+- **CF-39 is closed at P05-T01**: the project sits in `eu-central-2`, which is Zurich, outside the
   EU. `Operator` personal data in a non-EU jurisdiction is an adequacy question, and it
   becomes live at P05 when accounts are created rather than now while none exist. It is
   named here so it is not discovered at P05.
