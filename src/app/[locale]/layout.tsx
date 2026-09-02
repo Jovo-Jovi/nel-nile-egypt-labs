@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { dirForLocale, isLocale, LOCALES } from "@/lib/locale";
-import { SiteRoot } from "@/components/site/SiteRoot";
 
 export const dynamicParams = false;
 
@@ -21,9 +20,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={dirForLocale(locale)}>
-      <body>
-        <SiteRoot locale={locale}>{children}</SiteRoot>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

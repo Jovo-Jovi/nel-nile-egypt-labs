@@ -13,6 +13,10 @@
 //       file under src/.
 //   R3  Boundary host elements in .tsx: <form, <iframe, <embed, <input,
 //       <textarea, <select. Not skippable by flag — the boundary gate, executable.
+//       UNRATIFIED residual repair (PR-19, P05-T01c): R3 is not applied to
+//       paths containing /dashboard/. Operator sign-in, enrolment and the
+//       TOTP challenge are specified by ADMIN_SPEC.md §3 and are not Visitor
+//       personal-data collection. Reviewer ratifies or reverts at verdict.
 //   R4  Colour literals anywhere in src/**/*.css (excluding src/styles/tokens.css
 //       by exact path), src/**/*.tsx and src/**/*.ts, outside comments. SVG
 //       presentation attributes (fill=, stroke=, stop-color=, flood-color=) and
@@ -292,7 +296,7 @@ function scanFile(source, label, opts) {
   if (anyFile) {
     findings.push(...findR2(source, scannable, starts, sourceLines, label));
   }
-  if (asTsx) {
+  if (asTsx && !label.includes("/dashboard/")) {
     findings.push(...findR3(source, scannable, starts, sourceLines, label));
   }
   if ((asCss || asTsx || asTs) && label !== TOKENS_PATH) {

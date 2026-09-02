@@ -62,6 +62,29 @@ const ar = {
   "page.privacyPolicy.title": "سياسة الخصوصية",
   "page.labToLab.title": "معامل للمعامل",
 
+  // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
+  "dashboard.home.title": "لوحة التحكم",
+  "dashboard.signIn.title": "دخول لوحة التحكم",
+  "dashboard.signIn.email": "البريد الإلكتروني",
+  "dashboard.signIn.password": "كلمة المرور",
+  "dashboard.signIn.submit": "دخول",
+  "dashboard.signIn.failed": "تعذّر الدخول. حاول مرة أخرى.",
+  "dashboard.signOut": "خروج",
+  "dashboard.enrol.title": "تفعيل عامل التحقق",
+  "dashboard.enrol.instruction":
+    "امسح رمز الاستجابة السريعة بتطبيق المصادقة، أو أدخل السر نصاً، ثم أدخل الرمز المكوّن من ستة أرقام.",
+  "dashboard.enrol.secretLabel": "السر",
+  "dashboard.enrol.qrAlt": "رمز الاستجابة السريعة لتطبيق المصادقة",
+  "dashboard.enrol.code": "رمز التحقق",
+  "dashboard.enrol.submit": "تأكيد",
+  "dashboard.enrol.failed": "تعذّر التأكيد. حاول مرة أخرى.",
+  "dashboard.challenge.title": "التحقق بخطوتين",
+  "dashboard.challenge.instruction": "أدخل الرمز المكوّن من ستة أرقام من تطبيق المصادقة.",
+  "dashboard.challenge.code": "رمز التحقق",
+  "dashboard.challenge.submit": "تحقق",
+  "dashboard.challenge.failed": "تعذّر التحقق. حاول مرة أخرى.",
+  "dashboard.offers.heading": "العروض",
+
   // Programme detail chrome — P03-T08. Headings, labels, empty state,
   // tier axis. No LabTest name, panel membership or medical description.
   "programme.detail.axisLabel": "المستوى",
@@ -495,6 +518,29 @@ const en = {
   "page.portal.title": "Results portal",
   "page.privacyPolicy.title": "Privacy policy",
   "page.labToLab.title": "Lab-to-Lab",
+
+  // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
+  "dashboard.home.title": "Dashboard",
+  "dashboard.signIn.title": "Dashboard sign-in",
+  "dashboard.signIn.email": "Email",
+  "dashboard.signIn.password": "Password",
+  "dashboard.signIn.submit": "Sign in",
+  "dashboard.signIn.failed": "Sign-in failed. Try again.",
+  "dashboard.signOut": "Sign out",
+  "dashboard.enrol.title": "Enrol authenticator",
+  "dashboard.enrol.instruction":
+    "Scan the QR code with an authenticator app, or enter the secret as text, then enter the six-digit code.",
+  "dashboard.enrol.secretLabel": "Secret",
+  "dashboard.enrol.qrAlt": "Authenticator QR code",
+  "dashboard.enrol.code": "Verification code",
+  "dashboard.enrol.submit": "Confirm",
+  "dashboard.enrol.failed": "Confirmation failed. Try again.",
+  "dashboard.challenge.title": "Two-step verification",
+  "dashboard.challenge.instruction": "Enter the six-digit code from the authenticator app.",
+  "dashboard.challenge.code": "Verification code",
+  "dashboard.challenge.submit": "Verify",
+  "dashboard.challenge.failed": "Verification failed. Try again.",
+  "dashboard.offers.heading": "Offers",
 
   // Programme detail chrome — P03-T08. Headings, labels, empty state,
   // tier axis. No LabTest name, panel membership or medical description.

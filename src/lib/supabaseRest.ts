@@ -2,17 +2,12 @@
 // may appear here; it is not a secret. No service-role key, no project
 // ref, and no connection string.
 
-export type SupabaseRestConfig = { url: string; anonKey: string };
+import { supabasePublicEnv, type SupabasePublicEnv } from "@/lib/supabase/env";
+
+export type SupabaseRestConfig = SupabasePublicEnv;
 
 export function supabaseRestConfig(): SupabaseRestConfig | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
-  const anonKey =
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-    process.env.SUPABASE_ANON_KEY;
-  if (typeof url !== "string" || url.length === 0) return null;
-  if (typeof anonKey !== "string" || anonKey.length === 0) return null;
-  return { url: url.replace(/\/$/, ""), anonKey };
+  return supabasePublicEnv();
 }
 
 type PublishedTable =
