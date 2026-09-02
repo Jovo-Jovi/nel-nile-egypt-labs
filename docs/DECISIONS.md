@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-seven decisions. Twelve of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-seven decisions. Thirteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -366,6 +366,41 @@ would invalidate every reference in `DECISIONS.md`, `CARRY_FORWARDS.md`,
 not by position, so 20% still falls at P05 exit — earlier in calendar terms,
 which is the practical effect. Nothing in scope changes; no phase gains or
 loses contents. OD-09 remains DRAFT and unpriced.
+
+---
+
+### OD-13 — Model class, replaced by executable proof
+
+**Status:** SIGNED — 2 September 2026
+
+**Decides:** Grok is permitted on authentication, and on any task whose
+fence requires executable negative proofs. The model-class tiers in the
+reviewer instructions become advisory rather than binding, EXCEPT on two
+paths where they remain absolute:
+
+  1. Migrations APPLIED against the live database. CF-79 — there is no
+     staging branch and every push lands on the only database there is,
+     so a defect is not reviewable after the fact because the damage
+     happens at execution. Authoring a migration is unrestricted;
+     applying one is not.
+  2. LabTest content and Arabic clinical terminology. Invisible to a
+     reviewer who does not read clinical Arabic, and behind a gate that
+     is not waivable by any OD including this one.
+
+**In exchange:** any task the tiers previously protected must produce
+EXECUTABLE NEGATIVE PROOFS — evidence that the thing which must not
+happen does not happen, quoted with its command, its exit code and the
+mode it was run in. Reading the code is not the proof. A Done-when that
+cannot be executed is not a Done-when, and a task that cannot produce its
+proof halts rather than asserting the outcome.
+
+**Because:** across P02 and P03 every Grok defect was caught by the
+reviewer where the artefact was statically inspectable, and the model tier
+added nothing there. Where it is not inspectable, the tier was
+substituting for a check nobody was running. Making the check explicit is
+stronger than making the writer stronger, and it costs less.
+
+---
 
 ## Decision log
 

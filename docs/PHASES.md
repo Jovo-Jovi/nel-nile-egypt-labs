@@ -164,8 +164,9 @@ in the project, and it should not be first.
 
 - [x] **P05-T00** — `ADMIN_SPEC.md` — authored one step ahead (CF-91)
 - [x] **P05-T01a** — close out the stale region statements
-- [ ] **P05-T01b** — two repairs; Auth halted before STEP 3
-- [ ] Auth, Operator accounts and MFA
+- [x] **P05-T01b** — two repairs; Auth halted before STEP 3
+- [ ] **P05-T01c** — OD-13, Auth, enrolment and sessions with executable proof
+- [ ] the two real Operator accounts, created with their factors enrolled
 - [ ] Site Settings and Media Library modules
 - [ ] Branches and LabUnits modules
 - [ ] Offers, Videos and Equipment modules

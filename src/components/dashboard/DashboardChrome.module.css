@@ -1,0 +1,34 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nel-space-16);
+  min-block-size: 56px;
+  padding-inline: var(--nel-space-16);
+  background-color: var(--nel-color-surface);
+  border-block-end: 1px solid var(--nel-color-border);
+}
+
+.brand {
+  margin: 0;
+  font-size: var(--nel-size-base);
+  font-weight: 600;
+  color: var(--nel-color-text);
+  letter-spacing: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--nel-space-8);
+}
+
+.main {
+  flex: 1;
+  padding-block: var(--nel-space-32);
+  padding-inline: var(--nel-space-16);
+}
+
+.signOut {
+  display: inline-flex;
+}
