@@ -15,9 +15,7 @@ export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const slugs = await listPublishedProgrammeSlugs();
-  const params = slugs.map((slug) => ({ slug }));
-  console.log("[p03-t08] generateStaticParams programmes/[slug] =", JSON.stringify(params));
-  return params;
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -40,17 +38,6 @@ export default async function Page({ params }: Props) {
   const resolutions = labTestContent
     ? await resolveEachPublishedSlot(detail.id, detail.slots)
     : null;
-
-  if (resolutions !== null) {
-    for (const resolution of resolutions) {
-      console.log(
-        "[p03-t08] programmeLabTests",
-        resolution.slot.tier,
-        resolution.slot.audience,
-        resolution.rows.length,
-      );
-    }
-  }
 
   return <ProgrammeDetail locale={locale} detail={detail} resolutions={resolutions} />;
 }
