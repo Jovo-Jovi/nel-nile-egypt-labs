@@ -1,6 +1,7 @@
-// Mock-only placeholder constants (PR-16, D-07, D-09). The real results-portal
-// target is a build-time constant landed at P03; the real WhatsApp number
-// lives in SiteSettings, also at P03. Neither exists in this mock.
+// Placeholder constants (PR-16, D-07, D-09). The ResultsPortalLink target is
+// a build-time constant; until a production URL is supplied it is this
+// placeholder. The WhatsApp number lives in SiteSettings and is never a
+// literal in application source.
 
 export const RESULTS_PORTAL_PLACEHOLDER_URL =
   "https://example.invalid/portal-placeholder";

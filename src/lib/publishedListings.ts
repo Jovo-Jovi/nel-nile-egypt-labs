@@ -1,8 +1,8 @@
 // Published-only listings for Programme, LabUnit, Offer, Video,
-// Equipment and Branch. Ordered by display_order. Unpublished rows are
-// never selected: fetchAnonPublishedJson appends the filter where a
-// caller cannot omit it (PR-08). An empty list is D-42 failing closed —
-// the pass condition, not a gap to fill.
+// Equipment, Branch and SiteSettings. Ordered by display_order.
+// Unpublished rows are never selected: fetchAnonPublishedJson appends
+// the filter where a caller cannot omit it (PR-08). An empty list is
+// D-42 failing closed — the pass condition, not a gap to fill.
 // youtube_id is not selected: a listing must never emit a host thumbnail
 // or an autoloading embed (D-13, BOUNDARY_MODEL.md §5).
 // Programme listings select name and description only. No LabTest name,
@@ -81,6 +81,15 @@ export type BranchMapPin = {
   y: number;
 };
 
+export type PublishedSiteSettings = {
+  id: string;
+  whatsappE164: string | null;
+  whatsappMessageAr: string | null;
+  whatsappMessageEn: string | null;
+  labToLabAr: string | null;
+  labToLabEn: string | null;
+};
+
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
   return value as Record<string, unknown>;
@@ -148,6 +157,9 @@ const LAB_UNIT_SELECT =
 
 const BRANCH_SELECT =
   "select=id,name_ar,name_en,is_head_office,latitude,longitude,publication_state,display_order&order=display_order.asc";
+
+const SITE_SETTINGS_SELECT =
+  "select=id,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,lab_to_lab_ar,lab_to_lab_en,publication_state,display_order&order=display_order.asc";
 
 function parseOffer(value: unknown): PublishedOffer | null {
   const row = asRecord(value);
@@ -240,6 +252,22 @@ function parseLabUnit(value: unknown): PublishedLabUnit | null {
   return parseNamedDescription(value);
 }
 
+function parseSiteSettings(value: unknown): PublishedSiteSettings | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  if (id === null) return null;
+  return {
+    id,
+    whatsappE164: asNonEmptyString(row.whatsapp_e164),
+    whatsappMessageAr: asOptionalString(row.whatsapp_message_ar),
+    whatsappMessageEn: asOptionalString(row.whatsapp_message_en),
+    labToLabAr: asNonEmptyString(row.lab_to_lab_ar),
+    labToLabEn: asNonEmptyString(row.lab_to_lab_en),
+  };
+}
+
 function parseBranch(value: unknown): PublishedBranch | null {
   const row = asRecord(value);
   if (row === null) return null;
@@ -296,6 +324,14 @@ export async function listPublishedLabUnits(): Promise<PublishedLabUnit[]> {
 export async function listPublishedBranches(): Promise<PublishedBranch[]> {
   const payload = await fetchAnonPublishedJson("Branch", BRANCH_SELECT);
   return mapPublished(payload, parseBranch);
+}
+
+// Singleton. The published-only filter is the same as every other table
+// in this module. Zero published rows returns null — D-42 fail-closed.
+export async function publishedSiteSettings(): Promise<PublishedSiteSettings | null> {
+  const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_SELECT);
+  const rows = mapPublished(payload, parseSiteSettings);
+  return rows[0] ?? null;
 }
 
 // Pins are placed on the schematic only from published rows that carry

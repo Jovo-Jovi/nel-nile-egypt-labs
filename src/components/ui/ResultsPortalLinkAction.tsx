@@ -11,13 +11,16 @@ interface ResultsPortalLinkActionProps {
   variant: ButtonVariant;
   forceState?: ButtonForcedState;
   pill?: boolean;
+  // When omitted, the D-07 placeholder. The online-results page passes
+  // a resolved, allowlisted build-time href.
+  href?: string;
 }
 
-export function ResultsPortalLinkAction({ label, variant, forceState, pill }: ResultsPortalLinkActionProps) {
+export function ResultsPortalLinkAction({ label, variant, forceState, pill, href }: ResultsPortalLinkActionProps) {
   return (
     <Button
       variant={variant}
-      href={RESULTS_PORTAL_PLACEHOLDER_URL}
+      href={href ?? RESULTS_PORTAL_PLACEHOLDER_URL}
       target="_blank"
       rel="noopener noreferrer"
       forceState={forceState}
