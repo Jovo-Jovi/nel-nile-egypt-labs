@@ -62,6 +62,21 @@ const ar = {
   "page.privacyPolicy.title": "سياسة الخصوصية",
   "page.labToLab.title": "معامل للمعامل",
 
+  // Programme detail chrome — P03-T08. Headings, labels, empty state,
+  // tier axis. No LabTest name, panel membership or medical description.
+  "programme.detail.axisLabel": "المستوى",
+  "programme.detail.listHeading": "التحاليل المدرجة",
+  "programme.detail.emptyTitle": "لا توجد تحاليل معروضة",
+  "programme.detail.emptyBody":
+    "تظهر القائمة بعد أن يسجّل الفريق الطبي حكم الأهلية لكل عضوية.",
+  "programme.tier.none": "بدون مستوى",
+  "programme.tier.Silver": "فضي",
+  "programme.tier.Gold": "ذهبي",
+  "programme.tier.Platinum": "بلاتيني",
+  "programme.tier.Children": "الأطفال",
+  "programme.audience.Male": "ذكور",
+  "programme.audience.Female": "إناث",
+
   // §12 approval-state markers — one label per pending material class.
   // Named to the class, reused everywhere that class of material appears.
   "approval.pending.clinical": "قيد الانتظار — بانتظار توقيع الفريق الطبي بالمعمل كتابيًا",
@@ -480,6 +495,21 @@ const en = {
   "page.portal.title": "Results portal",
   "page.privacyPolicy.title": "Privacy policy",
   "page.labToLab.title": "Lab-to-Lab",
+
+  // Programme detail chrome — P03-T08. Headings, labels, empty state,
+  // tier axis. No LabTest name, panel membership or medical description.
+  "programme.detail.axisLabel": "Tier",
+  "programme.detail.listHeading": "Included analyses",
+  "programme.detail.emptyTitle": "No analyses listed",
+  "programme.detail.emptyBody":
+    "The list appears after the laboratory records an eligibility judgement for each membership.",
+  "programme.tier.none": "Untiered",
+  "programme.tier.Silver": "Silver",
+  "programme.tier.Gold": "Gold",
+  "programme.tier.Platinum": "Platinum",
+  "programme.tier.Children": "Children",
+  "programme.audience.Male": "Male",
+  "programme.audience.Female": "Female",
 
   // §12 approval-state markers — one label per pending material class.
   "approval.pending.clinical": "Pending — awaiting the lab's written clinical sign-off",

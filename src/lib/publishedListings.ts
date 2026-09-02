@@ -6,8 +6,8 @@
 // youtube_id is not selected: a listing must never emit a host thumbnail
 // or an autoloading embed (D-13, BOUNDARY_MODEL.md §5).
 // Programme listings select name and description only. No LabTest name,
-// membership, tier, preparation notes, or slug — the detail template is
-// later work, and a listing card is not a link.
+// membership, tier, preparation notes, or slug. The listing card is not
+// a link. Detail membership is resolved by public."programmeLabTests".
 
 import { fetchAnonPublishedJson } from "./supabaseRest";
 
