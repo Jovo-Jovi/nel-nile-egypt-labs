@@ -157,7 +157,8 @@ in the project, and it should not be first.
 - [x] **P03-T07** — Contact, results portal, privacy policy, lab-to-lab
 - [x] **P03-T08** — Programme detail template *(renders zero pages until P06)*
 - [x] **P03-T09** — remove console scaffolding, stage the G3 evidence pack
-- [x] G3 — rendered evidence in both locales on every page; boundary and bilingual gates
+- [x] **G3-R** — recorded the G3 gate
+- [x] **G3** — rendered evidence in both locales on every page; boundary and bilingual gates
 
 ### P05 — Admin dashboard · NEXT
 
@@ -167,7 +168,7 @@ in the project, and it should not be first.
 - [ ] Branches and LabUnits modules
 - [ ] Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
-- [ ] G5 — the owner can edit every unlocked region himself
+- [ ] **G5** — the owner can edit every unlocked region himself
 
 ### P06 — Content and Arabic · LONGEST POLE
 
@@ -176,13 +177,13 @@ in the project, and it should not be first.
 - [ ] 5 QA-flagged records — two high severity, resolved with the lab
 - [ ] Written clinical sign-off — not waivable by anyone, including the client
 - [ ] Content entry — through the dashboard, not through SQL
-- [ ] G6 — clinical and bilingual gates
+- [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · AFTER P06
 
 - [ ] static bilingual index over Programmes and LabTests
 - [ ] search on the البرامج page, both locales
-- [ ] G4 — clinical, data integrity and bilingual gates
+- [ ] **G4** — clinical, data integrity and bilingual gates
 
 ### P07 — Hardening and cutover · LAUNCH
 
@@ -192,7 +193,7 @@ in the project, and it should not be first.
 - [ ] decommission the old site
 - [ ] revert the repository to private (OD-04)
 - [ ] Owner handover — unscoped, see §5
-- [ ] G7 launch — all four standards
+- [ ] **G7** launch — all four standards
 
 ---
 
@@ -207,9 +208,11 @@ from the first and that is how `CF-86` happened.
 - A **gate box** is checked if and only if the phase map's Gate cell for that phase reads
   `PASSED`.
 - A task with no done-step row is unchecked. A task not yet issued has no row.
-- A checklist item carries a task id only once that task has been issued. Until
-  then the item is id-less prose. `guard:phases` R1–R4 read `**<id>**` boxes; an
-  id-less item is ignored.
+- A **task** checklist item carries a task id only once that task has been issued.
+  Until then the item is id-less prose. A **gate** box always carries its bold id,
+  checked or not, because a gate is never issued and its id is permanent; only
+  task items drop their id while unissued. `guard:phases` R1–R4 read `**<id>**`
+  boxes; an id-less item is ignored.
 
 **The Verdict cell is the weak link and this rule repairs it.** Verdicts are issued in review
 and, until now, were almost never written back: at v2 only one of the four most recent task
