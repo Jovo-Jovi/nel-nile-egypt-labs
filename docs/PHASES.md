@@ -166,6 +166,7 @@ in the project, and it should not be first.
 - [x] **P05-T01a** — close out the stale region statements
 - [x] **P05-T01b** — two repairs; Auth halted before STEP 3
 - [ ] **P05-T01c** — OD-13, Auth, enrolment and sessions with executable proof
+- [ ] **P05-T01c-F** — Narrow the R3 exemption to the files that need it
 - [ ] the two real Operator accounts, created with their factors enrolled
 - [ ] Site Settings and Media Library modules
 - [ ] Branches and LabUnits modules

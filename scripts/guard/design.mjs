@@ -13,10 +13,13 @@
 //       file under src/.
 //   R3  Boundary host elements in .tsx: <form, <iframe, <embed, <input,
 //       <textarea, <select. Not skippable by flag — the boundary gate, executable.
-//       UNRATIFIED residual repair (PR-19, P05-T01c): R3 is not applied to
-//       paths containing /dashboard/. Operator sign-in, enrolment and the
-//       TOTP challenge are specified by ADMIN_SPEC.md §3 and are not Visitor
-//       personal-data collection. Reviewer ratifies or reverts at verdict.
+//       Four exact paths (R3_EXEMPT_PATHS) are exempt: they carry Operator
+//       credential entry specified by ADMIN_SPEC.md §3 and the sign-out POST.
+//       The reviewer narrowed the exemption from a /dashboard/ directory match
+//       to this allowlist at P05-T01c-F. A path is exempt only when it equals
+//       a member of R3_EXEMPT_PATHS (full path, not a substring). Adding a
+//       path is a boundary decision requiring a reviewer verdict, never a
+//       builder's call.
 //   R4  Colour literals anywhere in src/**/*.css (excluding src/styles/tokens.css
 //       by exact path), src/**/*.tsx and src/**/*.ts, outside comments. SVG
 //       presentation attributes (fill=, stroke=, stop-color=, flood-color=) and
@@ -41,6 +44,15 @@ import { join, relative, sep } from "node:path";
 const SRC_DIR = join("src");
 const TOKENS_PATH = "src/styles/tokens.css";
 const ALLOWED_HEX = /^#25D366$/i;
+
+// Exact paths only. Set.has is equality, not a substring. Adding a member is
+// a boundary decision requiring a reviewer verdict (P05-T01c-F).
+const R3_EXEMPT_PATHS = new Set([
+  "src/app/[locale]/dashboard/sign-in/page.tsx",
+  "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
+  "src/app/[locale]/dashboard/(session)/enrol/page.tsx",
+  "src/components/dashboard/DashboardChrome.tsx",
+]);
 
 const CSS = new Set([".css"]);
 const TSX = new Set([".tsx"]);
@@ -296,7 +308,7 @@ function scanFile(source, label, opts) {
   if (anyFile) {
     findings.push(...findR2(source, scannable, starts, sourceLines, label));
   }
-  if (asTsx && !label.includes("/dashboard/")) {
+  if (asTsx && !R3_EXEMPT_PATHS.has(label)) {
     findings.push(...findR3(source, scannable, starts, sourceLines, label));
   }
   if ((asCss || asTsx || asTs) && label !== TOKENS_PATH) {
