@@ -21,3 +21,22 @@
   z-index: 1;
   flex: 1;
 }
+
+/* DESIGN_SYSTEM.md §9 "The page wash" — background easing to surface,
+   a primary tint at no more than 6% opacity via color-mix (never a
+   hardcoded second hex for the same value), fixed to the viewport,
+   painted first so every later sibling's own opaque fill sits above it.
+   No z-index is set: .root already isolates and .main / the footer
+   already sit at z-index 1. Direction is to block-end so the named
+   stops match §9 (background at the block-start easing to surface). */
+.wash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent),
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent)
+    ),
+    linear-gradient(to block-end, var(--nel-color-background), var(--nel-color-surface));
+}

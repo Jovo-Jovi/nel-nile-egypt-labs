@@ -3,6 +3,7 @@ import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { Button } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import type { SiteSettingsRow } from "@/lib/dashboard/siteSettings";
 import { localeHref } from "@/lib/locale";
@@ -176,7 +177,7 @@ function SettingsSection({
 }) {
   return (
     <section className={styles.section}>
-      <SectionHeader locale={locale} titleKey={titleKey} />
+      <SectionHeader locale={locale} titleKey={titleKey} level="h2" />
       {children}
     </section>
   );
@@ -217,11 +218,15 @@ export function SiteSettingsForm({
 
   return (
     <form className={styles.form} method="post" action={saveAction}>
-      <div className={styles.intro}>
-        <p className={styles.status}>{translate(locale, statusKey)}</p>
-        <p className={styles.status}>{translate(locale, "dashboard.siteSettings.noDelete")}</p>
-        <Notice locale={locale} notice={notice} />
-      </div>
+      <div className={styles.body}>
+        <div className={styles.intro}>
+          <StatusStateBadge
+            state={row.publication_state === "published" ? "published" : "draft"}
+            label={translate(locale, statusKey)}
+          />
+          <p className={styles.status}>{translate(locale, "dashboard.siteSettings.noDelete")}</p>
+          <Notice locale={locale} notice={notice} />
+        </div>
 
       <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionContact">
         <TextField
@@ -339,6 +344,7 @@ export function SiteSettingsForm({
           multiline
         />
       </SettingsSection>
+      </div>
 
       <div className={styles.actions}>
         <div className={styles.actionsMain}>

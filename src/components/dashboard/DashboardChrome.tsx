@@ -8,8 +8,8 @@ import { localeHref } from "@/lib/locale";
 import styles from "./DashboardChrome.module.css";
 
 // ADMIN_SPEC.md §4f — module page title at 2xl. This is not a §10
-// SectionHeader: that component is lg and is an h1, used for named
-// groups inside a module.
+// SectionHeader: that component is lg, defaults to h1, and dashboard
+// groups pass h2 so a module page keeps exactly one h1.
 export function DashboardModuleTitle({
   locale,
   titleKey,
@@ -34,7 +34,9 @@ export function DashboardChrome({
     : localeHref(locale, "/dashboard/sign-in");
 
   return (
-    <>
+    <div className={styles.root}>
+      {/* Same §9 wash as SiteRoot — one atmosphere, two surfaces. */}
+      <div className={styles.wash} aria-hidden="true" />
       <header className={styles.bar}>
         <Link href={markHref} className={styles.mark}>
           <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
@@ -51,6 +53,6 @@ export function DashboardChrome({
         </div>
       </header>
       <main className={styles.main}>{children}</main>
-    </>
+    </div>
   );
 }

@@ -1,8 +1,19 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--nel-space-48);
+  flex: 1;
+  min-block-size: 0;
   max-inline-size: 1120px;
+  inline-size: 100%;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-64);
+  flex: 1;
+  min-block-size: 0;
+  overflow: auto;
 }
 
 .intro {
@@ -127,8 +138,8 @@
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
-  border-radius: var(--nel-radius-sm);
-  background-color: var(--nel-color-surface);
+  border-radius: var(--nel-radius-md);
+  background-color: var(--nel-color-background);
   color: var(--nel-color-text);
   font-family: inherit;
   font-size: var(--nel-size-base);
@@ -168,10 +179,20 @@
 }
 
 .actions {
+  flex: none;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: var(--nel-space-32);
+  margin-block-start: var(--nel-space-96);
+  padding-block: var(--nel-space-16);
+  inline-size: 100%;
+  background-color: var(--nel-color-surface);
+  border-block-start-width: var(--nel-elevation-2-border-width);
+  border-block-start-style: solid;
+  border-block-start-color: var(--nel-color-border);
+  box-shadow: var(--nel-elevation-2-shadow);
 }
 
 .actionsMain {

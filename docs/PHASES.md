@@ -170,7 +170,8 @@ in the project, and it should not be first.
 - [x] **P05-T01c-F2** — Define what a checked box means, and make the guard enforce it
 - [ ] the two real Operator accounts, created with their factors enrolled
 - [x] **P05-T02** — Site Settings module
-- [ ] **P05-T04** — Compose the dashboard against the design system
+- [x] **P05-T04** — Compose the dashboard against the design system
+- [ ] **P05-T05** — Restore the §9 page wash, and put it behind the dashboard too
 - [ ] Media Library module
 - [ ] Branches and LabUnits modules
 - [ ] Offers, Videos and Equipment modules
