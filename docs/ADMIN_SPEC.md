@@ -207,6 +207,33 @@ sits at elevation 1, and uses the same bar height. The active module is
 marked in the navigation, and a module's name is not printed twice on the
 same screen.
 
+### §4g Validation
+
+**The server is authoritative.** Client-side validation is assistance
+that makes a form pleasant; it is not a control, because a form can be
+bypassed and at P05-T10C one was. Every rule below is enforced in the
+route handler. A rule that exists only in the browser has not been
+implemented.
+
+**Required fields are marked before they are submitted**, not discovered
+on failure. A field required only when publishing says so — §8's
+bilingual-complete checks bind on publish, not on draft, and the form
+must not demand on create what the database demands on publish.
+
+**A field's control matches its data.** A phone number is a country code
+and a number, normalised to E.164 before storage; it is not a text box.
+A coordinate pair is two numbers validated together or both empty; never
+one. A URL field accepts `https://` only. A field with a length that
+matters carries a counter.
+
+**Errors appear beside the field, on blur, in both languages**, and say
+what is wrong rather than that something is. A summary at the top of a
+long form links to the first failing field.
+
+**A counter warns; it does not truncate or block.** An over-length SEO
+description is a search-result consideration, not invalid data, and the
+Operator decides.
+
 ---
 
 ## §5 The eight modules

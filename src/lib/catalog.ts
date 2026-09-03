@@ -124,6 +124,23 @@ const ar = {
   "dashboard.siteSettings.seoDescription": "وصف SEO الافتراضي",
   "dashboard.siteSettings.errorHttps": "روابط الحسابات تُقبل بعنوان https فقط.",
   "dashboard.siteSettings.errorBilingual": "النشر يتطلب النص بالعربية والإنجليزية معاً، ولا يُترك أحدهما فارغاً.",
+  "dashboard.validation.callingCode": "رمز الدولة",
+  "dashboard.validation.subscriber": "الرقم",
+  "dashboard.validation.callingPlaceholder": "اختر رمز الدولة",
+  "dashboard.validation.required": "مطلوب",
+  "dashboard.validation.requiredOnPublish": "مطلوب عند النشر",
+  "dashboard.validation.errorPhone":
+    "رقم واتساب يُختار رمز دولته من القائمة ويُكتب رقمه، ويُحفظ بالصيغة الدولية. هذه القيمة غير صالحة.",
+  "dashboard.validation.errorLatitude": "خط العرض رقم بين -90 و90.",
+  "dashboard.validation.errorLongitude":
+    "خط الطول رقم بين -180 و180. يُملأ مع خط العرض أو يُتركان فارغين معاً.",
+  "dashboard.validation.summary": "يوجد ما يحتاج تصحيحاً. انتقل إلى أول حقل.",
+  "dashboard.validation.counterWarnTitle":
+    "أطول من 60 حرفاً — نتائج البحث قد تقتطع العنوان. الحفظ لا يُمنع.",
+  "dashboard.validation.counterWarnDescription":
+    "أطول من 160 حرفاً — نتائج البحث قد تقتطع الوصف. الحفظ لا يُمنع.",
+  "dashboard.validation.httpsHelp": "يُقبل عنوان https فقط.",
+  "dashboard.validation.phoneHelp": "رمز الدولة من القائمة، ثم الرقم. لا قيمة مفترضة.",
   "dashboard.siteSettings.errorMissing": "لا يوجد صف إعدادات. أنشئه أولاً.",
   "dashboard.siteSettings.errorWrite": "تعذّر الحفظ. حاول مرة أخرى.",
   "dashboard.siteSettings.errorCreate": "تعذّر إنشاء الصف. حاول مرة أخرى.",
@@ -738,6 +755,23 @@ const en = {
   "dashboard.siteSettings.seoDescription": "Default SEO description",
   "dashboard.siteSettings.errorHttps": "Account links must use an https address.",
   "dashboard.siteSettings.errorBilingual": "Publishing requires Arabic and English together; neither side may be empty.",
+  "dashboard.validation.callingCode": "Country calling code",
+  "dashboard.validation.subscriber": "Number",
+  "dashboard.validation.callingPlaceholder": "Choose a calling code",
+  "dashboard.validation.required": "Required",
+  "dashboard.validation.requiredOnPublish": "Required when publishing",
+  "dashboard.validation.errorPhone":
+    "WhatsApp is a calling code from the list and a number, stored as E.164. This value is not valid.",
+  "dashboard.validation.errorLatitude": "Latitude is a number between -90 and 90.",
+  "dashboard.validation.errorLongitude":
+    "Longitude is a number between -180 and 180. Fill both coordinates or leave both empty.",
+  "dashboard.validation.summary": "Something needs correcting. Go to the first field.",
+  "dashboard.validation.counterWarnTitle":
+    "Longer than 60 characters — search results may truncate the title. Save is not blocked.",
+  "dashboard.validation.counterWarnDescription":
+    "Longer than 160 characters — search results may truncate the description. Save is not blocked.",
+  "dashboard.validation.httpsHelp": "https addresses only.",
+  "dashboard.validation.phoneHelp": "Calling code from the list, then the number. Nothing is pre-selected.",
   "dashboard.siteSettings.errorMissing": "There is no settings row. Create it first.",
   "dashboard.siteSettings.errorWrite": "Save failed. Try again.",
   "dashboard.siteSettings.errorCreate": "Could not create the row. Try again.",

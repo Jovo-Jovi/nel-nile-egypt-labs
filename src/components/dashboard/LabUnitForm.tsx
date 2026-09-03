@@ -17,6 +17,7 @@ import {
   CatalogNoticeView,
   CatalogSection,
   FieldLabel,
+  FieldLegend,
   LocaleColumns,
   useCatalogFormFlight,
 } from "./catalogFormChrome";
@@ -45,16 +46,18 @@ function TextField({
   labelKey,
   defaultValue,
   inputMode,
+  required,
 }: {
   locale: Locale;
   name: string;
   labelKey: CatalogKey;
   defaultValue: string | null;
   inputMode?: "numeric";
+  required?: "always";
 }) {
   return (
     <div className={site.field}>
-      <FieldLabel locale={locale} htmlFor={name} labelKey={labelKey} />
+      <FieldLabel locale={locale} htmlFor={name} labelKey={labelKey} required={required} />
       <input
         id={name}
         className={site.control}
@@ -100,9 +103,7 @@ function Pair({
 
   return (
     <fieldset className={site.group}>
-      <legend className={site.legend}>
-        <IsolatedCopy locale={locale} text={translate(locale, legendKey)} />
-      </legend>
+      <FieldLegend locale={locale} legendKey={legendKey} required="publish" />
       <div className={site.pair}>
         <div className={site.field}>
           <label className={site.pairLocale} htmlFor={nameAr}>
@@ -168,6 +169,7 @@ export function LabUnitForm({
             name="slug"
             labelKey="dashboard.labUnits.slug"
             defaultValue={row?.slug ?? null}
+            required="always"
           />
           <p className={extra.help}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.labUnits.slugHelp")} />
