@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-block-size: 0;
 }
 
 .hex {
@@ -69,10 +68,8 @@
   position: relative;
   z-index: 1;
   flex: 1;
-  min-block-size: 0;
   display: flex;
   flex-direction: column;
-  overflow: auto;
   padding-block: var(--nel-space-32);
   padding-inline: var(--nel-space-16);
 }
@@ -87,9 +84,26 @@
   display: inline-flex;
 }
 
+.pageHeader {
+  margin: 0;
+  margin-block-end: var(--nel-space-64);
+}
+
+.eyebrow {
+  margin: 0;
+  margin-block-end: var(--nel-space-8);
+  color: var(--nel-color-accent);
+  font-size: var(--nel-size-xs);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: var(--nel-line-height-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .pageTitle {
   margin: 0;
-  margin-block-end: var(--nel-space-32);
   color: var(--nel-color-text);
   font-size: var(--nel-size-2xl);
   font-weight: 600;

@@ -14,6 +14,9 @@ interface SkeletonBarProps {
   // text shapes (a full first line, a shorter second) are legible as a
   // shape without spelling anything out.
   widthPercent: number;
+  // Card-shaped occupancy: the same §12 shimmer fills its parent instead
+  // of sizing as a type-step bar. Used where a listing will render cards.
+  fill?: boolean;
 }
 
 const BLOCK_SIZE_VAR: Record<SkeletonBarSize, string> = {
@@ -24,7 +27,16 @@ const BLOCK_SIZE_VAR: Record<SkeletonBarSize, string> = {
   xl: "var(--nel-size-xl)",
 };
 
-export function SkeletonBar({ size, widthPercent }: SkeletonBarProps) {
+export function SkeletonBar({ size, widthPercent, fill }: SkeletonBarProps) {
+  if (fill) {
+    return (
+      <span
+        className={styles.bar}
+        style={{ blockSize: "100%", inlineSize: "100%" }}
+        aria-hidden="true"
+      />
+    );
+  }
   return (
     <span
       className={styles.bar}

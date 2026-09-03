@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-block-size: 0;
   max-inline-size: 1120px;
   inline-size: 100%;
 }
@@ -11,9 +10,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--nel-space-64);
-  flex: 1;
-  min-block-size: 0;
-  overflow: auto;
 }
 
 .intro {
@@ -166,16 +162,20 @@
 
 .notice {
   margin: 0;
-  color: var(--nel-color-success);
-  font-size: var(--nel-size-sm);
-  letter-spacing: 0;
 }
 
-.error {
+.errorRow {
+  display: flex;
+  align-items: center;
+  gap: var(--nel-space-8);
   margin: 0;
   color: var(--nel-color-error);
   font-size: var(--nel-size-sm);
   letter-spacing: 0;
+}
+
+.errorRow svg {
+  flex: none;
 }
 
 .actions {
@@ -207,4 +207,45 @@
   border-block-start-style: solid;
   border-block-start-color: var(--nel-color-border);
   align-self: stretch;
+}
+
+.slot {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+
+.live {
+  min-block-size: 0;
+}
+
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.saveSlot button[aria-busy="true"]:disabled {
+  background-color: var(--nel-color-surface);
+  border-color: var(--nel-color-primary);
+  color: var(--nel-color-primary);
+  cursor: default;
+}
+
+.publishSlot button[aria-busy="true"]:disabled,
+.createSlot button[aria-busy="true"]:disabled {
+  background-color: var(--nel-color-primary);
+  border-color: transparent;
+  color: var(--nel-color-surface);
+  cursor: default;
+}
+
+.unpublishSlot button[aria-busy="true"]:disabled {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--nel-color-accent);
+  cursor: default;
 }
