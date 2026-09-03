@@ -261,7 +261,7 @@ export function useCatalogFormFlight() {
     const form = event.currentTarget;
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
     const actionUrl =
-      submitter instanceof HTMLButtonElement && submitter.formAction ? submitter.formAction : form.action;
+      submitter instanceof HTMLButtonElement && submitter.hasAttribute("formaction") ? submitter.formAction : form.action;
     const slot = slotFromActionUrl(actionUrl);
     setFlight({ slot, phase: "busy" });
     setClientNotice(null);
