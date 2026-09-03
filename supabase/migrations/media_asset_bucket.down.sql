@@ -15,9 +15,11 @@
 -- cascade is deliberately absent: a bare drop policy fails if the policy was
 -- renamed out from under this file, and that refusal is the control.
 --
--- This file does not disable row-level security on storage.objects. Other
--- buckets share that table; turning RLS off would be a security defect, not
--- a reverse of this migration.
+-- This file does not disable row-level security on storage.objects. The
+-- forward never enabled it: RLS on that table is the platform's, not this
+-- migration's, so there is no enable statement for this reverse to undo.
+-- Other buckets share that table; turning RLS off would be a security
+-- defect, not a reverse of this migration.
 --
 -- Why each step is safe today, per OD-10 control 1:
 --

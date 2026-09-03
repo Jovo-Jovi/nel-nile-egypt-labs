@@ -25,9 +25,7 @@
 --
 -- Additive only (OD-10 control 4). This file does not rewrite, narrow or
 -- otherwise change any table that already exists. It adds a bucket row and
--- two policies. RLS on storage.objects is enabled here so
--- the enable and the policies land together; on a hosted project the
--- enable is already true and the statement is idempotent.
+-- two policies.
 --
 -- Published-read (anon, SELECT only): an object in this bucket is
 -- readable by anon only when a published `"MediaAsset"` row names it in
@@ -57,7 +55,12 @@ values (
   array['image/jpeg', 'image/png', 'image/webp']::text[]
 );
 
-alter table storage.objects enable row level security;
+-- `alter table storage.objects enable row level security` is absent.
+-- On a hosted project storage.objects is owned by supabase_storage_admin
+-- and db push connects as postgres, so that statement aborts with
+-- `must be owner of table objects`. RLS on storage.objects is already
+-- enabled by the platform. That enable is the platform's, not this
+-- migration's.
 
 create policy "MediaAsset_objects_published_read"
   on storage.objects
