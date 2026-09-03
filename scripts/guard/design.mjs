@@ -19,9 +19,14 @@
 //       to that allowlist at P05-T01c-F. A fifth path,
 //       src/components/dashboard/SiteSettingsForm.tsx, was granted at P05-T02
 //       for an Operator-facing form behind aal2 that writes only to named
-//       "SiteSettings" columns. A path is exempt only when it equals a member
-//       of R3_EXEMPT_PATHS (full path, not a substring). Adding a path is a
-//       boundary decision requiring a reviewer verdict, never a builder's call.
+//       "SiteSettings" columns. A sixth and seventh path,
+//       src/components/dashboard/BranchForm.tsx and
+//       src/components/dashboard/LabUnitForm.tsx, were granted at P05-T08
+//       for Operator forms behind aal2 writing only to named columns. Two
+//       paths, no directory, no pattern. A path is exempt only when it equals
+//       a member of R3_EXEMPT_PATHS (full path, not a substring). Adding a
+//       path is a boundary decision requiring a reviewer verdict, never a
+//       builder's call.
 //   R4  Colour literals anywhere in src/**/*.css (excluding src/styles/tokens.css
 //       by exact path), src/**/*.tsx and src/**/*.ts, outside comments. SVG
 //       presentation attributes (fill=, stroke=, stop-color=, flood-color=) and
@@ -49,13 +54,16 @@ const ALLOWED_HEX = /^#25D366$/i;
 
 // Exact paths only. Set.has is equality, not a substring. Adding a member is
 // a boundary decision requiring a reviewer verdict (P05-T01c-F; P05-T02 added
-// SiteSettingsForm.tsx only).
+// SiteSettingsForm.tsx only; P05-T08 added BranchForm.tsx and LabUnitForm.tsx
+// as two exact paths, no directory, no pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
   "src/app/[locale]/dashboard/(session)/enrol/page.tsx",
   "src/components/dashboard/DashboardChrome.tsx",
   "src/components/dashboard/SiteSettingsForm.tsx",
+  "src/components/dashboard/BranchForm.tsx",
+  "src/components/dashboard/LabUnitForm.tsx",
 ]);
 
 const CSS = new Set([".css"]);

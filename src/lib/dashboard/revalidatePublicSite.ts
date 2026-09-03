@@ -20,3 +20,18 @@ export function revalidatePublicSite(): void {
     revalidatePath(path);
   }
 }
+
+const BRANCH_PUBLIC_PATHS = ["/ar/locations", "/en/locations"] as const;
+const LAB_UNIT_PUBLIC_PATHS = ["/ar/departments", "/en/departments"] as const;
+
+export function revalidatePublishedBranches(): void {
+  for (const path of BRANCH_PUBLIC_PATHS) {
+    revalidatePath(path);
+  }
+}
+
+export function revalidatePublishedLabUnits(): void {
+  for (const path of LAB_UNIT_PUBLIC_PATHS) {
+    revalidatePath(path);
+  }
+}
