@@ -83,11 +83,26 @@ export type BranchMapPin = {
 
 export type PublishedSiteSettings = {
   id: string;
+  hotline: string | null;
   whatsappE164: string | null;
   whatsappMessageAr: string | null;
   whatsappMessageEn: string | null;
+  hoursAr: string | null;
+  hoursEn: string | null;
+  facebookUrl: string | null;
+  instagramUrl: string | null;
+  linkedinUrl: string | null;
+  youtubeUrl: string | null;
   labToLabAr: string | null;
   labToLabEn: string | null;
+  aboutBodyAr: string | null;
+  aboutBodyEn: string | null;
+  privacyBodyAr: string | null;
+  privacyBodyEn: string | null;
+  seoTitleAr: string | null;
+  seoTitleEn: string | null;
+  seoDescriptionAr: string | null;
+  seoDescriptionEn: string | null;
 };
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -112,6 +127,17 @@ function asPriceAmount(value: unknown): string | null {
 
 function asBoolean(value: unknown): boolean {
   return value === true;
+}
+
+function asHttpsUrl(value: unknown): string | null {
+  const text = asNonEmptyString(value);
+  if (text === null || !text.startsWith("https://")) return null;
+  try {
+    const parsed = new URL(text);
+    return parsed.protocol === "https:" ? text : null;
+  } catch {
+    return null;
+  }
 }
 
 function asCoordinate(value: unknown): number | null {
@@ -159,7 +185,7 @@ const BRANCH_SELECT =
   "select=id,name_ar,name_en,is_head_office,latitude,longitude,publication_state,display_order&order=display_order.asc";
 
 const SITE_SETTINGS_SELECT =
-  "select=id,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,lab_to_lab_ar,lab_to_lab_en,publication_state,display_order&order=display_order.asc";
+  "select=id,hotline,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,hours_ar,hours_en,facebook_url,instagram_url,linkedin_url,youtube_url,lab_to_lab_ar,lab_to_lab_en,about_body_ar,about_body_en,privacy_body_ar,privacy_body_en,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,publication_state,display_order&order=display_order.asc";
 
 function parseOffer(value: unknown): PublishedOffer | null {
   const row = asRecord(value);
@@ -260,11 +286,26 @@ function parseSiteSettings(value: unknown): PublishedSiteSettings | null {
   if (id === null) return null;
   return {
     id,
+    hotline: asNonEmptyString(row.hotline),
     whatsappE164: asNonEmptyString(row.whatsapp_e164),
     whatsappMessageAr: asOptionalString(row.whatsapp_message_ar),
     whatsappMessageEn: asOptionalString(row.whatsapp_message_en),
+    hoursAr: asNonEmptyString(row.hours_ar),
+    hoursEn: asNonEmptyString(row.hours_en),
+    facebookUrl: asHttpsUrl(row.facebook_url),
+    instagramUrl: asHttpsUrl(row.instagram_url),
+    linkedinUrl: asHttpsUrl(row.linkedin_url),
+    youtubeUrl: asHttpsUrl(row.youtube_url),
     labToLabAr: asNonEmptyString(row.lab_to_lab_ar),
     labToLabEn: asNonEmptyString(row.lab_to_lab_en),
+    aboutBodyAr: asNonEmptyString(row.about_body_ar),
+    aboutBodyEn: asNonEmptyString(row.about_body_en),
+    privacyBodyAr: asNonEmptyString(row.privacy_body_ar),
+    privacyBodyEn: asNonEmptyString(row.privacy_body_en),
+    seoTitleAr: asNonEmptyString(row.seo_title_ar),
+    seoTitleEn: asNonEmptyString(row.seo_title_en),
+    seoDescriptionAr: asNonEmptyString(row.seo_description_ar),
+    seoDescriptionEn: asNonEmptyString(row.seo_description_en),
   };
 }
 

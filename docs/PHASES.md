@@ -167,9 +167,10 @@ in the project, and it should not be first.
 - [x] **P05-T01b** — two repairs; Auth halted before STEP 3
 - [x] **P05-T01c** — OD-13, Auth, enrolment and sessions with executable proof
 - [x] **P05-T01c-F** — Narrow the R3 exemption to the files that need it
-- [ ] **P05-T01c-F2** — Define what a checked box means, and make the guard enforce it
+- [x] **P05-T01c-F2** — Define what a checked box means, and make the guard enforce it
 - [ ] the two real Operator accounts, created with their factors enrolled
-- [ ] Site Settings and Media Library modules
+- [ ] **P05-T02** — Site Settings module
+- [ ] Media Library module
 - [ ] Branches and LabUnits modules
 - [ ] Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module

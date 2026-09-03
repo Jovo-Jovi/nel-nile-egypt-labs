@@ -52,6 +52,27 @@ export function CopyCard({ locale, title, body, children }: CopyCardProps) {
   );
 }
 
+export function OutboundList({
+  locale,
+  items,
+}: {
+  locale: Locale;
+  items: { href: string; label: string }[];
+}) {
+  if (items.length === 0) return null;
+  return (
+    <ul className={styles.outboundList}>
+      {items.map((item) => (
+        <li key={item.href}>
+          <a className={styles.outbound} href={item.href} target="_blank" rel="noopener noreferrer">
+            <IsolatedCopy locale={locale} text={item.label} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function PendingSlot({
   locale,
   pendingLabelKey,

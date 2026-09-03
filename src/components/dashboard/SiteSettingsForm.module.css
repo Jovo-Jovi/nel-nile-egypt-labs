@@ -1,0 +1,125 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-24);
+  max-inline-size: 64rem;
+  padding: var(--nel-space-16);
+  background-color: var(--nel-color-surface);
+  border-radius: var(--nel-radius-md);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  max-inline-size: 40rem;
+  padding: var(--nel-space-16);
+  background-color: var(--nel-color-surface);
+  border-radius: var(--nel-radius-md);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+}
+
+.missing p {
+  margin: 0;
+  color: var(--nel-color-text);
+  letter-spacing: 0;
+}
+
+.group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.legend {
+  padding: 0;
+  margin-block-end: var(--nel-space-8);
+  font-size: var(--nel-size-sm);
+  font-weight: 500;
+  color: var(--nel-color-text);
+  letter-spacing: 0;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nel-space-16);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  min-inline-size: 0;
+}
+
+.label {
+  font-size: var(--nel-size-sm);
+  font-weight: 500;
+  color: var(--nel-color-text);
+  letter-spacing: 0;
+}
+
+.control {
+  min-block-size: 44px;
+  padding-block: var(--nel-space-12);
+  padding-inline: var(--nel-space-16);
+  border: 1px solid var(--nel-color-border);
+  border-radius: var(--nel-radius-sm);
+  background-color: var(--nel-color-surface);
+  color: var(--nel-color-text);
+  font-family: inherit;
+  font-size: var(--nel-size-base);
+  letter-spacing: 0;
+}
+
+.area {
+  min-block-size: 8rem;
+  resize: vertical;
+}
+
+.control:focus-visible,
+.area:focus-visible {
+  outline: 2px solid var(--nel-color-accent);
+  outline-offset: 2px;
+}
+
+.status {
+  margin: 0;
+  font-size: var(--nel-size-sm);
+  color: var(--nel-color-muted);
+  letter-spacing: 0;
+}
+
+.notice {
+  margin: 0;
+  color: var(--nel-color-success);
+  font-size: var(--nel-size-sm);
+  letter-spacing: 0;
+}
+
+.error {
+  margin: 0;
+  color: var(--nel-color-error);
+  font-size: var(--nel-size-sm);
+  letter-spacing: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nel-space-16);
+}
+
+@media (min-width: 768px) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}

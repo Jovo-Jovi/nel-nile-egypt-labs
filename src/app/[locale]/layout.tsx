@@ -2,11 +2,14 @@ import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { dirForLocale, isLocale, LOCALES } from "@/lib/locale";
 
-export const dynamicParams = false;
-
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
+
+// Known locales are prerendered. After an Operator publish, revalidatePath
+// must be allowed to regenerate those pages; dynamicParams false turns
+// that regeneration into NoFallbackError / 404. Invalid locales still
+// notFound() below.
 
 export default async function LocaleLayout({
   children,
