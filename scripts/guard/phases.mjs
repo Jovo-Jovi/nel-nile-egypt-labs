@@ -6,16 +6,27 @@
 //
 //   R1  A checked `- [x] **<id>**` task box whose id has no done-step row.
 //   R2  A checked task box whose Verdict cell is `pushed — verdict at push`
-//       or empty.
-//   R3  An unchecked `- [ ] **<id>**` task box whose Verdict cell records a
-//       reviewer verdict (filled, and not the placeholder). The box should
-//       have been checked.
+//       or empty; or a checked box whose verdict is FAIL-prefixed and which
+//       has no done-step row for its fix task (`{id}-F`, or `{id}-F2` and
+//       onward for a chain). Checked-but-not-certified.
+//   R3  An unchecked `- [ ] **<id>**` task box whose Verdict cell is
+//       PASS-prefixed, or FAIL-prefixed with a done-step row for its fix
+//       task. The box should have been checked. An unchecked FAIL with no
+//       fix row is not a finding.
 //   R4  A checked gate box `- [x] **G<n>**` whose phase-map Gate cell does
 //       not read `PASSED`. Gate ids are `G` plus digits and nothing else, so
-//       `G3-R` is a task id and is evaluated by R1–R3.
+//       `G3-R` is a task id and is evaluated by R1–R3 and R6.
 //   R5  A done-step row whose pipe count is not 5 (an unescaped `|` in a
 //       cell of the four-column table). Report-only until CF-100's seventeen
 //       rows are escaped; a later P05 task turns this rule blocking.
+//   R6  A task box whose Verdict cell is neither the placeholder, nor
+//       PASS-prefixed, nor FAIL-prefixed (empty and skip excluded).
+//       Unclassifiable: report it, never guess.
+//
+// FAIL is classified as FAIL, not as an undifferentiated "reviewer verdict".
+// Cases: checked FAIL with no fix → R2; unchecked PASS → R3; unchecked FAIL
+// with a fix row → R3; unchecked FAIL with no fix row → allowed; a verdict
+// that is none of placeholder / PASS-prefixed / FAIL-prefixed → R6.
 //
 // Done-step rows are parsed from the right: Date is the last cell, Verdict
 // the one before it. Task-cell pipes therefore cannot steal the verdict.
@@ -119,13 +130,30 @@ function phaseForGateId(id) {
   return `P${hit[1].padStart(2, "0")}`;
 }
 
-function isReviewerVerdict(verdict) {
-  if (verdict === undefined || verdict === null) return false;
-  const value = verdict.trim();
-  if (value === "") return false;
-  if (value === TASK_STEP_SKIP) return false;
-  if (value === PLACEHOLDER_VERDICT) return false;
-  return true;
+function classifyVerdict(verdict) {
+  if (verdict === undefined || verdict === null) return "empty";
+  const value = String(verdict).trim();
+  if (value === "") return "empty";
+  if (value === TASK_STEP_SKIP) return "skip";
+  if (value === PLACEHOLDER_VERDICT) return "placeholder";
+  if (value.startsWith("PASS")) return "pass";
+  if (value.startsWith("FAIL")) return "fail";
+  return "unclassifiable";
+}
+
+function nextFixStepId(id) {
+  const numbered = /^(.*)-F(\d+)$/.exec(id);
+  if (numbered) {
+    return `${numbered[1]}-F${Number(numbered[2]) + 1}`;
+  }
+  if (id.endsWith("-F")) {
+    return `${id}2`;
+  }
+  return `${id}-F`;
+}
+
+function hasFixRow(id, byStep) {
+  return byStep.has(nextFixStepId(id));
 }
 
 function parseCheckboxes(lines) {
@@ -231,34 +259,62 @@ function main() {
     }
 
     const row = byStep.get(box.id);
+    if (box.checked && !row) {
+      blocking.push({
+        file: PHASES_PATH,
+        line: box.line,
+        rule: "R1",
+        reason: `checked box **${box.id}** has no done-step row`,
+      });
+      continue;
+    }
+    if (!row) continue;
+
+    const verdict = row.verdict ?? "";
+    const kind = classifyVerdict(verdict);
+
+    if (kind === "unclassifiable") {
+      blocking.push({
+        file: PHASES_PATH,
+        line: box.line,
+        rule: "R6",
+        reason: `box **${box.id}** has unclassifiable Verdict \`${verdict}\`; neither placeholder, PASS-prefixed, nor FAIL-prefixed`,
+      });
+      continue;
+    }
+
     if (box.checked) {
-      if (!row) {
-        blocking.push({
-          file: PHASES_PATH,
-          line: box.line,
-          rule: "R1",
-          reason: `checked box **${box.id}** has no done-step row`,
-        });
-        continue;
-      }
-      const verdict = row.verdict ?? "";
-      if (verdict === PLACEHOLDER_VERDICT || verdict.trim() === "") {
+      if (kind === "placeholder" || kind === "empty") {
         blocking.push({
           file: PHASES_PATH,
           line: box.line,
           rule: "R2",
           reason: `checked box **${box.id}** has Verdict \`${verdict || "(empty)"}\``,
         });
+      } else if (kind === "fail" && !hasFixRow(box.id, byStep)) {
+        blocking.push({
+          file: PHASES_PATH,
+          line: box.line,
+          rule: "R2",
+          reason: `checked box **${box.id}** has a FAIL verdict but no fix-task row (\`${nextFixStepId(box.id)}\`)`,
+        });
       }
       continue;
     }
 
-    if (row && isReviewerVerdict(row.verdict)) {
+    if (kind === "pass") {
       blocking.push({
         file: PHASES_PATH,
         line: box.line,
         rule: "R3",
-        reason: `unchecked box **${box.id}** has a reviewer verdict (\`${row.verdict}\`); the box should have been checked`,
+        reason: `unchecked box **${box.id}** has a PASS verdict (\`${verdict}\`); the box should have been checked`,
+      });
+    } else if (kind === "fail" && hasFixRow(box.id, byStep)) {
+      blocking.push({
+        file: PHASES_PATH,
+        line: box.line,
+        rule: "R3",
+        reason: `unchecked box **${box.id}** has a FAIL verdict and a fix-task row (\`${nextFixStepId(box.id)}\`); the box should have been checked`,
       });
     }
   }

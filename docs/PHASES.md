@@ -165,8 +165,9 @@ in the project, and it should not be first.
 - [x] **P05-T00** — `ADMIN_SPEC.md` — authored one step ahead (CF-91)
 - [x] **P05-T01a** — close out the stale region statements
 - [x] **P05-T01b** — two repairs; Auth halted before STEP 3
-- [ ] **P05-T01c** — OD-13, Auth, enrolment and sessions with executable proof
-- [ ] **P05-T01c-F** — Narrow the R3 exemption to the files that need it
+- [x] **P05-T01c** — OD-13, Auth, enrolment and sessions with executable proof
+- [x] **P05-T01c-F** — Narrow the R3 exemption to the files that need it
+- [ ] **P05-T01c-F2** — Define what a checked box means, and make the guard enforce it
 - [ ] the two real Operator accounts, created with their factors enrolled
 - [ ] Site Settings and Media Library modules
 - [ ] Branches and LabUnits modules
@@ -207,16 +208,27 @@ Every box above is **derived, never hand-maintained**, because a second source o
 from the first and that is how `CF-86` happened.
 
 - A **task box** is checked if and only if `docs/SESSION_CONTEXT.md` carries a done-step row
-  with that exact task id whose Verdict cell records a reviewer verdict — not the placeholder
-  `pushed — verdict at push`.
+  with that exact task id whose Verdict cell certifies the work as done — a PASS-prefixed
+  verdict, or a FAIL-prefixed verdict that has a fix-task row (`{id}-F`, or `{id}-F2` and
+  onward for a chain). The placeholder `pushed — verdict at push` is not a certification.
 - A **gate box** is checked if and only if the phase map's Gate cell for that phase reads
   `PASSED`.
 - A task with no done-step row is unchecked. A task not yet issued has no row.
 - A **task** checklist item carries a task id only once that task has been issued.
   Until then the item is id-less prose. A **gate** box always carries its bold id,
   checked or not, because a gate is never issued and its id is permanent; only
-  task items drop their id while unissued. `guard:phases` R1–R4 read `**<id>**`
-  boxes; an id-less item is ignored.
+  task items drop their id while unissued. `guard:phases` R1–R4 and R6 read `**<id>**`
+  boxes; R5 is the pipe-count rule on the done-steps table; an id-less item is ignored.
+
+A checked box means the work is done and certified, not that the task
+passed on its first attempt. A task that FAILED and was repaired by a
+named fix task is checked, and its Verdict cell keeps the FAIL — the
+checklist shows what is built, the Verdict column shows what it took.
+P03-T01 and P03-T05 are both checked and both record a FAIL.
+
+A box may therefore be checked while its verdict is FAIL only when a fix
+task for it exists in the done-steps table. A FAIL with no fix task is an
+unfinished failure and stays unchecked.
 
 **The Verdict cell is the weak link and this rule repairs it.** Verdicts are issued in review
 and, until now, were almost never written back: at v2 only one of the four most recent task
