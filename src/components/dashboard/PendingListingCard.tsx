@@ -20,7 +20,12 @@ export function PendingListingCards({
     <ul className={styles.grid}>
       {Array.from({ length: count }, (_, index) => (
         <li key={index}>
-          <ApprovalGate locale={locale} state="pending" pendingLabelKey={pendingLabelKey}>
+          <ApprovalGate
+            locale={locale}
+            state="pending"
+            pendingLabelKey={pendingLabelKey}
+            className={styles.wellGate}
+          >
             <article className={styles.card}>
               <div className={styles.media}>
                 <SkeletonBar size="lg" widthPercent={100} fill />

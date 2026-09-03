@@ -1,7 +1,7 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--nel-space-16);
+  gap: var(--nel-space-64);
   margin-block: 0;
   padding-inline-start: 0;
   list-style: none;
@@ -11,6 +11,13 @@
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.wellGate {
+  --nel-gate-radius: var(--nel-radius-well);
+  border-radius: var(--nel-radius-well);
+  background-color: var(--nel-color-surface);
+  box-shadow: var(--nel-elevation-1-shadow);
 }
 
 .card {
@@ -32,5 +39,5 @@
   display: flex;
   flex-direction: column;
   gap: var(--nel-space-8);
-  padding: var(--nel-space-16);
+  padding: var(--nel-space-32);
 }

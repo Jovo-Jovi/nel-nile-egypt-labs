@@ -22,9 +22,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--nel-space-24);
-  padding: var(--nel-space-16);
+  padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-md);
+  border-radius: var(--nel-radius-well);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
@@ -32,14 +32,19 @@
   font-size: var(--nel-size-lg);
 }
 
+.section h2 {
+  font-size: var(--nel-size-xl);
+  line-height: var(--nel-line-height-heading);
+}
+
 .missing {
   display: flex;
   flex-direction: column;
   gap: var(--nel-space-16);
   max-inline-size: 720px;
-  padding: var(--nel-space-16);
+  padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-md);
+  border-radius: var(--nel-radius-well);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
@@ -134,7 +139,7 @@
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
-  border-radius: var(--nel-radius-md);
+  border-radius: var(--nel-radius-sm);
   background-color: var(--nel-color-background);
   color: var(--nel-color-text);
   font-family: inherit;

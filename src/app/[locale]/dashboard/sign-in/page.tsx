@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
-import { DashboardChrome } from "@/components/dashboard/DashboardChrome";
+import { DashboardChrome, DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
@@ -29,8 +29,8 @@ export default async function SignInPage({ params, searchParams }: Props) {
 
   return (
     <DashboardChrome locale={locale} showSignOut={false}>
+      <DashboardModuleTitle locale={locale} titleKey="dashboard.signIn.title" />
       <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/sign-in/submit")}>
-        <h1>{translate(locale, "dashboard.signIn.title")}</h1>
         {failed ? <p className={formStyles.error}>{translate(locale, "dashboard.signIn.failed")}</p> : null}
         <div className={formStyles.field}>
           <label className={formStyles.label} htmlFor="dashboard-email">

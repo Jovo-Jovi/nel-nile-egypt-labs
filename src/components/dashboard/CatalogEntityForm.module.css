@@ -9,7 +9,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--nel-space-16);
+  gap: var(--nel-space-64);
   margin: 0;
   padding-inline-start: 0;
   list-style: none;
@@ -21,9 +21,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--nel-space-16);
-  padding: var(--nel-space-16);
+  padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-md);
+  border-radius: var(--nel-radius-well);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);

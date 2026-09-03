@@ -1,15 +1,31 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--nel-space-16);
+  gap: var(--nel-space-32);
   max-inline-size: 28rem;
-  padding: var(--nel-space-16);
+  padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-md);
+  border-radius: var(--nel-radius-well);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
   box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.heading {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-2xl);
+  font-weight: 600;
+  line-height: var(--nel-line-height-heading);
+  letter-spacing: 0;
+}
+
+.lede {
+  margin: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-base);
+  letter-spacing: 0;
 }
 
 .field {

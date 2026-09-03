@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
+import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
@@ -27,9 +28,10 @@ export default async function ChallengePage({ params, searchParams }: Props) {
   const failed = query.error === "1";
 
   return (
-    <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/challenge/submit")}>
-      <h1>{translate(locale, "dashboard.challenge.title")}</h1>
-      <p>{translate(locale, "dashboard.challenge.instruction")}</p>
+    <>
+      <DashboardModuleTitle locale={locale} titleKey="dashboard.challenge.title" />
+      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/challenge/submit")}>
+      <p className={formStyles.lede}>{translate(locale, "dashboard.challenge.instruction")}</p>
       {failed ? <p className={formStyles.error}>{translate(locale, "dashboard.challenge.failed")}</p> : null}
       <div className={formStyles.field}>
         <label className={formStyles.label} htmlFor="dashboard-challenge-code">
@@ -51,5 +53,6 @@ export default async function ChallengePage({ params, searchParams }: Props) {
         {translate(locale, "dashboard.challenge.submit")}
       </Button>
     </form>
+    </>
   );
 }

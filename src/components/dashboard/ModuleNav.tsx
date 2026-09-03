@@ -8,6 +8,8 @@ import styles from "./ModuleNav.module.css";
 
 const MODULES: { suffix: string; labelKey: CatalogKey }[] = [
   { suffix: "/dashboard/offers", labelKey: "dashboard.nav.offers" },
+  { suffix: "/dashboard/videos", labelKey: "dashboard.nav.videos" },
+  { suffix: "/dashboard/equipment", labelKey: "dashboard.nav.equipment" },
   { suffix: "/dashboard/branches", labelKey: "dashboard.nav.branches" },
   { suffix: "/dashboard/lab-units", labelKey: "dashboard.nav.labUnits" },
   { suffix: "/dashboard/site-settings", labelKey: "dashboard.nav.siteSettings" },

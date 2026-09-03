@@ -23,10 +23,15 @@
 //       src/components/dashboard/BranchForm.tsx and
 //       src/components/dashboard/LabUnitForm.tsx, were granted at P05-T08
 //       for Operator forms behind aal2 writing only to named columns. Two
-//       paths, no directory, no pattern. A path is exempt only when it equals
-//       a member of R3_EXEMPT_PATHS (full path, not a substring). Adding a
-//       path is a boundary decision requiring a reviewer verdict, never a
-//       builder's call.
+//       paths, no directory, no pattern. An eighth, ninth and tenth path,
+//       src/components/dashboard/OfferForm.tsx,
+//       src/components/dashboard/VideoForm.tsx and
+//       src/components/dashboard/EquipmentForm.tsx, were granted at P05-T09
+//       for Operator forms behind aal2 writing only to named columns. Three
+//       form files, no directory, no pattern. A path is exempt only when it
+//       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
+//       Adding a path is a boundary decision requiring a reviewer verdict,
+//       never a builder's call.
 //   R4  Colour literals anywhere in src/**/*.css (excluding src/styles/tokens.css
 //       by exact path), src/**/*.tsx and src/**/*.ts, outside comments. SVG
 //       presentation attributes (fill=, stroke=, stop-color=, flood-color=) and
@@ -55,7 +60,8 @@ const ALLOWED_HEX = /^#25D366$/i;
 // Exact paths only. Set.has is equality, not a substring. Adding a member is
 // a boundary decision requiring a reviewer verdict (P05-T01c-F; P05-T02 added
 // SiteSettingsForm.tsx only; P05-T08 added BranchForm.tsx and LabUnitForm.tsx
-// as two exact paths, no directory, no pattern).
+// as two exact paths; P05-T09 added OfferForm.tsx, VideoForm.tsx and
+// EquipmentForm.tsx as three exact paths, no directory, no pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
@@ -64,6 +70,9 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/SiteSettingsForm.tsx",
   "src/components/dashboard/BranchForm.tsx",
   "src/components/dashboard/LabUnitForm.tsx",
+  "src/components/dashboard/OfferForm.tsx",
+  "src/components/dashboard/VideoForm.tsx",
+  "src/components/dashboard/EquipmentForm.tsx",
 ]);
 
 const CSS = new Set([".css"]);
