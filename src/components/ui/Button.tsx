@@ -28,6 +28,7 @@ interface ButtonProps {
   forceState?: ButtonForcedState;
   disabled?: boolean;
   type?: "button" | "submit";
+  formAction?: string;
   // DESIGN_SYSTEM.md §10 Button — "icon, when present, sits inline-start
   // of the label in both locales and mirrors only if it encodes
   // direction". Every icon passed here is a meaning-encoding mark
@@ -48,6 +49,7 @@ export function Button({
   forceState,
   disabled,
   type,
+  formAction,
   icon,
   pill,
 }: ButtonProps) {
@@ -83,6 +85,7 @@ export function Button({
   return (
     <button
       type={type ?? "button"}
+      formAction={formAction}
       className={classes}
       disabled={isDisabled}
       aria-label={ariaLabel}

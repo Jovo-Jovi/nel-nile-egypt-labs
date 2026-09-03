@@ -36,7 +36,11 @@ export async function fetchAnonPublishedJson(
       Authorization: `Bearer ${config.anonKey}`,
       Accept: "application/json",
     },
-    cache: "no-store",
+    // Operator writes call revalidatePath. no-store would dynamize every
+    // public page that reads a published listing and drop the static HTML
+    // floor. Unpublished rows still cannot enter: the filter is appended
+    // above where a caller cannot omit it (PR-08).
+    cache: "force-cache",
   });
 
   if (!response.ok) {

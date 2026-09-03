@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { translate, type CatalogKey } from "@/lib/catalog";
+import { localizedText } from "@/lib/listingFormat";
 import { pageMetadata } from "@/lib/pageMetadata";
+import { publishedSiteSettings } from "@/lib/publishedListings";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { CopyCard, InfoPage, PendingSlot } from "@/components/site/InfoPage";
 
@@ -21,6 +23,12 @@ const CLAUSES: { title: CatalogKey; body: CatalogKey }[] = [
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
+  const settings = await publishedSiteSettings();
+  const signedCopy =
+    settings?.privacyBodyAr && settings.privacyBodyEn
+      ? localizedText(locale, settings.privacyBodyAr, settings.privacyBodyEn)
+      : null;
+
   return (
     <InfoPage locale={locale} titleKey="page.privacyPolicy.title">
       <CopyCard locale={locale} body={translate(locale, "privacy.standfirst")} />
@@ -32,6 +40,7 @@ export default async function Page({ params }: Props) {
           body={translate(locale, clause.body)}
         />
       ))}
+      {signedCopy ? <CopyCard locale={locale} body={signedCopy} /> : null}
       <PendingSlot locale={locale} pendingLabelKey="approval.pending.legalFact" />
     </InfoPage>
   );

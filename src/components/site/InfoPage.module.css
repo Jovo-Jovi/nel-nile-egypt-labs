@@ -55,6 +55,24 @@
   padding-block-end: var(--nel-space-24);
 }
 
+.outboundList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.outbound {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  color: var(--nel-color-primary);
+  text-decoration: underline;
+  letter-spacing: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card {
     transition: none;
