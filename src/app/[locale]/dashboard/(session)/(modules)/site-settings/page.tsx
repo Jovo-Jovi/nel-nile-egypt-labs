@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { SiteSettingsCreateForm, SiteSettingsForm } from "@/components/dashboard/SiteSettingsForm";
 import type { SiteSettingsNotice } from "@/components/dashboard/SiteSettingsForm";
 import { requireLocale } from "@/components/site/StaticShellPage";
@@ -37,7 +37,7 @@ export default async function SiteSettingsPage({ params, searchParams }: Props) 
   if (supabase === null) {
     return (
       <>
-        <SectionHeader locale={locale} titleKey="dashboard.siteSettings.heading" />
+        <DashboardModuleTitle locale={locale} titleKey="dashboard.siteSettings.heading" />
         <p>{translate(locale, "dashboard.siteSettings.errorWrite")}</p>
       </>
     );
@@ -47,7 +47,7 @@ export default async function SiteSettingsPage({ params, searchParams }: Props) 
 
   return (
     <>
-      <SectionHeader locale={locale} titleKey="dashboard.siteSettings.heading" />
+      <DashboardModuleTitle locale={locale} titleKey="dashboard.siteSettings.heading" />
       {row === null ? (
         <SiteSettingsCreateForm locale={locale} notice={notice} />
       ) : (

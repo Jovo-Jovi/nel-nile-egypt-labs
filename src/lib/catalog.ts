@@ -119,6 +119,10 @@ const ar = {
   "dashboard.siteSettings.errorWrite": "تعذّر الحفظ. حاول مرة أخرى.",
   "dashboard.siteSettings.errorCreate": "تعذّر إنشاء الصف. حاول مرة أخرى.",
   "dashboard.siteSettings.errorExists": "الصف موجود. أعد تحميل الصفحة.",
+  "dashboard.siteSettings.sectionContact": "التواصل",
+  "dashboard.siteSettings.sectionSocial": "حسابات التواصل",
+  "dashboard.siteSettings.sectionPageCopy": "نصوص الصفحات",
+  "dashboard.siteSettings.sectionSeo": "محركات البحث",
 
   // Programme detail chrome — P03-T08. Headings, labels, empty state,
   // tier axis. No LabTest name, panel membership or medical description.
@@ -617,6 +621,10 @@ const en = {
   "dashboard.siteSettings.errorWrite": "Save failed. Try again.",
   "dashboard.siteSettings.errorCreate": "Could not create the row. Try again.",
   "dashboard.siteSettings.errorExists": "The row already exists. Reload the page.",
+  "dashboard.siteSettings.sectionContact": "Contact",
+  "dashboard.siteSettings.sectionSocial": "Social",
+  "dashboard.siteSettings.sectionPageCopy": "Page copy",
+  "dashboard.siteSettings.sectionSeo": "SEO",
 
   // Programme detail chrome — P03-T08. Headings, labels, empty state,
   // tier axis. No LabTest name, panel membership or medical description.

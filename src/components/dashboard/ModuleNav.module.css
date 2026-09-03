@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--nel-space-8);
-  margin-block-end: var(--nel-space-24);
+  margin-block-end: var(--nel-space-32);
 }
 
 .link {
@@ -16,8 +16,17 @@
   font-weight: 500;
   letter-spacing: 0;
   border-radius: var(--nel-radius-sm);
-  border: 1px solid var(--nel-color-border);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
   background-color: var(--nel-color-surface);
+}
+
+.link[aria-current="page"] {
+  color: var(--nel-color-primary);
+  font-weight: 600;
+  background-color: var(--nel-color-background);
+  border-color: var(--nel-color-primary);
 }
 
 .link:focus-visible {

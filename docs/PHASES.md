@@ -169,7 +169,8 @@ in the project, and it should not be first.
 - [x] **P05-T01c-F** — Narrow the R3 exemption to the files that need it
 - [x] **P05-T01c-F2** — Define what a checked box means, and make the guard enforce it
 - [ ] the two real Operator accounts, created with their factors enrolled
-- [ ] **P05-T02** — Site Settings module
+- [x] **P05-T02** — Site Settings module
+- [ ] **P05-T04** — Compose the dashboard against the design system
 - [ ] Media Library module
 - [ ] Branches and LabUnits modules
 - [ ] Offers, Videos and Equipment modules

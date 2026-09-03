@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { pageMetadata } from "@/lib/pageMetadata";
 
@@ -12,5 +12,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DashboardHomePage({ params }: Props) {
   const locale = await requireLocale(params);
-  return <SectionHeader locale={locale} titleKey="dashboard.home.title" />;
+  return <DashboardModuleTitle locale={locale} titleKey="dashboard.home.title" />;
 }

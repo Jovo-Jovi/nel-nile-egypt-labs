@@ -175,6 +175,38 @@ patient document. No import of a contact list. No analytics, telemetry or event 
 If a client request implies one of these, it is refused and raised as an OD. This is the
 boundary gate, and it is not waivable (`BOUNDARY_MODEL.md`).
 
+### §4f Dashboard composition
+
+The dashboard is the same product as the public site seen from behind.
+It is denser, because an Operator works in it rather than reads it, but
+density is a spacing decision and not a licence to drop hierarchy.
+
+**Three type levels, not one.** A module page title takes
+`--nel-size-2xl` with `--nel-line-height-heading`. A section heading
+within a module takes `--nel-size-lg`. Labels and help text take
+`--nel-size-sm`. A page whose title is the same size as a field label
+has no hierarchy, and at P05-T02 the dashboard used only `sm` and `base`
+across every screen.
+
+**Fields are grouped into named sections, never listed flat.** Each
+section is a surface at elevation 1 with `--nel-radius-md`, carries a
+§10 section header, and is separated from its neighbours by
+`--nel-space-48`. Twenty-four controls in one column is a defect.
+
+**A bilingual pair is one field with two inputs**, laid out as a
+two-column grid with the language named once per section, not as two
+labelled fields repeated. It stacks to one column below the §5 breakpoint.
+
+**Actions are weighted by consequence.** The action that changes what a
+Visitor sees is the primary button. Save is secondary. Unpublish is
+separated from both and never adjacent to publish. Three identical
+buttons in a row make the consequential one indistinguishable.
+
+**The header is a sibling of the public header.** It carries `MarkSlot`,
+sits at elevation 1, and uses the same bar height. The active module is
+marked in the navigation, and a module's name is not printed twice on the
+same screen.
+
 ---
 
 ## §5 The eight modules
