@@ -1,10 +1,9 @@
 .root {
   isolation: isolate;
   position: relative;
-  block-size: 100vh;
+  min-block-size: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   background-color: var(--nel-color-background);
   color: var(--nel-color-text);
   line-height: var(--nel-line-height-body);

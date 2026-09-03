@@ -17,7 +17,12 @@ export function DashboardModuleTitle({
   locale: Locale;
   titleKey: CatalogKey;
 }) {
-  return <h1 className={styles.pageTitle}>{translate(locale, titleKey)}</h1>;
+  return (
+    <header className={styles.pageHeader}>
+      <p className={styles.eyebrow}>{translate(locale, "dashboard.module.eyebrow")}</p>
+      <h1 className={styles.pageTitle}>{translate(locale, titleKey)}</h1>
+    </header>
+  );
 }
 
 export function DashboardChrome({

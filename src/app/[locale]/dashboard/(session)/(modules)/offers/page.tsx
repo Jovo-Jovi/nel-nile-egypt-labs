@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
+import { PendingListingCards } from "@/components/dashboard/PendingListingCard";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { pageMetadata } from "@/lib/pageMetadata";
 
@@ -12,5 +13,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DashboardOffersPage({ params }: Props) {
   const locale = await requireLocale(params);
-  return <DashboardModuleTitle locale={locale} titleKey="dashboard.offers.heading" />;
+  return (
+    <>
+      <DashboardModuleTitle locale={locale} titleKey="dashboard.offers.heading" />
+      <PendingListingCards locale={locale} pendingLabelKey="dashboard.offers.pending" count={3} />
+    </>
+  );
 }

@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--nel-space-8);
-  margin-block-end: var(--nel-space-32);
+  margin-block-end: var(--nel-space-64);
 }
 
 .link {
