@@ -30,7 +30,7 @@ export default async function ChallengePage({ params, searchParams }: Props) {
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.challenge.title" />
-      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/challenge/submit")}>
+      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/challenge/submit")} data-nel-container="auth">
       <p className={formStyles.lede}>{translate(locale, "dashboard.challenge.instruction")}</p>
       {failed ? <p className={formStyles.error}>{translate(locale, "dashboard.challenge.failed")}</p> : null}
       <div className={formStyles.field}>

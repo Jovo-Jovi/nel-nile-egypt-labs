@@ -13,6 +13,7 @@ import styles from "./SiteHome.module.css";
 
 interface SiteHomeProps {
   locale: Locale;
+  whatsappHref: string | null;
 }
 
 const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
@@ -34,7 +35,7 @@ const VIDEO_ENTRIES = [
   { duration: "video.entry3.duration", title: "video.entry3.title" },
 ] as const;
 
-export function SiteHome({ locale }: SiteHomeProps) {
+export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
 
@@ -61,7 +62,18 @@ export function SiteHome({ locale }: SiteHomeProps) {
               <p className={styles.standfirst}>{translate(locale, "hero.standfirst")}</p>
               <div className={styles.actions}>
                 <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" pill />
-                <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappFilled" pill />
+                {whatsappHref ? (
+                  <WhatsAppAction
+                    label={translate(locale, "hero.whatsappAction")}
+                    variant="whatsappFilled"
+                    pill
+                    href={whatsappHref}
+                  />
+                ) : (
+                  <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData" dense>
+                    <span>{translate(locale, "hero.whatsappAction")}</span>
+                  </ApprovalGate>
+                )}
               </div>
             </div>
             <a className={styles.skip} href="#departments">
@@ -318,7 +330,18 @@ export function SiteHome({ locale }: SiteHomeProps) {
             <p className={styles.ctaPanelBody}>{translate(locale, "labToLab.ctaBody")}</p>
             <div className={styles.actions}>
               <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" pill />
-              <WhatsAppAction label={translate(locale, "hero.whatsappAction")} variant="whatsappFilled" pill />
+              {whatsappHref ? (
+                <WhatsAppAction
+                  label={translate(locale, "hero.whatsappAction")}
+                  variant="whatsappFilled"
+                  pill
+                  href={whatsappHref}
+                />
+              ) : (
+                <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData" dense>
+                  <span>{translate(locale, "hero.whatsappAction")}</span>
+                </ApprovalGate>
+              )}
             </div>
           </div>
         </div>

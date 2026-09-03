@@ -38,7 +38,7 @@ export async function POST(
     redirect(`${localeHref(locale, "/dashboard/challenge")}?error=1`);
   }
 
-  redirect(localeHref(locale, "/dashboard/offers"));
+  redirect(localeHref(locale, "/dashboard"));
 }
 
 export function GET() {

@@ -59,7 +59,7 @@ export default async function EnrolPage({ params, searchParams }: Props) {
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.enrol.title" />
-      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/enrol/submit")}>
+      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/enrol/submit")} data-nel-container="auth">
       <p className={formStyles.lede}>{translate(locale, "dashboard.enrol.instruction")}</p>
       {/* eslint-disable-next-line @next/next/no-img-element -- QR is a data-URL SVG from Auth, not a raster asset. */}
       <img className={formStyles.qr} src={qr} alt={translate(locale, "dashboard.enrol.qrAlt")} />

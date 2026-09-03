@@ -682,6 +682,7 @@ export function SiteSettingsForm({
       method="post"
       action={saveAction}
       onSubmit={onSubmit}
+      data-nel-container="settings"
       onInput={() => {
         if (flight?.phase === "saved") setFlight(null);
       }}

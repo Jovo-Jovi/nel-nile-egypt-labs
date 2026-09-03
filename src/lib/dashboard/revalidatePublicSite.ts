@@ -1,23 +1,42 @@
 import { revalidatePath } from "next/cache";
+import { LOCALES } from "@/lib/locale";
 
-// Public routes that read `"SiteSettings"`. A published change must be
-// visible without a redeploy — that is this module's purpose.
-const SITE_SETTINGS_PUBLIC_PATHS = [
-  "/ar",
-  "/en",
-  "/ar/about",
-  "/en/about",
-  "/ar/contact",
-  "/en/contact",
-  "/ar/lab-to-lab",
-  "/en/lab-to-lab",
-  "/ar/privacy-policy",
-  "/en/privacy-policy",
+// Public routes that render `"SiteSettings"` — body copy, SEO, contact,
+// AND chrome (header/footer). A published change must be visible without
+// a redeploy. Chrome sits in `(public)/layout.tsx` and therefore on every
+// public URL; a list that omitted locations and offers was the T12 defect.
+//
+// Layout revalidation of `/{locale}` is the sufficiency proof: it
+// invalidates the locale layout, the public layout beneath it, and every
+// nested page. The explicit page list documents the twelve static
+// patterns in both locales. The slug pattern covers Programme detail
+// URLs if any are ever emitted.
+const PUBLIC_PAGE_SUFFIXES = [
+  "",
+  "/about",
+  "/departments",
+  "/programmes",
+  "/offers",
+  "/videos",
+  "/equipment",
+  "/locations",
+  "/contact",
+  "/online-results",
+  "/privacy-policy",
+  "/lab-to-lab",
 ] as const;
 
+export const SITE_SETTINGS_PUBLIC_PATHS = LOCALES.flatMap((locale) =>
+  PUBLIC_PAGE_SUFFIXES.map((suffix) => `/${locale}${suffix}`),
+);
+
 export function revalidatePublicSite(): void {
-  for (const path of SITE_SETTINGS_PUBLIC_PATHS) {
-    revalidatePath(path);
+  for (const locale of LOCALES) {
+    revalidatePath(`/${locale}`, "layout");
+    for (const suffix of PUBLIC_PAGE_SUFFIXES) {
+      revalidatePath(`/${locale}${suffix}`);
+    }
+    revalidatePath(`/${locale}/programmes/[slug]`, "page");
   }
 }
 
