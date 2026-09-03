@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { Isolate } from "@/components/ui/Isolate";
+import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
@@ -56,9 +57,10 @@ export default async function EnrolPage({ params, searchParams }: Props) {
   const factorId = enrolled.data.id;
 
   return (
-    <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/enrol/submit")}>
-      <h1>{translate(locale, "dashboard.enrol.title")}</h1>
-      <p>{translate(locale, "dashboard.enrol.instruction")}</p>
+    <>
+      <DashboardModuleTitle locale={locale} titleKey="dashboard.enrol.title" />
+      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/enrol/submit")}>
+      <p className={formStyles.lede}>{translate(locale, "dashboard.enrol.instruction")}</p>
       {/* eslint-disable-next-line @next/next/no-img-element -- QR is a data-URL SVG from Auth, not a raster asset. */}
       <img className={formStyles.qr} src={qr} alt={translate(locale, "dashboard.enrol.qrAlt")} />
       <div className={formStyles.field}>
@@ -89,5 +91,6 @@ export default async function EnrolPage({ params, searchParams }: Props) {
         {translate(locale, "dashboard.enrol.submit")}
       </Button>
     </form>
+    </>
   );
 }

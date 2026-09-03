@@ -1,8 +1,9 @@
-// Operator read/write for `"Branch"` and `"LabUnit"`.
-// Not a second REST helper: public pages keep using fetchAnonPublishedJson,
-// which still appends publication_state=eq.published where a caller cannot
-// omit it (PR-08). This module uses the existing SSR client so an Operator
-// can see draft rows. It is imported only from aal2-gated dashboard files.
+// Operator read/write for `"Branch"`, `"LabUnit"`, `"Offer"`, `"Video"`
+// and `"Equipment"`. Not a second REST helper: public pages keep using
+// fetchAnonPublishedJson, which still appends publication_state=eq.published
+// where a caller cannot omit it (PR-08). This module uses the existing SSR
+// client so an Operator can see draft rows. It is imported only from
+// aal2-gated dashboard files.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Locale } from "@/lib/locale";
@@ -15,6 +16,10 @@ export const UUID_PATTERN =
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const INTEGER_PATTERN = /^-?\d+$/;
 const DECIMAL_PATTERN = /^-?\d+(?:\.\d+)?$/;
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const AMOUNT_PATTERN = /^-?\d+(?:\.\d{1,2})?$/;
+const CURRENCY_PATTERN = /^[A-Za-z]{3}$/;
+const HOST_ID_PATTERN = /^[A-Za-z0-9_-]{11}$/;
 
 export type BranchRow = {
   id: string;
@@ -43,6 +48,47 @@ export type LabUnitRow = {
   display_order: number;
 };
 
+export type OfferRow = {
+  id: string;
+  title_ar: string | null;
+  title_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  valid_from: string | null;
+  valid_until: string | null;
+  price_amount: string | null;
+  price_currency: string | null;
+  MediaAsset: string | null;
+  Programme: string | null;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
+export type VideoRow = {
+  id: string;
+  youtube_id: string | null;
+  title_ar: string | null;
+  title_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  is_featured: boolean;
+  MediaAsset: string | null;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
+export type EquipmentRow = {
+  id: string;
+  name_ar: string | null;
+  name_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  MediaAsset: string | null;
+  Video: string | null;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
 export type CatalogWriteReason =
   | "bilingual"
   | "slug"
@@ -54,7 +100,12 @@ export type CatalogWriteReason =
   | "confirm"
   | "missing"
   | "write"
-  | "create";
+  | "create"
+  | "dates"
+  | "amount"
+  | "currency"
+  | "reference"
+  | "hostId";
 
 export type CatalogNotice = "saved" | CatalogWriteReason | null;
 
@@ -78,6 +129,41 @@ export const LAB_UNIT_FORM_COLUMNS = {
   name_en: "name_en",
   description_ar: "description_ar",
   description_en: "description_en",
+  display_order: "display_order",
+} as const;
+
+export const OFFER_FORM_COLUMNS = {
+  title_ar: "title_ar",
+  title_en: "title_en",
+  description_ar: "description_ar",
+  description_en: "description_en",
+  valid_from: "valid_from",
+  valid_until: "valid_until",
+  price_amount: "price_amount",
+  price_currency: "price_currency",
+  MediaAsset: "MediaAsset",
+  Programme: "Programme",
+  display_order: "display_order",
+} as const;
+
+export const VIDEO_FORM_COLUMNS = {
+  youtube_id: "youtube_id",
+  title_ar: "title_ar",
+  title_en: "title_en",
+  description_ar: "description_ar",
+  description_en: "description_en",
+  is_featured: "is_featured",
+  MediaAsset: "MediaAsset",
+  display_order: "display_order",
+} as const;
+
+export const EQUIPMENT_FORM_COLUMNS = {
+  name_ar: "name_ar",
+  name_en: "name_en",
+  description_ar: "description_ar",
+  description_en: "description_en",
+  MediaAsset: "MediaAsset",
+  Video: "Video",
   display_order: "display_order",
 } as const;
 
@@ -366,7 +452,10 @@ function nowIso(): string {
   return new Date().toISOString();
 }
 
-function uniqueReason(message: string | undefined, entity: "Branch" | "LabUnit"): CatalogWriteReason {
+function uniqueReason(
+  message: string | undefined,
+  entity: "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment",
+): CatalogWriteReason {
   const text = message ?? "";
   if (entity === "LabUnit" && text.includes("LabUnit") && text.toLowerCase().includes("slug")) {
     return "slugTaken";
@@ -378,7 +467,12 @@ function uniqueReason(message: string | undefined, entity: "Branch" | "LabUnit")
   return "write";
 }
 
-function writeReason(code: string | undefined, message: string | undefined, entity: "Branch" | "LabUnit"): CatalogWriteReason {
+function writeReason(
+  code: string | undefined,
+  message: string | undefined,
+  entity: "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment",
+): CatalogWriteReason {
+  if (code === "23514") return "dates";
   if (code === "23503") return "held";
   if (code === "23505") return uniqueReason(message, entity);
   return uniqueReason(message, entity) === "write" ? "write" : uniqueReason(message, entity);
@@ -478,11 +572,20 @@ export async function writeLabUnitRow(
 
 export function confirmToken(
   locale: Locale,
-  row: { id: string; name_ar: string | null; name_en: string | null; slug?: string },
+  row: {
+    id: string;
+    name_ar?: string | null;
+    name_en?: string | null;
+    title_ar?: string | null;
+    title_en?: string | null;
+    slug?: string;
+  },
 ): string {
-  const localized = locale === "ar" ? row.name_ar : row.name_en;
+  const nameAr = row.name_ar ?? row.title_ar ?? null;
+  const nameEn = row.name_en ?? row.title_en ?? null;
+  const localized = locale === "ar" ? nameAr : nameEn;
   if (localized !== null && localized.length > 0) return localized;
-  const other = locale === "ar" ? row.name_en : row.name_ar;
+  const other = locale === "ar" ? nameEn : nameAr;
   if (other !== null && other.length > 0) return other;
   if (typeof row.slug === "string" && row.slug.length > 0) return row.slug;
   return row.id;
@@ -534,10 +637,534 @@ export function noticeFromQuery(query: { error?: string; saved?: string }): Cata
     error === "confirm" ||
     error === "missing" ||
     error === "write" ||
-    error === "create"
+    error === "create" ||
+    error === "dates" ||
+    error === "amount" ||
+    error === "currency" ||
+    error === "reference" ||
+    error === "hostId"
   ) {
     return error;
   }
   if (error !== undefined && error.length > 0) return "write";
   return null;
+}
+
+const OFFER_SELECT = [
+  "id",
+  "title_ar",
+  "title_en",
+  "description_ar",
+  "description_en",
+  "valid_from",
+  "valid_until",
+  "price_amount",
+  "price_currency",
+  "MediaAsset",
+  "Programme",
+  "publication_state",
+  "display_order",
+].join(",");
+
+const VIDEO_SELECT = [
+  "id",
+  "youtube_id",
+  "title_ar",
+  "title_en",
+  "description_ar",
+  "description_en",
+  "is_featured",
+  "MediaAsset",
+  "publication_state",
+  "display_order",
+].join(",");
+
+const EQUIPMENT_SELECT = [
+  "id",
+  "name_ar",
+  "name_en",
+  "description_ar",
+  "description_en",
+  "MediaAsset",
+  "Video",
+  "publication_state",
+  "display_order",
+].join(",");
+
+const OFFER_BILINGUAL_PAIRS = [
+  ["title_ar", "title_en"],
+  ["description_ar", "description_en"],
+] as const;
+
+const VIDEO_BILINGUAL_PAIRS = [
+  ["title_ar", "title_en"],
+  ["description_ar", "description_en"],
+] as const;
+
+const EQUIPMENT_BILINGUAL_PAIRS = [
+  ["name_ar", "name_en"],
+  ["description_ar", "description_en"],
+] as const;
+
+function asDateText(value: unknown): string | null {
+  const text = asOptionalText(value);
+  if (text === null) return null;
+  return text.slice(0, 10);
+}
+
+function asAmountText(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value === "string" && value.length > 0) return value;
+  return null;
+}
+
+function parseIsoDate(raw: string | null): string | null | "invalid" {
+  if (raw === null) return null;
+  if (!DATE_PATTERN.test(raw)) return "invalid";
+  return raw;
+}
+
+function parseAmount(raw: string | null): string | null | "invalid" {
+  if (raw === null) return null;
+  if (!AMOUNT_PATTERN.test(raw)) return "invalid";
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed)) return "invalid";
+  return raw;
+}
+
+function parseCurrencyCode(raw: string | null): string | null | "invalid" {
+  if (raw === null) return null;
+  if (!CURRENCY_PATTERN.test(raw)) return "invalid";
+  return raw;
+}
+
+function parseHostId(raw: string | null): string | null | "invalid" {
+  if (raw === null) return null;
+  if (!HOST_ID_PATTERN.test(raw)) return "invalid";
+  return raw;
+}
+
+function parseOptionalRowId(raw: string | null): string | null | "invalid" {
+  if (raw === null) return null;
+  if (!isRowId(raw)) return "invalid";
+  return raw;
+}
+
+export function parseOfferRow(value: unknown): OfferRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const publication_state = asPublicationState(row.publication_state);
+  if (id === null || publication_state === null) return null;
+  const media = row.MediaAsset === null || row.MediaAsset === undefined ? null : asId(row.MediaAsset);
+  const programme = row.Programme === null || row.Programme === undefined ? null : asId(row.Programme);
+  if (row.MediaAsset !== null && row.MediaAsset !== undefined && media === null) return null;
+  if (row.Programme !== null && row.Programme !== undefined && programme === null) return null;
+  return {
+    id,
+    title_ar: asOptionalText(row.title_ar),
+    title_en: asOptionalText(row.title_en),
+    description_ar: asOptionalText(row.description_ar),
+    description_en: asOptionalText(row.description_en),
+    valid_from: asDateText(row.valid_from),
+    valid_until: asDateText(row.valid_until),
+    price_amount: asAmountText(row.price_amount),
+    price_currency: asOptionalText(row.price_currency),
+    MediaAsset: media,
+    Programme: programme,
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export function parseVideoRow(value: unknown): VideoRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const publication_state = asPublicationState(row.publication_state);
+  if (id === null || publication_state === null) return null;
+  const media = row.MediaAsset === null || row.MediaAsset === undefined ? null : asId(row.MediaAsset);
+  if (row.MediaAsset !== null && row.MediaAsset !== undefined && media === null) return null;
+  return {
+    id,
+    youtube_id: asOptionalText(row.youtube_id),
+    title_ar: asOptionalText(row.title_ar),
+    title_en: asOptionalText(row.title_en),
+    description_ar: asOptionalText(row.description_ar),
+    description_en: asOptionalText(row.description_en),
+    is_featured: asBoolean(row.is_featured),
+    MediaAsset: media,
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export function parseEquipmentRow(value: unknown): EquipmentRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const publication_state = asPublicationState(row.publication_state);
+  if (id === null || publication_state === null) return null;
+  const media = row.MediaAsset === null || row.MediaAsset === undefined ? null : asId(row.MediaAsset);
+  const video = row.Video === null || row.Video === undefined ? null : asId(row.Video);
+  if (row.MediaAsset !== null && row.MediaAsset !== undefined && media === null) return null;
+  if (row.Video !== null && row.Video !== undefined && video === null) return null;
+  return {
+    id,
+    name_ar: asOptionalText(row.name_ar),
+    name_en: asOptionalText(row.name_en),
+    description_ar: asOptionalText(row.description_ar),
+    description_en: asOptionalText(row.description_en),
+    MediaAsset: media,
+    Video: video,
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export async function listOfferRows(supabase: SupabaseClient): Promise<OfferRow[]> {
+  const { data, error } = await supabase
+    .from("Offer")
+    .select(OFFER_SELECT)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseOfferRow);
+}
+
+export async function listVideoRows(supabase: SupabaseClient): Promise<VideoRow[]> {
+  const { data, error } = await supabase
+    .from("Video")
+    .select(VIDEO_SELECT)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseVideoRow);
+}
+
+export async function listEquipmentRows(supabase: SupabaseClient): Promise<EquipmentRow[]> {
+  const { data, error } = await supabase
+    .from("Equipment")
+    .select(EQUIPMENT_SELECT)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseEquipmentRow);
+}
+
+export async function readOfferRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<OfferRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase.from("Offer").select(OFFER_SELECT).eq("id", rowId).maybeSingle();
+  if (error || data === null) return null;
+  return parseOfferRow(data);
+}
+
+export async function readVideoRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<VideoRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase.from("Video").select(VIDEO_SELECT).eq("id", rowId).maybeSingle();
+  if (error || data === null) return null;
+  return parseVideoRow(data);
+}
+
+export async function readEquipmentRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<EquipmentRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase.from("Equipment").select(EQUIPMENT_SELECT).eq("id", rowId).maybeSingle();
+  if (error || data === null) return null;
+  return parseEquipmentRow(data);
+}
+
+export type OfferWriteColumns = {
+  title_ar: string | null;
+  title_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  valid_from: string | null;
+  valid_until: string | null;
+  price_amount: string | null;
+  price_currency: string | null;
+  MediaAsset: string | null;
+  Programme: string | null;
+  display_order: number;
+};
+
+export type VideoWriteColumns = {
+  youtube_id: string | null;
+  title_ar: string | null;
+  title_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  is_featured: boolean;
+  MediaAsset: string | null;
+  display_order: number;
+};
+
+export type EquipmentWriteColumns = {
+  name_ar: string | null;
+  name_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  MediaAsset: string | null;
+  Video: string | null;
+  display_order: number;
+};
+
+export function parseOfferWrite(form: FormData, requireBilingual: boolean): ParseResult<OfferWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const valid_from = parseIsoDate(emptyToNull(form.get("valid_from")));
+  const valid_until = parseIsoDate(emptyToNull(form.get("valid_until")));
+  if (valid_from === "invalid" || valid_until === "invalid") return { ok: false, reason: "dates" };
+  if (valid_from !== null && valid_until !== null && valid_until < valid_from) {
+    return { ok: false, reason: "dates" };
+  }
+
+  const price_amount = parseAmount(emptyToNull(form.get("price_amount")));
+  if (price_amount === "invalid") return { ok: false, reason: "amount" };
+
+  const price_currency = parseCurrencyCode(emptyToNull(form.get("price_currency")));
+  if (price_currency === "invalid") return { ok: false, reason: "currency" };
+
+  const MediaAsset = parseOptionalRowId(emptyToNull(form.get("MediaAsset")));
+  const Programme = parseOptionalRowId(emptyToNull(form.get("Programme")));
+  if (MediaAsset === "invalid" || Programme === "invalid") return { ok: false, reason: "reference" };
+
+  const columns: OfferWriteColumns = {
+    title_ar: emptyToNull(form.get("title_ar")),
+    title_en: emptyToNull(form.get("title_en")),
+    description_ar: emptyToNull(form.get("description_ar")),
+    description_en: emptyToNull(form.get("description_en")),
+    valid_from,
+    valid_until,
+    price_amount,
+    price_currency,
+    MediaAsset,
+    Programme,
+    display_order,
+  };
+
+  if (requireBilingual) {
+    for (const [arField, enField] of OFFER_BILINGUAL_PAIRS) {
+      if (columns[arField] === null || columns[enField] === null) {
+        return { ok: false, reason: "bilingual" };
+      }
+    }
+  }
+  return { ok: true, columns };
+}
+
+export function parseVideoWrite(form: FormData, requireBilingual: boolean): ParseResult<VideoWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const youtube_id = parseHostId(emptyToNull(form.get("youtube_id")));
+  if (youtube_id === "invalid") return { ok: false, reason: "hostId" };
+
+  const MediaAsset = parseOptionalRowId(emptyToNull(form.get("MediaAsset")));
+  if (MediaAsset === "invalid") return { ok: false, reason: "reference" };
+
+  const columns: VideoWriteColumns = {
+    youtube_id,
+    title_ar: emptyToNull(form.get("title_ar")),
+    title_en: emptyToNull(form.get("title_en")),
+    description_ar: emptyToNull(form.get("description_ar")),
+    description_en: emptyToNull(form.get("description_en")),
+    is_featured: form.get("is_featured") === "true",
+    MediaAsset,
+    display_order,
+  };
+
+  if (requireBilingual) {
+    for (const [arField, enField] of VIDEO_BILINGUAL_PAIRS) {
+      if (columns[arField] === null || columns[enField] === null) {
+        return { ok: false, reason: "bilingual" };
+      }
+    }
+  }
+  return { ok: true, columns };
+}
+
+export function parseEquipmentWrite(
+  form: FormData,
+  requireBilingual: boolean,
+): ParseResult<EquipmentWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const MediaAsset = parseOptionalRowId(emptyToNull(form.get("MediaAsset")));
+  const Video = parseOptionalRowId(emptyToNull(form.get("Video")));
+  if (MediaAsset === "invalid" || Video === "invalid") return { ok: false, reason: "reference" };
+
+  const columns: EquipmentWriteColumns = {
+    name_ar: emptyToNull(form.get("name_ar")),
+    name_en: emptyToNull(form.get("name_en")),
+    description_ar: emptyToNull(form.get("description_ar")),
+    description_en: emptyToNull(form.get("description_en")),
+    MediaAsset,
+    Video,
+    display_order,
+  };
+
+  if (requireBilingual) {
+    for (const [arField, enField] of EQUIPMENT_BILINGUAL_PAIRS) {
+      if (columns[arField] === null || columns[enField] === null) {
+        return { ok: false, reason: "bilingual" };
+      }
+    }
+  }
+  return { ok: true, columns };
+}
+
+export async function createOfferRow(
+  supabase: SupabaseClient,
+  columns: OfferWriteColumns,
+): Promise<{ ok: true; id: string } | { ok: false; reason: CatalogWriteReason }> {
+  const { data, error } = await supabase
+    .from("Offer")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Offer") };
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function createVideoRow(
+  supabase: SupabaseClient,
+  columns: VideoWriteColumns,
+): Promise<{ ok: true; id: string } | { ok: false; reason: CatalogWriteReason }> {
+  const { data, error } = await supabase
+    .from("Video")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Video") };
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function createEquipmentRow(
+  supabase: SupabaseClient,
+  columns: EquipmentWriteColumns,
+): Promise<{ ok: true; id: string } | { ok: false; reason: CatalogWriteReason }> {
+  const { data, error } = await supabase
+    .from("Equipment")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Equipment") };
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function writeOfferRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: OfferWriteColumns,
+  publicationState: PublicationState,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase
+    .from("Offer")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Offer") };
+  return { ok: true };
+}
+
+export async function writeVideoRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: VideoWriteColumns,
+  publicationState: PublicationState,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase
+    .from("Video")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Video") };
+  return { ok: true };
+}
+
+export async function writeEquipmentRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: EquipmentWriteColumns,
+  publicationState: PublicationState,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase
+    .from("Equipment")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Equipment") };
+  return { ok: true };
+}
+
+export async function deleteOfferRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase.from("Offer").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Offer") };
+  const remaining = await readOfferRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
+}
+
+export async function deleteVideoRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const held = await supabase.from("Equipment").select("id").eq("Video", rowId).limit(1);
+  if (held.error) return { ok: false, reason: "write" };
+  if (Array.isArray(held.data) && held.data.length > 0) return { ok: false, reason: "held" };
+  const { error } = await supabase.from("Video").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Video") };
+  const remaining = await readVideoRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
+}
+
+export async function deleteEquipmentRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase.from("Equipment").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Equipment") };
+  const remaining = await readEquipmentRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
 }

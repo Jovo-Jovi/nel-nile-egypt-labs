@@ -37,7 +37,12 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "confirm" ||
     error === "missing" ||
     error === "write" ||
-    error === "create"
+    error === "create" ||
+    error === "dates" ||
+    error === "amount" ||
+    error === "currency" ||
+    error === "reference" ||
+    error === "hostId"
   ) {
     return error;
   }
@@ -72,6 +77,11 @@ function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "coordinate") return "dashboard.catalog.errorCoordinate";
   if (notice === "confirm") return "dashboard.catalog.errorConfirm";
   if (notice === "order") return "dashboard.catalog.errorOrder";
+  if (notice === "dates") return "dashboard.catalog.errorDates";
+  if (notice === "amount") return "dashboard.catalog.errorAmount";
+  if (notice === "currency") return "dashboard.catalog.errorCurrency";
+  if (notice === "reference") return "dashboard.catalog.errorReference";
+  if (notice === "hostId") return "dashboard.catalog.errorHostId";
   return "dashboard.catalog.errorWrite";
 }
 

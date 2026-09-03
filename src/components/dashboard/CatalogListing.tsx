@@ -21,7 +21,7 @@ export function CatalogRowList({
 }: {
   locale: Locale;
   rows: CatalogListRow[];
-  editPrefix: "/dashboard/branches" | "/dashboard/lab-units";
+  editPrefix: "/dashboard/branches" | "/dashboard/lab-units" | "/dashboard/offers" | "/dashboard/videos" | "/dashboard/equipment";
 }) {
   return (
     <ul className={styles.list}>
