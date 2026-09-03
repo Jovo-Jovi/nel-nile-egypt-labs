@@ -21,7 +21,13 @@ export function CatalogRowList({
 }: {
   locale: Locale;
   rows: CatalogListRow[];
-  editPrefix: "/dashboard/branches" | "/dashboard/lab-units" | "/dashboard/offers" | "/dashboard/videos" | "/dashboard/equipment";
+  editPrefix:
+    | "/dashboard/branches"
+    | "/dashboard/lab-units"
+    | "/dashboard/offers"
+    | "/dashboard/videos"
+    | "/dashboard/equipment"
+    | "/dashboard/media-assets";
 }) {
   return (
     <ul className={styles.list}>

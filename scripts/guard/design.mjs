@@ -28,7 +28,10 @@
 //       src/components/dashboard/VideoForm.tsx and
 //       src/components/dashboard/EquipmentForm.tsx, were granted at P05-T09
 //       for Operator forms behind aal2 writing only to named columns. Three
-//       form files, no directory, no pattern. A path is exempt only when it
+//       form files, no directory, no pattern. An eleventh path,
+//       src/components/dashboard/MediaAssetForm.tsx, was granted at P05-T10
+//       for an Operator form behind aal2 writing only to named columns.
+//       One form file, no directory, no pattern. A path is exempt only when it
 //       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
 //       Adding a path is a boundary decision requiring a reviewer verdict,
 //       never a builder's call.
@@ -61,7 +64,9 @@ const ALLOWED_HEX = /^#25D366$/i;
 // a boundary decision requiring a reviewer verdict (P05-T01c-F; P05-T02 added
 // SiteSettingsForm.tsx only; P05-T08 added BranchForm.tsx and LabUnitForm.tsx
 // as two exact paths; P05-T09 added OfferForm.tsx, VideoForm.tsx and
-// EquipmentForm.tsx as three exact paths, no directory, no pattern).
+// EquipmentForm.tsx as three exact paths, no directory, no pattern;
+// P05-T10 added MediaAssetForm.tsx as one exact path, no directory, no
+// pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
@@ -73,6 +78,7 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/OfferForm.tsx",
   "src/components/dashboard/VideoForm.tsx",
   "src/components/dashboard/EquipmentForm.tsx",
+  "src/components/dashboard/MediaAssetForm.tsx",
 ]);
 
 const CSS = new Set([".css"]);

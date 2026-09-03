@@ -10,7 +10,9 @@ import {
   type CatalogNotice,
   type OfferRow,
 } from "@/lib/dashboard/catalogEntities";
+import type { MediaAssetOption } from "@/lib/dashboard/mediaAsset";
 import { localeHref } from "@/lib/locale";
+import { MediaAssetPicker } from "./MediaAssetForm";
 import {
   ActionSlot,
   ActionStatus,
@@ -33,7 +35,7 @@ import site from "./SiteSettingsForm.module.css";
 // valid_until → valid_until
 // price_amount → price_amount
 // price_currency → price_currency
-// MediaAsset → MediaAsset
+// MediaAsset → MediaAsset (picker over existing rows)
 // Programme → Programme
 // display_order → display_order
 // Publish / unpublish write publication_state.
@@ -217,10 +219,12 @@ export function OfferForm({
   locale,
   row,
   notice,
+  assets,
 }: {
   locale: Locale;
   row: OfferRow | null;
   notice: CatalogNotice;
+  assets: MediaAssetOption[];
 }) {
   const { flight, setFlight, clientNotice, showQueryNotice, onSubmit } = useCatalogFormFlight();
   const isCreate = row === null;
@@ -312,15 +316,7 @@ export function OfferForm({
         </CatalogSection>
 
         <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
-          <TextField
-            locale={locale}
-            name="MediaAsset"
-            labelKey="dashboard.offers.mediaAsset"
-            defaultValue={row?.MediaAsset ?? null}
-          />
-          <p className={extra.help}>
-            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.mediaAssetTemporary")} />
-          </p>
+          <MediaAssetPicker locale={locale} assets={assets} selectedId={row?.MediaAsset ?? null} />
           <TextField
             locale={locale}
             name="Programme"

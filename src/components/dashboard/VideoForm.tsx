@@ -10,7 +10,9 @@ import {
   type CatalogNotice,
   type VideoRow,
 } from "@/lib/dashboard/catalogEntities";
+import type { MediaAssetOption } from "@/lib/dashboard/mediaAsset";
 import { localeHref } from "@/lib/locale";
+import { MediaAssetPicker } from "./MediaAssetForm";
 import {
   ActionSlot,
   ActionStatus,
@@ -31,15 +33,14 @@ import site from "./SiteSettingsForm.module.css";
 // description_ar → description_ar
 // description_en → description_en
 // is_featured → is_featured
-// MediaAsset → MediaAsset
+// MediaAsset → MediaAsset (picker over existing rows; the poster, D-13)
 // display_order → display_order
 // Publish / unpublish write publication_state.
 // row_id identifies `"Video".id` and is not assigned on create.
 // confirm_name is not a column: typed confirmation per ADMIN_SPEC.md §4d,
 // compared then discarded.
 // The poster is a MediaAsset reference, never a host thumbnail URL, and no
-// embed is rendered in the dashboard (D-13). The MediaAsset field is temporary
-// until the Media Library exists.
+// embed is rendered in the dashboard (D-13).
 // No field accepts a Visitor or patient name, phone, email, address, date of birth
 // or identifier.
 void VIDEO_FORM_COLUMNS;
@@ -213,10 +214,12 @@ export function VideoForm({
   locale,
   row,
   notice,
+  assets,
 }: {
   locale: Locale;
   row: VideoRow | null;
   notice: CatalogNotice;
+  assets: MediaAssetOption[];
 }) {
   const { flight, setFlight, clientNotice, showQueryNotice, onSubmit } = useCatalogFormFlight();
   const isCreate = row === null;
@@ -284,15 +287,12 @@ export function VideoForm({
         </CatalogSection>
 
         <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
-          <TextField
+          <MediaAssetPicker
             locale={locale}
-            name="MediaAsset"
-            labelKey="dashboard.videos.mediaAsset"
-            defaultValue={row?.MediaAsset ?? null}
+            assets={assets}
+            selectedId={row?.MediaAsset ?? null}
+            helpKey="dashboard.videos.posterHelp"
           />
-          <p className={extra.help}>
-            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.mediaAssetTemporary")} />
-          </p>
           <div className={site.field}>
             <div className={extra.checkRow}>
               <input

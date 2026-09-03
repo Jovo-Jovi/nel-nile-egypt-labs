@@ -7,6 +7,7 @@ import { PendingListingCards } from "@/components/dashboard/PendingListingCard";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { listVideoRows } from "@/lib/dashboard/catalogEntities";
+import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
@@ -35,7 +36,7 @@ export default async function VideosPage({ params, searchParams }: Props) {
     );
   }
 
-  const rows = await listVideoRows(supabase);
+  const [rows, assets] = await Promise.all([listVideoRows(supabase), listMediaAssetOptions(supabase)]);
 
   return (
     <>
@@ -56,7 +57,7 @@ export default async function VideosPage({ params, searchParams }: Props) {
             editPrefix="/dashboard/videos"
           />
         )}
-        <VideoForm locale={locale} row={null} notice={notice} />
+        <VideoForm locale={locale} row={null} notice={notice} assets={assets} />
       </div>
     </>
   );

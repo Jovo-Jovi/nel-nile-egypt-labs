@@ -5,6 +5,7 @@ import { OfferForm } from "@/components/dashboard/OfferForm";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { isRowId, readOfferRow } from "@/lib/dashboard/catalogEntities";
+import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
@@ -38,11 +39,12 @@ export default async function OfferEditPage({ params, searchParams }: Props) {
 
   const row = await readOfferRow(supabase, resolved.id);
   if (row === null) notFound();
+  const assets = await listMediaAssetOptions(supabase);
 
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.offers.heading" />
-      <OfferForm locale={locale} row={row} notice={notice} />
+      <OfferForm locale={locale} row={row} notice={notice} assets={assets} />
     </>
   );
 }

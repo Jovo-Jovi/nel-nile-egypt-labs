@@ -7,6 +7,7 @@ import { PendingListingCards } from "@/components/dashboard/PendingListingCard";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { listOfferRows } from "@/lib/dashboard/catalogEntities";
+import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
@@ -35,7 +36,7 @@ export default async function OffersPage({ params, searchParams }: Props) {
     );
   }
 
-  const rows = await listOfferRows(supabase);
+  const [rows, assets] = await Promise.all([listOfferRows(supabase), listMediaAssetOptions(supabase)]);
 
   return (
     <>
@@ -56,7 +57,7 @@ export default async function OffersPage({ params, searchParams }: Props) {
             editPrefix="/dashboard/offers"
           />
         )}
-        <OfferForm locale={locale} row={null} notice={notice} />
+        <OfferForm locale={locale} row={null} notice={notice} assets={assets} />
       </div>
     </>
   );
