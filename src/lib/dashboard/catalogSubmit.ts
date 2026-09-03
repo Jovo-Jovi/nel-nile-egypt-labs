@@ -33,6 +33,7 @@ import {
   type CatalogWriteReason,
   type PublicationState,
 } from "@/lib/dashboard/catalogEntities";
+import { checkMediaAssetAttach } from "@/lib/dashboard/mediaAsset";
 import { gateModuleRoute } from "@/lib/dashboard/gates";
 import {
   revalidatePublishedBranches,
@@ -123,6 +124,8 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (entity === "Offer") {
         const parsed = parseOfferWrite(form, false);
         if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+        const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
+        if (attach !== null) toList(locale, errorQuery(attach));
         const created = await createOfferRow(supabase, parsed.columns);
         if (!created.ok) toList(locale, errorQuery(created.reason));
         revalidate();
@@ -131,6 +134,8 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (entity === "Video") {
         const parsed = parseVideoWrite(form, false);
         if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+        const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
+        if (attach !== null) toList(locale, errorQuery(attach));
         const created = await createVideoRow(supabase, parsed.columns);
         if (!created.ok) toList(locale, errorQuery(created.reason));
         revalidate();
@@ -138,6 +143,8 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       }
       const parsed = parseEquipmentWrite(form, false);
       if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+      const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
+      if (attach !== null) toList(locale, errorQuery(attach));
       const created = await createEquipmentRow(supabase, parsed.columns);
       if (!created.ok) toList(locale, errorQuery(created.reason));
       revalidate();
@@ -209,6 +216,12 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseOfferWrite(form, nextState === "published");
       if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+      const attach = await checkMediaAssetAttach(
+        supabase,
+        parsed.columns.MediaAsset,
+        nextState === "published",
+      );
+      if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
       const written = await writeOfferRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
       revalidate();
@@ -231,6 +244,12 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseVideoWrite(form, nextState === "published");
       if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+      const attach = await checkMediaAssetAttach(
+        supabase,
+        parsed.columns.MediaAsset,
+        nextState === "published",
+      );
+      if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
       const written = await writeVideoRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
       revalidate();
@@ -252,6 +271,12 @@ function catalogWriteHandlers(entity: CatalogEntity) {
     if (params.action === "unpublish") nextState = "draft";
     const parsed = parseEquipmentWrite(form, nextState === "published");
     if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+    const attach = await checkMediaAssetAttach(
+      supabase,
+      parsed.columns.MediaAsset,
+      nextState === "published",
+    );
+    if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
     const written = await writeEquipmentRow(supabase, rowId, parsed.columns, nextState);
     if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
     revalidate();

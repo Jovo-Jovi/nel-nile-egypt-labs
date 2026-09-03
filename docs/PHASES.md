@@ -174,9 +174,9 @@ in the project, and it should not be first.
 - [ ] **P05-T05** — Restore the §9 page wash, and put it behind the dashboard too
 - [x] **P05-T06** — Restore the hex lattice and reconcile §9 with what was approved
 - [x] **P05-T07** — Fix the dashboard scroll, then feedback states
-- [ ] Media Library module
+- [ ] **P05-T10** — Media Library module, bucket authored unapplied
 - [x] **P05-T08** — Branches and LabUnits modules
-- [ ] **P05-T09** — Offers, Videos and Equipment modules
+- [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
 - [ ] **G5** — the owner can edit every unlocked region himself
 

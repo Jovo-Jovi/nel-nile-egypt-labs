@@ -10,7 +10,9 @@ import {
   type CatalogNotice,
   type EquipmentRow,
 } from "@/lib/dashboard/catalogEntities";
+import type { MediaAssetOption } from "@/lib/dashboard/mediaAsset";
 import { localeHref } from "@/lib/locale";
+import { MediaAssetPicker } from "./MediaAssetForm";
 import {
   ActionSlot,
   ActionStatus,
@@ -29,15 +31,14 @@ import site from "./SiteSettingsForm.module.css";
 // name_en → name_en
 // description_ar → description_ar
 // description_en → description_en
-// MediaAsset → MediaAsset
+// MediaAsset → MediaAsset (picker over existing rows)
 // Video → Video
 // display_order → display_order
 // Publish / unpublish write publication_state.
 // row_id identifies `"Equipment".id` and is not assigned on create.
 // confirm_name is not a column: typed confirmation per ADMIN_SPEC.md §4d,
 // compared then discarded.
-// MediaAsset and Video are optional. The MediaAsset field is temporary until
-// the Media Library exists.
+// MediaAsset and Video are optional.
 // No field accepts a Visitor or patient name, phone, email, address, date of birth
 // or identifier.
 void EQUIPMENT_FORM_COLUMNS;
@@ -211,10 +212,12 @@ export function EquipmentForm({
   locale,
   row,
   notice,
+  assets,
 }: {
   locale: Locale;
   row: EquipmentRow | null;
   notice: CatalogNotice;
+  assets: MediaAssetOption[];
 }) {
   const { flight, setFlight, clientNotice, showQueryNotice, onSubmit } = useCatalogFormFlight();
   const isCreate = row === null;
@@ -270,15 +273,7 @@ export function EquipmentForm({
         </CatalogSection>
 
         <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
-          <TextField
-            locale={locale}
-            name="MediaAsset"
-            labelKey="dashboard.equipment.mediaAsset"
-            defaultValue={row?.MediaAsset ?? null}
-          />
-          <p className={extra.help}>
-            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.mediaAssetTemporary")} />
-          </p>
+          <MediaAssetPicker locale={locale} assets={assets} selectedId={row?.MediaAsset ?? null} />
           <TextField
             locale={locale}
             name="Video"

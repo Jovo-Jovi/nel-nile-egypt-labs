@@ -105,7 +105,10 @@ export type CatalogWriteReason =
   | "amount"
   | "currency"
   | "reference"
-  | "hostId";
+  | "hostId"
+  | "bucket"
+  | "alt"
+  | "file";
 
 export type CatalogNotice = "saved" | CatalogWriteReason | null;
 
@@ -642,7 +645,10 @@ export function noticeFromQuery(query: { error?: string; saved?: string }): Cata
     error === "amount" ||
     error === "currency" ||
     error === "reference" ||
-    error === "hostId"
+    error === "hostId" ||
+    error === "bucket" ||
+    error === "alt" ||
+    error === "file"
   ) {
     return error;
   }

@@ -42,7 +42,10 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "amount" ||
     error === "currency" ||
     error === "reference" ||
-    error === "hostId"
+    error === "hostId" ||
+    error === "bucket" ||
+    error === "alt" ||
+    error === "file"
   ) {
     return error;
   }
@@ -82,6 +85,9 @@ function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "currency") return "dashboard.catalog.errorCurrency";
   if (notice === "reference") return "dashboard.catalog.errorReference";
   if (notice === "hostId") return "dashboard.catalog.errorHostId";
+  if (notice === "bucket") return "dashboard.media.errorBucket";
+  if (notice === "alt") return "dashboard.media.errorAlt";
+  if (notice === "file") return "dashboard.media.errorFile";
   return "dashboard.catalog.errorWrite";
 }
 

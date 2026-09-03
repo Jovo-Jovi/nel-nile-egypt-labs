@@ -91,6 +91,7 @@ const ar = {
   "dashboard.nav.branches": "الفروع",
   "dashboard.nav.labUnits": "الأقسام",
   "dashboard.nav.siteSettings": "إعدادات الموقع",
+  "dashboard.nav.mediaAssets": "مكتبة الوسائط",
   "dashboard.siteSettings.heading": "إعدادات الموقع",
   "dashboard.siteSettings.missing":
     "لا توجد صف إعدادات بعد. أنشئ الصف كمسودة — لا يُعرض نموذج فارغ يُدرج صفاً في الخفاء.",
@@ -214,6 +215,31 @@ const ar = {
   "dashboard.equipment.videoHelp": "اختياري. معرّف صف فيديو منشور أو مسودة.",
   "dashboard.nav.videos": "الفيديوهات",
   "dashboard.nav.equipment": "الأجهزة",
+  "dashboard.catalog.mediaAsset": "MediaAsset",
+  "dashboard.media.heading": "مكتبة الوسائط",
+  "dashboard.media.pending": "قيد الانتظار — بانتظار ملفات الوسائط",
+  "dashboard.media.pickerNone": "بلا صورة",
+  "dashboard.media.altIncomplete": "النص البديل غير مكتمل",
+  "dashboard.media.pickerHelp":
+    "لا يُربط ملف بصف منشور قبل اكتمال النص البديل بالعربية والإنجليزية.",
+  "dashboard.videos.posterHelp": "الملصق من MediaAsset. ليس من صورة المضيف.",
+  "dashboard.media.errorBucket":
+    "مستودع الملفات غير متاح بعد. رُفض الرفع ولم يُكتب أي صف MediaAsset.",
+  "dashboard.media.errorAlt":
+    "لا يُربط ملف وسائط بصف منشور قبل اكتمال النص البديل بالعربية والإنجليزية.",
+  "dashboard.media.errorFile": "اختر ملف صورة للرفع.",
+  "dashboard.media.bucketMissing":
+    "مستودع الملفات لم يُطبَّق بعد. الرفع يفشل جهراً ولا يُكتب صف جزئي.",
+  "dashboard.media.sectionFile": "الملف",
+  "dashboard.media.file": "ملف الصورة",
+  "dashboard.media.mimeHelp":
+    "المستودع يقبل image/jpeg و image/png و image/webp، بحد أقصى 5242880 بايت (5 ميبي بايت). النموذج لا يفرض ذلك؛ المستودع يفرضه.",
+  "dashboard.media.fileRequired": "الرفع يتطلب ملفاً. لا يُكتب صف إن فشل الرفع.",
+  "dashboard.media.replaceHelp": "اترك الملف فارغاً للإبقاء على الحالي، أو اختر ملفاً لاستبداله.",
+  "dashboard.media.sectionAlt": "النص البديل",
+  "dashboard.media.alt": "النص البديل",
+  "dashboard.media.altHelp": "مطلوب باللغتين قبل ربط الملف بصف منشور.",
+  "dashboard.media.sectionHolders": "الصفوف المرتبطة",
 
   // Programme detail chrome — P03-T08. Headings, labels, empty state,
   // tier axis. No LabTest name, panel membership or medical description.
@@ -679,6 +705,7 @@ const en = {
   "dashboard.nav.branches": "Branches",
   "dashboard.nav.labUnits": "LabUnits",
   "dashboard.nav.siteSettings": "Site Settings",
+  "dashboard.nav.mediaAssets": "Media Library",
   "dashboard.siteSettings.heading": "Site Settings",
   "dashboard.siteSettings.missing":
     "There is no settings row yet. Create it as a draft — an empty form will not insert a row in silence.",
@@ -802,6 +829,31 @@ const en = {
   "dashboard.equipment.videoHelp": "Optional. The identifier of a Video row.",
   "dashboard.nav.videos": "Videos",
   "dashboard.nav.equipment": "Equipment",
+  "dashboard.catalog.mediaAsset": "MediaAsset",
+  "dashboard.media.heading": "Media Library",
+  "dashboard.media.pending": "Pending — awaiting MediaAsset rows",
+  "dashboard.media.pickerNone": "None",
+  "dashboard.media.altIncomplete": "alt text incomplete",
+  "dashboard.media.pickerHelp":
+    "A MediaAsset cannot attach to a published row until Arabic and English alt text are both present.",
+  "dashboard.videos.posterHelp": "The poster comes from MediaAsset. It never comes from a host thumbnail.",
+  "dashboard.media.errorBucket":
+    "The storage bucket is not available yet. The upload was refused and no MediaAsset row was written.",
+  "dashboard.media.errorAlt":
+    "A MediaAsset cannot attach to a published row until Arabic and English alt text are both present.",
+  "dashboard.media.errorFile": "Choose an image file to upload.",
+  "dashboard.media.bucketMissing":
+    "The storage bucket has not been applied yet. Uploads fail visibly and no partial row is written.",
+  "dashboard.media.sectionFile": "File",
+  "dashboard.media.file": "Image file",
+  "dashboard.media.mimeHelp":
+    "The bucket accepts image/jpeg, image/png and image/webp, each at most 5242880 bytes (5 MiB). The form does not enforce this; the bucket does.",
+  "dashboard.media.fileRequired": "Upload requires a file. No row is written if the upload fails.",
+  "dashboard.media.replaceHelp": "Leave the file empty to keep the current object, or choose a file to replace it.",
+  "dashboard.media.sectionAlt": "Alt text",
+  "dashboard.media.alt": "Alt text",
+  "dashboard.media.altHelp": "Required in both languages before the asset can attach to a published row.",
+  "dashboard.media.sectionHolders": "Attached rows",
 
   // Programme detail chrome — P03-T08. Headings, labels, empty state,
   // tier axis. No LabTest name, panel membership or medical description.
