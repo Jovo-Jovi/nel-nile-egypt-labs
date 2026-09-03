@@ -24,3 +24,11 @@
 .expired .icon {
   color: var(--nel-color-warning);
 }
+
+.draft .icon {
+  color: var(--nel-color-muted);
+}
+
+.published .icon {
+  color: var(--nel-color-success);
+}

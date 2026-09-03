@@ -8,8 +8,8 @@ import { localeHref } from "@/lib/locale";
 import styles from "./DashboardChrome.module.css";
 
 // ADMIN_SPEC.md §4f — module page title at 2xl. This is not a §10
-// SectionHeader: that component is lg and is an h1, used for named
-// groups inside a module.
+// SectionHeader: that component is lg, defaults to h1, and dashboard
+// groups pass h2 so a module page keeps exactly one h1.
 export function DashboardModuleTitle({
   locale,
   titleKey,
