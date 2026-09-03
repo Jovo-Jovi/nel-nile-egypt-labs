@@ -177,6 +177,7 @@ in the project, and it should not be first.
 - [x] **P05-T10** — Media Library module, bucket authored unapplied
 - [x] **P05-T10A** — Fix the submit-button action fallback
 - [ ] **P05-T10B** — Remove the ownership line, then apply the bucket
+- [ ] **P05-T10C** — Fix Site Settings save, and complete T10B's verification
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
