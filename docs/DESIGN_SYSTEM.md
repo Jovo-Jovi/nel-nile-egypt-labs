@@ -675,13 +675,14 @@ unless the text clears its floor against **both** stops, verified at each end an
 recorded — a single measurement in the middle proves nothing about the corners. It may
 never be applied to text itself (§9, the selective-colour headline).
 
-**The page wash.** One permitted page-level gradient: `background` at the block-start
-easing to `surface`, with a `primary` tint at no more than 6% opacity, fixed to the
-viewport and sitting behind everything. It is a decorative layer under §9 — nothing is
-read off it, because every text-bearing region sits on `background` or `surface` above
-it. Both stops are within 1.05:1 of each other, so no text ratio moves measurably across
-the page. This is the entire atmosphere budget for the site; there is no second wash and
-no per-section gradient.
+**The hex lattice.** One permitted page-level decorative layer: a hexagonal stroke
+pattern in `primary` at 12% opacity, tiled at 56×64, path
+`M28 2 52 16v28L28 58 4 44V16Z`, `fill="none"`, `stroke="currentColor"`,
+`strokeWidth="0.75"`, fixed to the viewport and sitting behind everything. It is a
+decorative layer under §9 — it carries no text and no interactive target, and nothing
+is read off it, because every text-bearing region sits on `background` or `surface`
+above it. This is the entire atmosphere budget for the site; there is no second
+decorative layer and no per-section pattern.
 
 ### Video posters
 

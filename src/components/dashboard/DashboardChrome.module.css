@@ -7,17 +7,18 @@
   min-block-size: 0;
 }
 
-/* Same values as SiteRoot.module.css .wash — one wash used twice. */
-.wash {
+.hex {
   position: fixed;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--nel-color-primary) 6%, transparent),
-      color-mix(in srgb, var(--nel-color-primary) 6%, transparent)
-    ),
-    linear-gradient(to block-end, var(--nel-color-background), var(--nel-color-surface));
+  color: var(--nel-color-primary);
+  opacity: 0.12;
+}
+
+.hex svg {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .bar {

@@ -35,8 +35,16 @@ export function DashboardChrome({
 
   return (
     <div className={styles.root}>
-      {/* Same §9 wash as SiteRoot — one atmosphere, two surfaces. */}
-      <div className={styles.wash} aria-hidden="true" />
+      <div className={styles.hex} aria-hidden="true">
+        <svg>
+          <defs>
+            <pattern id="nel-dashboard-hex" width="56" height="64" patternUnits="userSpaceOnUse">
+              <path d="M28 2 52 16v28L28 58 4 44V16Z" fill="none" stroke="currentColor" strokeWidth="0.75" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#nel-dashboard-hex)" />
+        </svg>
+      </div>
       <header className={styles.bar}>
         <Link href={markHref} className={styles.mark}>
           <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />

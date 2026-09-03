@@ -15,13 +15,16 @@ interface SiteRootProps {
 export function SiteRoot({ locale, children }: SiteRootProps) {
   return (
     <div className={styles.root} data-locale={locale}>
-      {/* DESIGN_SYSTEM.md §9 "The page wash" — the one permitted
-          page-level decorative layer: background easing to surface, a
-          primary tint at no more than 6%, fixed to the viewport, behind
-          everything. Carries no text and no interactive target; every
-          text-bearing region below paints its own opaque background or
-          surface fill above it, so nothing is ever read off this layer. */}
-      <div className={styles.wash} aria-hidden="true" />
+      <div className={styles.hex} aria-hidden="true">
+        <svg>
+          <defs>
+            <pattern id="nel-site-hex" width="56" height="64" patternUnits="userSpaceOnUse">
+              <path d="M28 2 52 16v28L28 58 4 44V16Z" fill="none" stroke="currentColor" strokeWidth="0.75" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#nel-site-hex)" />
+        </svg>
+      </div>
       <SiteHeader locale={locale} />
       <main className={styles.main}>{children}</main>
       <SiteFooter locale={locale} />

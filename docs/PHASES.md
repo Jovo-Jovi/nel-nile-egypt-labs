@@ -172,6 +172,7 @@ in the project, and it should not be first.
 - [x] **P05-T02** — Site Settings module
 - [x] **P05-T04** — Compose the dashboard against the design system
 - [ ] **P05-T05** — Restore the §9 page wash, and put it behind the dashboard too
+- [ ] **P05-T06** — Restore the hex lattice and reconcile §9 with what was approved
 - [ ] Media Library module
 - [ ] Branches and LabUnits modules
 - [ ] Offers, Videos and Equipment modules
