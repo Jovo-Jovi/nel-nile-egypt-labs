@@ -174,7 +174,8 @@ in the project, and it should not be first.
 - [ ] **P05-T05** — Restore the §9 page wash, and put it behind the dashboard too
 - [x] **P05-T06** — Restore the hex lattice and reconcile §9 with what was approved
 - [x] **P05-T07** — Fix the dashboard scroll, then feedback states
-- [ ] **P05-T10** — Media Library module, bucket authored unapplied
+- [x] **P05-T10** — Media Library module, bucket authored unapplied
+- [ ] **P05-T10A** — Fix the submit-button action fallback
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
