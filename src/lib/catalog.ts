@@ -64,6 +64,9 @@ const ar = {
 
   // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
   "dashboard.home.title": "لوحة التحكم",
+  "dashboard.home.published": "منشور",
+  "dashboard.home.draft": "مسودة",
+  "dashboard.home.open": "فتح",
   "dashboard.module.eyebrow": "وحدة",
   "dashboard.signIn.title": "دخول لوحة التحكم",
   "dashboard.signIn.email": "البريد الإلكتروني",
@@ -92,6 +95,7 @@ const ar = {
   "dashboard.nav.labUnits": "الأقسام",
   "dashboard.nav.siteSettings": "إعدادات الموقع",
   "dashboard.nav.mediaAssets": "مكتبة الوسائط",
+  "dashboard.nav.programmes": "البرامج",
   "dashboard.siteSettings.heading": "إعدادات الموقع",
   "dashboard.siteSettings.missing":
     "لا توجد صف إعدادات بعد. أنشئ الصف كمسودة — لا يُعرض نموذج فارغ يُدرج صفاً في الخفاء.",
@@ -695,6 +699,9 @@ const en = {
 
   // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
   "dashboard.home.title": "Dashboard",
+  "dashboard.home.published": "Published",
+  "dashboard.home.draft": "Draft",
+  "dashboard.home.open": "Open",
   "dashboard.module.eyebrow": "Module",
   "dashboard.signIn.title": "Dashboard sign-in",
   "dashboard.signIn.email": "Email",
@@ -723,6 +730,7 @@ const en = {
   "dashboard.nav.labUnits": "LabUnits",
   "dashboard.nav.siteSettings": "Site Settings",
   "dashboard.nav.mediaAssets": "Media Library",
+  "dashboard.nav.programmes": "Programmes",
   "dashboard.siteSettings.heading": "Site Settings",
   "dashboard.siteSettings.missing":
     "There is no settings row yet. Create it as a draft — an empty form will not insert a row in silence.",

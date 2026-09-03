@@ -30,7 +30,7 @@ export default async function SignInPage({ params, searchParams }: Props) {
   return (
     <DashboardChrome locale={locale} showSignOut={false}>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.signIn.title" />
-      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/sign-in/submit")}>
+      <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/sign-in/submit")} data-nel-container="auth">
         {failed ? <p className={formStyles.error}>{translate(locale, "dashboard.signIn.failed")}</p> : null}
         <div className={formStyles.field}>
           <label className={formStyles.label} htmlFor="dashboard-email">

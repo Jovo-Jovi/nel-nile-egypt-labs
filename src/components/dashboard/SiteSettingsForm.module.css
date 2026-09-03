@@ -3,6 +3,7 @@
   flex-direction: column;
   flex: 1;
   max-inline-size: 1120px;
+  margin-inline: auto;
   inline-size: 100%;
 }
 
@@ -42,6 +43,7 @@
   flex-direction: column;
   gap: var(--nel-space-16);
   max-inline-size: 720px;
+  margin-inline: auto;
   padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
   border-radius: var(--nel-radius-well);

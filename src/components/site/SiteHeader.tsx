@@ -15,9 +15,10 @@ import styles from "./SiteHeader.module.css";
 
 interface SiteHeaderProps {
   locale: Locale;
+  whatsappHref: string | null;
 }
 
-export function SiteHeader({ locale }: SiteHeaderProps) {
+export function SiteHeader({ locale, whatsappHref }: SiteHeaderProps) {
   const [navOpen, setNavOpen] = useState(false);
   const [compact, setCompact] = useState(false);
 
@@ -90,7 +91,18 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           <span className={styles.portalAction}>
             <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" pill />
           </span>
-          <WhatsAppAction label={translate(locale, "header.whatsappCompactLabel")} variant="whatsappOutlined" pill />
+          {whatsappHref ? (
+            <WhatsAppAction
+              label={translate(locale, "header.whatsappCompactLabel")}
+              variant="whatsappOutlined"
+              pill
+              href={whatsappHref}
+            />
+          ) : (
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData" dense>
+              <span>{translate(locale, "header.whatsappCompactLabel")}</span>
+            </ApprovalGate>
+          )}
           <LanguageSwitcher locale={locale} />
         </div>
       </div>
