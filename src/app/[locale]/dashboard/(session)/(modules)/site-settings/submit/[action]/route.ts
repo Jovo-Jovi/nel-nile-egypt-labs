@@ -57,7 +57,11 @@ export async function POST(
   const requireBilingual = nextState === "published";
   const parsed = parseSiteSettingsWrite(form, requireBilingual);
   if (!parsed.ok) {
-    back(locale, parsed.reason === "https" ? "error=https" : "error=bilingual");
+    if (parsed.reason === "whatsapp_e164") back(locale, "error=whatsapp_e164");
+    if (parsed.reason === "https") {
+      back(locale, parsed.field ? `error=${parsed.field}` : "error=https");
+    }
+    back(locale, "error=bilingual");
   }
 
   const written = await writeSiteSettingsRow(supabase, row.id, parsed.columns, nextState);

@@ -8,7 +8,6 @@ export const RESULTS_PORTAL_PLACEHOLDER_URL =
 export const RESULTS_PORTAL_PLACEHOLDER_DISPLAY = "example.invalid";
 
 const WHATSAPP_PLACEHOLDER_NUMBER = "200000000000";
-export const WHATSAPP_PLACEHOLDER_DISPLAY = "+20 000 000 0000";
 
 export function buildWhatsAppPlaceholderUrl(): string {
   return `https://wa.me/${WHATSAPP_PLACEHOLDER_NUMBER}`;

@@ -31,6 +31,9 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "slug" ||
     error === "slugTaken" ||
     error === "coordinate" ||
+    error === "latitude" ||
+    error === "longitude" ||
+    error === "whatsapp_e164" ||
     error === "order" ||
     error === "headOffice" ||
     error === "held" ||
@@ -45,7 +48,12 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "hostId" ||
     error === "bucket" ||
     error === "alt" ||
-    error === "file"
+    error === "file" ||
+    error === "https" ||
+    error === "facebook_url" ||
+    error === "instagram_url" ||
+    error === "linkedin_url" ||
+    error === "youtube_url"
   ) {
     return error;
   }
@@ -78,6 +86,9 @@ function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "slug") return "dashboard.catalog.errorSlug";
   if (notice === "slugTaken") return "dashboard.catalog.errorSlugTaken";
   if (notice === "coordinate") return "dashboard.catalog.errorCoordinate";
+  if (notice === "latitude") return "dashboard.validation.errorLatitude";
+  if (notice === "longitude") return "dashboard.validation.errorLongitude";
+  if (notice === "whatsapp_e164") return "dashboard.validation.errorPhone";
   if (notice === "confirm") return "dashboard.catalog.errorConfirm";
   if (notice === "order") return "dashboard.catalog.errorOrder";
   if (notice === "dates") return "dashboard.catalog.errorDates";
@@ -88,6 +99,15 @@ function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "bucket") return "dashboard.media.errorBucket";
   if (notice === "alt") return "dashboard.media.errorAlt";
   if (notice === "file") return "dashboard.media.errorFile";
+  if (
+    notice === "https" ||
+    notice === "facebook_url" ||
+    notice === "instagram_url" ||
+    notice === "linkedin_url" ||
+    notice === "youtube_url"
+  ) {
+    return "dashboard.siteSettings.errorHttps";
+  }
   return "dashboard.catalog.errorWrite";
 }
 
@@ -118,15 +138,96 @@ export function FieldLabel({
   locale,
   htmlFor,
   labelKey,
+  required,
 }: {
   locale: Locale;
   htmlFor: string;
   labelKey: CatalogKey;
+  required?: "always" | "publish";
 }) {
   return (
     <label className={site.label} htmlFor={htmlFor}>
       <IsolatedCopy locale={locale} text={translate(locale, labelKey)} />
+      {required === "always" ? (
+        <span className={site.requiredMark}>
+          {" "}
+          <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.required")} />
+        </span>
+      ) : null}
+      {required === "publish" ? (
+        <span className={site.publishHint}>
+          {" "}
+          <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.requiredOnPublish")} />
+        </span>
+      ) : null}
     </label>
+  );
+}
+
+export function FieldLegend({
+  locale,
+  legendKey,
+  required,
+}: {
+  locale: Locale;
+  legendKey: CatalogKey;
+  required?: "publish";
+}) {
+  return (
+    <legend className={site.legend}>
+      <IsolatedCopy locale={locale} text={translate(locale, legendKey)} />
+      {required === "publish" ? (
+        <span className={site.publishHint}>
+          {" "}
+          <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.requiredOnPublish")} />
+        </span>
+      ) : null}
+    </legend>
+  );
+}
+
+export function FieldMessage({
+  locale,
+  fieldId,
+  message,
+}: {
+  locale: Locale;
+  fieldId: string;
+  message: string | null;
+}) {
+  if (message === null) return null;
+  return (
+    <p className={site.fieldError} id={`${fieldId}-error`}>
+      <CautionIcon size={14} />
+      <span>
+        <IsolatedCopy locale={locale} text={message} />
+      </span>
+    </p>
+  );
+}
+
+export function FieldSummary({
+  locale,
+  issues,
+}: {
+  locale: Locale;
+  issues: readonly { id: string; message: string }[];
+}) {
+  if (issues.length === 0) return null;
+  const first = issues[0];
+  if (first === undefined) return null;
+  return (
+    <div className={site.summary}>
+      <p className={site.errorRow}>
+        <CautionIcon size={14} />
+        <span>
+          <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.summary")} />
+        </span>
+      </p>
+      <a className={site.summaryLink} href={`#${first.id}`}>
+        <IsolatedCopy locale={locale} text={first.message} />
+      </a>
+    </div>
   );
 }
 

@@ -1,15 +1,23 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
+import { callingCodeSelectOptions } from "@/lib/dashboard/callingCodes";
 import {
   BRANCH_FORM_COLUMNS,
   confirmToken,
   type BranchRow,
   type CatalogNotice,
 } from "@/lib/dashboard/catalogEntities";
+import {
+  emptyToNull,
+  parseCoordinatePair,
+  parseWhatsAppParts,
+  splitE164,
+} from "@/lib/dashboard/fieldRules";
 import { localeHref } from "@/lib/locale";
 import {
   ActionSlot,
@@ -17,6 +25,9 @@ import {
   CatalogNoticeView,
   CatalogSection,
   FieldLabel,
+  FieldLegend,
+  FieldMessage,
+  FieldSummary,
   LocaleColumns,
   useCatalogFormFlight,
 } from "./catalogFormChrome";
@@ -30,7 +41,9 @@ import site from "./SiteSettingsForm.module.css";
 // address_en → address_en
 // hours_ar → hours_ar
 // hours_en → hours_en
-// whatsapp_e164 → whatsapp_e164
+// whatsapp_calling and whatsapp_subscriber are not columns: the route
+// handler assembles `"Branch".whatsapp_e164` as E.164. No calling code is
+// selected until the Operator chooses one.
 // latitude → latitude
 // longitude → longitude
 // is_head_office → is_head_office
@@ -50,12 +63,16 @@ function TextField({
   labelKey,
   defaultValue,
   inputMode,
+  error,
+  onBlur,
 }: {
   locale: Locale;
   name: string;
   labelKey: CatalogKey;
   defaultValue: string | null;
   inputMode?: "tel" | "decimal" | "numeric";
+  error: string | null;
+  onBlur?: () => void;
 }) {
   return (
     <div className={site.field}>
@@ -68,7 +85,75 @@ function TextField({
         defaultValue={defaultValue ?? ""}
         autoComplete="off"
         inputMode={inputMode}
+        aria-invalid={error !== null || undefined}
+        aria-describedby={error !== null ? `${name}-error` : undefined}
+        onBlur={onBlur}
       />
+      <FieldMessage locale={locale} fieldId={name} message={error} />
+    </div>
+  );
+}
+
+function PhoneField({
+  locale,
+  defaultE164,
+  error,
+  onBlur,
+}: {
+  locale: Locale;
+  defaultE164: string | null;
+  error: string | null;
+  onBlur: () => void;
+}) {
+  const split = splitE164(defaultE164);
+  const options = useMemo(() => callingCodeSelectOptions(locale), [locale]);
+  return (
+    <div className={site.field}>
+      <FieldLabel locale={locale} htmlFor="whatsapp_subscriber" labelKey="dashboard.branches.whatsappE164" />
+      <p className={extra.help}>
+        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.phoneHelp")} />
+      </p>
+      <div className={site.phoneRow}>
+        <div className={site.field}>
+          <label className={site.pairLocale} htmlFor="whatsapp_calling">
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.callingCode")} />
+          </label>
+          <select
+            id="whatsapp_calling"
+            className={site.control}
+            name="whatsapp_calling"
+            defaultValue={split.calling}
+            autoComplete="off"
+            aria-invalid={error !== null || undefined}
+            onBlur={onBlur}
+          >
+            <option value="">{translate(locale, "dashboard.validation.callingPlaceholder")}</option>
+            {options.map((row) => (
+              <option key={row.iso2} value={row.calling}>
+                {row.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={site.field}>
+          <label className={site.pairLocale} htmlFor="whatsapp_subscriber">
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.subscriber")} />
+          </label>
+          <input
+            id="whatsapp_subscriber"
+            className={site.control}
+            type="text"
+            name="whatsapp_subscriber"
+            defaultValue={split.subscriber}
+            autoComplete="off"
+            inputMode="tel"
+            aria-invalid={error !== null || undefined}
+            aria-describedby={error !== null ? "whatsapp_subscriber-error" : undefined}
+            onBlur={onBlur}
+          />
+        </div>
+      </div>
+      <FieldMessage locale={locale} fieldId="whatsapp_subscriber" message={error} />
     </div>
   );
 }
@@ -105,9 +190,7 @@ function Pair({
 
   return (
     <fieldset className={site.group}>
-      <legend className={site.legend}>
-        <IsolatedCopy locale={locale} text={translate(locale, legendKey)} />
-      </legend>
+      <FieldLegend locale={locale} legendKey={legendKey} required="publish" />
       <div className={site.pair}>
         <div className={site.field}>
           <label className={site.pairLocale} htmlFor={nameAr}>
@@ -142,6 +225,48 @@ export function BranchForm({
   const statusKey: CatalogKey =
     row?.publication_state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";
   const expectedConfirm = row === null ? "" : confirmToken(locale, row);
+  const [issues, setIssues] = useState<Record<string, string>>({});
+  const activeNotice = clientNotice !== null ? clientNotice : showQueryNotice ? notice : null;
+
+  function setIssue(id: string, message: string | null) {
+    setIssues((current) => {
+      if (message === null) {
+        if (!(id in current)) return current;
+        const next = { ...current };
+        delete next[id];
+        return next;
+      }
+      if (current[id] === message) return current;
+      return { ...current, [id]: message };
+    });
+  }
+
+  function readPhone(form: HTMLFormElement) {
+    const data = new FormData(form);
+    return parseWhatsAppParts(emptyToNull(data.get("whatsapp_calling")), emptyToNull(data.get("whatsapp_subscriber")));
+  }
+
+  function readCoordinates(form: HTMLFormElement) {
+    const data = new FormData(form);
+    return parseCoordinatePair(emptyToNull(data.get("latitude")), emptyToNull(data.get("longitude")));
+  }
+
+  const phoneError =
+    issues.whatsapp_subscriber ??
+    (activeNotice === "whatsapp_e164" ? translate(locale, "dashboard.validation.errorPhone") : null);
+  const latitudeError =
+    issues.latitude ?? (activeNotice === "latitude" ? translate(locale, "dashboard.validation.errorLatitude") : null);
+  const longitudeError =
+    issues.longitude ??
+    (activeNotice === "longitude" || activeNotice === "coordinate"
+      ? translate(locale, "dashboard.validation.errorLongitude")
+      : null);
+
+  const summaryIssues = [
+    phoneError !== null ? { id: "whatsapp_subscriber", message: phoneError } : null,
+    latitudeError !== null ? { id: "latitude", message: latitudeError } : null,
+    longitudeError !== null ? { id: "longitude", message: longitudeError } : null,
+  ].filter((item): item is { id: string; message: string } => item !== null);
 
   return (
     <form
@@ -164,6 +289,7 @@ export function BranchForm({
             />
           ) : null}
           <p className={site.status}>{translate(locale, "dashboard.catalog.unpublishHint")}</p>
+          <FieldSummary locale={locale} issues={summaryIssues} />
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
@@ -198,12 +324,19 @@ export function BranchForm({
             defaultAr={row?.hours_ar ?? null}
             defaultEn={row?.hours_en ?? null}
           />
-          <TextField
+          <PhoneField
             locale={locale}
-            name="whatsapp_e164"
-            labelKey="dashboard.branches.whatsappE164"
-            defaultValue={row?.whatsapp_e164 ?? null}
-            inputMode="tel"
+            defaultE164={row?.whatsapp_e164 ?? null}
+            error={phoneError}
+            onBlur={() => {
+              const form = document.getElementById("whatsapp_subscriber")?.closest("form");
+              if (!(form instanceof HTMLFormElement)) return;
+              const parsed = readPhone(form);
+              setIssue(
+                "whatsapp_subscriber",
+                parsed.ok ? null : translate(locale, "dashboard.validation.errorPhone"),
+              );
+            }}
           />
         </CatalogSection>
 
@@ -217,6 +350,25 @@ export function BranchForm({
             labelKey="dashboard.branches.latitude"
             defaultValue={row?.latitude ?? null}
             inputMode="decimal"
+            error={latitudeError}
+            onBlur={() => {
+              const form = document.getElementById("latitude")?.closest("form");
+              if (!(form instanceof HTMLFormElement)) return;
+              const parsed = readCoordinates(form);
+              if (parsed.ok) {
+                setIssue("latitude", null);
+                setIssue("longitude", null);
+                return;
+              }
+              setIssue(
+                "latitude",
+                parsed.field === "latitude" ? translate(locale, "dashboard.validation.errorLatitude") : null,
+              );
+              setIssue(
+                "longitude",
+                parsed.field === "longitude" ? translate(locale, "dashboard.validation.errorLongitude") : null,
+              );
+            }}
           />
           <TextField
             locale={locale}
@@ -224,6 +376,25 @@ export function BranchForm({
             labelKey="dashboard.branches.longitude"
             defaultValue={row?.longitude ?? null}
             inputMode="decimal"
+            error={longitudeError}
+            onBlur={() => {
+              const form = document.getElementById("longitude")?.closest("form");
+              if (!(form instanceof HTMLFormElement)) return;
+              const parsed = readCoordinates(form);
+              if (parsed.ok) {
+                setIssue("latitude", null);
+                setIssue("longitude", null);
+                return;
+              }
+              setIssue(
+                "latitude",
+                parsed.field === "latitude" ? translate(locale, "dashboard.validation.errorLatitude") : null,
+              );
+              setIssue(
+                "longitude",
+                parsed.field === "longitude" ? translate(locale, "dashboard.validation.errorLongitude") : null,
+              );
+            }}
           />
         </CatalogSection>
 
@@ -234,6 +405,7 @@ export function BranchForm({
             labelKey="dashboard.catalog.displayOrder"
             defaultValue={row === null ? "0" : String(row.display_order)}
             inputMode="numeric"
+            error={null}
           />
           <div className={site.field}>
             <div className={extra.checkRow}>

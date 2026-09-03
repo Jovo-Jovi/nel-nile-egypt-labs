@@ -7,6 +7,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Locale } from "@/lib/locale";
+import { emptyToNull, parseCoordinatePair, parseWhatsAppFromForm } from "./fieldRules";
 
 export type PublicationState = "draft" | "published";
 
@@ -15,7 +16,6 @@ export const UUID_PATTERN =
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const INTEGER_PATTERN = /^-?\d+$/;
-const DECIMAL_PATTERN = /^-?\d+(?:\.\d+)?$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const AMOUNT_PATTERN = /^-?\d+(?:\.\d{1,2})?$/;
 const CURRENCY_PATTERN = /^[A-Za-z]{3}$/;
@@ -94,6 +94,9 @@ export type CatalogWriteReason =
   | "slug"
   | "slugTaken"
   | "coordinate"
+  | "latitude"
+  | "longitude"
+  | "whatsapp_e164"
   | "order"
   | "headOffice"
   | "held"
@@ -108,7 +111,12 @@ export type CatalogWriteReason =
   | "hostId"
   | "bucket"
   | "alt"
-  | "file";
+  | "file"
+  | "facebook_url"
+  | "instagram_url"
+  | "linkedin_url"
+  | "youtube_url"
+  | "https";
 
 export type CatalogNotice = "saved" | CatalogWriteReason | null;
 
@@ -245,12 +253,6 @@ function asCoordinateText(value: unknown): string | null {
   return null;
 }
 
-function emptyToNull(value: FormDataEntryValue | null): string | null {
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
-}
-
 export function isRowId(value: string): boolean {
   return UUID_PATTERN.test(value);
 }
@@ -260,18 +262,6 @@ export function parseDisplayOrder(raw: string | null): number | "invalid" {
   if (!INTEGER_PATTERN.test(raw)) return "invalid";
   const parsed = Number(raw);
   if (!Number.isSafeInteger(parsed)) return "invalid";
-  return parsed;
-}
-
-function parseCoordinate(
-  raw: string | null,
-  min: number,
-  max: number,
-): number | null | "invalid" {
-  if (raw === null) return null;
-  if (!DECIMAL_PATTERN.test(raw)) return "invalid";
-  const parsed = Number(raw);
-  if (!Number.isFinite(parsed) || parsed < min || parsed > max) return "invalid";
   return parsed;
 }
 
@@ -394,10 +384,14 @@ export function parseBranchWrite(form: FormData, requireBilingual: boolean): Par
   const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
   if (display_order === "invalid") return { ok: false, reason: "order" };
 
-  const latitude = parseCoordinate(emptyToNull(form.get("latitude")), -90, 90);
-  const longitude = parseCoordinate(emptyToNull(form.get("longitude")), -180, 180);
-  if (latitude === "invalid" || longitude === "invalid") return { ok: false, reason: "coordinate" };
-  if ((latitude === null) !== (longitude === null)) return { ok: false, reason: "coordinate" };
+  const coordinates = parseCoordinatePair(
+    emptyToNull(form.get("latitude")),
+    emptyToNull(form.get("longitude")),
+  );
+  if (!coordinates.ok) return { ok: false, reason: coordinates.field };
+
+  const phone = parseWhatsAppFromForm(form);
+  if (!phone.ok) return { ok: false, reason: "whatsapp_e164" };
 
   const columns: BranchWriteColumns = {
     name_ar: emptyToNull(form.get("name_ar")),
@@ -406,9 +400,9 @@ export function parseBranchWrite(form: FormData, requireBilingual: boolean): Par
     address_en: emptyToNull(form.get("address_en")),
     hours_ar: emptyToNull(form.get("hours_ar")),
     hours_en: emptyToNull(form.get("hours_en")),
-    whatsapp_e164: emptyToNull(form.get("whatsapp_e164")),
-    latitude,
-    longitude,
+    whatsapp_e164: phone.e164,
+    latitude: coordinates.latitude,
+    longitude: coordinates.longitude,
     is_head_office: form.get("is_head_office") === "true",
     display_order,
   };

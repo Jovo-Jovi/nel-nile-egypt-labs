@@ -5,6 +5,11 @@
 // can see the draft row. It is imported only from aal2-gated dashboard files.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  emptyToNull,
+  parseHttpsField,
+  parseWhatsAppFromForm,
+} from "./fieldRules";
 
 export type PublicationState = "draft" | "published";
 
@@ -179,33 +184,27 @@ export type WriteColumns = Record<SiteSettingsFormField, string | null>;
 
 export type ParseWriteResult =
   | { ok: true; columns: WriteColumns }
-  | { ok: false; reason: "https" | "bilingual" };
-
-function emptyToNull(value: FormDataEntryValue | null): string | null {
-  if (typeof value !== "string") return null;
-  const trimmed = value.trim();
-  return trimmed.length > 0 ? trimmed : null;
-}
-
-function isHttpsUrl(value: string): boolean {
-  if (!value.startsWith("https://")) return false;
-  try {
-    const parsed = new URL(value);
-    return parsed.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
+  | { ok: false; reason: "https" | "bilingual" | "whatsapp_e164"; field?: SiteSettingsFormField };
 
 export function parseSiteSettingsWrite(
   form: FormData,
   requireBilingual: boolean,
 ): ParseWriteResult {
   const columns = {} as WriteColumns;
+  const phone = parseWhatsAppFromForm(form);
+  if (!phone.ok) return { ok: false, reason: "whatsapp_e164", field: "whatsapp_e164" };
+
   for (const field of Object.keys(SITE_SETTINGS_FORM_COLUMNS) as SiteSettingsFormField[]) {
+    if (field === "whatsapp_e164") {
+      columns[field] = phone.e164;
+      continue;
+    }
     const raw = emptyToNull(form.get(field));
-    if (raw !== null && HTTPS_FIELDS.has(field) && !isHttpsUrl(raw)) {
-      return { ok: false, reason: "https" };
+    if (HTTPS_FIELDS.has(field)) {
+      const parsed = parseHttpsField(raw);
+      if (!parsed.ok) return { ok: false, reason: "https", field };
+      columns[field] = parsed.value;
+      continue;
     }
     columns[field] = raw;
   }

@@ -19,6 +19,7 @@ import {
   CatalogNoticeView,
   CatalogSection,
   FieldLabel,
+  FieldLegend,
   LocaleColumns,
   useCatalogFormFlight,
   type Flight,
@@ -104,9 +105,7 @@ function Pair({
 
   return (
     <fieldset className={site.group}>
-      <legend className={site.legend}>
-        <IsolatedCopy locale={locale} text={translate(locale, legendKey)} />
-      </legend>
+      <FieldLegend locale={locale} legendKey={legendKey} required="publish" />
       <div className={site.pair}>
         <div className={site.field}>
           <label className={site.pairLocale} htmlFor={nameAr}>
