@@ -1,3 +1,25 @@
+.root {
+  isolation: isolate;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-block-size: 0;
+}
+
+/* Same values as SiteRoot.module.css .wash — one wash used twice. */
+.wash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent),
+      color-mix(in srgb, var(--nel-color-primary) 6%, transparent)
+    ),
+    linear-gradient(to block-end, var(--nel-color-background), var(--nel-color-surface));
+}
+
 .bar {
   position: sticky;
   inset-block-start: 0;
@@ -43,7 +65,13 @@
 }
 
 .main {
+  position: relative;
+  z-index: 1;
   flex: 1;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
   padding-block: var(--nel-space-32);
   padding-inline: var(--nel-space-16);
 }

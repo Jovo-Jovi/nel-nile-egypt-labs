@@ -406,11 +406,6 @@ const ar = {
   "system.composition.alternatingFills.heading": "تناوب تعبئة الأقسام",
   "system.composition.alternatingFills.body":
     "تتناوب الأقسام بين لونين محايدين فقط، بلا عائلة لونية جديدة وبلا لون خاص بقسم واحد.",
-  "system.composition.wash.heading": "طبقة التمويه الخلفية",
-  "system.composition.wash.body":
-    "طبقة تزيينية واحدة ثابتة خلف كل شيء: من background إلى surface بتدرج primary لا يتجاوز 6%. لا تحمل نصًا ولا هدفًا تفاعليًا.",
-  "system.composition.wash.note":
-    "كل منطقة تحمل نصًا تُرسم فوق background أو surface خاصة بها، فلا تتم قراءة أي تباين من هذه الطبقة.",
 
   // System view — §12 approval states, three side by side (STEP 3)
   "system.approval.heading": "حالات الاعتماد (§12)",
@@ -906,11 +901,6 @@ const en = {
   "system.composition.alternatingFills.heading": "Alternating section fills",
   "system.composition.alternatingFills.body":
     "Sections alternate between two neutral fills only — no new chromatic family, no per-section colour.",
-  "system.composition.wash.heading": "The page wash",
-  "system.composition.wash.body":
-    "One fixed decorative layer behind everything: background easing to surface with a primary tint no more than 6%. Carries no text and no interactive target.",
-  "system.composition.wash.note":
-    "Every text-bearing region paints its own background or surface fill above it, so no ratio is ever read off this layer.",
 
   // System view — §12 approval states, three side by side (STEP 3)
   "system.approval.heading": "Approval states (§12)",
