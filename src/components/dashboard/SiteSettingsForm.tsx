@@ -1,6 +1,8 @@
+import type { ReactNode } from "react";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { Button } from "@/components/ui/Button";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { translate } from "@/lib/catalog";
 import type { SiteSettingsRow } from "@/lib/dashboard/siteSettings";
 import { localeHref } from "@/lib/locale";
@@ -97,6 +99,19 @@ function TextField({
   );
 }
 
+function LocaleColumns({ locale }: { locale: Locale }) {
+  return (
+    <div className={styles.localeHead} aria-hidden="true">
+      <span>
+        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeAr")} />
+      </span>
+      <span>
+        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeEn")} />
+      </span>
+    </div>
+  );
+}
+
 function Pair({
   locale,
   nameAr,
@@ -134,19 +149,36 @@ function Pair({
       </legend>
       <div className={styles.pair}>
         <div className={styles.field}>
-          <label className={styles.label} htmlFor={nameAr}>
+          <label className={styles.pairLocale} htmlFor={nameAr}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeAr")} />
           </label>
           {control(nameAr, defaultAr)}
         </div>
         <div className={styles.field}>
-          <label className={styles.label} htmlFor={nameEn}>
+          <label className={styles.pairLocale} htmlFor={nameEn}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeEn")} />
           </label>
           {control(nameEn, defaultEn)}
         </div>
       </div>
     </fieldset>
+  );
+}
+
+function SettingsSection({
+  locale,
+  titleKey,
+  children,
+}: {
+  locale: Locale;
+  titleKey: CatalogKey;
+  children: ReactNode;
+}) {
+  return (
+    <section className={styles.section}>
+      <SectionHeader locale={locale} titleKey={titleKey} />
+      {children}
+    </section>
   );
 }
 
@@ -185,131 +217,151 @@ export function SiteSettingsForm({
 
   return (
     <form className={styles.form} method="post" action={saveAction}>
-      <p className={styles.status}>{translate(locale, statusKey)}</p>
-      <p className={styles.status}>{translate(locale, "dashboard.siteSettings.noDelete")}</p>
-      <Notice locale={locale} notice={notice} />
+      <div className={styles.intro}>
+        <p className={styles.status}>{translate(locale, statusKey)}</p>
+        <p className={styles.status}>{translate(locale, "dashboard.siteSettings.noDelete")}</p>
+        <Notice locale={locale} notice={notice} />
+      </div>
 
-      <TextField
-        locale={locale}
-        name="hotline"
-        labelKey="dashboard.siteSettings.hotline"
-        defaultValue={row.hotline}
-        inputMode="tel"
-      />
-      <TextField
-        locale={locale}
-        name="whatsapp_e164"
-        labelKey="dashboard.siteSettings.whatsappE164"
-        defaultValue={row.whatsapp_e164}
-        inputMode="tel"
-      />
-      <Pair
-        locale={locale}
-        nameAr="whatsapp_message_ar"
-        nameEn="whatsapp_message_en"
-        legendKey="dashboard.siteSettings.whatsappMessage"
-        defaultAr={row.whatsapp_message_ar}
-        defaultEn={row.whatsapp_message_en}
-      />
-      <Pair
-        locale={locale}
-        nameAr="hours_ar"
-        nameEn="hours_en"
-        legendKey="dashboard.siteSettings.hours"
-        defaultAr={row.hours_ar}
-        defaultEn={row.hours_en}
-      />
-      <TextField
-        locale={locale}
-        name="facebook_url"
-        labelKey="dashboard.siteSettings.facebookUrl"
-        defaultValue={row.facebook_url}
-        inputMode="url"
-      />
-      <TextField
-        locale={locale}
-        name="instagram_url"
-        labelKey="dashboard.siteSettings.instagramUrl"
-        defaultValue={row.instagram_url}
-        inputMode="url"
-      />
-      <TextField
-        locale={locale}
-        name="linkedin_url"
-        labelKey="dashboard.siteSettings.linkedinUrl"
-        defaultValue={row.linkedin_url}
-        inputMode="url"
-      />
-      <TextField
-        locale={locale}
-        name="youtube_url"
-        labelKey="dashboard.siteSettings.youtubeUrl"
-        defaultValue={row.youtube_url}
-        inputMode="url"
-      />
-      <Pair
-        locale={locale}
-        nameAr="about_body_ar"
-        nameEn="about_body_en"
-        legendKey="dashboard.siteSettings.aboutBody"
-        defaultAr={row.about_body_ar}
-        defaultEn={row.about_body_en}
-        multiline
-      />
-      <Pair
-        locale={locale}
-        nameAr="privacy_body_ar"
-        nameEn="privacy_body_en"
-        legendKey="dashboard.siteSettings.privacyBody"
-        defaultAr={row.privacy_body_ar}
-        defaultEn={row.privacy_body_en}
-        multiline
-      />
-      <Pair
-        locale={locale}
-        nameAr="lab_to_lab_ar"
-        nameEn="lab_to_lab_en"
-        legendKey="dashboard.siteSettings.labToLab"
-        defaultAr={row.lab_to_lab_ar}
-        defaultEn={row.lab_to_lab_en}
-        multiline
-      />
-      <Pair
-        locale={locale}
-        nameAr="seo_title_ar"
-        nameEn="seo_title_en"
-        legendKey="dashboard.siteSettings.seoTitle"
-        defaultAr={row.seo_title_ar}
-        defaultEn={row.seo_title_en}
-      />
-      <Pair
-        locale={locale}
-        nameAr="seo_description_ar"
-        nameEn="seo_description_en"
-        legendKey="dashboard.siteSettings.seoDescription"
-        defaultAr={row.seo_description_ar}
-        defaultEn={row.seo_description_en}
-        multiline
-      />
+      <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionContact">
+        <TextField
+          locale={locale}
+          name="hotline"
+          labelKey="dashboard.siteSettings.hotline"
+          defaultValue={row.hotline}
+          inputMode="tel"
+        />
+        <TextField
+          locale={locale}
+          name="whatsapp_e164"
+          labelKey="dashboard.siteSettings.whatsappE164"
+          defaultValue={row.whatsapp_e164}
+          inputMode="tel"
+        />
+        <LocaleColumns locale={locale} />
+        <Pair
+          locale={locale}
+          nameAr="whatsapp_message_ar"
+          nameEn="whatsapp_message_en"
+          legendKey="dashboard.siteSettings.whatsappMessage"
+          defaultAr={row.whatsapp_message_ar}
+          defaultEn={row.whatsapp_message_en}
+        />
+        <Pair
+          locale={locale}
+          nameAr="hours_ar"
+          nameEn="hours_en"
+          legendKey="dashboard.siteSettings.hours"
+          defaultAr={row.hours_ar}
+          defaultEn={row.hours_en}
+        />
+      </SettingsSection>
+
+      <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionSocial">
+        <TextField
+          locale={locale}
+          name="facebook_url"
+          labelKey="dashboard.siteSettings.facebookUrl"
+          defaultValue={row.facebook_url}
+          inputMode="url"
+        />
+        <TextField
+          locale={locale}
+          name="instagram_url"
+          labelKey="dashboard.siteSettings.instagramUrl"
+          defaultValue={row.instagram_url}
+          inputMode="url"
+        />
+        <TextField
+          locale={locale}
+          name="linkedin_url"
+          labelKey="dashboard.siteSettings.linkedinUrl"
+          defaultValue={row.linkedin_url}
+          inputMode="url"
+        />
+        <TextField
+          locale={locale}
+          name="youtube_url"
+          labelKey="dashboard.siteSettings.youtubeUrl"
+          defaultValue={row.youtube_url}
+          inputMode="url"
+        />
+      </SettingsSection>
+
+      <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionPageCopy">
+        <LocaleColumns locale={locale} />
+        <Pair
+          locale={locale}
+          nameAr="about_body_ar"
+          nameEn="about_body_en"
+          legendKey="dashboard.siteSettings.aboutBody"
+          defaultAr={row.about_body_ar}
+          defaultEn={row.about_body_en}
+          multiline
+        />
+        <Pair
+          locale={locale}
+          nameAr="privacy_body_ar"
+          nameEn="privacy_body_en"
+          legendKey="dashboard.siteSettings.privacyBody"
+          defaultAr={row.privacy_body_ar}
+          defaultEn={row.privacy_body_en}
+          multiline
+        />
+        <Pair
+          locale={locale}
+          nameAr="lab_to_lab_ar"
+          nameEn="lab_to_lab_en"
+          legendKey="dashboard.siteSettings.labToLab"
+          defaultAr={row.lab_to_lab_ar}
+          defaultEn={row.lab_to_lab_en}
+          multiline
+        />
+      </SettingsSection>
+
+      <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionSeo">
+        <LocaleColumns locale={locale} />
+        <Pair
+          locale={locale}
+          nameAr="seo_title_ar"
+          nameEn="seo_title_en"
+          legendKey="dashboard.siteSettings.seoTitle"
+          defaultAr={row.seo_title_ar}
+          defaultEn={row.seo_title_en}
+        />
+        <Pair
+          locale={locale}
+          nameAr="seo_description_ar"
+          nameEn="seo_description_en"
+          legendKey="dashboard.siteSettings.seoDescription"
+          defaultAr={row.seo_description_ar}
+          defaultEn={row.seo_description_en}
+          multiline
+        />
+      </SettingsSection>
 
       <div className={styles.actions}>
-        <Button type="submit" variant="secondary">
-          {translate(locale, "dashboard.siteSettings.save")}
-        </Button>
-        <Button
-          type="submit"
-          variant="primary"
-          formAction={localeHref(locale, "/dashboard/site-settings/submit/publish")}
-        >
-          {translate(locale, "dashboard.siteSettings.publish")}
-        </Button>
-        <Button
-          type="submit"
-          variant="text"
-          formAction={localeHref(locale, "/dashboard/site-settings/submit/unpublish")}
-        >
-          {translate(locale, "dashboard.siteSettings.unpublish")}
-        </Button>
+        <div className={styles.actionsMain}>
+          <Button type="submit" variant="secondary">
+            {translate(locale, "dashboard.siteSettings.save")}
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            formAction={localeHref(locale, "/dashboard/site-settings/submit/publish")}
+          >
+            {translate(locale, "dashboard.siteSettings.publish")}
+          </Button>
+        </div>
+        <div className={styles.actionsUnpublish}>
+          <Button
+            type="submit"
+            variant="text"
+            formAction={localeHref(locale, "/dashboard/site-settings/submit/unpublish")}
+          >
+            {translate(locale, "dashboard.siteSettings.unpublish")}
+          </Button>
+        </div>
       </div>
     </form>
   );

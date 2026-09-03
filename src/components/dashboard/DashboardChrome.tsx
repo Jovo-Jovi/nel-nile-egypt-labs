@@ -1,9 +1,24 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
-import { translate, type Locale } from "@/lib/catalog";
+import { MarkSlot } from "@/components/ui/MarkSlot";
+import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
 import { localeHref } from "@/lib/locale";
 import styles from "./DashboardChrome.module.css";
+
+// ADMIN_SPEC.md §4f — module page title at 2xl. This is not a §10
+// SectionHeader: that component is lg and is an h1, used for named
+// groups inside a module.
+export function DashboardModuleTitle({
+  locale,
+  titleKey,
+}: {
+  locale: Locale;
+  titleKey: CatalogKey;
+}) {
+  return <h1 className={styles.pageTitle}>{translate(locale, titleKey)}</h1>;
+}
 
 export function DashboardChrome({
   locale,
@@ -14,10 +29,16 @@ export function DashboardChrome({
   showSignOut: boolean;
   children: ReactNode;
 }) {
+  const markHref = showSignOut
+    ? localeHref(locale, "/dashboard")
+    : localeHref(locale, "/dashboard/sign-in");
+
   return (
     <>
       <header className={styles.bar}>
-        <p className={styles.brand}>{translate(locale, "dashboard.home.title")}</p>
+        <Link href={markHref} className={styles.mark}>
+          <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
+        </Link>
         <div className={styles.actions}>
           <LanguageSwitcher locale={locale} />
           {showSignOut ? (
