@@ -181,7 +181,8 @@ in the project, and it should not be first.
 - [x] **P05-T11** — Validation and field types
 - [x] **P05-T12** — Wire the chrome, add a dashboard home, centre the containers
 - [x] **P05-T13** — Land OD-14 and the expiry rule, then Videos and Media Library
-- [ ] **P05-T14** — Site Settings and Branches: maps links, phone fields, proof residue
+- [x] **P05-T14** — Site Settings and Branches: maps links, phone fields, proof residue
+- [ ] **M7A** — Read-first audit of the role split
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
