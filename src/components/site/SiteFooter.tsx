@@ -35,7 +35,18 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
                 <span className={styles.brandLine}>{translate(locale, "hero.eyebrow")}</span>
               </span>
             </Link>
-            <p className={styles.blurb}>{translate(locale, "about.body")}</p>
+            {chrome.aboutBody ? (
+              <p className={styles.blurb}>
+                <IsolatedCopy locale={locale} text={chrome.aboutBody} />
+              </p>
+            ) : (
+              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+                <div className={styles.blurb}>
+                  <SkeletonBar size="sm" widthPercent={88} />
+                  <SkeletonBar size="sm" widthPercent={64} />
+                </div>
+              </ApprovalGate>
+            )}
           </div>
           <nav className={styles.column} aria-label={translate(locale, "footer.sitemap")}>
             <h2 className={styles.heading}>{translate(locale, "footer.sitemap")}</h2>

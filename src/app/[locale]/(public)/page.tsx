@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { localizedText } from "@/lib/listingFormat";
 import { pageMetadata } from "@/lib/pageMetadata";
-import { publishedSiteSettings } from "@/lib/publishedListings";
+import {
+  listPublishedBranches,
+  listPublishedLabUnits,
+  listPublishedProgrammes,
+  publishedSiteSettings,
+} from "@/lib/publishedListings";
 import { chromeFromPublishedSettings } from "@/lib/publicChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { SiteHome } from "@/components/site/SiteHome";
@@ -25,7 +30,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
-  const settings = await publishedSiteSettings();
+  const [settings, labUnits, branches, programmes] = await Promise.all([
+    publishedSiteSettings(),
+    listPublishedLabUnits(),
+    listPublishedBranches(),
+    listPublishedProgrammes(),
+  ]);
   const chrome = chromeFromPublishedSettings(settings, locale);
-  return <SiteHome locale={locale} whatsappHref={chrome.whatsappHref} />;
+  return (
+    <SiteHome
+      locale={locale}
+      whatsappHref={chrome.whatsappHref}
+      aboutBody={chrome.aboutBody}
+      labUnits={labUnits.map((row) => ({
+        id: row.id,
+        name: localizedText(locale, row.nameAr, row.nameEn),
+      }))}
+      branchCount={branches.length}
+      programmeCount={programmes.length}
+    />
+  );
 }
