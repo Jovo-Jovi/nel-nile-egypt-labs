@@ -186,7 +186,8 @@ in the project, and it should not be first.
 - [x] **P05-T15A** — Record the OD-15 client approval
 - [x] **P05-T15B** — Record the countersignature, close CF-50, narrow CF-69 and CF-74
 - [x] **P05-T15** — Delete the invented public content
-- [ ] **M6A** — Author the hero, reason-card and media-role columns. Do not apply
+- [x] **M6A** — Author the hero, reason-card and media-role columns. Do not apply
+- [ ] **M6B** — Unpublish, apply M6, verify, leave in draft
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
@@ -318,7 +319,7 @@ Sent to the client today, that document understates the project badly.
 
 | Instalment | Gate | Earned when |
 |---|---|---|
-| 30% | Signature | The revised quotation is signed. **Outstanding** |
+| 30% | Signature | The revised quotation was signed 4 September 2026 |
 | 20% | G3 | The thirteen pages render in both languages and pass the boundary and bilingual gates |
 | 20% | G5 | The owner can edit the site himself through the dashboard |
 | 30% | G7 | Launch — and, if §5 is resolved, handover |
@@ -327,16 +328,12 @@ Sent to the client today, that document understates the project badly.
 
 ## §7 What stops the project today
 
-Two things, and neither is engineering.
-
-**The signature.** `OD-03` holds scope frozen and **lapses 15 September 2026**. By its own
-terms no further build task issues after that date until a new freeze is signed. P03, P04,
-P05, P06 and P07 are all build phases. One signature prevents this.
+One thing, and it is not engineering.
 
 **The clinical work.** It has not started, it is the longest item on the schedule, and it
 cannot be compressed by adding developers. Seventy-two Arabic names, 121 judgements, five
-flagged records, and a signature from the lab's clinical staff. It can begin in parallel with
-P03 today, and starting it now is the single highest-value thing the client can do.
+flagged records, and a signature from the lab's clinical staff. Starting it now is the
+single highest-value thing the client can do.
 
 Everything else is sequenced and has no blocker. The database is live, the design system is
 closed, the routing is built, and the approved home page renders in Arabic and English.

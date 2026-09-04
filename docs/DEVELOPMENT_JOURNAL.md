@@ -259,4 +259,14 @@ SQL only, not applied. `CONTENT_MODEL.md` §3a named the fields first; `DATA_MOD
 
 The headline is one field per locale. Counts stay derived; no maps URL column; no `Announcement` or `ClinicalNotice`; no role column on `"MediaAsset"`. Apply is M6B.
 
+---
+
+## 2026-09-05 — M6B: unpublish, apply M6, leave in draft
+
+The singleton was unpublished through `POST /ar/dashboard/site-settings/submit/unpublish` at aal2, not by SQL. The public chrome now renders the §12 pending state (no hotline, no WhatsApp) until a content task fills the pairs and republishes.
+
+M6 applied: twenty-one nullable columns, nine bilingual-when-published checks, three `"MediaAsset"` keys with `on delete set null`. `"SiteSettings"` has 46 columns. `public.*` stays eleven tables, twenty-two policies, RLS on eleven of eleven. The reverse was not applied. The row stays `draft`; no field was filled.
+
+CF-108 landed OPEN: empty string satisfies `is not null` on every `bilingual_when_published` check of that form. The application write path nulls empty fields; the database checks do not.
+
 
