@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-108**
+**Next free id: CF-109**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -113,6 +113,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-105 | The laboratory's own PDPL obligations as controller — licensing, processing records, DPO where required — sit with the client and are not a build output. The Executive Regulations' grace period ends in late October or early November 2026, which may fall near G7 launch. Tracked so the date stays visible after CF-39's closure; this project's contribution is the Operator email addresses alone, and the client's existing patient results portal is a materially larger exposure. | client | OPEN | P07 |
 | CF-106 | `anon` holds table-level INSERT, UPDATE and DELETE on `storage.objects`, granted by `supabase_storage_admin`. RLS denies it — there is no anon write policy — but the project's own posture elsewhere is to revoke what is not needed (M3 revoked all, then granted select). We do not own that table and revoking could break Storage, so this is recorded, not fixed. | reviewer | OPEN | G5 |
 | CF-107 | P05-T10C Y4 tested the app route and got the guard's redirect. It did not test a direct Storage API upload with the publishable anon key, which ships in the client bundle by design. Closed at P05-T11: a direct upload to `media-asset` with that key was refused by RLS. | reviewer | CLOSED at P05-T11 | P05-T11 |
+| CF-108 | Every `bilingual_when_published` check tests `is not null`, which an empty string satisfies. Twenty constraints across `"SiteSettings"`, `"Branch"`, `"LabUnit"`, `"Offer"`, `"Video"` and `"Equipment"` share the form, so a published row can hold blank bilingual pairs and §8's completeness rule does not notice — the live singleton is in that state now. Fixed uniformly across all twenty in one migration or not at all; a stricter form on a subset creates two rules for one thing. `ADMIN_SPEC.md` §4h.2 catches the empty case at the application layer meanwhile. | reviewer | OPEN | G6 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

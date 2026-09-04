@@ -104,7 +104,7 @@ These are not commercial entries. They gate delivery regardless of what is signe
 | B2 | **Certification evidence** — scheme, number, issuing body, expiry | client | No accreditation claim renders without a supplied document. An unverified claim is a regulatory exposure |
 | B3 | **The mark as vector** | client | The 83×100 raster does not satisfy §7's 16px favicon and 180px app icon (CF-74) |
 | B4 | **Photography files** | client | Every image slot renders a labelled frame until they land (CF-72) |
-| B5 | **`Branch` addresses** | client | The drawn map renders `pending` with indicative pins; unverified geography is a defect (CF-69) |
+| B5 | **`Branch` addresses** | client | Client-locked in `docs/research/09-locked-baseline.md`. Unverified geography remains a defect (CF-69); the addresses themselves are not unsupplied |
 | B6 | **CF-34 — no local Postgres, no container runtime, no shell elevation** | human | **P01-T03-R cannot start. There is no schema, so nothing wires.** Every task since P02 opened has been documents or a mock because that is all that has been available |
 
 **B6 is the real blocker on the project, not the price.** Signing the quotation unfreezes
@@ -126,10 +126,11 @@ In a single message rather than six:
    approval queue, Offers restricted to approved accounts, one shared price list, and
    the role split that must precede it. D-09's own terms: this is separate paid scope.
 4. **Dark theme** — wanted or dropped.
-5. **The five deliverables he owes** — vector mark, photography, certification documents,
-   `Branch` addresses, and clinical sign-off. Attaching the §12 `pending` list from the
-   P02-T15 report makes this concrete: twenty-one regions on the page he approved are
-   waiting on him, not on us.
+5. **What he still owes** — vector mark, photography, certification documents, clinical
+   sign-off, and four answers: working hours, coordinate authority, the fourth branch's
+   identity, and whether the two Google-listed branch phone numbers publish. Attaching the
+   §12 `pending` list from the P02-T15 report makes this concrete: twenty-one regions on
+   the page he approved are waiting on him, not on us.
 
 ---
 
