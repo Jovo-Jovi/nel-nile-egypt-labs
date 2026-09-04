@@ -114,6 +114,7 @@ const ar = {
   "dashboard.siteSettings.localeAr": "العربية",
   "dashboard.siteSettings.localeEn": "English",
   "dashboard.siteSettings.hotline": "الخط الساخن",
+  "dashboard.siteSettings.hotlineHelp": "رمز قصير من أربعة أو خمسة أرقام. ليس رقماً دولياً.",
   "dashboard.siteSettings.whatsappE164": "رقم واتساب",
   "dashboard.siteSettings.whatsappMessage": "رسالة واتساب الجاهزة",
   "dashboard.siteSettings.hours": "ساعات العمل",
@@ -145,6 +146,11 @@ const ar = {
     "أطول من 160 حرفاً — نتائج البحث قد تقتطع الوصف. الحفظ لا يُمنع.",
   "dashboard.validation.httpsHelp": "يُقبل عنوان https فقط.",
   "dashboard.validation.phoneHelp": "رمز الدولة من القائمة، ثم الرقم. لا قيمة مفترضة.",
+  "dashboard.validation.hoursHelp": "نص حر. مثال: السبت–الخميس 8ص–8م. ليست جدولاً.",
+  "dashboard.validation.errorMapsShort":
+    "هذا رابط خرائط مختصر. الصق الرابط الموسَّع. الروابط المختصرة لا تُحَل.",
+  "dashboard.validation.errorMapsUrl":
+    "حقل رابط الخرائط لا يحتوي إحداثيات. الصق رابط خرائط Google موسَّعاً يحتوي إحداثيات.",
   "dashboard.siteSettings.errorMissing": "لا يوجد صف إعدادات. أنشئه أولاً.",
   "dashboard.siteSettings.errorWrite": "تعذّر الحفظ. حاول مرة أخرى.",
   "dashboard.siteSettings.errorCreate": "تعذّر إنشاء الصف. حاول مرة أخرى.",
@@ -165,7 +171,10 @@ const ar = {
   "dashboard.branches.headOfficeHelp":
     "صف واحد فقط يحمل هذه العلامة. تعليم هذا الصف يزيلها عن أي صف آخر. قاعدة البيانات تمنع صفين معاً.",
   "dashboard.branches.coordinatesHelp":
-    "اترك الحقلين فارغين إن لم تُتحقق الإحداثيات. لا تقدير ولا اختراع. الخريطة التخطيطية لا تضع دبوساً من هذه القيم.",
+    "الصق رابط خرائط Google الموسَّع. الخادم يقرأ الإحداثيات ولا يخزّن الرابط. لا تقدير ولا اختراع.",
+  "dashboard.branches.mapsUrl": "رابط خرائط Google",
+  "dashboard.branches.mapsEcho": "ما فُهم من الرابط",
+  "dashboard.branches.mapsStored": "المخزَّن",
   "dashboard.labUnits.heading": "الأقسام",
   "dashboard.labUnits.pending": "قيد الانتظار — بانتظار صفوف الأقسام",
   "dashboard.labUnits.name": "اسم القسم",
@@ -186,6 +195,7 @@ const ar = {
   "dashboard.catalog.sectionIdentity": "الاسم",
   "dashboard.catalog.sectionContact": "التواصل",
   "dashboard.catalog.sectionLocation": "الموقع",
+  "dashboard.catalog.sectionPublish": "النشر",
   "dashboard.catalog.sectionOrder": "الترتيب",
   "dashboard.catalog.errorMissing": "لا يوجد هذا الصف.",
   "dashboard.catalog.errorCreate": "تعذّر الإنشاء. حاول مرة أخرى.",
@@ -761,6 +771,7 @@ const en = {
   "dashboard.siteSettings.localeAr": "Arabic",
   "dashboard.siteSettings.localeEn": "English",
   "dashboard.siteSettings.hotline": "Hotline",
+  "dashboard.siteSettings.hotlineHelp": "A four- or five-digit short code. Not an international number.",
   "dashboard.siteSettings.whatsappE164": "WhatsApp number",
   "dashboard.siteSettings.whatsappMessage": "WhatsApp preset message",
   "dashboard.siteSettings.hours": "Working hours",
@@ -792,6 +803,11 @@ const en = {
     "Longer than 160 characters — search results may truncate the description. Save is not blocked.",
   "dashboard.validation.httpsHelp": "https addresses only.",
   "dashboard.validation.phoneHelp": "Calling code from the list, then the number. Nothing is pre-selected.",
+  "dashboard.validation.hoursHelp": "Free text. Example: Sat–Thu 8am–8pm. Not a schedule.",
+  "dashboard.validation.errorMapsShort":
+    "This is a shortened Maps link. Paste the expanded link. Short links are not resolved.",
+  "dashboard.validation.errorMapsUrl":
+    "The Maps link field has no coordinate. Paste an expanded Google Maps URL that contains one.",
   "dashboard.siteSettings.errorMissing": "There is no settings row. Create it first.",
   "dashboard.siteSettings.errorWrite": "Save failed. Try again.",
   "dashboard.siteSettings.errorCreate": "Could not create the row. Try again.",
@@ -812,7 +828,10 @@ const en = {
   "dashboard.branches.headOfficeHelp":
     "Exactly one row may hold this flag. Checking it here clears it on any other row. The database also refuses a second head-office row.",
   "dashboard.branches.coordinatesHelp":
-    "Leave both blank when coordinates are unverified. Do not estimate or invent them. The schematic map cannot place a pin from these values.",
+    "Paste an expanded Google Maps URL. The server reads the coordinates and does not store the link. Do not estimate or invent them.",
+  "dashboard.branches.mapsUrl": "Google Maps link",
+  "dashboard.branches.mapsEcho": "Understood from the link",
+  "dashboard.branches.mapsStored": "Stored pair",
   "dashboard.labUnits.heading": "LabUnits",
   "dashboard.labUnits.pending": "Pending — awaiting LabUnit rows",
   "dashboard.labUnits.name": "Department name",
@@ -833,6 +852,7 @@ const en = {
   "dashboard.catalog.sectionIdentity": "Name",
   "dashboard.catalog.sectionContact": "Contact",
   "dashboard.catalog.sectionLocation": "Location",
+  "dashboard.catalog.sectionPublish": "Publishing",
   "dashboard.catalog.sectionOrder": "Order",
   "dashboard.catalog.errorMissing": "This row does not exist.",
   "dashboard.catalog.errorCreate": "Could not create the row. Try again.",

@@ -678,7 +678,7 @@ export function SiteSettingsForm({
 
   return (
     <form
-      className={styles.form}
+      className={styles.splitForm}
       method="post"
       action={saveAction}
       onSubmit={onSubmit}
@@ -707,6 +707,9 @@ export function SiteSettingsForm({
             defaultValue={row.hotline}
             inputMode="tel"
           />
+          <p className={styles.status}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.hotlineHelp")} />
+          </p>
           <PhoneField
             locale={locale}
             defaultE164={row.whatsapp_e164}
@@ -742,6 +745,9 @@ export function SiteSettingsForm({
             defaultAr={row.hours_ar}
             defaultEn={row.hours_en}
           />
+          <p className={styles.status}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.hoursHelp")} />
+          </p>
         </SettingsSection>
 
         <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionSocial">
@@ -843,7 +849,7 @@ export function SiteSettingsForm({
         </SettingsSection>
       </div>
 
-      <div className={styles.actions}>
+      <aside className={styles.publishAside} aria-label={translate(locale, "dashboard.catalog.sectionPublish")}>
         <div className={styles.actionsMain}>
           <ActionSlot
             locale={locale}
@@ -872,7 +878,7 @@ export function SiteSettingsForm({
           />
         </div>
         <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
-      </div>
+      </aside>
     </form>
   );
 }

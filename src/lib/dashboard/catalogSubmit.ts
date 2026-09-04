@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { readOperatorAccessFrom } from "@/lib/dashboard/assurance";
 import {
+  branchStoredCoordinates,
   confirmFromForm,
   confirmToken,
   createBranchRow,
@@ -184,7 +185,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       let nextState: PublicationState = row.publication_state;
       if (params.action === "publish") nextState = "published";
       if (params.action === "unpublish") nextState = "draft";
-      const parsed = parseBranchWrite(form, nextState === "published");
+      const parsed = parseBranchWrite(form, nextState === "published", branchStoredCoordinates(row));
       if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
       const written = await writeBranchRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
