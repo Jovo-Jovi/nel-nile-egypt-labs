@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-eight decisions. Fourteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-eight decisions. Fifteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -420,6 +420,96 @@ playing it is guesswork.
 **Does not decide:** the public video card, which is unchanged. The poster
 remains a locally stored `MediaAsset`, populated server-side from the
 video's thumbnail. No Visitor request reaches YouTube.
+
+---
+
+### OD-15 — PartnerLab accounts and private Offers
+
+**Status:** SIGNED — 4 September 2026
+
+**§1 The actor.** `GLOSSARY.md` gains a third: `PartnerLab` — another
+laboratory holding an account on this site. `Visitor` holds no account and
+sees public content. `Operator` manages content behind AAL2.
+`PartnerLab` is an authenticated reader with no write access anywhere.
+"Lab account" is a bare noun and never enters the codebase.
+
+**§2 Offers become private.** `/{locale}/offers` stops being a public
+page. An anonymous Visitor sees an authentication-required state naming
+the Offer area and offering sign-up and sign-in; no title, description,
+price or image is rendered. The offers band on the home page becomes the
+same state.
+
+This REMOVES a public page the owner summary lists as page 5 and that G3
+certified as rendering publicly. That removal is the substance of this OD,
+not a side effect.
+
+**Client approval.** The removal of the public `/offers` page and the
+gating of the home Offers band was approved by the client, reported by
+the human on 4 September 2026. This is a relayed verbal approval, not a
+countersignature, and it is recorded as such. It is superseded by the
+client's signature on the amended quotation, which is where a scope
+removal belongs. Until that signature, this record is the only evidence
+that a promised deliverable was withdrawn by agreement.
+
+This reverses P05-T09's proof V4, which demonstrated an Operator
+publishing an Offer and a Visitor seeing it at `/ar/offers` and
+`/en/offers`, and which G3 certified. The reversal is deliberate and
+recorded here so a later task is not read as contradicting an earlier
+verdict.
+
+**§3 One list, no partition.** Every approved `PartnerLab` sees the same
+Offers at the same prices. No `partner_lab_id`, no `owner_id`, no per-Lab
+override, no tenant RLS. If different rates per Lab are ever wanted, that
+is a separate OD and a materially larger phase.
+
+**§4 The account model.** Signup is open. A new account is `pending` and
+can sign in, reaching only a status screen. An `Operator` approves or
+rejects it. Approved accounts read Offers. Rejected and pending accounts
+read nothing.
+
+State lives as a claim in the auth schema, the same pattern as `Operator`.
+No public table holds an account row, no `owner_id` exists, and **D-40 is
+untouched** — that is what keeps this small.
+
+**§5 No TOTP for PartnerLab.** AAL2 and TOTP remain an `Operator`
+requirement under D-08 and are not required of a `PartnerLab`, nor a
+condition of approval or of Offer access. `Operator` is AAL2 plus an
+operator claim; `PartnerLab` is a normal authenticated session plus an
+approved claim. Neither implies the other.
+
+**§6 D-09 carve-out.** D-09 struck the incoming-message inbox and prices
+its reversal at "a `BOUNDARY_MODEL.md` amendment plus a changed compliance
+position plus separate paid scope." A pending-account review queue is an
+approval inbox and this OD pays that price. **What stays struck:** no
+contact form, no booking, no enquiry inbox, no free-text message from a
+Visitor or a `PartnerLab` to the laboratory. The queue holds account
+records the system created, not messages anyone wrote.
+
+**§7 Where approval lives.** None of D-16's eight modules owns account
+review without distortion. It becomes a ninth, which D-15 forbids — so
+D-15 is amended here for this one case. Naming it is the point: a ninth
+module added by a builder's judgement is how a module list stops meaning
+anything.
+
+**§8 `SECURITY_MODEL.md` §3** gains a third policy shape: partner-read,
+`for select to authenticated` gated on the approved claim. Its two
+existing shapes stand.
+
+**§9 The role split is a precondition, not a part.** M7 lands first and
+independently. Today every write policy is `for all to authenticated` and
+the dashboard gate checks only AAL2, so any second account type inherits
+Operator write on all eleven tables and reaches every dashboard route. M7
+is worth doing whether or not this OD is ever signed.
+
+**§10 Commercial.** Unpriced. Signup changes the site's compliance
+position — the privacy page currently says the site collects nothing, and
+an account holder's email is something. That page needs amending in the
+same phase. This is separate paid scope under D-09's own terms and belongs
+in the amended quotation alongside the additions already outstanding.
+
+**Does not decide:** per-Lab pricing, a price-request workflow, any
+`PriceRequest` entity, any inbox for messages, or any change to Offer
+publication or expiry semantics (D-48 stands).
 
 ---
 
