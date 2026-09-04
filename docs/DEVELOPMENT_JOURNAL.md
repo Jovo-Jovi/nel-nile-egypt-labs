@@ -251,4 +251,12 @@ Hero `headlineLine1`, `headlineLine2` and `standfirst` do not appear in `docs/re
 
 Catalogue 572 → 440, both locales identical (133 keys removed, one `approval.pending.signedCopy` added). Reachability from `src/app` plus `src/middleware.ts`: 159 / 159 / 0. No migration.
 
+---
+
+## 2026-09-05 — M6A: author SiteSettings hero, reason-card and media-role columns
+
+SQL only, not applied. `CONTENT_MODEL.md` §3a named the fields first; `DATA_MODEL.md` §6 row 10 was then made to match. Twenty-one nullable columns, three `"MediaAsset"` keys with `on delete set null`, nine bilingual publish checks in the M2 `whatsapp_message` form.
+
+The headline is one field per locale. Counts stay derived; no maps URL column; no `Announcement` or `ClinicalNotice`; no role column on `"MediaAsset"`. Apply is M6B.
+
 

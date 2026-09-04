@@ -185,7 +185,8 @@ in the project, and it should not be first.
 - [x] **M7A** — Read-first audit of the role split
 - [x] **P05-T15A** — Record the OD-15 client approval
 - [x] **P05-T15B** — Record the countersignature, close CF-50, narrow CF-69 and CF-74
-- [ ] **P05-T15** — Delete the invented public content
+- [x] **P05-T15** — Delete the invented public content
+- [ ] **M6A** — Author the hero, reason-card and media-role columns. Do not apply
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module

@@ -200,12 +200,14 @@ and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 | 7 | `"Offer"` | `title_ar` · `title_en` · `description_ar` · `description_en` · `valid_from date` · `valid_until date` · `price_amount numeric(10,2)` · `price_currency` · `"MediaAsset"` fk nullable · `"Programme"` fk nullable (D-18). No currency is hardcoded in application source and none is named here (CF-21); `price_currency` is stored per row with no default |
 | 8 | `"Equipment"` | `name_ar` · `name_en` · `description_ar` · `description_en` · `"MediaAsset"` fk nullable · `"Video"` fk nullable. No `"LabUnit"` foreign key: `CONTENT_MODEL.md` §3a line 78 does not list one, `/{locale}/equipment` is a flat listing, and grouping by department is an amendment if the dashboard ever wants it |
 | 9 | `"Video"` | `youtube_id` · `title_ar` · `title_en` · `description_ar` · `description_en` · `is_featured boolean` · `"MediaAsset"` fk nullable, the poster (D-13, `DESIGN_SYSTEM.md` §10, `CONTENT_MODEL.md` §3a as amended at M5A) |
-| 10 | `"SiteSettings"` | singleton, enforced by a one-row check. Hotline, WhatsApp, hours, social URLs, About and Privacy bodies, Lab-to-Lab copy, default SEO — every text field bilingual |
+| 10 | `"SiteSettings"` | singleton, enforced by a one-row check. Hotline · WhatsApp · hours · social URLs · map · About and Privacy bodies · Lab-to-Lab copy · default SEO · hero eyebrow, headline and standfirst (`hero_eyebrow_ar` / `hero_eyebrow_en`, `hero_headline_ar` / `hero_headline_en`, `hero_standfirst_ar` / `hero_standfirst_en`; one headline field per locale, not two lines) · three reason cards (`reason1`–`reason3` title and body, each `_ar` / `_en`) · nullable `"MediaAsset"` keys `favicon_media`, `app_icon_media`, `hero_media` (`on delete set null`) |
 | 11 | `"MediaAsset"` | `storage_path` · `alt_ar` · `alt_en` · `width` · `height` · `byte_size` · `mime_type` |
 | 12 | `"Announcement"` | title, body, `published_at`. **Does not exist until OD-09 is signed** |
 | 13 | `"ClinicalNotice"` | title, body, plus `signed_by`, `signed_at`, `signed_text_hash`. **Does not exist until OD-09 is signed** |
 
 Rows 7–9 were reconciled field by field against `CONTENT_MODEL.md` §3a at M5A under CF-86, naming the three changes: `body` → `description` and the added `"Programme"` fk on `"Offer"`, the dropped `"LabUnit"` fk and added `"Video"` fk on `"Equipment"`, and the `"MediaAsset"` poster on `"Video"` carried by a §3a amendment rather than kept silently.
+
+Row 10 was reconciled against `CONTENT_MODEL.md` §3a at M6A under CF-86. §3a was amended first to name the hero, reason-card and media-role fields; this row was then made to match. Pre-existing §3a `map` is kept in both documents; no maps URL column is added.
 
 **Row 3 belongs to a `"ProgrammeTier"`, not to a `"Programme"` with loose axis columns.**
 `CONTENT_MODEL.md` §3a states it and §3a's relationship table makes `ProgrammeTier` →
