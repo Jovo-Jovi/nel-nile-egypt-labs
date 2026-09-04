@@ -3,7 +3,6 @@ import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { LabUnitForm } from "@/components/dashboard/LabUnitForm";
 import { CatalogRowList } from "@/components/dashboard/CatalogListing";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
-import { PendingListingCards } from "@/components/dashboard/PendingListingCard";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { listLabUnitRows } from "@/lib/dashboard/catalogEntities";
@@ -41,11 +40,7 @@ export default async function LabUnitsPage({ params, searchParams }: Props) {
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.labUnits.heading" />
       <div className={extra.groups}>
-        {rows.length === 0 ? (
-          <PendingListingCards locale={locale} pendingLabelKey="dashboard.labUnits.pending" count={4} />
-        ) : (
-          <CatalogRowList locale={locale} rows={rows} editPrefix="/dashboard/lab-units" />
-        )}
+        <CatalogRowList locale={locale} rows={rows} editPrefix="/dashboard/lab-units" />
         <LabUnitForm locale={locale} row={null} notice={notice} />
       </div>
     </>

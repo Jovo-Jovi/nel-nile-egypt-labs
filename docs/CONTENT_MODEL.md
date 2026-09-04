@@ -73,7 +73,7 @@ The remaining 117 rows default to `audience` = `all`, `minAge` = null, no note. 
 
 **`Branch`.** `name_ar` · `name_en` · `isHeadOffice` · `addressLine_ar` · `addressLine_en` · `phone` · `workingHours` · `latitude` · `longitude` · `published` · `displayOrder`. Optional `MediaAsset`. `workingHours` is a structured value rendered by locale formatting, not a translated string. Published business data lives here, never as a literal in application source (PR-16).
 
-**`Offer`.** `title_ar` · `title_en` · `description_ar` · `description_en` · `validFrom` · `validUntil` · `priceAmount` · `priceCurrency` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Programme` (D-18). `priceCurrency` is stored per `Offer`. No currency is hardcoded in application source, and none is named in this document.
+**`Offer`.** `title_ar` · `title_en` · `description_ar` · `description_en` · `validFrom` · `validUntil` · `priceAmount` · `priceCurrency` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Programme` (D-18). `priceCurrency` is stored per `Offer`. No currency is hardcoded in application source, and none is named in this document. The effective public rule is `publication_state = 'published' AND (valid_until IS NULL OR valid_until >= now)` — an additional read-path filter that does not mutate `publication_state` (D-48).
 
 **`Equipment`.** `name_ar` · `name_en` · `description_ar` · `description_en` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Video`.
 

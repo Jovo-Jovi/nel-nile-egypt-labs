@@ -8,6 +8,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Locale } from "@/lib/locale";
 import { emptyToNull, parseCoordinatePair, parseWhatsAppFromForm } from "./fieldRules";
+import { parseYoutubeUrl } from "./youtubePoster";
 
 export type PublicationState = "draft" | "published";
 
@@ -19,7 +20,6 @@ const INTEGER_PATTERN = /^-?\d+$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const AMOUNT_PATTERN = /^-?\d+(?:\.\d{1,2})?$/;
 const CURRENCY_PATTERN = /^[A-Za-z]{3}$/;
-const HOST_ID_PATTERN = /^[A-Za-z0-9_-]{11}$/;
 
 export type BranchRow = {
   id: string;
@@ -118,7 +118,7 @@ export type CatalogWriteReason =
   | "youtube_url"
   | "https";
 
-export type CatalogNotice = "saved" | CatalogWriteReason | null;
+export type CatalogNotice = "saved" | "posterMissing" | CatalogWriteReason | null;
 
 export const BRANCH_FORM_COLUMNS = {
   name_ar: "name_ar",
@@ -620,7 +620,8 @@ export function confirmFromForm(form: FormData): string | null {
   return emptyToNull(form.get("confirm_name"));
 }
 
-export function noticeFromQuery(query: { error?: string; saved?: string }): CatalogNotice {
+export function noticeFromQuery(query: { error?: string; saved?: string; poster?: string }): CatalogNotice {
+  if (query.poster === "missing") return "posterMissing";
   if (query.saved === "1") return "saved";
   const error = query.error;
   if (
@@ -736,12 +737,6 @@ function parseAmount(raw: string | null): string | null | "invalid" {
 function parseCurrencyCode(raw: string | null): string | null | "invalid" {
   if (raw === null) return null;
   if (!CURRENCY_PATTERN.test(raw)) return "invalid";
-  return raw;
-}
-
-function parseHostId(raw: string | null): string | null | "invalid" {
-  if (raw === null) return null;
-  if (!HOST_ID_PATTERN.test(raw)) return "invalid";
   return raw;
 }
 
@@ -964,11 +959,9 @@ export function parseVideoWrite(form: FormData, requireBilingual: boolean): Pars
   const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
   if (display_order === "invalid") return { ok: false, reason: "order" };
 
-  const youtube_id = parseHostId(emptyToNull(form.get("youtube_id")));
-  if (youtube_id === "invalid") return { ok: false, reason: "hostId" };
-
-  const MediaAsset = parseOptionalRowId(emptyToNull(form.get("MediaAsset")));
-  if (MediaAsset === "invalid") return { ok: false, reason: "reference" };
+  const parsedUrl = parseYoutubeUrl(emptyToNull(form.get("youtube_url")));
+  if (!parsedUrl.ok) return { ok: false, reason: "hostId" };
+  const youtube_id = parsedUrl.id;
 
   const columns: VideoWriteColumns = {
     youtube_id,
@@ -977,7 +970,7 @@ export function parseVideoWrite(form: FormData, requireBilingual: boolean): Pars
     description_ar: emptyToNull(form.get("description_ar")),
     description_en: emptyToNull(form.get("description_en")),
     is_featured: form.get("is_featured") === "true",
-    MediaAsset,
+    MediaAsset: null,
     display_order,
   };
 
@@ -987,6 +980,7 @@ export function parseVideoWrite(form: FormData, requireBilingual: boolean): Pars
         return { ok: false, reason: "bilingual" };
       }
     }
+    if (columns.youtube_id === null) return { ok: false, reason: "hostId" };
   }
   return { ok: true, columns };
 }

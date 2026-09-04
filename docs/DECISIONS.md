@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-seven decisions. Thirteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-eight decisions. Fourteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -402,6 +402,27 @@ stronger than making the writer stronger, and it costs less.
 
 ---
 
+### OD-14 — YouTube preview inside the dashboard
+
+**Status:** SIGNED — 3 September 2026
+
+**Decides:** an Operator-facing preview in the dashboard, behind aal2, may
+render a YouTube embed so the Operator can confirm the link is the video
+they meant. This does not amend D-13, which continues to bind every
+Visitor-facing surface: no autoloading embed, no host-supplied thumbnail,
+placeholder until the Visitor clicks.
+
+**Because:** D-13's reason is that an embed transmits the VISITOR's IP to
+a third party on page load. An Operator who has authenticated and passed a
+TOTP challenge is not a Visitor, and confirming a video link without
+playing it is guesswork.
+
+**Does not decide:** the public video card, which is unchanged. The poster
+remains a locally stored `MediaAsset`, populated server-side from the
+video's thumbnail. No Visitor request reaches YouTube.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze
@@ -591,3 +612,17 @@ OD-11, signed 31 August 2026. `Operator` authentication and MFA move from P01 to
 ### D-47 — Hosting region
 
 The Supabase project stays in `eu-central-2` (Zurich). The cross-border storage position was reviewed against Egypt's PDPL and accepted by the human on 2 September 2026, closing CF-39. No region migration is required and none is planned. The only personal data this system holds is the Operator email addresses in the Supabase `auth` schema; no public table holds personal or medical data about any Visitor or patient (D-40), and the patient results portal is a separate application this project never touches (D-07, D-17). Remaining PDPL obligations sit with the laboratory as controller and are tracked separately; they are not a build output and do not gate any phase of this project.
+
+### D-48 — Offer expiry is a visibility filter, not a state change
+
+A published `Offer` stops appearing on Visitor-facing surfaces once
+`valid_until` has passed. The effective public rule is
+`publication_state = 'published' AND (valid_until IS NULL OR valid_until
+>= now)`.
+
+This is an ADDITIONAL filter on the read path. It never replaces or
+mutates `publication_state`. No job rewrites a row on expiry, and the
+Operator sees the record unchanged in the dashboard — still published,
+still editable, still auditable — with its expired status shown. An
+expiry that silently unpublishes a row destroys the record of what was
+published and when.

@@ -38,6 +38,8 @@ export type MediaAssetOption = {
   id: string;
   alt_ar: string | null;
   alt_en: string | null;
+  publication_state: PublicationState;
+  thumbSrc: string | null;
 };
 
 export type MediaAssetHolder = {
@@ -156,13 +158,30 @@ export async function listMediaAssetRows(supabase: SupabaseClient): Promise<Medi
   return mapRows(data, parseMediaAssetRow);
 }
 
+export async function signedMediaSrc(
+  supabase: SupabaseClient,
+  storagePath: string,
+): Promise<string | null> {
+  const { data, error } = await supabase.storage
+    .from(MEDIA_ASSET_BUCKET_ID)
+    .createSignedUrl(storagePath, 3_600);
+  if (error || data === null || typeof data.signedUrl !== "string") return null;
+  return data.signedUrl;
+}
+
 export async function listMediaAssetOptions(supabase: SupabaseClient): Promise<MediaAssetOption[]> {
   const rows = await listMediaAssetRows(supabase);
-  return rows.map((row) => ({
-    id: row.id,
-    alt_ar: row.alt_ar,
-    alt_en: row.alt_en,
-  }));
+  const options: MediaAssetOption[] = [];
+  for (const row of rows) {
+    options.push({
+      id: row.id,
+      alt_ar: row.alt_ar,
+      alt_en: row.alt_en,
+      publication_state: row.publication_state,
+      thumbSrc: await signedMediaSrc(supabase, row.storage_path),
+    });
+  }
+  return options;
 }
 
 export async function readMediaAssetRow(
@@ -410,6 +429,20 @@ export async function deleteMediaAssetRow(
   if (error) return { ok: false, reason: "write", holders: [] };
   const remaining = await readMediaAssetRow(supabase, row.id);
   if (remaining !== null) return { ok: false, reason: "write", holders: [] };
+  return { ok: true };
+}
+
+export async function setMediaAssetPublication(
+  supabase: SupabaseClient,
+  rowId: string,
+  publicationState: PublicationState,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  if (!isRowId(rowId)) return { ok: false, reason: "reference" };
+  const { error } = await supabase
+    .from("MediaAsset")
+    .update({ publication_state: publicationState, updated_at: nowIso() })
+    .eq("id", rowId);
+  if (error) return { ok: false, reason: "write" };
   return { ok: true };
 }
 

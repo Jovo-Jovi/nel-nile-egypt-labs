@@ -5,14 +5,13 @@ import { VideoForm } from "@/components/dashboard/VideoForm";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { isRowId, readVideoRow } from "@/lib/dashboard/catalogEntities";
-import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
 
 type Props = {
   params: Promise<{ locale: string; id: string }>;
-  searchParams: Promise<{ error?: string; saved?: string }>;
+  searchParams: Promise<{ error?: string; saved?: string; poster?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -39,12 +38,11 @@ export default async function VideoEditPage({ params, searchParams }: Props) {
 
   const row = await readVideoRow(supabase, resolved.id);
   if (row === null) notFound();
-  const assets = await listMediaAssetOptions(supabase);
 
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.videos.heading" />
-      <VideoForm locale={locale} row={row} notice={notice} assets={assets} />
+      <VideoForm locale={locale} row={row} notice={notice} />
     </>
   );
 }

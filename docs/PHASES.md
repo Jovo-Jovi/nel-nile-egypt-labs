@@ -179,7 +179,8 @@ in the project, and it should not be first.
 - [x] **P05-T10B** — Remove the ownership line, then apply the bucket
 - [x] **P05-T10C** — Fix Site Settings save, and complete T10B's verification
 - [x] **P05-T11** — Validation and field types
-- [ ] **P05-T12** — Wire the chrome, add a dashboard home, centre the containers
+- [x] **P05-T12** — Wire the chrome, add a dashboard home, centre the containers
+- [ ] **P05-T13** — Land OD-14 and the expiry rule, then Videos and Media Library
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module

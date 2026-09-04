@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
-import { MediaAssetForm } from "@/components/dashboard/MediaAssetForm";
-import { CatalogRowList } from "@/components/dashboard/CatalogListing";
+import { MediaAssetForm, MediaLibraryListing } from "@/components/dashboard/MediaAssetForm";
+import { CatalogEmptyState } from "@/components/dashboard/CatalogListing";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
-import { PendingListingCards } from "@/components/dashboard/PendingListingCard";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
-import { listMediaAssetRows, mediaAssetBucketAvailable } from "@/lib/dashboard/mediaAsset";
+import { listMediaAssetOptions, mediaAssetBucketAvailable } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
@@ -36,7 +35,7 @@ export default async function MediaAssetsPage({ params, searchParams }: Props) {
   }
 
   const [rows, bucketAvailable] = await Promise.all([
-    listMediaAssetRows(supabase),
+    listMediaAssetOptions(supabase),
     mediaAssetBucketAvailable(supabase),
   ]);
 
@@ -45,19 +44,9 @@ export default async function MediaAssetsPage({ params, searchParams }: Props) {
       <DashboardModuleTitle locale={locale} titleKey="dashboard.media.heading" />
       <div className={extra.groups}>
         {rows.length === 0 ? (
-          <PendingListingCards locale={locale} pendingLabelKey="dashboard.media.pending" count={3} />
+          <CatalogEmptyState locale={locale} createHref="#create" />
         ) : (
-          <CatalogRowList
-            locale={locale}
-            rows={rows.map((row) => ({
-              id: row.id,
-              name_ar: row.alt_ar,
-              name_en: row.alt_en,
-              publication_state: row.publication_state,
-              display_order: row.display_order,
-            }))}
-            editPrefix="/dashboard/media-assets"
-          />
+          <MediaLibraryListing locale={locale} rows={rows} />
         )}
         <MediaAssetForm
           locale={locale}

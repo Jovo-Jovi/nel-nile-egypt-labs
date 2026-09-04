@@ -49,3 +49,25 @@ export async function fetchAnonPublishedJson(
 
   return response.json();
 }
+
+export async function fetchAnonStorageObject(
+  bucket: string,
+  objectName: string,
+): Promise<Response | null> {
+  const config = supabaseRestConfig();
+  if (config === null) return null;
+
+  const response = await fetch(
+    `${config.url}/storage/v1/object/${bucket}/${encodeURIComponent(objectName)}`,
+    {
+      headers: {
+        apikey: config.anonKey,
+        Authorization: `Bearer ${config.anonKey}`,
+      },
+      cache: "force-cache",
+    },
+  );
+
+  if (!response.ok) return null;
+  return response;
+}

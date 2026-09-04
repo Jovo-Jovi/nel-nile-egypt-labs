@@ -191,3 +191,26 @@ Clinical from P04 and disagrees with `SESSION_CONTEXT`). Open count 15 → 19. T
 four document corrections themselves belong to P01-T03 STEP 0, not here. Phase
 state unchanged; next action remains P01-T03 schema.
 
+---
+
+## 2026-09-04 — P05-T13: OD-14, expiry filter, Videos and Media Library
+
+Live maxima before allocate: OD 13, D 47. OD-14 and D-48 landed as the last
+entries of their series. Offer expiry is a read-path filter on
+`publishedListings.parseOffer`; it does not rewrite `publication_state`.
+
+Video writes take a full YouTube URL. Parsing and poster fetch are server-side
+(`youtubePoster.ts`) on save. The dashboard preview iframe lives only in
+`VideoForm.tsx` (OD-14). Visitor HTML after `npm run build` contains none of
+`youtube.com`, `youtu.be`, `ytimg.com` (25 public files, 0 dashboard).
+
+guard:design **R5** is the new YouTube-host rule. Exempt paths:
+`src/lib/dashboard/youtubePoster.ts` and
+`src/components/dashboard/VideoForm.tsx`. FILE-MODE seed under
+`src/components/site/` in a scratch tree outside the repository fired; the
+real tree exits 0.
+
+`fetchAnonStorageObject` was added to the existing `supabaseRest.ts` helper so
+published posters can be served from `/media-asset/[name]` without a second
+REST client. No migration. T14 not started.
+
