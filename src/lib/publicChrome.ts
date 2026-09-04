@@ -19,6 +19,7 @@ export type PublicChrome = {
   hotline: string | null;
   hours: string | null;
   social: PublicSocialLink[];
+  aboutBody: string | null;
 };
 
 function socialFromSettings(settings: PublishedSiteSettings): PublicSocialLink[] {
@@ -43,18 +44,23 @@ export function chromeFromPublishedSettings(
   locale: Locale,
 ): PublicChrome {
   if (settings === null) {
-    return { whatsappHref: null, hotline: null, hours: null, social: [] };
+    return { whatsappHref: null, hotline: null, hours: null, social: [], aboutBody: null };
   }
   const message = locale === "ar" ? settings.whatsappMessageAr : settings.whatsappMessageEn;
   const hours =
     settings.hoursAr !== null && settings.hoursEn !== null
       ? localizedText(locale, settings.hoursAr, settings.hoursEn)
       : null;
+  const aboutBody =
+    settings.aboutBodyAr !== null && settings.aboutBodyEn !== null
+      ? localizedText(locale, settings.aboutBodyAr, settings.aboutBodyEn)
+      : null;
   return {
     whatsappHref: buildWhatsAppHref(settings.whatsappE164, message),
     hotline: settings.hotline,
     hours,
     social: socialFromSettings(settings),
+    aboutBody,
   };
 }
 

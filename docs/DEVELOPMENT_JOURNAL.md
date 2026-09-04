@@ -239,3 +239,16 @@ were not rewritten.
 
 No migration. T15 (invented public content) not started.
 
+---
+
+## 2026-09-05 — P05-T15: delete invented public content
+
+The home composition no longer publishes unsigned claims as if they were a page. Accreditation marks, placeholder Offer cards, invented video durations, news items with dates, hardcoded LabUnit names, why-bodies, and `about.body` are gone. A region with nothing approved renders the §12 pending state.
+
+Trust counts are derived from published `Branch`, `Programme` and `LabUnit` rows through `fetchAnonPublishedJson`. Zero published rows is pending, not the numeral 0. The about blurb reads published `SiteSettings`, same as `/about`.
+
+Hero `headlineLine1`, `headlineLine2` and `standfirst` do not appear in `docs/research/09-locked-baseline.md`. They were invented mock copy and went to pending with the rest. M6 supplies the real ones. No column was added.
+
+Catalogue 572 → 440, both locales identical (133 keys removed, one `approval.pending.signedCopy` added). Reachability from `src/app` plus `src/middleware.ts`: 159 / 159 / 0. No migration.
+
+

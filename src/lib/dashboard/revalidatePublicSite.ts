@@ -40,8 +40,9 @@ export function revalidatePublicSite(): void {
   }
 }
 
-const BRANCH_PUBLIC_PATHS = ["/ar/locations", "/en/locations"] as const;
-const LAB_UNIT_PUBLIC_PATHS = ["/ar/departments", "/en/departments"] as const;
+const BRANCH_PUBLIC_PATHS = ["/ar", "/en", "/ar/locations", "/en/locations"] as const;
+const LAB_UNIT_PUBLIC_PATHS = ["/ar", "/en", "/ar/departments", "/en/departments"] as const;
+const PROGRAMME_PUBLIC_PATHS = ["/ar", "/en", "/ar/programmes", "/en/programmes"] as const;
 const OFFER_PUBLIC_PATHS = ["/ar/offers", "/en/offers"] as const;
 const VIDEO_PUBLIC_PATHS = ["/ar/videos", "/en/videos"] as const;
 const EQUIPMENT_PUBLIC_PATHS = ["/ar/equipment", "/en/equipment"] as const;
@@ -54,6 +55,12 @@ export function revalidatePublishedBranches(): void {
 
 export function revalidatePublishedLabUnits(): void {
   for (const path of LAB_UNIT_PUBLIC_PATHS) {
+    revalidatePath(path);
+  }
+}
+
+export function revalidatePublishedProgrammes(): void {
+  for (const path of PROGRAMME_PUBLIC_PATHS) {
     revalidatePath(path);
   }
 }

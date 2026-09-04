@@ -1,6 +1,6 @@
-import { translate, type Locale } from "@/lib/catalog";
-import type { CatalogKey } from "@/lib/catalog";
-import { Isolate } from "@/components/ui/Isolate";
+import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
+import { formatWesternCount, publishedCountLabel } from "@/lib/listingFormat";
+import { Isolate, IsolatedCopy } from "@/components/ui/Isolate";
 import { ImageFrame } from "@/components/ui/ImageFrame";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { SkeletonBar } from "@/components/ui/SkeletonBar";
@@ -11,9 +11,18 @@ import { ScrollDownIcon, PlayIcon } from "@/components/ui/icons";
 import { SitePanels } from "./SitePanels";
 import styles from "./SiteHome.module.css";
 
+export type HomeLabUnit = {
+  id: string;
+  name: string;
+};
+
 interface SiteHomeProps {
   locale: Locale;
   whatsappHref: string | null;
+  aboutBody: string | null;
+  labUnits: HomeLabUnit[];
+  branchCount: number;
+  programmeCount: number;
 }
 
 const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
@@ -22,20 +31,63 @@ const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }
   { id: "maadi", x: 56, y: 74, key: "locations.map.district.maadi" },
 ];
 
-const DEPARTMENTS: { key: CatalogKey; index: string }[] = [
-  { key: "departments.immunology", index: "01" },
-  { key: "departments.chemistry", index: "02" },
-  { key: "departments.haematology", index: "03" },
-  { key: "departments.molecularBiology", index: "04" },
-];
+const OCCUPANCY = [0, 1, 2] as const;
 
-const VIDEO_ENTRIES = [
-  { duration: "video.entry1.duration", title: "video.entry1.title" },
-  { duration: "video.entry2.duration", title: "video.entry2.title" },
-  { duration: "video.entry3.duration", title: "video.entry3.title" },
-] as const;
+function PendingCopyBlock() {
+  return (
+    <div className={styles.pendingCopy}>
+      <SkeletonBar size="xs" widthPercent={28} />
+      <SkeletonBar size="xl" widthPercent={82} />
+      <SkeletonBar size="base" widthPercent={100} />
+      <SkeletonBar size="base" widthPercent={68} />
+    </div>
+  );
+}
 
-export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
+function TrustStat({
+  locale,
+  count,
+  nounKey,
+  pendingLabelKey,
+}: {
+  locale: Locale;
+  count: number;
+  nounKey: CatalogKey;
+  pendingLabelKey: CatalogKey;
+}) {
+  const noun = translate(locale, nounKey);
+  const formatted = formatWesternCount(locale, count);
+  const label = publishedCountLabel(count, formatted, noun);
+  if (label === null) {
+    return (
+      <li>
+        <ApprovalGate locale={locale} state="pending" pendingLabelKey={pendingLabelKey}>
+          <div className={styles.pendingCopy}>
+            <SkeletonBar size="xl" widthPercent={48} />
+            <SkeletonBar size="sm" widthPercent={72} />
+          </div>
+        </ApprovalGate>
+      </li>
+    );
+  }
+  return (
+    <li>
+      <strong>
+        <Isolate>{formatted}</Isolate>
+        {` ${noun}`}
+      </strong>
+    </li>
+  );
+}
+
+export function SiteHome({
+  locale,
+  whatsappHref,
+  aboutBody,
+  labUnits,
+  branchCount,
+  programmeCount,
+}: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
 
@@ -55,11 +107,14 @@ export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
             <div className={styles.veil} aria-hidden="true" />
             <div className={styles.copy}>
               <p className={styles.eyebrow}>{translate(locale, "hero.eyebrow")}</p>
-              <h1 className={styles.headline}>
-                <span className={styles.headlineLead}>{translate(locale, "hero.headlineLine1")}</span>
-                <span className={styles.headlineFollow}>{translate(locale, "hero.headlineLine2")}</span>
-              </h1>
-              <p className={styles.standfirst}>{translate(locale, "hero.standfirst")}</p>
+              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.signedCopy">
+                <div className={styles.pendingCopy}>
+                  <SkeletonBar size="xl" widthPercent={88} />
+                  <SkeletonBar size="xl" widthPercent={64} />
+                  <SkeletonBar size="base" widthPercent={100} />
+                  <SkeletonBar size="base" widthPercent={72} />
+                </div>
+              </ApprovalGate>
               <div className={styles.actions}>
                 <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" pill />
                 {whatsappHref ? (
@@ -86,31 +141,52 @@ export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
 
       <section className={styles.offer} id="departments">
         <p className={styles.kicker}>{translate(locale, "departments.heading")}</p>
-        <h2 className={styles.sectionTitle}>{translate(locale, "departments.standfirst")}</h2>
-        <ol className={styles.offerGrid}>
-          {DEPARTMENTS.map((tile) => (
-            <li key={tile.key} className={styles.offerTile}>
-              <p className={styles.offerCaption}>
-                <Isolate>
-                  <span className={styles.offerIndex}>{tile.index}</span>
-                </Isolate>
-                {translate(locale, tile.key)}
-              </p>
-              <div className={styles.offerPhoto}>
-                <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
-                  <ImageFrame label={photographyLabel} />
-                </ApprovalGate>
-              </div>
-            </li>
-          ))}
-        </ol>
+        {labUnits.length === 0 ? (
+          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+            <div className={styles.pendingCopy}>
+              <SkeletonBar size="xl" widthPercent={48} />
+              <SkeletonBar size="base" widthPercent={72} />
+              <SkeletonBar size="base" widthPercent={100} />
+            </div>
+          </ApprovalGate>
+        ) : (
+          <ol className={styles.offerGrid}>
+            {labUnits.map((tile, index) => (
+              <li key={tile.id} className={styles.offerTile}>
+                <p className={styles.offerCaption}>
+                  <Isolate>
+                    <span className={styles.offerIndex}>{String(index + 1).padStart(2, "0")}</span>
+                  </Isolate>{" "}
+                  <IsolatedCopy locale={locale} text={tile.name} />
+                </p>
+                <div className={styles.offerPhoto}>
+                  <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
+                    <ImageFrame label={photographyLabel} />
+                  </ApprovalGate>
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
       </section>
 
       <section className={styles.story} id="about">
         <div className={styles.storyCopy}>
           <p className={styles.kicker}>{translate(locale, "about.heading")}</p>
           <h2 className={styles.sectionTitle}>{translate(locale, "about.whoHeading")}</h2>
-          <p className={styles.prose}>{translate(locale, "about.body")}</p>
+          {aboutBody ? (
+            <p className={styles.prose}>
+              <IsolatedCopy locale={locale} text={aboutBody} />
+            </p>
+          ) : (
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+              <div className={styles.pendingCopy}>
+                <SkeletonBar size="base" widthPercent={100} />
+                <SkeletonBar size="base" widthPercent={92} />
+                <SkeletonBar size="base" widthPercent={64} />
+              </div>
+            </ApprovalGate>
+          )}
           <div className={styles.actions}>
             <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" pill />
           </div>
@@ -139,49 +215,39 @@ export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
 
       <section className={`${styles.band} ${styles.inset}`} id="why">
         <p className={styles.kicker}>{translate(locale, "why.heading")}</p>
-        <h2 className={styles.sectionTitle}>{translate(locale, "why.standfirst")}</h2>
-        <ol className={styles.reasons}>
-          <li>
-            <Isolate>
-              <span className={styles.offerIndex}>01</span>
-            </Isolate>
-            <div>
-              <h3>{translate(locale, "why.booking.title")}</h3>
-              <p>{translate(locale, "why.booking.body")}</p>
-            </div>
-          </li>
-          <li>
-            <Isolate>
-              <span className={styles.offerIndex}>02</span>
-            </Isolate>
-            <div>
-              <h3>{translate(locale, "why.care.title")}</h3>
-              <p>{translate(locale, "why.care.body")}</p>
-            </div>
-          </li>
-          <li>
-            <Isolate>
-              <span className={styles.offerIndex}>03</span>
-            </Isolate>
-            <div>
-              <h3>{translate(locale, "why.support.title")}</h3>
-              <p>{translate(locale, "why.support.body")}</p>
-            </div>
-          </li>
-        </ol>
+        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.signedCopy">
+          <ol className={styles.reasons}>
+            {OCCUPANCY.map((slot) => (
+              <li key={slot}>
+                <div className={styles.pendingCopy}>
+                  <SkeletonBar size="xs" widthPercent={20} />
+                  <SkeletonBar size="lg" widthPercent={70} />
+                  <SkeletonBar size="sm" widthPercent={100} />
+                  <SkeletonBar size="sm" widthPercent={58} />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </ApprovalGate>
         <ul className={styles.stats}>
-          <li>
-            <strong>{translate(locale, "trust.branches.label")}</strong>
-            <span>{translate(locale, "trust.branches.qualifier")}</span>
-          </li>
-          <li>
-            <strong>{translate(locale, "trust.programmes.label")}</strong>
-            <span>{translate(locale, "trust.programmes.qualifier")}</span>
-          </li>
-          <li>
-            <strong>{translate(locale, "trust.labUnits.label")}</strong>
-            <span>{translate(locale, "trust.labUnits.qualifier")}</span>
-          </li>
+          <TrustStat
+            locale={locale}
+            count={branchCount}
+            nounKey="trust.branches.label"
+            pendingLabelKey="approval.pending.businessData"
+          />
+          <TrustStat
+            locale={locale}
+            count={programmeCount}
+            nounKey="trust.programmes.label"
+            pendingLabelKey="approval.pending.clinical"
+          />
+          <TrustStat
+            locale={locale}
+            count={labUnits.length}
+            nounKey="trust.labUnits.label"
+            pendingLabelKey="approval.pending.businessData"
+          />
         </ul>
       </section>
 
@@ -189,7 +255,12 @@ export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
         <div>
           <p className={styles.kicker}>{translate(locale, "branches.heading")}</p>
           <h2 className={styles.sectionTitle}>{translate(locale, "branches.find")}</h2>
-          <p className={styles.prose}>{translate(locale, "branches.standfirst")}</p>
+          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+            <div className={styles.pendingCopy}>
+              <SkeletonBar size="base" widthPercent={86} />
+              <SkeletonBar size="base" widthPercent={64} />
+            </div>
+          </ApprovalGate>
         </div>
         <div className={styles.map}>
           <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData" fill>
@@ -211,29 +282,20 @@ export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
       <section className={`${styles.band} ${styles.inset}`} id="offers">
         <p className={styles.kicker}>{translate(locale, "offers.heading")}</p>
         <h2 className={styles.sectionTitle}>{translate(locale, "offers.standfirst")}</h2>
-        <ol className={styles.cards}>
-          <li>
-            <p className={styles.offerIndex}>
-              <Isolate>01</Isolate>
-            </p>
-            <h3>{translate(locale, "offers.item1.title")}</h3>
-            <p>{translate(locale, "offers.item1.body")}</p>
-          </li>
-          <li>
-            <p className={styles.offerIndex}>
-              <Isolate>02</Isolate>
-            </p>
-            <h3>{translate(locale, "offers.item2.title")}</h3>
-            <p>{translate(locale, "offers.item2.body")}</p>
-          </li>
-          <li>
-            <p className={styles.offerIndex}>
-              <Isolate>03</Isolate>
-            </p>
-            <h3>{translate(locale, "offers.item3.title")}</h3>
-            <p>{translate(locale, "offers.item3.body")}</p>
-          </li>
-        </ol>
+        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+          <ol className={styles.cards}>
+            {OCCUPANCY.map((slot) => (
+              <li key={slot}>
+                <div className={styles.pendingCopy}>
+                  <SkeletonBar size="xs" widthPercent={16} />
+                  <SkeletonBar size="lg" widthPercent={78} />
+                  <SkeletonBar size="sm" widthPercent={100} />
+                  <SkeletonBar size="sm" widthPercent={54} />
+                </div>
+              </li>
+            ))}
+          </ol>
+        </ApprovalGate>
       </section>
 
       <section className={`${styles.band} ${styles.inset}`} id="insights">
@@ -247,77 +309,48 @@ export function SiteHome({ locale, whatsappHref }: SiteHomeProps) {
               </ApprovalGate>
             </div>
             <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
-              <div className={styles.pendingCopy}>
-                <SkeletonBar size="xs" widthPercent={28} />
-                <SkeletonBar size="xl" widthPercent={82} />
-                <SkeletonBar size="base" widthPercent={100} />
-                <SkeletonBar size="base" widthPercent={68} />
-              </div>
+              <PendingCopyBlock />
             </ApprovalGate>
           </article>
           <ol className={styles.indexStack}>
             <li>
               <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
-                <div className={styles.pendingCopy}>
-                  <SkeletonBar size="xs" widthPercent={24} />
-                  <SkeletonBar size="lg" widthPercent={78} />
-                  <SkeletonBar size="sm" widthPercent={92} />
-                  <SkeletonBar size="sm" widthPercent={58} />
-                </div>
+                <PendingCopyBlock />
               </ApprovalGate>
             </li>
             <li>
               <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
-                <div className={styles.pendingCopy}>
-                  <SkeletonBar size="xs" widthPercent={24} />
-                  <SkeletonBar size="lg" widthPercent={74} />
-                  <SkeletonBar size="sm" widthPercent={88} />
-                  <SkeletonBar size="sm" widthPercent={54} />
-                </div>
+                <PendingCopyBlock />
               </ApprovalGate>
             </li>
           </ol>
         </div>
         <aside className={styles.caution}>
           <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.clinical">
-            <div className={styles.pendingCopy}>
-              <SkeletonBar size="xs" widthPercent={20} />
-              <SkeletonBar size="base" widthPercent={72} />
-              <SkeletonBar size="base" widthPercent={100} />
-              <SkeletonBar size="base" widthPercent={48} />
-            </div>
+            <PendingCopyBlock />
           </ApprovalGate>
         </aside>
       </section>
 
       <section className={styles.band} id="videos">
         <p className={styles.kicker}>{translate(locale, "video.heading")}</p>
-        <h2 className={styles.sectionTitle}>{translate(locale, "video.standfirst")}</h2>
-        <div className={styles.film}>
-          {VIDEO_ENTRIES.map((entry) => (
-            <ApprovalGate
-              key={entry.title}
-              locale={locale}
-              state="pending"
-              pendingLabelKey="approval.pending.videoAsset"
-            >
-              <article className={styles.filmTile}>
+        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.videoAsset">
+          <div className={styles.film}>
+            {OCCUPANCY.map((slot) => (
+              <article key={slot} className={styles.filmTile}>
                 <div className={styles.filmPoster}>
                   <ImageFrame label={posterLabel} />
                   <span className={styles.playMark} aria-hidden="true">
                     <PlayIcon size={20} />
-                  </span>
-                  <span className={styles.duration}>
-                    <Isolate>{translate(locale, entry.duration)}</Isolate>
                   </span>
                 </div>
                 <div className={styles.pendingCopy}>
                   <SkeletonBar size="base" widthPercent={70} />
                 </div>
               </article>
-            </ApprovalGate>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ApprovalGate>
       </section>
 
       <section className={styles.cta} id="lab-to-lab">

@@ -16,34 +16,21 @@ const PANELS = [
     tab: "header.nav.programmes" as const,
     title: "programmes.heading" as const,
     body: "programmes.standfirst" as const,
-    items: [
-      ["programmes.row1Title", "programmes.row1Subtitle"],
-      ["programmes.row2Title", "programmes.row2Subtitle"],
-      ["programmes.row3Title", "programmes.row3Subtitle"],
-    ] as const,
+    itemCount: 3,
   },
   {
     id: "branches",
     tab: "header.nav.locations" as const,
     title: "branches.heading" as const,
     body: "branches.find" as const,
-    items: [
-      ["branches.card", "branches.awaiting"],
-      ["branches.card", "branches.awaiting"],
-      ["branches.card", "branches.awaiting"],
-    ] as const,
-    numbered: true,
+    itemCount: 3,
   },
   {
     id: "insights",
     tab: "header.nav.insights" as const,
     title: "newsShowcase.heading" as const,
     body: "newsShowcase.standfirst" as const,
-    items: [
-      ["newsShowcase.item1.title", "newsShowcase.item1.excerpt"],
-      ["newsShowcase.item2.title", "newsShowcase.item2.excerpt"],
-      ["newsShowcase.item3.title", "newsShowcase.item3.excerpt"],
-    ] as const,
+    itemCount: 3,
   },
 ] as const;
 
@@ -56,6 +43,7 @@ function panelGateKey(id: (typeof PANELS)[number]["id"]): CatalogKey {
 export function SitePanels({ locale }: SitePanelsProps) {
   const [active, setActive] = useState<(typeof PANELS)[number]["id"]>("programmes");
   const panel = PANELS.find((item) => item.id === active) ?? PANELS[0];
+  const slots = Array.from({ length: panel.itemCount }, (_, index) => index);
 
   return (
     <div className={styles.wrap}>
@@ -78,7 +66,7 @@ export function SitePanels({ locale }: SitePanelsProps) {
         <p className={styles.body}>{translate(locale, panel.body)}</p>
         <ApprovalGate locale={locale} state="pending" pendingLabelKey={panelGateKey(panel.id)}>
           <ul className={styles.list}>
-            {panel.items.map((_, index) => (
+            {slots.map((index) => (
               <li key={`${panel.id}-${index}`}>
                 <SkeletonBar size="base" widthPercent={72} />
                 <SkeletonBar size="sm" widthPercent={88} />

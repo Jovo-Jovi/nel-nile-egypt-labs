@@ -44,6 +44,23 @@ export function localizedText(locale: Locale, ar: string, en: string): string {
   return locale === "ar" ? ar : en;
 }
 
+export function formatWesternCount(locale: Locale, count: number): string {
+  return new Intl.NumberFormat(localeTag(locale), {
+    maximumFractionDigits: 0,
+    ...NUMBERING,
+  }).format(count);
+}
+
+// Zero published rows is pending, never the numeral "0".
+export function publishedCountLabel(
+  count: number,
+  formattedCount: string,
+  noun: string,
+): string | null {
+  if (count === 0) return null;
+  return `${formattedCount} ${noun}`;
+}
+
 export function offerIsExpired(validUntil: string | null, now = new Date()): boolean {
   if (validUntil === null || validUntil.length === 0) return false;
   return validUntil < now.toISOString().slice(0, 10);

@@ -1,16 +1,10 @@
 // I18N_MODEL.md §8 — one catalogue object, ar/en, identical key sets. A
 // missing key fails the build; it never falls back to the other locale.
-// Every value here is either synthetic placeholder copy (PR-16 — no real
-// Programme, LabTest, hotline, WhatsApp number, address or opening hours)
-// or chrome for this preview build itself (the banner, the view toggle).
-// The four LabUnit department names are the ones CONTENT_MODEL.md:129
-// enumerates in English; their Arabic renderings are standard laboratory
-// terminology, not a clinical translation requiring the lab's sign-off.
+// Every value here is chrome or a §12 pending label. Published business
+// data and LabUnit names come from rows, never from this file (PR-16).
 //
-// Rebuilt at P02-T11 against DESIGN_SYSTEM.md v3. Every new key below
-// backs a §12 `pending` or `approved` region — see ApprovalGate.tsx. No
-// key here names a real seeded Programme or LabTest (checked against
-// `data/seed/catalogue.json` at STEP 4f of that task).
+// Rebuilt at P02-T11 against DESIGN_SYSTEM.md v3. P05-T15 removed invented
+// public copy. No key here names a real seeded Programme or LabTest.
 
 export type Locale = "ar" | "en";
 
@@ -308,31 +302,22 @@ const ar = {
   "approval.pending.newsModule": "قيد الانتظار — بانتظار اعتماد وحدة تحكم تاسعة",
   "approval.pending.videoAsset": "قيد الانتظار — بانتظار ملفات الفيديو من العميل",
   "approval.pending.legalFact": "قيد الانتظار — بانتظار سياسة خصوصية موقّعة والوقائع القانونية من العميل",
+  "approval.pending.signedCopy": "قيد الانتظار — بانتظار النص المعتمد من العميل",
   "offer.validity.current": "ساري",
   "offer.validity.expired": "منتهٍ",
 
   // Hero
   "hero.eyebrow": "مختبرات تحاليل طبية",
-  "hero.headlineLine1": "رعاية صحية شاملة",
-  "hero.headlineLine2": "لكل أسرة في القاهرة الكبرى",
-  "hero.standfirst":
-    "شبكة فروع تغطي القاهرة الكبرى وتشكيلة من البرامج الصحية، بخبرة تراكمت على مدى سنوات في خدمة الأسرة المصرية.",
   "hero.imageFrameLabel": "صورة المعمل (يوفرها العميل)",
   "hero.portalAction": "الدخول إلى بوابة النتائج",
   "hero.whatsappAction": "تواصل عبر واتساب",
   "hero.photoAlt": "صورة مخزون لمختبر — للحكم على التخطيط فقط",
   "hero.stockNote": "صورة معاينة مرفقة للحكم على التخطيط.",
 
-  // Trust row — three verified structural facts (CONTENT_MODEL.md §3a /
-  // D-11), approved, not gated.
-  "trust.branches.label": "4 فروع",
-  "trust.branches.qualifier": "في القاهرة الكبرى، أحدها المقر الرئيسي",
-  "trust.programmes.label": "9 برامج",
-  "trust.programmes.qualifier": "برامج فحص شاملة منشورة",
-  "trust.labUnits.label": "4 أقسام",
-  "trust.labUnits.qualifier": "أقسام معملية متخصصة",
-  "trust.isoBadge": "ISO",
-  "trust.isoNote": "شارة اعتماد نائبة — بلا رقم",
+  // Trust row — nouns only. The count is derived from published rows.
+  "trust.branches.label": "فروع",
+  "trust.programmes.label": "برامج",
+  "trust.labUnits.label": "أقسام",
   "trust.hotlineVisual": "الخط الساخن",
 
   // Card band — News
@@ -382,28 +367,13 @@ const ar = {
   "programmes.row3Title": "برنامج فحص نائب 3 — بانتظار توقيع الفريق الطبي",
   "programmes.row3Subtitle": "نص فرعي تجريبي",
 
-  // Departments (LabUnit) — approved, not gated
+  // Departments (LabUnit) — names come from published rows.
   "departments.heading": "أقسام المعمل",
-  "departments.standfirst": "أربعة أقسام متخصصة تدير عملنا اليومي.",
-  "departments.immunology": "علم المناعة",
-  "departments.chemistry": "الكيمياء الحيوية",
-  "departments.haematology": "أمراض الدم",
-  "departments.molecularBiology": "الأحياء الجزيئية",
 
   // Video section
   "video.heading": "فيديوهات",
-  "video.standfirst": "ثلاثة مقاطع — ملفات الفيديو لم تُسلَّم بعد.",
   "video.posterLabel": "غلاف الفيديو (عنصر نائب)",
   "video.playLabel": "تشغيل الفيديو",
-  "video.entry1.duration": "2:30",
-  "video.entry1.title": "عنوان فيديو نائب 1",
-  "video.entry1.description": "وصف تجريبي، لا يمثل محتوى فعليًا.",
-  "video.entry2.duration": "3:15",
-  "video.entry2.title": "عنوان فيديو نائب 2",
-  "video.entry2.description": "وصف تجريبي، لا يمثل محتوى فعليًا.",
-  "video.entry3.duration": "1:45",
-  "video.entry3.title": "عنوان فيديو نائب 3",
-  "video.entry3.description": "وصف تجريبي، لا يمثل محتوى فعليًا.",
 
   // About / Offers / Equipment / Lab-to-Lab — page chrome for the
   // CONTENT_MODEL §3c destinations that exist on this mock as in-page
@@ -412,16 +382,9 @@ const ar = {
   "about.heading": "عن المعمل",
   "about.standfirst": "معمل تحاليل طبية يخدم الأسر في القاهرة الكبرى.",
   "about.whoHeading": "من نحن",
-  "about.body": "النص المعتمد يصل بعد موافقة العميل. هذه الفقرة تملأ التخطيط فقط، وليست وصفاً طبياً.",
   "offers.heading": "العروض",
   "offers.standfirst": "عروض قيد الاعتماد — بلا سعر حتى يوافق العميل على المحتوى.",
   "offers.viewAll": "عرض الكل",
-  "offers.item1.title": "عرض قيد الاعتماد 1",
-  "offers.item1.body": "التفاصيل والسعر يصلان بعد اعتماد العميل.",
-  "offers.item2.title": "عرض قيد الاعتماد 2",
-  "offers.item2.body": "التفاصيل والسعر يصلان بعد اعتماد العميل.",
-  "offers.item3.title": "عرض قيد الاعتماد 3",
-  "offers.item3.body": "التفاصيل والسعر يصلان بعد اعتماد العميل.",
   "equipment.heading": "الأجهزة",
   "equipment.standfirst": "أجهزة المعمل — بانتظار الصور من العميل.",
   "equipment.viewAll": "عرض الكل",
@@ -453,46 +416,12 @@ const ar = {
   "privacy.contact.title": "التواصل",
   "privacy.contact.body": "التواصل يتم عبر واتساب، وهو تطبيق منفصل يُفتح في نافذة جديدة. لا تُرسل الرسالة إلى هذا الموقع.",
   "branches.heading": "فروعنا",
-  "branches.standfirst": "أربعة فروع في القاهرة الكبرى — العناوين بانتظار بيانات العميل.",
   "branches.find": "اعثر على أقرب فرع",
   "branches.awaiting": "العنوان وساعات العمل يصلان بعد اعتماد بيانات العميل.",
   "branches.card": "فرع",
   "newsShowcase.heading": "المستجدات",
   "newsShowcase.standfirst": "أخبار من المعمل، محتوى للأسرة، وتنبيهات عند الحاجة.",
-  "newsShowcase.kicker": "أخبار",
-  "newsShowcase.more": "اقرأ المزيد",
-  "newsShowcase.item1.kicker": "من المعمل",
-  "newsShowcase.item1.date": "اغسطس 2026",
-  "newsShowcase.item1.title": "كيف نجهّز يوم الاستقبال في الفروع",
-  "newsShowcase.item1.excerpt": "نص معاينة لأسلوب بطاقة الخبر، وليس مقالاً طبياً.",
-  "newsShowcase.item2.kicker": "للأسرة",
-  "newsShowcase.item2.date": "اغسطس 2026",
-  "newsShowcase.item2.title": "ماذا تتوقع الأسرة في أول زيارة للمعمل",
-  "newsShowcase.item2.excerpt": "نص معاينة يملأ البطاقة حتى يظهر ترتيب العنوان والمقتطف.",
-  "newsShowcase.item3.kicker": "الجودة",
-  "newsShowcase.item3.date": "اغسطس 2026",
-  "newsShowcase.item3.title": "روتين يومي داخل أقسام المعمل",
-  "newsShowcase.item3.excerpt": "عنوان بأسلوب نشرة، بلا أسماء فحوصات وبلا تعليمات طبية.",
-  "newsShowcase.caution.kicker": "تنبيه",
-  "newsShowcase.caution.title": "تنبيه عام للزائر — بانتظار توقيع الفريق الطبي",
-  "newsShowcase.caution.body": "هذا الإطار يوضح موضع التنبيهات. ليس تعليمات طبية، ولا يستبدل مشورة الطبيب.",
   "why.heading": "لماذا معامل النيل مصر",
-  "why.standfirst": "أسباب يختارنا عليها الزائر في القاهرة الكبرى.",
-  "why.booking.title": "تواصل بسهولة",
-  "why.booking.body": "لا يوجد نموذج حجز على الموقع. التواصل يتم من خلال أزرار الصفحة.",
-  "why.booking.action": "تواصل للحجز",
-  "why.care.title": "رعاية متكاملة",
-  "why.care.body": "شبكة فروع وبرامج منشورة لخدمة الأسرة في القاهرة الكبرى.",
-  "why.support.title": "تواصل مباشر",
-  "why.support.body": "فريق المعمل يرد على الاستفسارات. ساعات الدعم لم تُعتمد بعد.",
-  "why.support.action": "اسأل عبر واتساب",
-  "why.insurance.title": "شركاء التأمين",
-  "why.insurance.body": "بلا شعارات شركات حقيقية — مربعات نائبة للحكم على الشكل.",
-  "why.partners.heading": "شركاؤنا في التأمين",
-  "why.partners.tile": "شعار شريك (نائب)",
-  "why.request.title": "طلب اتصال",
-  "why.request.body": "الشكل مستوحى من شريط الطلب، والتنفيذ واتساب وليس نموذجاً.",
-  "why.request.action": "اطلب اتصالاً عبر واتساب",
   "stock.alt.news": "صورة مخزون لبطاقة خبر",
   "stock.alt.footer": "صورة مخزون في التذييل",
   "stock.alt.video": "صورة مخزون لغلاف فيديو",
@@ -550,23 +479,6 @@ const ar = {
   "system.space.elevationScale": "مستويات الارتفاع",
   "system.components.heading": "المكونات",
 
-  // System view — v3 composition rules (STEP 3)
-  "system.composition.heading": "قواعد التركيب الجديدة في v3",
-  "system.composition.boldRule.heading": "قاعدة الوزن الغامق 700",
-  "system.composition.boldRule.body":
-    "الوزن الغامق 700 مسموح فقط عند حجم كبير جدًا وما فوق؛ يُمنع أسفل ذلك لأنه يزحم توصيلات الحروف العربية عند حجم النص العادي.",
-  "system.composition.boldRule.sampleAllowed": "مسموح",
-  "system.composition.boldRule.sampleForbidden": "ممنوع",
-  "system.composition.gradientRule.heading": "قاعدة التدرجات",
-  "system.composition.gradientRule.body":
-    "يُسمح بتدرج واحد داخل نفس العائلة اللونية فقط، خلف قسم أو شريط رئيسي، وليس فوق النص أبدًا.",
-  "system.composition.gradientRule.primarySample": "التدرج الأساسي",
-  "system.composition.gradientRule.neutralSample": "التدرج المحايد",
-  "system.composition.gradientRule.textNote": "لا يُطبَّق التدرج على النص أبدًا — انظر الترويسة الرئيسية.",
-  "system.composition.alternatingFills.heading": "تناوب تعبئة الأقسام",
-  "system.composition.alternatingFills.body":
-    "تتناوب الأقسام بين لونين محايدين فقط، بلا عائلة لونية جديدة وبلا لون خاص بقسم واحد.",
-
   // System view — §12 approval states, three side by side (STEP 3)
   "system.approval.heading": "حالات الاعتماد (§12)",
   "system.approval.standfirst":
@@ -593,68 +505,6 @@ const ar = {
   "state.empty": "فارغ",
   "state.error": "خطأ",
   "state.hoverReveal": "كشف عند التحويم",
-
-  // Component gallery — labels and sample copy
-  "gallery.button.heading": "زر (Button)",
-  "gallery.button.primary": "زر أساسي",
-  "gallery.button.secondary": "زر ثانوي",
-  "gallery.button.text": "زر نصي",
-  "gallery.card.heading": "بطاقة (Card)",
-  "gallery.card.title": "عنوان البطاقة",
-  "gallery.card.body": "نص وصفي مختصر داخل البطاقة.",
-  "gallery.card.detail": "سطر تفصيلي إضافي يظهر عند التحويم.",
-  "gallery.card.action": "فتح",
-  "gallery.header.heading": "الترويسة (Header)",
-  "gallery.languageSwitcher.heading": "مبدّل اللغة",
-  "gallery.statCell.heading": "خلية إحصائية (Stat cell)",
-  "gallery.statCell.number": "9",
-  "gallery.statCell.label": "برامج",
-  "gallery.imageFrame.heading": "إطار الصورة (Image frame)",
-  "gallery.imageFrame.label": "صورة (يوفرها العميل)",
-  "gallery.whatsapp.heading": "إجراء واتساب",
-  "gallery.whatsapp.label": "تواصل عبر واتساب",
-  "gallery.whatsapp.filledRatio": "معبأ — 8.28 AA",
-  "gallery.whatsapp.outlinedRatio": "مفرغ — يرث الزر الثانوي",
-  "gallery.whatsapp.forbiddenNote":
-    "نص أبيض فوق #25D366 يقيس 1.98 ويفشل معيار AA؛ لهذا لا يُستخدم في أي معالجة.",
-  "gallery.portal.heading": "رابط بوابة النتائج (ResultsPortalLink)",
-  "gallery.portal.label": "فتح بوابة النتائج",
-  "gallery.bilingualField.heading": "حقل ثنائي اللغة (Bilingual field pair)",
-  "gallery.bilingualField.arLabel": "بالعربية",
-  "gallery.bilingualField.enLabel": "بالإنجليزية",
-  "gallery.statusBadge.heading": "شارة الحالة (StatusState badge)",
-  "gallery.statusBadge.published": "منشور",
-  "gallery.statusBadge.draft": "مسودة",
-  "gallery.statusBadge.expired": "منتهي",
-  "gallery.footer.heading": "التذييل (Footer)",
-
-  // Component gallery — the seven §10 components v3 introduced
-  "gallery.sectionHeader.heading": "ترويسة القسم (Section header)",
-  "gallery.sectionHeader.title": "عنوان القسم",
-  "gallery.sectionHeader.viewAll": "عرض الكل",
-  "gallery.trustEntry.heading": "عنصر الثقة (Trust entry)",
-  "gallery.trustEntry.label": "تسمية نموذجية",
-  "gallery.trustEntry.qualifier": "وصف فرعي نموذجي",
-  "gallery.newsCardEntry.heading": "عنصر بطاقة خبر (News card entry)",
-  "gallery.newsCardEntry.date": "التاريخ (عنصر نائب)",
-  "gallery.newsCardEntry.title": "عنوان نموذجي لعنصر خبر",
-  "gallery.newsCardEntry.excerpt": "نص تجريبي مقتطف من الخبر.",
-  "gallery.cautionCardEntry.heading": "عنصر بطاقة تنبيه (Caution card entry)",
-  "gallery.cautionCardEntry.title": "عنوان نموذجي للتنبيه",
-  "gallery.cautionCardEntry.body": "نص تجريبي لتوضيح شكل التنبيه.",
-  "gallery.locationCard.heading": "بطاقة الموقع (Location card)",
-  "gallery.locationCard.addressLabel": "العنوان",
-  "gallery.locationCard.hotlineLabel": "الخط الساخن",
-  "gallery.locationCard.action": "الحصول على الاتجاهات",
-  "gallery.programmeRow.heading": "صف البرنامج (Programme row)",
-  "gallery.programmeRow.title": "عنوان نموذجي للصف",
-  "gallery.programmeRow.subtitle": "نص فرعي نموذجي",
-  "gallery.videoCard.heading": "بطاقة الفيديو (Video card)",
-  "gallery.videoCard.posterLabel": "غلاف الفيديو (عنصر نائب)",
-  "gallery.videoCard.duration": "2:30",
-  "gallery.videoCard.title": "عنوان نموذجي للفيديو",
-  "gallery.videoCard.description": "وصف تجريبي للفيديو.",
-  "gallery.videoCard.playLabel": "تشغيل الفيديو",
 
   // Accessibility checklist (§8)
   "a11y.criterion1": "تباين AA على كل زوج نص/سطح",
@@ -964,31 +814,22 @@ const en = {
   "approval.pending.newsModule": "Pending — awaiting a signed ninth dashboard module",
   "approval.pending.videoAsset": "Pending — awaiting client-supplied video assets",
   "approval.pending.legalFact": "Pending — awaiting a signed privacy policy and legal facts from the client",
+  "approval.pending.signedCopy": "Pending — awaiting approved copy from the client",
   "offer.validity.current": "Current",
   "offer.validity.expired": "Expired",
 
   // Hero
   "hero.eyebrow": "Medical laboratory services",
-  "hero.headlineLine1": "Complete health care",
-  "hero.headlineLine2": "for every family in Greater Cairo",
-  "hero.standfirst":
-    "A branch network across Greater Cairo and a range of health programmes, built on years of experience serving Egyptian families.",
   "hero.imageFrameLabel": "Lab photograph (client-supplied)",
   "hero.portalAction": "Access the results portal",
   "hero.whatsappAction": "Chat on WhatsApp",
   "hero.photoAlt": "Stock laboratory photograph — layout judgment only",
   "hero.stockNote": "Attached preview photograph for layout judgment.",
 
-  // Trust row — three verified structural facts (CONTENT_MODEL.md §3a /
-  // D-11), approved, not gated.
-  "trust.branches.label": "4 Branches",
-  "trust.branches.qualifier": "Across Greater Cairo, one head office",
-  "trust.programmes.label": "9 Programmes",
-  "trust.programmes.qualifier": "Published check-up programmes",
-  "trust.labUnits.label": "4 Departments",
-  "trust.labUnits.qualifier": "Specialised laboratory departments",
-  "trust.isoBadge": "ISO",
-  "trust.isoNote": "Placeholder accreditation mark — no number",
+  // Trust row — nouns only. The count is derived from published rows.
+  "trust.branches.label": "Branches",
+  "trust.programmes.label": "Programmes",
+  "trust.labUnits.label": "Departments",
   "trust.hotlineVisual": "Hotline",
 
   // Card band — News
@@ -1038,28 +879,13 @@ const en = {
   "programmes.row3Title": "Placeholder programme 3 — awaiting clinical sign-off",
   "programmes.row3Subtitle": "Sample subtitle",
 
-  // Departments (LabUnit) — approved, not gated
+  // Departments (LabUnit) — names come from published rows.
   "departments.heading": "Departments",
-  "departments.standfirst": "Four specialised departments run our day-to-day work.",
-  "departments.immunology": "Immunology",
-  "departments.chemistry": "Chemistry",
-  "departments.haematology": "Haematology",
-  "departments.molecularBiology": "Molecular Biology",
 
   // Video section
   "video.heading": "Videos",
-  "video.standfirst": "Three films — video files have not been supplied yet.",
   "video.posterLabel": "Video poster (placeholder)",
   "video.playLabel": "Play video",
-  "video.entry1.duration": "2:30",
-  "video.entry1.title": "Placeholder video title 1",
-  "video.entry1.description": "Sample description; not real content.",
-  "video.entry2.duration": "3:15",
-  "video.entry2.title": "Placeholder video title 2",
-  "video.entry2.description": "Sample description; not real content.",
-  "video.entry3.duration": "1:45",
-  "video.entry3.title": "Placeholder video title 3",
-  "video.entry3.description": "Sample description; not real content.",
 
   // About / Offers / Equipment / Lab-to-Lab — page chrome for the
   // CONTENT_MODEL §3c destinations that exist on this mock as in-page
@@ -1068,16 +894,9 @@ const en = {
   "about.heading": "About the laboratory",
   "about.standfirst": "A medical laboratory serving families in Greater Cairo.",
   "about.whoHeading": "Who we are",
-  "about.body": "Approved copy arrives after client sign-off. This paragraph fills the layout only and is not a medical description.",
   "offers.heading": "Offers",
   "offers.standfirst": "Offers awaiting approval — no price until the client signs off the copy.",
   "offers.viewAll": "View all",
-  "offers.item1.title": "Offer awaiting approval 1",
-  "offers.item1.body": "Details and price arrive after client approval.",
-  "offers.item2.title": "Offer awaiting approval 2",
-  "offers.item2.body": "Details and price arrive after client approval.",
-  "offers.item3.title": "Offer awaiting approval 3",
-  "offers.item3.body": "Details and price arrive after client approval.",
   "equipment.heading": "Equipment",
   "equipment.standfirst": "Laboratory equipment — awaiting client-supplied photographs.",
   "equipment.viewAll": "View all",
@@ -1109,46 +928,12 @@ const en = {
   "privacy.contact.title": "Contact",
   "privacy.contact.body": "Contact is through WhatsApp, a separate application that opens in a new browsing context. The message is not sent to this site.",
   "branches.heading": "Our branches",
-  "branches.standfirst": "Four branches across Greater Cairo — addresses await client data.",
   "branches.find": "Find a branch near you",
   "branches.awaiting": "Address and opening hours arrive after client data is approved.",
   "branches.card": "Branch",
   "newsShowcase.heading": "Insights",
   "newsShowcase.standfirst": "News from the laboratory, family-facing notes, and cautions when they apply.",
-  "newsShowcase.kicker": "News",
-  "newsShowcase.more": "Read more",
-  "newsShowcase.item1.kicker": "From the laboratory",
-  "newsShowcase.item1.date": "August 2026",
-  "newsShowcase.item1.title": "How a branch prepares for the morning intake",
-  "newsShowcase.item1.excerpt": "Layout copy for a news card, not a medical article.",
-  "newsShowcase.item2.kicker": "For families",
-  "newsShowcase.item2.date": "August 2026",
-  "newsShowcase.item2.title": "What a family can expect on a first visit",
-  "newsShowcase.item2.excerpt": "Preview text so the title and excerpt stack can be judged.",
-  "newsShowcase.item3.kicker": "Quality",
-  "newsShowcase.item3.date": "August 2026",
-  "newsShowcase.item3.title": "A day inside the laboratory departments",
-  "newsShowcase.item3.excerpt": "Newsletter-style headline. No LabTest names, no clinical instruction.",
-  "newsShowcase.caution.kicker": "Caution",
-  "newsShowcase.caution.title": "General visitor caution — awaiting clinical sign-off",
-  "newsShowcase.caution.body": "This frame shows where cautions will sit. It is not medical instruction and does not replace a physician's advice.",
   "why.heading": "Why Nile Egypt Lab",
-  "why.standfirst": "Reasons a visitor in Greater Cairo chooses the laboratory.",
-  "why.booking.title": "Contact easily",
-  "why.booking.body": "There is no booking form on the site. Contact uses the page actions.",
-  "why.booking.action": "Book via WhatsApp",
-  "why.care.title": "Complete care",
-  "why.care.body": "A branch network and published programmes serving families in Greater Cairo.",
-  "why.support.title": "Direct contact",
-  "why.support.body": "The laboratory answers enquiries. Support hours have not been approved yet.",
-  "why.support.action": "Ask on WhatsApp",
-  "why.insurance.title": "Insurance partners",
-  "why.insurance.body": "No real insurer marks — empty tiles so the layout can be judged.",
-  "why.partners.heading": "Insurance partners",
-  "why.partners.tile": "Partner mark (placeholder)",
-  "why.request.title": "Request a call",
-  "why.request.body": "The layout follows a request bar; the action is WhatsApp, not a form.",
-  "why.request.action": "Request a call on WhatsApp",
   "stock.alt.news": "Stock photograph for a news card",
   "stock.alt.footer": "Stock photograph in the footer",
   "stock.alt.video": "Stock photograph for a video poster",
@@ -1205,23 +990,6 @@ const en = {
   "system.space.elevationScale": "Elevation levels",
   "system.components.heading": "Components",
 
-  // System view — v3 composition rules (STEP 3)
-  "system.composition.heading": "v3's new composition rules",
-  "system.composition.boldRule.heading": "The Bold 700 rule",
-  "system.composition.boldRule.body":
-    "Bold 700 is permitted at 2xl and above only; forbidden below that because it clogs Arabic joins at running-text size.",
-  "system.composition.boldRule.sampleAllowed": "Permitted",
-  "system.composition.boldRule.sampleForbidden": "Forbidden",
-  "system.composition.gradientRule.heading": "The gradient rule",
-  "system.composition.gradientRule.body":
-    "One gradient within a single hue family only, behind a section or hero band, never over text.",
-  "system.composition.gradientRule.primarySample": "Primary gradient",
-  "system.composition.gradientRule.neutralSample": "Neutral gradient",
-  "system.composition.gradientRule.textNote": "Never applied to text — see the hero headline.",
-  "system.composition.alternatingFills.heading": "Alternating section fills",
-  "system.composition.alternatingFills.body":
-    "Sections alternate between two neutral fills only — no new chromatic family, no per-section colour.",
-
   // System view — §12 approval states, three side by side (STEP 3)
   "system.approval.heading": "Approval states (§12)",
   "system.approval.standfirst":
@@ -1248,68 +1016,6 @@ const en = {
   "state.empty": "Empty",
   "state.error": "Error",
   "state.hoverReveal": "Hover-reveal",
-
-  // Component gallery — labels and sample copy
-  "gallery.button.heading": "Button",
-  "gallery.button.primary": "Primary button",
-  "gallery.button.secondary": "Secondary button",
-  "gallery.button.text": "Text button",
-  "gallery.card.heading": "Card",
-  "gallery.card.title": "Card title",
-  "gallery.card.body": "A short descriptive line inside the card.",
-  "gallery.card.detail": "An extra detail line, revealed on hover.",
-  "gallery.card.action": "Open",
-  "gallery.header.heading": "Header",
-  "gallery.languageSwitcher.heading": "Language switcher",
-  "gallery.statCell.heading": "Stat cell",
-  "gallery.statCell.number": "9",
-  "gallery.statCell.label": "Programmes",
-  "gallery.imageFrame.heading": "Image frame",
-  "gallery.imageFrame.label": "Image (client-supplied)",
-  "gallery.whatsapp.heading": "WhatsApp action",
-  "gallery.whatsapp.label": "Chat on WhatsApp",
-  "gallery.whatsapp.filledRatio": "Filled — 8.28 AA",
-  "gallery.whatsapp.outlinedRatio": "Outlined — inherits secondary",
-  "gallery.whatsapp.forbiddenNote":
-    "White text on #25D366 measures 1.98 and fails AA, which is why it is never used in either treatment.",
-  "gallery.portal.heading": "ResultsPortalLink action",
-  "gallery.portal.label": "Open results portal",
-  "gallery.bilingualField.heading": "Bilingual field pair",
-  "gallery.bilingualField.arLabel": "Arabic",
-  "gallery.bilingualField.enLabel": "English",
-  "gallery.statusBadge.heading": "StatusState badge",
-  "gallery.statusBadge.published": "Published",
-  "gallery.statusBadge.draft": "Draft",
-  "gallery.statusBadge.expired": "Expired",
-  "gallery.footer.heading": "Footer",
-
-  // Component gallery — the seven §10 components v3 introduced
-  "gallery.sectionHeader.heading": "Section header",
-  "gallery.sectionHeader.title": "Section title",
-  "gallery.sectionHeader.viewAll": "View all",
-  "gallery.trustEntry.heading": "Trust entry",
-  "gallery.trustEntry.label": "Sample label",
-  "gallery.trustEntry.qualifier": "Sample qualifier",
-  "gallery.newsCardEntry.heading": "News card entry",
-  "gallery.newsCardEntry.date": "Date (placeholder)",
-  "gallery.newsCardEntry.title": "Sample news entry title",
-  "gallery.newsCardEntry.excerpt": "Sample excerpt text.",
-  "gallery.cautionCardEntry.heading": "Caution card entry",
-  "gallery.cautionCardEntry.title": "Sample caution title",
-  "gallery.cautionCardEntry.body": "Sample text showing the caution's shape.",
-  "gallery.locationCard.heading": "Location card",
-  "gallery.locationCard.addressLabel": "Address",
-  "gallery.locationCard.hotlineLabel": "Hotline",
-  "gallery.locationCard.action": "Get directions",
-  "gallery.programmeRow.heading": "Programme row",
-  "gallery.programmeRow.title": "Sample row title",
-  "gallery.programmeRow.subtitle": "Sample subtitle",
-  "gallery.videoCard.heading": "Video card",
-  "gallery.videoCard.posterLabel": "Video poster (placeholder)",
-  "gallery.videoCard.duration": "2:30",
-  "gallery.videoCard.title": "Sample video title",
-  "gallery.videoCard.description": "Sample video description.",
-  "gallery.videoCard.playLabel": "Play video",
 
   // Accessibility checklist (§8)
   "a11y.criterion1": "AA contrast on every text-on-surface pair",

@@ -32,7 +32,7 @@ export function OfferCard({
   posterSrc,
   posterAlt,
 }: OfferCardProps) {
-  const frameLabel = translate(locale, "gallery.imageFrame.label");
+  const frameLabel = translate(locale, "hero.imageFrameLabel");
   return (
     <article className={styles.card}>
       <div className={styles.media}>
