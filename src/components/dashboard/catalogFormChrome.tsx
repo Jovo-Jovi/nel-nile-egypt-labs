@@ -34,6 +34,8 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "coordinate" ||
     error === "latitude" ||
     error === "longitude" ||
+    error === "mapsShort" ||
+    error === "mapsUrl" ||
     error === "whatsapp_e164" ||
     error === "order" ||
     error === "headOffice" ||
@@ -90,6 +92,8 @@ function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "coordinate") return "dashboard.catalog.errorCoordinate";
   if (notice === "latitude") return "dashboard.validation.errorLatitude";
   if (notice === "longitude") return "dashboard.validation.errorLongitude";
+  if (notice === "mapsShort") return "dashboard.validation.errorMapsShort";
+  if (notice === "mapsUrl") return "dashboard.validation.errorMapsUrl";
   if (notice === "whatsapp_e164") return "dashboard.validation.errorPhone";
   if (notice === "confirm") return "dashboard.catalog.errorConfirm";
   if (notice === "order") return "dashboard.catalog.errorOrder";

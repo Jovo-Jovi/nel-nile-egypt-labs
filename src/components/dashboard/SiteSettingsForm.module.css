@@ -311,3 +311,50 @@
   color: var(--nel-color-accent);
   cursor: default;
 }
+
+.splitForm {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-inline-size: 1120px;
+  margin-inline: auto;
+  inline-size: 100%;
+  gap: var(--nel-space-32);
+}
+
+.publishAside {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: var(--nel-space-32);
+  padding: var(--nel-space-32);
+  background-color: var(--nel-color-surface);
+  border-radius: var(--nel-radius-well);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  box-shadow: var(--nel-elevation-1-shadow);
+  z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .publishAside {
+    order: -1;
+    position: sticky;
+    inset-block-start: 56px;
+  }
+}
+
+@media (min-width: 768px) {
+  .splitForm {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 18rem);
+    align-items: start;
+    gap: var(--nel-space-32);
+  }
+
+  .publishAside {
+    position: sticky;
+    inset-block-start: calc(72px + var(--nel-space-24));
+  }
+}

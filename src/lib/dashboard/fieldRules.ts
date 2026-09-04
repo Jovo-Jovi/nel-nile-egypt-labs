@@ -110,6 +110,74 @@ export function parseCoordinatePair(latRaw: string | null, lngRaw: string | null
   return { ok: true, latitude, longitude };
 }
 
+// Maps URL → coordinate pair. String parse only. Never fetch, never
+// follow redirects, never resolve a short link. A maps.app.goo.gl URL
+// cannot be parsed without a request to Google, so it is refused.
+const AT_PAIR = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/;
+const BANG_PAIR = /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/;
+const QUERY_PAIR = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/;
+
+export type MapsParse =
+  | { ok: true; latitude: number; longitude: number }
+  | { ok: false; reason: "mapsShort" | "mapsUrl" };
+
+function isShortMapsHost(hostname: string): boolean {
+  const host = hostname.replace(/^www\./i, "").toLowerCase();
+  if (host === "maps.app.goo.gl") return true;
+  if (host === "goo.gl") return true;
+  if (host.endsWith(".app.goo.gl")) return true;
+  return false;
+}
+
+function pairFromStrings(latRaw: string, lngRaw: string): { latitude: number; longitude: number } | null {
+  const parsed = parseCoordinatePair(latRaw, lngRaw);
+  if (!parsed.ok || parsed.latitude === null || parsed.longitude === null) return null;
+  return { latitude: parsed.latitude, longitude: parsed.longitude };
+}
+
+export function parseMapsUrl(raw: string): MapsParse {
+  let parsed: URL;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    return { ok: false, reason: "mapsUrl" };
+  }
+  if (parsed.protocol !== "https:") return { ok: false, reason: "mapsUrl" };
+  if (isShortMapsHost(parsed.hostname)) return { ok: false, reason: "mapsShort" };
+
+  const at = AT_PAIR.exec(parsed.href);
+  if (at?.[1] !== undefined && at[2] !== undefined) {
+    const pair = pairFromStrings(at[1], at[2]);
+    if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
+  }
+
+  const q = parsed.searchParams.get("q");
+  if (q !== null) {
+    const match = QUERY_PAIR.exec(q);
+    if (match?.[1] !== undefined && match[2] !== undefined) {
+      const pair = pairFromStrings(match[1], match[2]);
+      if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
+    }
+  }
+
+  const bang = BANG_PAIR.exec(parsed.href);
+  if (bang?.[1] !== undefined && bang[2] !== undefined) {
+    const pair = pairFromStrings(bang[1], bang[2]);
+    if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
+  }
+
+  const ll = parsed.searchParams.get("ll");
+  if (ll !== null) {
+    const match = QUERY_PAIR.exec(ll);
+    if (match?.[1] !== undefined && match[2] !== undefined) {
+      const pair = pairFromStrings(match[1], match[2]);
+      if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
+    }
+  }
+
+  return { ok: false, reason: "mapsUrl" };
+}
+
 export type HttpsParse = { ok: true; value: string | null } | { ok: false };
 
 export function parseHttpsField(raw: string | null): HttpsParse {

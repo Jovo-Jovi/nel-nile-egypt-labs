@@ -7,7 +7,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Locale } from "@/lib/locale";
-import { emptyToNull, parseCoordinatePair, parseWhatsAppFromForm } from "./fieldRules";
+import { emptyToNull, parseCoordinatePair, parseMapsUrl, parseWhatsAppFromForm } from "./fieldRules";
 import { parseYoutubeUrl } from "./youtubePoster";
 
 export type PublicationState = "draft" | "published";
@@ -96,6 +96,8 @@ export type CatalogWriteReason =
   | "coordinate"
   | "latitude"
   | "longitude"
+  | "mapsShort"
+  | "mapsUrl"
   | "whatsapp_e164"
   | "order"
   | "headOffice"
@@ -380,15 +382,35 @@ export type LabUnitWriteColumns = {
 
 export type ParseResult<T> = { ok: true; columns: T } | { ok: false; reason: CatalogWriteReason };
 
-export function parseBranchWrite(form: FormData, requireBilingual: boolean): ParseResult<BranchWriteColumns> {
+export function branchStoredCoordinates(row: BranchRow): {
+  latitude: number | null;
+  longitude: number | null;
+} {
+  const parsed = parseCoordinatePair(row.latitude, row.longitude);
+  if (!parsed.ok) return { latitude: null, longitude: null };
+  return { latitude: parsed.latitude, longitude: parsed.longitude };
+}
+
+export function parseBranchWrite(
+  form: FormData,
+  requireBilingual: boolean,
+  existingCoordinates?: { latitude: number | null; longitude: number | null },
+): ParseResult<BranchWriteColumns> {
   const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
   if (display_order === "invalid") return { ok: false, reason: "order" };
 
-  const coordinates = parseCoordinatePair(
-    emptyToNull(form.get("latitude")),
-    emptyToNull(form.get("longitude")),
-  );
-  if (!coordinates.ok) return { ok: false, reason: coordinates.field };
+  const mapsRaw = emptyToNull(form.get("maps_url"));
+  let latitude: number | null;
+  let longitude: number | null;
+  if (mapsRaw === null) {
+    latitude = existingCoordinates?.latitude ?? null;
+    longitude = existingCoordinates?.longitude ?? null;
+  } else {
+    const maps = parseMapsUrl(mapsRaw);
+    if (!maps.ok) return { ok: false, reason: maps.reason };
+    latitude = maps.latitude;
+    longitude = maps.longitude;
+  }
 
   const phone = parseWhatsAppFromForm(form);
   if (!phone.ok) return { ok: false, reason: "whatsapp_e164" };
@@ -401,8 +423,8 @@ export function parseBranchWrite(form: FormData, requireBilingual: boolean): Par
     hours_ar: emptyToNull(form.get("hours_ar")),
     hours_en: emptyToNull(form.get("hours_en")),
     whatsapp_e164: phone.e164,
-    latitude: coordinates.latitude,
-    longitude: coordinates.longitude,
+    latitude,
+    longitude,
     is_head_office: form.get("is_head_office") === "true",
     display_order,
   };
@@ -629,6 +651,8 @@ export function noticeFromQuery(query: { error?: string; saved?: string; poster?
     error === "slug" ||
     error === "slugTaken" ||
     error === "coordinate" ||
+    error === "mapsShort" ||
+    error === "mapsUrl" ||
     error === "order" ||
     error === "headOffice" ||
     error === "held" ||

@@ -214,3 +214,28 @@ real tree exits 0.
 published posters can be served from `/media-asset/[name]` without a second
 REST client. No migration. T14 not started.
 
+---
+
+## 2026-09-04 — P05-T14: maps links, phone fields, SiteSettings residue
+
+The Branch form no longer takes a manual latitude/longitude pair. The Operator
+pastes an expanded Google Maps URL; `parseMapsUrl` is a synchronous string
+parse (`@lat,lng`, `?q=`, `!3d!4d`, `ll=`) and never fetches. A
+`maps.app.goo.gl` short link is refused with `error=mapsShort` because
+resolving it would make Google a dependency of every save. The URL itself is
+not stored — there is no column and this task adds none. Retaining it is an
+M6 candidate.
+
+`SiteSettings` has no coordinate field. The laboratory's location is its
+head-office `Branch`. `hotline` stays a short-code text box. `whatsapp_e164`
+uses the calling-code selector with an empty first option (PR-16). Hours stay
+prose with a format hint.
+
+Fourteen published `SiteSettings` bilingual fields held `NEL-P05-T02-PROOF`
+from earlier verification runs and were cleared to empty string, not to a
+new placeholder. `ADMIN_SPEC.md` has no §4h; the classify used the T02 token
+and T11 probe shapes. `hotline` and `whatsapp_e164` were not proof tokens and
+were not rewritten.
+
+No migration. T15 (invented public content) not started.
+

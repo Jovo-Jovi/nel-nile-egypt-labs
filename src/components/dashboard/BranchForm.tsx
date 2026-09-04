@@ -14,7 +14,7 @@ import {
 } from "@/lib/dashboard/catalogEntities";
 import {
   emptyToNull,
-  parseCoordinatePair,
+  parseMapsUrl,
   parseWhatsAppParts,
   splitE164,
 } from "@/lib/dashboard/fieldRules";
@@ -44,8 +44,10 @@ import site from "./SiteSettingsForm.module.css";
 // whatsapp_calling and whatsapp_subscriber are not columns: the route
 // handler assembles `"Branch".whatsapp_e164` as E.164. No calling code is
 // selected until the Operator chooses one.
-// latitude → latitude
-// longitude → longitude
+// maps_url is not a column: the route handler extracts latitude and
+// longitude from the pasted Google Maps URL and stores only that pair.
+// The URL itself is discarded. A maps.app.goo.gl short link is refused
+// without a network request.
 // is_head_office → is_head_office
 // display_order → display_order
 // Publish / unpublish write publication_state.
@@ -226,6 +228,7 @@ export function BranchForm({
     row?.publication_state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";
   const expectedConfirm = row === null ? "" : confirmToken(locale, row);
   const [issues, setIssues] = useState<Record<string, string>>({});
+  const [mapsEcho, setMapsEcho] = useState<string | null>(null);
   const activeNotice = clientNotice !== null ? clientNotice : showQueryNotice ? notice : null;
 
   function setIssue(id: string, message: string | null) {
@@ -246,31 +249,39 @@ export function BranchForm({
     return parseWhatsAppParts(emptyToNull(data.get("whatsapp_calling")), emptyToNull(data.get("whatsapp_subscriber")));
   }
 
-  function readCoordinates(form: HTMLFormElement) {
+  function readMaps(form: HTMLFormElement) {
     const data = new FormData(form);
-    return parseCoordinatePair(emptyToNull(data.get("latitude")), emptyToNull(data.get("longitude")));
+    const raw = emptyToNull(data.get("maps_url"));
+    if (raw === null) return { ok: true as const, pair: null };
+    const parsed = parseMapsUrl(raw);
+    if (!parsed.ok) return parsed;
+    return { ok: true as const, pair: `${parsed.latitude}, ${parsed.longitude}` };
   }
+
+  const storedPair =
+    row !== null && row.latitude !== null && row.longitude !== null
+      ? `${row.latitude}, ${row.longitude}`
+      : null;
 
   const phoneError =
     issues.whatsapp_subscriber ??
     (activeNotice === "whatsapp_e164" ? translate(locale, "dashboard.validation.errorPhone") : null);
-  const latitudeError =
-    issues.latitude ?? (activeNotice === "latitude" ? translate(locale, "dashboard.validation.errorLatitude") : null);
-  const longitudeError =
-    issues.longitude ??
-    (activeNotice === "longitude" || activeNotice === "coordinate"
-      ? translate(locale, "dashboard.validation.errorLongitude")
-      : null);
+  const mapsError =
+    issues.maps_url ??
+    (activeNotice === "mapsShort"
+      ? translate(locale, "dashboard.validation.errorMapsShort")
+      : activeNotice === "mapsUrl"
+        ? translate(locale, "dashboard.validation.errorMapsUrl")
+        : null);
 
   const summaryIssues = [
     phoneError !== null ? { id: "whatsapp_subscriber", message: phoneError } : null,
-    latitudeError !== null ? { id: "latitude", message: latitudeError } : null,
-    longitudeError !== null ? { id: "longitude", message: longitudeError } : null,
+    mapsError !== null ? { id: "maps_url", message: mapsError } : null,
   ].filter((item): item is { id: string; message: string } => item !== null);
 
   return (
     <form
-      className={site.form}
+      className={site.splitForm}
       method="post"
       action={isCreate ? saveAction : editSave}
       id={isCreate ? "create" : undefined}
@@ -325,6 +336,9 @@ export function BranchForm({
             defaultAr={row?.hours_ar ?? null}
             defaultEn={row?.hours_en ?? null}
           />
+          <p className={extra.help}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.validation.hoursHelp")} />
+          </p>
           <PhoneField
             locale={locale}
             defaultE164={row?.whatsapp_e164 ?? null}
@@ -347,56 +361,41 @@ export function BranchForm({
           </p>
           <TextField
             locale={locale}
-            name="latitude"
-            labelKey="dashboard.branches.latitude"
-            defaultValue={row?.latitude ?? null}
-            inputMode="decimal"
-            error={latitudeError}
+            name="maps_url"
+            labelKey="dashboard.branches.mapsUrl"
+            defaultValue={null}
+            error={mapsError}
             onBlur={() => {
-              const form = document.getElementById("latitude")?.closest("form");
+              const form = document.getElementById("maps_url")?.closest("form");
               if (!(form instanceof HTMLFormElement)) return;
-              const parsed = readCoordinates(form);
-              if (parsed.ok) {
-                setIssue("latitude", null);
-                setIssue("longitude", null);
+              const parsed = readMaps(form);
+              if (!parsed.ok) {
+                setMapsEcho(null);
+                setIssue(
+                  "maps_url",
+                  parsed.reason === "mapsShort"
+                    ? translate(locale, "dashboard.validation.errorMapsShort")
+                    : translate(locale, "dashboard.validation.errorMapsUrl"),
+                );
                 return;
               }
-              setIssue(
-                "latitude",
-                parsed.field === "latitude" ? translate(locale, "dashboard.validation.errorLatitude") : null,
-              );
-              setIssue(
-                "longitude",
-                parsed.field === "longitude" ? translate(locale, "dashboard.validation.errorLongitude") : null,
-              );
+              setIssue("maps_url", null);
+              setMapsEcho(parsed.pair);
             }}
           />
-          <TextField
-            locale={locale}
-            name="longitude"
-            labelKey="dashboard.branches.longitude"
-            defaultValue={row?.longitude ?? null}
-            inputMode="decimal"
-            error={longitudeError}
-            onBlur={() => {
-              const form = document.getElementById("longitude")?.closest("form");
-              if (!(form instanceof HTMLFormElement)) return;
-              const parsed = readCoordinates(form);
-              if (parsed.ok) {
-                setIssue("latitude", null);
-                setIssue("longitude", null);
-                return;
-              }
-              setIssue(
-                "latitude",
-                parsed.field === "latitude" ? translate(locale, "dashboard.validation.errorLatitude") : null,
-              );
-              setIssue(
-                "longitude",
-                parsed.field === "longitude" ? translate(locale, "dashboard.validation.errorLongitude") : null,
-              );
-            }}
-          />
+          {mapsEcho !== null ? (
+            <p className={extra.help}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.mapsEcho")} />
+              {" "}
+              <IsolatedCopy locale={locale} text={mapsEcho} />
+            </p>
+          ) : storedPair !== null ? (
+            <p className={extra.help}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.mapsStored")} />
+              {" "}
+              <IsolatedCopy locale={locale} text={storedPair} />
+            </p>
+          ) : null}
         </CatalogSection>
 
         <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionOrder">
@@ -428,7 +427,7 @@ export function BranchForm({
         </CatalogSection>
       </div>
 
-      <div className={site.actions}>
+      <aside className={site.publishAside} aria-label={translate(locale, "dashboard.catalog.sectionPublish")}>
         {isCreate ? (
           <div className={site.actionsMain}>
             <ActionSlot
@@ -497,7 +496,7 @@ export function BranchForm({
           </>
         )}
         <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
-      </div>
+      </aside>
     </form>
   );
 }
