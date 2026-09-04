@@ -444,12 +444,10 @@ certified as rendering publicly. That removal is the substance of this OD,
 not a side effect.
 
 **Client approval.** The removal of the public `/offers` page and the
-gating of the home Offers band was approved by the client, reported by
-the human on 4 September 2026. This is a relayed verbal approval, not a
-countersignature, and it is recorded as such. It is superseded by the
-client's signature on the amended quotation, which is where a scope
-removal belongs. Until that signature, this record is the only evidence
-that a promised deliverable was withdrawn by agreement.
+gating of the home Offers band was approved by the client and carried into
+the amended quotation, which Androw signed on 4 September 2026. That
+signature is the authoritative record and supersedes the relayed approval
+this section previously carried.
 
 This reverses P05-T09's proof V4, which demonstrated an Operator
 publishing an Offer and a Visitor seeing it at `/ar/offers` and
