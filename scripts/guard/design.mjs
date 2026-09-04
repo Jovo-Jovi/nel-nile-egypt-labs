@@ -5,7 +5,7 @@
 // host-element prohibition, DESIGN_SYSTEM.md §3 third-party brand-mark exception.
 // This guard makes those static checks executable rather than re-greppable.
 //
-// Four rules over src/**. Comments (`/* */` and `//`) are blanked before matching,
+// Five rules over src/**. Comments (`/* */` and `//`) are blanked before matching,
 // preserving offsets so file:line:col stay true to the original file.
 //
 //   R1  Physical properties in .css / .tsx / .ts — I18N_MODEL.md §4 forbidden list.
@@ -43,6 +43,12 @@
 //       A `#` + 3/6 hex run that is an identifier reference is not a colour:
 //       fragment identifiers (`href="#cbc"`) and SVG `url(#id)` references
 //       (P03-T01; seed ids `cbc` and `cea` are hex-shaped).
+//   R5  YouTube host strings — youtube.com, youtu.be, ytimg.com — are a
+//       blocking finding anywhere under src/components/site/ and
+//       src/app/[locale]/(public)/**. They are permitted only in the
+//       named server module that fetches the poster and the dashboard
+//       preview (exact paths in R5_EXEMPT_PATHS). OD-14 does not amend
+//       D-13 on Visitor-facing surfaces.
 //
 // No vocabulary rule over src/. GLOSSARY.md §7 rules route segments and
 // Visitor-facing strings out of the forbidden set; a rule against the wrong
@@ -51,7 +57,7 @@
 // Usage:
 //   node scripts/guard/design.mjs              scan src/**
 //   node scripts/guard/design.mjs --stdin      scan text piped on stdin
-//                                              (all four rules, as if .tsx and .css)
+//                                              (all five rules, as if .tsx and .css)
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join, relative, sep } from "node:path";
@@ -80,6 +86,16 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/EquipmentForm.tsx",
   "src/components/dashboard/MediaAssetForm.tsx",
 ]);
+
+// Exact paths. Host strings may appear in these two files and nowhere
+// under the Visitor trees R5 scans. Adding a member is a boundary
+// decision (P05-T13; OD-14).
+const R5_EXEMPT_PATHS = new Set([
+  "src/lib/dashboard/youtubePoster.ts",
+  "src/components/dashboard/VideoForm.tsx",
+]);
+
+const R5_VISITOR_PREFIXES = ["src/components/site/", "src/app/[locale]/(public)/"];
 
 const CSS = new Set([".css"]);
 const TSX = new Set([".tsx"]);
@@ -322,6 +338,19 @@ function findR4(source, scannable, starts, sourceLines, label) {
   return colorHitsInSpan(source, scannable, starts, sourceLines, label, 0, scannable.length);
 }
 
+const R5_HOST_PATTERN = /youtube\.com|youtu\.be|ytimg\.com/gi;
+
+function r5Applies(label, stdinAllRules) {
+  if (stdinAllRules) return true;
+  return R5_VISITOR_PREFIXES.some((prefix) => label.startsWith(prefix));
+}
+
+function findR5(source, scannable, starts, sourceLines, label) {
+  const findings = [];
+  pushMatches(findings, source, scannable, starts, sourceLines, label, "R5", R5_HOST_PATTERN);
+  return findings;
+}
+
 function scanFile(source, label, opts) {
   const { asCss, asTsx, asTs, anyFile } = opts;
   const scannable = blankComments(source);
@@ -341,6 +370,9 @@ function scanFile(source, label, opts) {
   if ((asCss || asTsx || asTs) && label !== TOKENS_PATH) {
     findings.push(...findR4(source, scannable, starts, sourceLines, label));
   }
+  if (anyFile && r5Applies(label, Boolean(opts.stdinAllRules)) && !R5_EXEMPT_PATHS.has(label)) {
+    findings.push(...findR5(source, scannable, starts, sourceLines, label));
+  }
 
   findings.sort(
     (a, b) =>
@@ -354,7 +386,7 @@ function scanFile(source, label, opts) {
 
 function optsForLabel(label, stdinAllRules) {
   if (stdinAllRules) {
-    return { asCss: true, asTsx: true, asTs: true, anyFile: true };
+    return { asCss: true, asTsx: true, asTs: true, anyFile: true, stdinAllRules: true };
   }
   const ext = extOf(label);
   return {
@@ -362,6 +394,7 @@ function optsForLabel(label, stdinAllRules) {
     asTsx: TSX.has(ext),
     asTs: ext === ".ts",
     anyFile: true,
+    stdinAllRules: false,
   };
 }
 

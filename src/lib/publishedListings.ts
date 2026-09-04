@@ -10,6 +10,7 @@
 // a link. Detail membership is resolved by public."programmeLabTests".
 
 import { fetchAnonPublishedJson } from "./supabaseRest";
+import { offerIsExpired } from "./listingFormat";
 
 export type MediaPoster = {
   storagePath: string;
@@ -198,6 +199,8 @@ function parseOffer(value: unknown): PublishedOffer | null {
   const descriptionEn = asNonEmptyString(row.description_en);
   if (id === null || titleAr === null || titleEn === null) return null;
   if (descriptionAr === null || descriptionEn === null) return null;
+  const validUntil = asOptionalString(row.valid_until);
+  if (offerIsExpired(validUntil)) return null;
   return {
     id,
     titleAr,
@@ -205,7 +208,7 @@ function parseOffer(value: unknown): PublishedOffer | null {
     descriptionAr,
     descriptionEn,
     validFrom: asOptionalString(row.valid_from),
-    validUntil: asOptionalString(row.valid_until),
+    validUntil,
     priceAmount: asPriceAmount(row.price_amount),
     priceCurrency: asNonEmptyString(row.price_currency),
     poster: parsePoster(row.MediaAsset),
@@ -397,8 +400,10 @@ export function posterSrc(poster: MediaPoster | null): string | null {
   if (poster === null) return null;
   const path = poster.storagePath;
   if (FORBIDDEN_POSTER.test(path)) return null;
-  if (/^https:\/\//i.test(path)) return path;
-  return null;
+  if (/^https?:\/\//i.test(path)) return null;
+  if (path.includes("..") || path.includes("/") || path.includes("\\")) return null;
+  if (path.length === 0) return null;
+  return `/media-asset/${encodeURIComponent(path)}`;
 }
 
 export function posterAlt(locale: "ar" | "en", poster: MediaPoster | null): string | null {

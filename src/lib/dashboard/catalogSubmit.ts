@@ -33,7 +33,8 @@ import {
   type CatalogWriteReason,
   type PublicationState,
 } from "@/lib/dashboard/catalogEntities";
-import { checkMediaAssetAttach } from "@/lib/dashboard/mediaAsset";
+import { checkMediaAssetAttach, setMediaAssetPublication } from "@/lib/dashboard/mediaAsset";
+import { ensureVideoPoster, posterFileFromForm } from "@/lib/dashboard/youtubePoster";
 import { gateModuleRoute } from "@/lib/dashboard/gates";
 import {
   revalidatePublishedBranches,
@@ -63,6 +64,10 @@ function editSuffix(entity: CatalogEntity, rowId: string): string {
 
 function errorQuery(reason: CatalogWriteReason): string {
   return `error=${reason}`;
+}
+
+function savedQuery(posterMissing: boolean): string {
+  return posterMissing ? "saved=1&poster=missing" : "saved=1";
 }
 
 function revalidateFor(entity: CatalogEntity): () => void {
@@ -134,12 +139,21 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (entity === "Video") {
         const parsed = parseVideoWrite(form, false);
         if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+        const poster = await ensureVideoPoster(supabase, {
+          youtubeId: parsed.columns.youtube_id,
+          existingMediaId: null,
+          youtubeIdChanged: true,
+          overrideFile: posterFileFromForm(form),
+          alt_ar: parsed.columns.title_ar,
+          alt_en: parsed.columns.title_en,
+        });
+        parsed.columns.MediaAsset = poster.mediaId;
         const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
         if (attach !== null) toList(locale, errorQuery(attach));
         const created = await createVideoRow(supabase, parsed.columns);
         if (!created.ok) toList(locale, errorQuery(created.reason));
         revalidate();
-        toEdit(locale, created.id, "saved=1");
+        toEdit(locale, created.id, savedQuery(poster.posterMissing));
       }
       const parsed = parseEquipmentWrite(form, false);
       if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
@@ -244,6 +258,15 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseVideoWrite(form, nextState === "published");
       if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+      const poster = await ensureVideoPoster(supabase, {
+        youtubeId: parsed.columns.youtube_id,
+        existingMediaId: row.MediaAsset,
+        youtubeIdChanged: row.youtube_id !== parsed.columns.youtube_id,
+        overrideFile: posterFileFromForm(form),
+        alt_ar: parsed.columns.title_ar,
+        alt_en: parsed.columns.title_en,
+      });
+      parsed.columns.MediaAsset = poster.mediaId;
       const attach = await checkMediaAssetAttach(
         supabase,
         parsed.columns.MediaAsset,
@@ -252,8 +275,11 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
       const written = await writeVideoRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
+      if (nextState === "published" && parsed.columns.MediaAsset !== null) {
+        await setMediaAssetPublication(supabase, parsed.columns.MediaAsset, "published");
+      }
       revalidate();
-      toEdit(locale, rowId, "saved=1");
+      toEdit(locale, rowId, savedQuery(poster.posterMissing));
     }
 
     const row = await readEquipmentRow(supabase, rowId);

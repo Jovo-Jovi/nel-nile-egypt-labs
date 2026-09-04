@@ -108,3 +108,116 @@
   color: var(--nel-color-error);
   cursor: default;
 }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  padding: var(--nel-space-32);
+  background-color: var(--nel-color-surface);
+  border-radius: var(--nel-radius-well);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.emptyBody {
+  margin: 0;
+  color: var(--nel-color-text);
+  font-size: var(--nel-size-base);
+  letter-spacing: 0;
+}
+
+.videoLayout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-32);
+}
+
+.videoAside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-32);
+}
+
+@media (min-width: 768px) {
+  .videoLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 20rem);
+    align-items: start;
+    gap: var(--nel-space-32);
+  }
+}
+
+.previewFrame {
+  inline-size: 100%;
+  aspect-ratio: 16 / 9;
+  border-width: 0;
+  border-radius: var(--nel-radius-control);
+}
+
+.thumbGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--nel-space-16);
+  margin: 0;
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.thumb {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  min-block-size: 44px;
+  padding: var(--nel-space-8);
+  background-color: var(--nel-color-background);
+  border-radius: var(--nel-radius-control);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  color: var(--nel-color-text);
+  font: inherit;
+  text-decoration: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.thumbSelected {
+  border-color: var(--nel-color-accent);
+  box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.thumbImage {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--nel-radius-control);
+}
+
+.thumbFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 6rem;
+  font-size: var(--nel-size-sm);
+  color: var(--nel-color-muted);
+}
+
+.thumbLabel {
+  font-size: var(--nel-size-sm);
+  letter-spacing: 0;
+}
+
+.drop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  padding: var(--nel-space-16);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: dashed;
+  border-color: var(--nel-color-border);
+  border-radius: var(--nel-radius-control);
+}

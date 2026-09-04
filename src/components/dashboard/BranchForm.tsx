@@ -273,6 +273,7 @@ export function BranchForm({
       className={site.form}
       method="post"
       action={isCreate ? saveAction : editSave}
+      id={isCreate ? "create" : undefined}
       onSubmit={onSubmit}
       onInput={() => {
         if (flight?.phase === "saved") setFlight(null);

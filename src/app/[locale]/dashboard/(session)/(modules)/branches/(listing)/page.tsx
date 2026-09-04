@@ -3,7 +3,6 @@ import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { BranchForm } from "@/components/dashboard/BranchForm";
 import { CatalogRowList } from "@/components/dashboard/CatalogListing";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
-import { PendingListingCards } from "@/components/dashboard/PendingListingCard";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { listBranchRows } from "@/lib/dashboard/catalogEntities";
@@ -41,11 +40,7 @@ export default async function BranchesPage({ params, searchParams }: Props) {
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.branches.heading" />
       <div className={extra.groups}>
-        {rows.length === 0 ? (
-          <PendingListingCards locale={locale} pendingLabelKey="dashboard.branches.pending" count={4} />
-        ) : (
-          <CatalogRowList locale={locale} rows={rows} editPrefix="/dashboard/branches" />
-        )}
+        <CatalogRowList locale={locale} rows={rows} editPrefix="/dashboard/branches" />
         <BranchForm locale={locale} row={null} notice={notice} />
       </div>
     </>

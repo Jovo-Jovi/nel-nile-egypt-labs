@@ -12,7 +12,27 @@ export type CatalogListRow = {
   name_en: string | null;
   publication_state: PublicationState;
   display_order: number;
+  expired?: boolean;
 };
+
+export function CatalogEmptyState({
+  locale,
+  createHref,
+}: {
+  locale: Locale;
+  createHref: string;
+}) {
+  return (
+    <div className={styles.empty}>
+      <p className={styles.emptyBody}>
+        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.empty")} />
+      </p>
+      <Link className={styles.editLink} href={createHref}>
+        {translate(locale, "dashboard.catalog.emptyCreate")}
+      </Link>
+    </div>
+  );
+}
 
 export function CatalogRowList({
   locale,
@@ -29,6 +49,10 @@ export function CatalogRowList({
     | "/dashboard/equipment"
     | "/dashboard/media-assets";
 }) {
+  if (rows.length === 0) {
+    return <CatalogEmptyState locale={locale} createHref="#create" />;
+  }
+
   return (
     <ul className={styles.list}>
       {rows.map((row) => {
@@ -52,6 +76,12 @@ export function CatalogRowList({
                     state={row.publication_state === "published" ? "published" : "draft"}
                     label={translate(locale, statusKey)}
                   />
+                  {row.expired === true ? (
+                    <StatusStateBadge
+                      state="expired"
+                      label={translate(locale, "offer.validity.expired")}
+                    />
+                  ) : null}
                 </p>
               </div>
               <Link className={styles.editLink} href={href}>

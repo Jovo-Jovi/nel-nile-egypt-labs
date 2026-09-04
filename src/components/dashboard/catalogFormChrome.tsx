@@ -24,6 +24,7 @@ export function noticeFromHref(href: string): CatalogNotice {
   } catch {
     return "write";
   }
+  if (url.searchParams.get("poster") === "missing") return "posterMissing";
   if (url.searchParams.get("saved") === "1") return "saved";
   const error = url.searchParams.get("error");
   if (
@@ -53,7 +54,8 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "facebook_url" ||
     error === "instagram_url" ||
     error === "linkedin_url" ||
-    error === "youtube_url"
+    error === "youtube_url" ||
+    error === "posterMissing"
   ) {
     return error;
   }
@@ -96,6 +98,7 @@ function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "currency") return "dashboard.catalog.errorCurrency";
   if (notice === "reference") return "dashboard.catalog.errorReference";
   if (notice === "hostId") return "dashboard.catalog.errorHostId";
+  if (notice === "posterMissing") return "dashboard.videos.posterMissing";
   if (notice === "bucket") return "dashboard.media.errorBucket";
   if (notice === "alt") return "dashboard.media.errorAlt";
   if (notice === "file") return "dashboard.media.errorFile";
@@ -124,6 +127,16 @@ export function CatalogNoticeView({ locale, notice }: { locale: Locale; notice: 
   if (notice === "saved") {
     return (
       <StatusStateBadge state="current" label={translate(locale, "dashboard.siteSettings.saved")} />
+    );
+  }
+  if (notice === "posterMissing") {
+    return (
+      <>
+        <StatusStateBadge state="current" label={translate(locale, "dashboard.siteSettings.saved")} />
+        <p className={extra.help}>
+          <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.posterMissing")} />
+        </p>
+      </>
     );
   }
   return (

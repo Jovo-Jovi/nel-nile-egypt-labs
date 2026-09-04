@@ -3,11 +3,11 @@ import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { OfferForm } from "@/components/dashboard/OfferForm";
 import { CatalogRowList } from "@/components/dashboard/CatalogListing";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
-import { PendingListingCards } from "@/components/dashboard/PendingListingCard";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { listOfferRows } from "@/lib/dashboard/catalogEntities";
 import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
+import { offerIsExpired } from "@/lib/listingFormat";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
@@ -42,21 +42,18 @@ export default async function OffersPage({ params, searchParams }: Props) {
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.offers.heading" />
       <div className={extra.groups}>
-        {rows.length === 0 ? (
-          <PendingListingCards locale={locale} pendingLabelKey="dashboard.offers.pending" count={3} />
-        ) : (
-          <CatalogRowList
-            locale={locale}
-            rows={rows.map((row) => ({
-              id: row.id,
-              name_ar: row.title_ar,
-              name_en: row.title_en,
-              publication_state: row.publication_state,
-              display_order: row.display_order,
-            }))}
-            editPrefix="/dashboard/offers"
-          />
-        )}
+        <CatalogRowList
+          locale={locale}
+          rows={rows.map((row) => ({
+            id: row.id,
+            name_ar: row.title_ar,
+            name_en: row.title_en,
+            publication_state: row.publication_state,
+            display_order: row.display_order,
+            expired: offerIsExpired(row.valid_until),
+          }))}
+          editPrefix="/dashboard/offers"
+        />
         <OfferForm locale={locale} row={null} notice={notice} assets={assets} />
       </div>
     </>
