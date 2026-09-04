@@ -183,7 +183,8 @@ in the project, and it should not be first.
 - [x] **P05-T13** — Land OD-14 and the expiry rule, then Videos and Media Library
 - [x] **P05-T14** — Site Settings and Branches: maps links, phone fields, proof residue
 - [x] **M7A** — Read-first audit of the role split
-- [ ] **P05-T15A** — Record the OD-15 client approval
+- [x] **P05-T15A** — Record the OD-15 client approval
+- [ ] **P05-T15B** — Record the countersignature, close CF-50, narrow CF-69 and CF-74
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module

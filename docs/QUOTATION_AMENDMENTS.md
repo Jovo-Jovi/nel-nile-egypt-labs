@@ -21,12 +21,15 @@ September 2026** if no signed quotation is filed. Its own text: *"if 15 Septembe
 arrives with no signed quotation, this OD expires and no further build task is issued
 until a new freeze is signed."*
 
-Seventeen days remain from the date of this document. Eleven entries have accumulated against
-a quotation nobody has signed, and two of them rest on **verbal** approval (CF-50): brand
-refinement, already built, and the withdrawal of the public Offers page, agreed on
-4 September 2026 and not yet executed.
+The amended quotation was signed on 4 September 2026. That signature files the
+quotation OD-03 named and retires the two unfiled approvals CF-50 carried: brand
+refinement, already built, and the withdrawal of the public Offers page. The
+15 September lapse path therefore does not fire. Whether the signature also
+discharges OD-03's freeze role is a reviewer ruling; this file records the
+signature, not that finding.
 
-The cost of the deadline passing is not a penalty. It is that the build stops.
+Eleven entries have accumulated against the quotation. A2, A7 and the scope
+removal R1 now rest on that signature.
 
 ---
 
@@ -49,13 +52,12 @@ than forgotten — the inbox was quoted and is not being built.
 
 A removal is not a correction of a drafting error and not an addition of work.
 The client is losing a page he was promised, and it is recorded here so the
-schedule shows that plainly. Pending the client's signature on the amended
-quotation; until then this entry, and OD-15, are the only evidence of the
-agreement.
+schedule shows that plainly. The client's signature on the amended quotation,
+4 September 2026, is the authoritative record of this agreement.
 
 | # | Item | Draft says | Reality | Source |
 |---|---|---|---|---|
-| R1 | **Public Offers page and home Offers band** | Public page 5 (`/{locale}/offers`); G3 certified it rendering publicly | Withdrawn from the public deliverable by client agreement on 4 September 2026, relayed by the human, pending signature. An anonymous Visitor will see an authentication-required state; no title, description, price or image. The home Offers band becomes the same state. Not executed in this phase — that is P08, after G5 | OD-15, CF-50 |
+| R1 | **Public Offers page and home Offers band** | Public page 5 (`/{locale}/offers`); G3 certified it rendering publicly | Withdrawn from the public deliverable by the client's signature on the amended quotation, 4 September 2026. An anonymous Visitor will see an authentication-required state; no title, description, price or image. The home Offers band becomes the same state. Not executed in this phase — that is P08, after G5 | OD-15, CF-50 |
 
 ---
 
@@ -66,16 +68,16 @@ Seven entries. Each is outside the draft quotation as written.
 | # | Item | Why it is outside the draft | Depends on |
 |---|---|---|---|
 | A1 | **Bilingual delivery** | Draft §7 and §9 **exclude** bilingual. `D-10` makes Arabic the default and English secondary. This is not a translation line — it doubles the copy surface, the review surface and the acceptance evidence, and it constrains the type system (`I18N_MODEL.md`) | CF-18 |
-| A2 | **Brand refinement** | Absent from the draft. Logo refinement and vector reconstruction, four variants, a digital palette, typography direction, and a UI design system. Approved **verbally** on 26 August, unfiled | OD-07, CF-49, CF-50 |
+| A2 | **Brand refinement** | Absent from the draft. Logo refinement and vector reconstruction, four variants, a digital palette, typography direction, and a UI design system. Approved by the client's signature on the amended quotation, 4 September 2026 | OD-07, CF-49, CF-50 |
 | A3 | **Announcements module** | The draft has eight dashboard modules. `D-15` states there is no ninth; `D-16` enumerates the eight. A news and posts stream is a ninth | OD-09 |
 | A4 | **Clinical notices module** | A tenth module, and the only one carrying medical copy. Requires a distinct publication workflow because the clinical gate applies to it and not to Announcements | OD-09 |
 | A5 | **Photography direction** | The lab supplies the files (`08-form-review:73`). Art direction, selection, cropping to the §9 ratios and optimisation are not the same as supplying a folder | §9, CF-72 |
 | A6 | **Dark theme** | Requested at the reference-design review. A second theme roughly doubles the AA certification matrix: every token pair in `DESIGN_SYSTEM.md` §3 is verified twice, in both locales | not yet decided |
-| A7 | **PartnerLab accounts and private Offers** | Absent from the draft. Open signup; an Operator-reviewed approval queue; `/{locale}/offers` and the home Offers band restricted to approved accounts; one shared price list with no per-Lab pricing; the role split (M7) that must precede it. D-09 prices its own reversal — an approval inbox — at a `BOUNDARY_MODEL.md` amendment plus a changed compliance position plus separate paid scope. This is that scope. Approved **verbally** on 4 September 2026, unfiled | OD-15, D-09, CF-50 |
+| A7 | **PartnerLab accounts and private Offers** | Absent from the draft. Open signup; an Operator-reviewed approval queue; `/{locale}/offers` and the home Offers band restricted to approved accounts; one shared price list with no per-Lab pricing; the role split (M7) that must precede it. D-09 prices its own reversal — an approval inbox — at a `BOUNDARY_MODEL.md` amendment plus a changed compliance position plus separate paid scope. This is that scope. Approved by the client's signature on the amended quotation, 4 September 2026 | OD-15, D-09, CF-50 |
 
 A6 is the only entry the client has not confirmed wanting. It is included so it is
-priced or dropped deliberately rather than absorbed. A7 is wanted; it is unpriced
-and unsigned.
+priced or dropped deliberately rather than absorbed. A7 is wanted and signed; it
+is unpriced (OD-15 §10).
 
 ---
 
@@ -113,12 +115,11 @@ scope; it does not produce a database.
 ## §6 The one conversation to have
 
 Seven additions, three corrections, one deletion to net off (C3), one scope removal
-(R1 — the public Offers page and the home Offers band), five client dependencies, and
-seventeen days. In a single message rather than six:
+(R1 — the public Offers page and the home Offers band), five client dependencies.
+In a single message rather than six:
 
-1. **The signature** — CF-50. Two verbal approvals sit on it: brand refinement, already
-   built, and OD-15's withdrawal of the public Offers page, agreed 4 September 2026.
-   One signature retires both.
+1. **The signature** — landed 4 September 2026. CF-50 is closed. Brand refinement
+   and OD-15's withdrawal of the public Offers page both rest on that signature.
 2. **The two new modules** — Announcements and Clinical notices, priced, with the clinical
    workflow explained rather than assumed.
 3. **A7 — PartnerLab accounts and private Offers** — open signup, an Operator-reviewed
@@ -136,7 +137,7 @@ seventeen days. In a single message rather than six:
 
 - Any price, rate, or total. The human's, entirely.
 - Whether A6 is wanted.
-- Whether the client signs. If 15 September passes unsigned, `OD-03` expires by its own
-  terms and a new freeze is required before any further build task issues.
+- Whether the 4 September 2026 signature discharges OD-03's freeze role. OD-03 is
+  unamended. The reviewer rules.
 - What `SCOPE.md` says, which derives from a **signed** quotation and not from this
   schedule.

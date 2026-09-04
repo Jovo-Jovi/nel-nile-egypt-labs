@@ -41,24 +41,21 @@ twenty-two policies, RLS on eleven of eleven.
 ## Blocking conditions
 
 **OD-03 — scope freeze.** Signed 25 August 2026; lapses 15 September 2026 if no
-signed quotation lands. Development proceeds against the draft quotation as
-amended by OD-03 and D-01 through D-19. `SCOPE.md` still derives from a signed
-quotation and is not authored.
+signed quotation lands. The amended quotation was signed on 4 September 2026
+(recorded at OD-15 §2, `QUOTATION_AMENDMENTS.md`, CF-50). `SCOPE.md` still
+derives from a signed quotation and is not authored. OD-03 is unamended;
+whether the signature discharges its freeze role is a reviewer ruling.
 
 **OD-04 — repository visibility.** Signed 25 August 2026. The repository is
 PUBLIC during development, for review convenience, and reverts to PRIVATE
 before production cutover. The revert is a G7 checklist item; until it is
 done, G7 does not pass. Full conditions in `docs/DECISIONS.md` OD-04.
 
-**OD-07 / OD-15 — verbal client approvals (CF-50).** Brand refinement was
-approved verbally on 26 August 2026, not filed in writing. OD-15's withdrawal
-of the public Offers page and the home Offers band was approved verbally on
-4 September 2026, relayed by the human, not filed in writing. Both are
-retired by the same quotation signature. OD-03's scope freeze lapses
-15 September 2026 if no signed quotation lands, after which no further build
-task is issued until a new freeze is signed. Brand refinement is proceeding,
-and the Offers withdrawal is recorded, on verbal expansions of an unsigned
-scope.
+**OD-07 / OD-15 — quotation signed (CF-50 closed).** The amended quotation
+carrying OD-07's brand refinement and OD-15's scope removal was signed on
+4 September 2026. Both previously unfiled approvals are retired. CF-50 is
+CLOSED at P05-T15B. `docs/research/09-locked-baseline.md` is the source for
+branch and settings content.
 
 ---
 
@@ -141,7 +138,8 @@ scope.
 | P05-T13 | Land OD-14 and the expiry rule, then Videos and Media Library. Branched p05-t13 from origin/main at e5f4927 (T12 merge, PR #66). Live OD maximum before allocate: 13 (python re.findall ^### OD-); live D maximum 47. STEP 0 — P05-T12 Verdict cell set to PASS at reviewer verdict — 4 September 2026; PHASES.md T12 box already checked; unchecked P05-T13 box present. P05-T05 remains unchecked with the placeholder. STEP 1 — OD-14 landed SIGNED verbatim as the last OD entry; OD headings 13 to 14; count sentence Forty-eight / fourteen. STEP 2 — D-48 landed as the last D entry; D headings 47 to 48. CONTENT_MODEL.md section 3a Offer gained one sentence stating the effective public rule (publication_state = published AND (valid_until IS NULL OR valid_until >= now)), read-path only, D-48. publishedListings.parseOffer returns null when offerIsExpired; publication_state is not written. STEP 3 — Video form takes a full YouTube URL; parseYoutubeUrl in youtubePoster.ts (watch?v=, youtu.be/, /embed/, /shorts/) runs in the route handler. Unparseable paste returns error=hostId. Poster fetched on save (maxresdefault then hqdefault) into media-asset; MediaAsset row linked. Unreachable thumbnail still saves (poster=missing). No MediaAsset picker on Video. Dashboard iframe under OD-14 in VideoForm.tsx only. guard:design R5 blocks youtube.com, youtu.be, ytimg.com under src/components/site/ and src/app/[locale]/(public)/. R5_EXEMPT_PATHS: src/lib/dashboard/youtubePoster.ts and src/components/dashboard/VideoForm.tsx. STEP 4 — Media Library thumbnail grid, alt-text search, drag-and-drop upload, one-click attach on Offer and Equipment pickers. Bilingual alt still required before attach to a published parent. STEP 5 — CatalogRowList renders CatalogEmptyState when the query returned zero rows; skeletons stay in loading.tsx / DashboardSegmentLoading. All six listing modules updated. Create forms carry id=create. STEP 6 production HTTP npx next start -p 3024, throwaway aal2. C1 POST videos/submit/create with a full watch URL: 303 saved=1; youtube_id dQw4w9WgXcQ; MediaAsset linked; storage object JPEG 65324 bytes, path uuid.jpeg, not a host URL. C2 POST youtube_url=not-a-youtube-link: 303 error=hostId; error page names the unparseable address. C3 publish: GET /ar/videos and /en/videos 200 with the proof title; youtube.com, youtu.be, ytimg.com absent from those bodies. C4 python over .next/server/app html excluding _global-error.html: 25 public, 0 dashboard, host_hits 0. C5 FILE MODE outside the repository (%TEMP%\nel-p05-t13-r5): seeded src/components/site/r5-seed.tsx fires R5 at :1:31 youtube.com, exit 1; real tree npm run guard:design exit 0, Scanned 159 file(s). C6 GET /ar/dashboard/videos with Video count 0: empty Arabic copy and #create present; data-approval-state=pending absent from script-stripped HTML. C7 Video 204, MediaAsset 204, factor DELETE 200, user DELETE 200, GET 404; sidecar deleted. Open CF 62 + 0 - 0 = 62. Catalogue ar=564 en=564 identical (552 + 12). git ls-files supabase/migrations/ count 18, unchanged. No migration. D 48 / OD 14. Build: 25 static HTML excluding _global-error.html, 0 dashboard HTML. Guards, lint, typecheck, build, verify_seed.py exit 0 (121 -> 72). No lasting Operator account. T14 not started. | PASS at reviewer verdict — 4 September 2026 | 2026-09-04 |
 | P05-T14 | Site Settings and Branches: maps links, phone fields, proof residue. Branched p05-t14 from origin/main at 71bc495 (T13 merge, PR #67). CF live maximum 107; PR live maximum 34. STEP 0 — P05-T13 Verdict cell set to PASS at reviewer verdict — 4 September 2026; PHASES.md T13 box checked; unchecked P05-T14 box present. P05-T05 remains unchecked with the placeholder. STEP 1 — Branch maps_url is parsed by parseMapsUrl, synchronous, never fetch. Patterns @lat,lng, q=, !3d!4d, ll=. A maps.app.goo.gl short link returns error=mapsShort and asks for the expanded link. The URL is not stored and no column was added. SiteSettings has no coordinate field; location is the head-office Branch. Retaining the URL is an M6 candidate, not started. STEP 2 — hotline stays a short-code text box, not E.164. whatsapp_e164 on SiteSettings and Branch uses the country selector plus number, no country pre-selected, no code hardcoded. Hours are a free-text pair with a format hint. STEP 3 — published SiteSettings: fourteen bilingual fields held NEL-P05-T02-PROOF and were cleared to empty string (about_body, hours, lab_to_lab, privacy_body, seo_description, seo_title, whatsapp_message, each ar and en). hotline and whatsapp_e164 were not proof tokens and were not rewritten. ADMIN_SPEC.md has no section 4h; the classify used the T02 token and T11 probe shapes. STEP 4 — both forms are one continuous page with grouped sections and a sticky publishAside so save is reachable without scrolling to the bottom. STEP 5 production HTTP npx next start -p 3025, throwaway aal2. D1 POST create with https://www.google.com/maps/place/T14Proof/@1.25,2.5,17z: 303 saved=1, stored 1.25 2.5, GET edit echoes the pair, name=maps_url present, name=latitude and name=longitude absent. D2 POST https://maps.app.goo.gl/t14proof: 303 error=mapsShort, message asks for the expanded link, coords unchanged. No outbound Google request: parseMapsUrl is sync, fetch( count 0 in fieldRules.ts catalogEntities.ts catalogSubmit.ts BranchForm.tsx, googleapis 0, maps.google 0; Next start stdout has 0 of google.com goo.gl maps.google. D3 POST https://example.invalid/maps-without-a-coordinate: 303 error=mapsUrl, message names the Maps link field. D4 POST publish with the same @ pair: 303 saved=1, publication_state published, stored 1.25 2.5. D5 POST save calling=1 subscriber=2025550100: stored +12025550100; rg +20 under src/ hits only fonts.css unicode-range. D6 classify on published SiteSettings: 0 PROOF_TOKEN NEL_TASK_TOKEN EXAMPLE_INVALID NANP_PROBE T10C_PROBE WA_PLACEHOLDER; the fourteen bilingual fields are empty char_len 0; publication_state length 9. D7 typed delete 303 saved=1, REST row gone, GET edit 404; factor DELETE 200, user DELETE 200, GET 404; sidecar deleted. Open CF 62 + 0 − 0 = 62. Catalogue ar=572 en=572 identical (564 + 8). git ls-files supabase/migrations/ count 18, unchanged. No migration. D 48 / OD 14. Build: 25 static HTML excluding _global-error.html, 0 dashboard HTML. Guards, lint, typecheck, build, verify_seed.py exit 0 (121 -> 72). No lasting Operator account. T15 not started. | PASS at reviewer verdict — 4 September 2026 | 2026-09-04 |
 | M7A | Read-first audit of the role split. Authors nothing. Branched m7a from origin/main at 6282fb6 (P05-T14 merge, PR #68). CF live maximum 107; PR live maximum 34. STEP 0 — P05-T14 Verdict cell set to PASS at reviewer verdict — 4 September 2026; PHASES.md T14 box checked; unchecked M7A box added. P05-T05 remains unchecked with the placeholder. STEP 1 — 24 policies inventoried from the three forward files (python create-policy count 16+6+2=24) and live pg_policies count 24, cmd ALL 12 SELECT 12. Twelve published-read KEEP; twelve operator-write CHANGE (eleven tables plus storage.objects). STEP 2 — recommend app_metadata.nel_principal equals Operator; reject the custom access token hook (config commented out, pg_proc 0 rows, would need a public roles table D-40 forbids). Live auth.users count 1; operator and nel_principal keys 0; provider and providers present. STEP 3 — stamp the claim first, then one policy migration; combined push without session revoke locks unrefreshed JWTs. STEP 4 — readOperatorAccessFrom checks AAL2 and verified TOTP and no role; Operator check must precede TOTP so a PartnerLab fails without TOTP being the failure. STEP 5 — tokens nel-m7b-anon, nel-m7b-auth-no-claim, nel-m7b-operator-control; Admin mint and delete, no lasting account; HTTP to PostgREST and Storage. STEP 6 — CLI login is postgres with rolbypassrls true; proofs must not use MCP or db query as the subject. Report landed at docs/research/m7-role-split-audit.md. git ls-files supabase/migrations/ count 18, unchanged. No src/ change. No SQL authored. Open CF 62 + 0 − 0 = 62. D 48 / OD 14. Guards, lint, typecheck, build, verify_seed.py exit 0 (121 -> 72). | PASS at reviewer verdict — 4 September 2026 | 2026-09-04 |
-| P05-T15A | Record the OD-15 client approval. Documents only. Branched p05-t15a from origin/main at dfaf71d (M7A merge, PR #69). Live OD maximum before allocate: 14 (python re.findall ^### OD-); live D maximum 48. STEP 0 — M7A Verdict cell set to PASS at reviewer verdict — 4 September 2026; PHASES.md M7A box checked; unchecked P05-T15A box added. P05-T05 remains unchecked with the placeholder. STEP 1 — OD-15 landed SIGNED verbatim as the last OD entry; OD headings 14 to 15; D headings stay 48; count sentence Forty-eight / fifteen. STEP 2 — QUOTATION_AMENDMENTS.md gained A7 in the section 3 additions table and a distinct section 2a scope-removal entry for the public Offers page and home Offers band. STEP 3 — CF-50 amended, still OPEN; a second verbal unfiled approval (OD-15 scope removal) appended; owner and due date unchanged. STEP 4 — this row; open-CF list regenerated; Next action P05-T15; invented-content deletion: Next action names P05-T15 only and does not invent its payload; OD-15 SIGNED; GLOSSARY.md, SECURITY_MODEL.md section 3, CONTENT_MODEL.md section 3c and PHASES.md OD-15 amendments land after G5. Open CF 62 + 0 − 0 = 62. D 48 / OD 15. git ls-files supabase/migrations/ count 18, unchanged. No src/ change. Build: 25 static HTML excluding _global-error.html, 0 dashboard HTML; 24 public pages unchanged including /ar/offers and /en/offers. Guards, lint, typecheck, build, verify_seed.py exit 0 (121 -> 72). | pushed — verdict at push | 2026-09-05 |
+| P05-T15A | Record the OD-15 client approval. Documents only. Branched p05-t15a from origin/main at dfaf71d (M7A merge, PR #69). Live OD maximum before allocate: 14 (python re.findall ^### OD-); live D maximum 48. STEP 0 — M7A Verdict cell set to PASS at reviewer verdict — 4 September 2026; PHASES.md M7A box checked; unchecked P05-T15A box added. P05-T05 remains unchecked with the placeholder. STEP 1 — OD-15 landed SIGNED verbatim as the last OD entry; OD headings 14 to 15; D headings stay 48; count sentence Forty-eight / fifteen. STEP 2 — QUOTATION_AMENDMENTS.md gained A7 in the section 3 additions table and a distinct section 2a scope-removal entry for the public Offers page and home Offers band. STEP 3 — CF-50 amended, still OPEN; a second verbal unfiled approval (OD-15 scope removal) appended; owner and due date unchanged. STEP 4 — this row; open-CF list regenerated; Next action P05-T15; invented-content deletion: Next action names P05-T15 only and does not invent its payload; OD-15 SIGNED; GLOSSARY.md, SECURITY_MODEL.md section 3, CONTENT_MODEL.md section 3c and PHASES.md OD-15 amendments land after G5. Open CF 62 + 0 − 0 = 62. D 48 / OD 15. git ls-files supabase/migrations/ count 18, unchanged. No src/ change. Build: 25 static HTML excluding _global-error.html, 0 dashboard HTML; 24 public pages unchanged including /ar/offers and /en/offers. Guards, lint, typecheck, build, verify_seed.py exit 0 (121 -> 72). | PASS at reviewer verdict — 4 September 2026 | 2026-09-05 |
+| P05-T15B | Record the OD-15 countersignature, close CF-50, narrow CF-69 and CF-74. Documents only. Branched p05-t15b from origin/main at 9928170 (T15A merge, PR #70). STEP 0 — P05-T15A Verdict cell set to PASS at reviewer verdict — 4 September 2026; PHASES.md P05-T15A box checked; unchecked P05-T15B box added. P05-T05 remains unchecked with the placeholder. STEP 1 — OD-15 section 2 Client approval paragraph replaced in full; the V4 reversal paragraph unchanged; nothing else in OD-15 and no other decision body edited. OD headings stay 15, D headings stay 48. STEP 2 — QUOTATION_AMENDMENTS.md A7 and R1 rewritten to the 4 September 2026 signature; section 1 lapse-date framing corrected; A2, section 2a intro, section 3 A7 closing, section 6 item 1 and section 7 sign-or-lapse lines corrected so none still read as unsigned. STEP 3 — CF-50 CLOSED at P05-T15B; Item cell appended with the signed-quotation sentence; owner unchanged. OD-03 unamended; lapse-discharge finding in the task report. STEP 4 — CF-69 appended, still OPEN. STEP 5 — CF-74 appended, still OPEN. STEP 6 — this row; open-CF list regenerated; Next action P05-T15; quotation recorded as signed; locked baseline recorded as the source for branch and settings content. Open CF 62 + 0 - 1 = 61. D 48 / OD 15. git ls-files supabase/migrations/ count 18, unchanged. No src/ change. npm run build still prerenders /ar/offers and /en/offers. Guards, lint, typecheck, build, verify_seed.py exit 0 (121 -> 72). | pushed — verdict at push | 2026-09-05 |
 
 ---
 
@@ -150,9 +148,9 @@ scope.
 Computed by (run after M5B):
 `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md`
 
-**Open — 62:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
+**Open — 61:** CF-01 · CF-03 · CF-04 · CF-05 · CF-06 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
-CF-28 · CF-37 · CF-41 · CF-45 · CF-46 · CF-49 · CF-50 · CF-51 ·
+CF-28 · CF-37 · CF-41 · CF-45 · CF-46 · CF-49 · CF-51 ·
 CF-52 · CF-54 · CF-62 · CF-63 · CF-65 · CF-66 · CF-67 ·
 CF-68 · CF-69 · CF-71 · CF-74 · CF-75 · CF-78 · CF-79 · CF-80 · CF-81 ·
 CF-82 · CF-83 · CF-86 · CF-87 · CF-89 · CF-90 · CF-92 · CF-93 · CF-94 ·
@@ -392,6 +390,14 @@ wrapping 403 `new row violates row-level security policy`). CF-106 landed OPEN
 project does not own that table. Open count 61 + 2 − 1 = 62
 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 62).
 
+**Closed at P05-T15B:** CF-50 (the amended quotation carrying OD-07's brand
+refinement and OD-15's scope removal was signed on 4 September 2026,
+retiring both unfiled approvals). CF-69 and CF-74 stay OPEN, narrowed:
+CF-69 now tracks only verification of the two coordinate pairs and the
+absence of the other two; CF-74 now tracks a non-blocking request for a
+larger or scalable mark file, not an absent mark. Open count 62 + 0 − 1 = 61
+(`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 61).
+
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
 risk: P04 search cannot ship until the lab's clinical sign-off opens the PR-08
@@ -403,10 +409,9 @@ CF-41 is the Node engine-version drift between the build machine and CI,
 owned by the builder. CF-45, CF-46 and CF-49 are `DESIGN_SYSTEM.md`
 dependencies raised at brand extraction under OD-06/OD-07: no editable
 original of the mark, the portal's painted login staying UNDETERMINED, and
-the lab's pre-launch approval of the refined mark. CF-50 and CF-51 are the
-OD-07 exposures: verbal, unfiled client approval racing OD-03's 15 September
-2026 lapse, and unpriced brand-refinement work joining CF-17/CF-18 at the
-quotation. CF-52 and CF-54 are `I18N_MODEL.md` deferrals landed at P02-T05
+the lab's pre-launch approval of the refined mark. CF-50 is CLOSED at P05-T15B: the amended quotation was signed on
+4 September 2026, retiring both unfiled approvals. CF-51 remains the
+unpriced brand-refinement work joining CF-17/CF-18 at the quotation. CF-52 and CF-54 are `I18N_MODEL.md` deferrals landed at P02-T05
 still open: the Operator dashboard's chrome language (P04 `ADMIN_SPEC.md`)
 and unspecified cross-script search matching (P03 search architecture). CF-58
 is CLOSED at P01-T03-R-M1: it was landed at P02-X02-A restricting `scripts/` to
@@ -445,14 +450,17 @@ rebuilt landing preview renders 11 regions as §12 `pending` (header mark,
 footer mark, footer contact block, hero media, News card, Cautions card,
 Locations card address/hotline, Programmes card, three Video cards), and
 each of the 11 clears only on a signature or a supplied asset — never on a
-further design task — enumerated by name in the P02-T11 report. CF-69 is landed at P02-T12, open, P03: the drawn SVG map `DESIGN_SYSTEM.md`
-§10 specifies needs verified `Branch` coordinates and renders `pending`
-with indicative pins until they exist. CF-70 is CLOSED at P02-T14: social
+further design task — enumerated by name in the P02-T11 report. CF-69 is landed at P02-T12, still OPEN, narrowed at P05-T15B: the four
+branch addresses and the hotline, WhatsApp number and hours are
+client-locked in `docs/research/09-locked-baseline.md` and are not
+unsupplied; the row now tracks only verification of the two coordinate
+pairs and the absence of the other two. CF-70 is CLOSED at P02-T14: social
 marks render monochrome in `surface`; §3's third-party exception stays at
 one, the WhatsApp mark. CF-71 is landed at P02-T13, still open. CF-72 and
-CF-73 are CLOSED at P02-T15. CF-74 stays OPEN: the SVG was not supplied;
-the slot uses the `onError` labelled-frame fallback and the 83×100 raster
-is not referenced. CF-75 is landed at P02-T15, OPEN, P03: the promoted
+CF-73 are CLOSED at P02-T15. CF-74 stays OPEN, narrowed at P05-T15B: `public/mark/nel-mark.png` is
+supplied at 83×100 and is the mark asset, sufficient for in-page use and
+insufficient for the 180px app icon; the row tracks a non-blocking request
+for a larger or scalable file, not an absent mark. CF-75 is landed at P02-T15, OPEN, P03: the promoted
 composition renders 21 regions as §12 pending under OD-08, each clearing
 on a signature or a supplied asset, enumerated in the P02-T15 report. CF-34
 is CLOSED at P02-T17: OD-10 decides the route and no local database is used
@@ -524,7 +532,7 @@ tracked as CF-79. **OD-11 (Auth and MFA move to P05) is SIGNED** 31 August
 dashboard they serve. G1 closes on foundation. D-08 is unchanged except
 when. See `DECISIONS.md` OD-11. **OD-12 (delivery order) is SIGNED** 1 September
 2026 — phases are delivered P03 → P05 → P06 → P04 → P07. Identifiers and gates
-are unchanged. D-12 is unamended. See `DECISIONS.md` OD-12. **OD-13 (model class, replaced by executable proof) is SIGNED** 2 September 2026 — Grok is permitted on authentication and on any task whose fence requires executable negative proofs; the two absolute exceptions remain applying a migration against the live database (CF-79) and LabTest content / Arabic clinical terminology. See `DECISIONS.md` OD-13. **OD-14 (YouTube preview inside the dashboard) is SIGNED** 3 September 2026 — an aal2 Operator preview may embed YouTube; D-13 still binds every Visitor-facing surface. See `DECISIONS.md` OD-14. **OD-15 (PartnerLab accounts and private Offers) is SIGNED** 4 September 2026 — a relayed verbal approval, not a countersignature, superseded by the client's signature on the amended quotation. Its document amendments — `GLOSSARY.md`, `SECURITY_MODEL.md` §3, `CONTENT_MODEL.md` §3c, `PHASES.md` — land after G5. See `DECISIONS.md` OD-15. **OD-10's controls are now exercised rather than
+are unchanged. D-12 is unamended. See `DECISIONS.md` OD-12. **OD-13 (model class, replaced by executable proof) is SIGNED** 2 September 2026 — Grok is permitted on authentication and on any task whose fence requires executable negative proofs; the two absolute exceptions remain applying a migration against the live database (CF-79) and LabTest content / Arabic clinical terminology. See `DECISIONS.md` OD-13. **OD-14 (YouTube preview inside the dashboard) is SIGNED** 3 September 2026 — an aal2 Operator preview may embed YouTube; D-13 still binds every Visitor-facing surface. See `DECISIONS.md` OD-14. **OD-15 (PartnerLab accounts and private Offers) is SIGNED** 4 September 2026 — the client's signature on the amended quotation, 4 September 2026, is the authoritative record. Its document amendments — `GLOSSARY.md`, `SECURITY_MODEL.md` §3, `CONTENT_MODEL.md` §3c, `PHASES.md` — land after G5. See `DECISIONS.md` OD-15. **OD-10's controls are now exercised rather than
 prospective:** P01-T03-R-M1 authored a reverse in the same task (control 1),
 ran `db push --dry-run` before applying and quoted it (control 2), applied one
 migration and no more (control 3), created only types so nothing was dropped or
@@ -571,7 +579,7 @@ nothing and must never be cited as authority. v2 is reordered under OD-12.
 
 ## Next action
 
-**P05-T15.** OD-15 is SIGNED. Its document amendments — `GLOSSARY.md`, `SECURITY_MODEL.md` §3, `CONTENT_MODEL.md` §3c, `PHASES.md` — land after G5, not now. The public Offers page and the home Offers band are unchanged until P08.
+**P05-T15.** OD-15 is SIGNED. The amended quotation was signed on 4 September 2026. `docs/research/09-locked-baseline.md` is the source for branch and settings content. Its document amendments — `GLOSSARY.md`, `SECURITY_MODEL.md` §3, `CONTENT_MODEL.md` §3c, `PHASES.md` — land after G5, not now. The public Offers page and the home Offers band are unchanged until P08.
 
 Site Settings' write path is on `main` (P05-T02). Dashboard composition against the design system is on `main` as of `a2c067f` (P05-T04). The §9 page wash landed on `main` as of `4b41b97` (P05-T05). The approved hex lattice restore, which replaces that wash, is on `main` as of `4f22074` (P05-T06). Dashboard document scroll and Save/Saving/Saved feedback are on `main` as of `6a51089` (P05-T07). Branch and LabUnit full CRUD is on `main` as of `4b792fb` (P05-T08). Offer, Video and Equipment full CRUD is on `main` as of `e992ed1` (P05-T09). Media Library module is on `main` as of `24633d3` (P05-T10). The catalog submit-button action fallback is on `main` as of `eba2a82` (P05-T10A). The applied private `media-asset` bucket is on `main` as of `1d4f684` (P05-T10B). Site Settings save uses the same `hasAttribute("formaction")` test on `main` as of `594ee49` (P05-T10C). Operator field validation (E.164 WhatsApp, coordinate pairs, https-only social URLs, SEO counters that warn at 60/160, publish-time required marks) is on `main` as of `16a19e9` (P05-T11). Public chrome reads published SiteSettings, the dashboard home renders eight module cards, and dashboard containers are centred on `main` as of `e5f4927` (P05-T12). OD-14, Offer expiry as a read-path filter (D-48), Video URL parse with server-side poster fetch, Media Library thumbnail grid, and listing empty-vs-loading are on `main` as of `71bc495` (P05-T13). Branch maps-link parse (no Google fetch, URL not stored), E.164 WhatsApp selector with no pre-selected country, and the SiteSettings proof-residue clear are on `main` as of `6282fb6` (P05-T14 merge, PR #68). The role-split audit is on `main` as of `dfaf71d` (M7A merge, PR #69). M7B is after G5. The two real Operator accounts remain an unchecked P05 item; they are not this next action.
 
@@ -596,17 +604,18 @@ P03 was first and is now closed. P04 follows P06 because Arabic LabTest names
 are empty. P05 precedes P06 so content entry is through the dashboard, not
 SQL. P05 is next.
 
-OD-03 lapses 15 September 2026 and P05 is a build phase, so by OD-03's own
-text no further build task is issued after that date until a new freeze is
-signed. Seven unpriced additions sit in `docs/QUOTATION_AMENDMENTS.md` §3:
-A1 bilingual delivery, A2 brand refinement, A3 Announcements module, A4
-Clinical notices module, A5 photography direction, A6 dark theme, A7
-PartnerLab accounts and private Offers. CF-50 now holds two verbal
-approvals, both unfiled: brand refinement and OD-15's public-Offers
-withdrawal. §2a records the scope removal separately; it is not an addition.
+The amended quotation was signed on 4 September 2026, so OD-03's 15
+September lapse path does not fire. OD-03 is unamended; whether the
+signature discharges its freeze role is a reviewer ruling. Seven unpriced
+additions sit in `docs/QUOTATION_AMENDMENTS.md` §3: A1 bilingual delivery,
+A2 brand refinement, A3 Announcements module, A4 Clinical notices module,
+A5 photography direction, A6 dark theme, A7 PartnerLab accounts and private
+Offers. CF-50 is CLOSED at P05-T15B. §2a records the scope removal
+separately; it is not an addition.
 
 G3 certified the public chrome in both locales on the human's attestation
-(CF-59, CF-60 closed). Remaining: the mark is unsupplied (CF-74); the 21
+(CF-59, CF-60 closed). Remaining: the mark is supplied at 83×100 and still
+needs a larger or scalable file for the app icon (CF-74); the 21
 §12 pending regions are uncleared (CF-75); there is no gallery to re-prove
 §8 criteria 1–3 on (CF-92). CF-103 holds CF-60's staff-judgement clause live
 for the Arabic that P06 will introduce. CF-104 holds the eighteen Programme
@@ -625,9 +634,10 @@ CF-39 is closed under D-47 and the region is settled.
 is landed (§1–§7) and OD-09 (Announcements and Clinical notices,
 two dashboard modules — `Announcement` and `ClinicalNotice`, priced as A3 and
 A4) is DRAFT, awaiting the human's signature and a price. CF-17, CF-18,
-CF-49, CF-50, CF-51 and CF-67 remain open against the draft quotation; none
-of them clears on a document, only on a signature or a supplied asset. CF-74
-stays open until the human supplies `public/mark/nel-mark.svg`. CF-80, CF-81
+CF-49, CF-51 and CF-67 remain open against the quotation; none of them
+clears on a document, only on a price or a supplied asset. CF-50 is closed.
+CF-74 stays open as a non-blocking request for a larger or scalable mark
+file. CF-80, CF-81
 and CF-82 are open against the seed: missing Arabic LabTest names, unset
 eligibility, and five QA-flagged rows. CF-65, CF-66, CF-68,
 CF-69, CF-71, CF-75, CF-78, CF-79 and CF-103 remain open, and CF-83, CF-86,
