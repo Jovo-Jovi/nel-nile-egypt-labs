@@ -11,6 +11,8 @@ const MODULES: { suffix: string; labelKey: CatalogKey }[] = [
   { suffix: "/dashboard/videos", labelKey: "dashboard.nav.videos" },
   { suffix: "/dashboard/equipment", labelKey: "dashboard.nav.equipment" },
   { suffix: "/dashboard/branches", labelKey: "dashboard.nav.branches" },
+  { suffix: "/dashboard/programmes", labelKey: "dashboard.nav.programmes" },
+  { suffix: "/dashboard/lab-tests", labelKey: "dashboard.nav.labTests" },
   { suffix: "/dashboard/lab-units", labelKey: "dashboard.nav.labUnits" },
   { suffix: "/dashboard/site-settings", labelKey: "dashboard.nav.siteSettings" },
   { suffix: "/dashboard/media-assets", labelKey: "dashboard.nav.mediaAssets" },

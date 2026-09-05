@@ -6,8 +6,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   listBranchRows,
   listEquipmentRows,
+  listLabTestRows,
   listLabUnitRows,
   listOfferRows,
+  listProgrammeRows,
   listVideoRows,
   type PublicationState,
 } from "./catalogEntities";
@@ -19,12 +21,21 @@ export type PublicationCounts = {
   draft: number;
 };
 
+export type ClinicalProgressCounts = {
+  labTestArabicNamed: number;
+  labTestTotal: number;
+  membershipsReviewed: number;
+  membershipsTotal: number;
+  qaFlagsOutstanding: number;
+};
+
 type CountTable =
   | "Offer"
   | "Video"
   | "Equipment"
   | "Branch"
   | "Programme"
+  | "LabTest"
   | "LabUnit"
   | "SiteSettings"
   | "MediaAsset";
@@ -39,28 +50,52 @@ function fromStates(states: PublicationState[]): PublicationCounts {
   return { published, draft };
 }
 
-async function countProgrammeRows(supabase: SupabaseClient): Promise<PublicationCounts> {
-  const { data, error } = await supabase.from("Programme").select("publication_state");
-  if (error || !Array.isArray(data)) return { published: 0, draft: 0 };
-  const states: PublicationState[] = [];
-  for (const row of data) {
-    if (row === null || typeof row !== "object") continue;
-    const state = (row as { publication_state?: unknown }).publication_state;
-    if (state === "published" || state === "draft") states.push(state);
+export async function countClinicalProgress(
+  supabase: SupabaseClient,
+): Promise<ClinicalProgressCounts> {
+  const [labTests, memberships] = await Promise.all([
+    listLabTestRows(supabase),
+    supabase.from("ProgrammeLabTest").select("eligibility_audience"),
+  ]);
+
+  let labTestArabicNamed = 0;
+  let qaFlagsOutstanding = 0;
+  for (const row of labTests) {
+    if (row.name_ar !== null) labTestArabicNamed += 1;
+    if (row.qa_flag !== null) qaFlagsOutstanding += 1;
   }
-  return fromStates(states);
+
+  let membershipsReviewed = 0;
+  let membershipsTotal = 0;
+  if (!memberships.error && Array.isArray(memberships.data)) {
+    membershipsTotal = memberships.data.length;
+    for (const row of memberships.data) {
+      if (row === null || typeof row !== "object") continue;
+      const audience = (row as { eligibility_audience?: unknown }).eligibility_audience;
+      if (typeof audience === "string" && audience !== "unreviewed") membershipsReviewed += 1;
+    }
+  }
+
+  return {
+    labTestArabicNamed,
+    labTestTotal: labTests.length,
+    membershipsReviewed,
+    membershipsTotal,
+    qaFlagsOutstanding,
+  };
 }
 
 export async function countDashboardModules(
   supabase: SupabaseClient,
 ): Promise<Record<CountTable, PublicationCounts>> {
-  const [offers, videos, equipment, branches, programmes, labUnits, siteSettings, media] =
+  const [offers, videos, equipment, branches, programmes, labTests, labUnits, siteSettings, media] =
     await Promise.all([
       listOfferRows(supabase),
       listVideoRows(supabase),
       listEquipmentRows(supabase),
       listBranchRows(supabase),
-      countProgrammeRows(supabase),
+      listProgrammeRows(supabase),
+      listLabTestRows(supabase),
       listLabUnitRows(supabase),
       readSiteSettingsRow(supabase),
       listMediaAssetRows(supabase),
@@ -71,7 +106,8 @@ export async function countDashboardModules(
     Video: fromStates(videos.map((row) => row.publication_state)),
     Equipment: fromStates(equipment.map((row) => row.publication_state)),
     Branch: fromStates(branches.map((row) => row.publication_state)),
-    Programme: programmes,
+    Programme: fromStates(programmes.map((row) => row.publication_state)),
+    LabTest: fromStates(labTests.map((row) => row.publication_state)),
     LabUnit: fromStates(labUnits.map((row) => row.publication_state)),
     SiteSettings:
       siteSettings === null

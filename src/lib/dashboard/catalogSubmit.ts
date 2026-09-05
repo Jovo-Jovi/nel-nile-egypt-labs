@@ -2,38 +2,52 @@ import { notFound, redirect } from "next/navigation";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { readOperatorAccessFrom } from "@/lib/dashboard/assurance";
 import {
+  bilingualErrorQuery,
   branchStoredCoordinates,
   confirmFromForm,
   confirmToken,
   createBranchRow,
   createEquipmentRow,
+  createLabTestRow,
   createLabUnitRow,
   createOfferRow,
+  createProgrammeRow,
   createVideoRow,
   deleteBranchRow,
   deleteEquipmentRow,
+  deleteLabTestRow,
   deleteLabUnitRow,
   deleteOfferRow,
+  deleteProgrammeRow,
   deleteVideoRow,
+  LAB_TEST_PAIR_STEMS,
   parseBranchWrite,
   parseEquipmentWrite,
+  parseLabTestWrite,
   parseLabUnitWrite,
   parseOfferWrite,
+  parseProgrammeWrite,
   parseVideoWrite,
+  PROGRAMME_PAIR_STEMS,
   readBranchRow,
   readEquipmentRow,
+  readLabTestRow,
   readLabUnitRow,
   readOfferRow,
+  readProgrammeRow,
   readVideoRow,
   rowIdFromForm,
   writeBranchRow,
   writeEquipmentRow,
+  writeLabTestRow,
   writeLabUnitRow,
   writeOfferRow,
+  writeProgrammeRow,
   writeVideoRow,
   type CatalogWriteReason,
   type PublicationState,
 } from "@/lib/dashboard/catalogEntities";
+import { hasClinicalCatalogueSignOff } from "@/lib/dashboard/clinicalSignOff";
 import { checkMediaAssetAttach, setMediaAssetPublication } from "@/lib/dashboard/mediaAsset";
 import { ensureVideoPoster, posterFileFromForm } from "@/lib/dashboard/youtubePoster";
 import { gateModuleRoute } from "@/lib/dashboard/gates";
@@ -42,6 +56,7 @@ import {
   revalidatePublishedEquipment,
   revalidatePublishedLabUnits,
   revalidatePublishedOffers,
+  revalidatePublishedProgrammes,
   revalidatePublishedVideos,
 } from "@/lib/dashboard/revalidatePublicSite";
 import { localeHref } from "@/lib/locale";
@@ -49,13 +64,15 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const WRITE_ACTIONS = new Set(["create", "save", "publish", "unpublish", "delete"]);
 
-type CatalogEntity = "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment";
+type CatalogEntity = "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment" | "Programme" | "LabTest";
 
 function listSuffix(entity: CatalogEntity): string {
   if (entity === "Branch") return "/dashboard/branches";
   if (entity === "LabUnit") return "/dashboard/lab-units";
   if (entity === "Offer") return "/dashboard/offers";
   if (entity === "Video") return "/dashboard/videos";
+  if (entity === "Programme") return "/dashboard/programmes";
+  if (entity === "LabTest") return "/dashboard/lab-tests";
   return "/dashboard/equipment";
 }
 
@@ -63,8 +80,17 @@ function editSuffix(entity: CatalogEntity, rowId: string): string {
   return `${listSuffix(entity)}/${rowId}`;
 }
 
-function errorQuery(reason: CatalogWriteReason): string {
+function errorQuery(reason: CatalogWriteReason, groups?: string[]): string {
+  if (reason === "bilingual" && groups !== undefined && groups.length > 0) {
+    return `error=bilingual&groups=${groups.join(",")}`;
+  }
   return `error=${reason}`;
+}
+
+function bilingualQueryFor(entity: CatalogEntity, groups: string[] | undefined): string {
+  if (entity === "Programme") return bilingualErrorQuery(groups ?? [], PROGRAMME_PAIR_STEMS);
+  if (entity === "LabTest") return bilingualErrorQuery(groups ?? [], LAB_TEST_PAIR_STEMS);
+  return "error=bilingual";
 }
 
 function savedQuery(posterMissing: boolean): string {
@@ -76,6 +102,7 @@ function revalidateFor(entity: CatalogEntity): () => void {
   if (entity === "LabUnit") return revalidatePublishedLabUnits;
   if (entity === "Offer") return revalidatePublishedOffers;
   if (entity === "Video") return revalidatePublishedVideos;
+  if (entity === "Programme" || entity === "LabTest") return revalidatePublishedProgrammes;
   return revalidatePublishedEquipment;
 }
 
@@ -113,7 +140,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
     if (params.action === "create") {
       if (entity === "Branch") {
         const parsed = parseBranchWrite(form, false);
-        if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+        if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
         const created = await createBranchRow(supabase, parsed.columns);
         if (!created.ok) toList(locale, errorQuery(created.reason));
         revalidate();
@@ -121,7 +148,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       }
       if (entity === "LabUnit") {
         const parsed = parseLabUnitWrite(form, false);
-        if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+        if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
         const created = await createLabUnitRow(supabase, parsed.columns);
         if (!created.ok) toList(locale, errorQuery(created.reason));
         revalidate();
@@ -129,7 +156,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       }
       if (entity === "Offer") {
         const parsed = parseOfferWrite(form, false);
-        if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+        if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
         const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
         if (attach !== null) toList(locale, errorQuery(attach));
         const created = await createOfferRow(supabase, parsed.columns);
@@ -139,7 +166,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       }
       if (entity === "Video") {
         const parsed = parseVideoWrite(form, false);
-        if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
+        if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
         const poster = await ensureVideoPoster(supabase, {
           youtubeId: parsed.columns.youtube_id,
           existingMediaId: null,
@@ -156,14 +183,37 @@ function catalogWriteHandlers(entity: CatalogEntity) {
         revalidate();
         toEdit(locale, created.id, savedQuery(poster.posterMissing));
       }
-      const parsed = parseEquipmentWrite(form, false);
-      if (!parsed.ok) toList(locale, errorQuery(parsed.reason));
-      const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
-      if (attach !== null) toList(locale, errorQuery(attach));
-      const created = await createEquipmentRow(supabase, parsed.columns);
-      if (!created.ok) toList(locale, errorQuery(created.reason));
-      revalidate();
-      toEdit(locale, created.id, "saved=1");
+      if (entity === "Programme") {
+        const parsed = parseProgrammeWrite(form, false);
+        if (!parsed.ok) {
+          toList(
+            locale,
+            parsed.reason === "bilingual" ? bilingualQueryFor(entity, parsed.groups) : errorQuery(parsed.reason),
+          );
+        }
+        const created = await createProgrammeRow(supabase, parsed.columns);
+        if (!created.ok) toList(locale, errorQuery(created.reason));
+        revalidate();
+        toEdit(locale, created.id, "saved=1");
+      }
+      if (entity === "LabTest") {
+        const parsed = parseLabTestWrite(form, false);
+        if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
+        const created = await createLabTestRow(supabase, parsed.columns);
+        if (!created.ok) toList(locale, errorQuery(created.reason));
+        revalidate();
+        toEdit(locale, created.id, "saved=1");
+      }
+      if (entity === "Equipment") {
+        const parsed = parseEquipmentWrite(form, false);
+        if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
+        const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
+        if (attach !== null) toList(locale, errorQuery(attach));
+        const created = await createEquipmentRow(supabase, parsed.columns);
+        if (!created.ok) toList(locale, errorQuery(created.reason));
+        revalidate();
+        toEdit(locale, created.id, "saved=1");
+      }
     }
 
     const rowId = rowIdFromForm(form);
@@ -186,7 +236,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "publish") nextState = "published";
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseBranchWrite(form, nextState === "published", branchStoredCoordinates(row));
-      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason, parsed.groups));
       const written = await writeBranchRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
       revalidate();
@@ -208,7 +258,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "publish") nextState = "published";
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseLabUnitWrite(form, nextState === "published");
-      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason, parsed.groups));
       const written = await writeLabUnitRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
       revalidate();
@@ -230,7 +280,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "publish") nextState = "published";
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseOfferWrite(form, nextState === "published");
-      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason, parsed.groups));
       const attach = await checkMediaAssetAttach(
         supabase,
         parsed.columns.MediaAsset,
@@ -258,7 +308,7 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "publish") nextState = "published";
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseVideoWrite(form, nextState === "published");
-      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason, parsed.groups));
       const poster = await ensureVideoPoster(supabase, {
         youtubeId: parsed.columns.youtube_id,
         existingMediaId: row.MediaAsset,
@@ -283,31 +333,95 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       toEdit(locale, rowId, savedQuery(poster.posterMissing));
     }
 
-    const row = await readEquipmentRow(supabase, rowId);
-    if (row === null) toList(locale, "error=missing");
-    if (params.action === "delete") {
-      const expected = confirmToken(locale, row);
-      if (confirmFromForm(form) !== expected) toEdit(locale, rowId, "error=confirm");
-      const deleted = await deleteEquipmentRow(supabase, rowId);
-      if (!deleted.ok) toEdit(locale, rowId, errorQuery(deleted.reason));
+    if (entity === "Programme") {
+      const row = await readProgrammeRow(supabase, rowId);
+      if (row === null) toList(locale, "error=missing");
+      if (params.action === "delete") {
+        const expected = confirmToken(locale, row);
+        if (confirmFromForm(form) !== expected) toEdit(locale, rowId, "error=confirm");
+        const deleted = await deleteProgrammeRow(supabase, rowId);
+        if (!deleted.ok) toEdit(locale, rowId, errorQuery(deleted.reason));
+        revalidate();
+        toList(locale, "saved=1");
+      }
+      let nextState: PublicationState = row.publication_state;
+      if (params.action === "publish") nextState = "published";
+      if (params.action === "unpublish") nextState = "draft";
+      const parsed = parseProgrammeWrite(form, nextState === "published");
+      if (!parsed.ok) {
+        toEdit(
+          locale,
+          rowId,
+          parsed.reason === "bilingual" ? bilingualQueryFor(entity, parsed.groups) : errorQuery(parsed.reason),
+        );
+      }
+      if (params.action === "publish" && !hasClinicalCatalogueSignOff()) {
+        toEdit(locale, rowId, "error=signOff");
+      }
+      const written = await writeProgrammeRow(supabase, rowId, parsed.columns, nextState);
+      if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
       revalidate();
-      toList(locale, "saved=1");
+      toEdit(locale, rowId, "saved=1");
     }
-    let nextState: PublicationState = row.publication_state;
-    if (params.action === "publish") nextState = "published";
-    if (params.action === "unpublish") nextState = "draft";
-    const parsed = parseEquipmentWrite(form, nextState === "published");
-    if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
-    const attach = await checkMediaAssetAttach(
-      supabase,
-      parsed.columns.MediaAsset,
-      nextState === "published",
-    );
-    if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
-    const written = await writeEquipmentRow(supabase, rowId, parsed.columns, nextState);
-    if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
-    revalidate();
-    toEdit(locale, rowId, "saved=1");
+
+    if (entity === "LabTest") {
+      const row = await readLabTestRow(supabase, rowId);
+      if (row === null) toList(locale, "error=missing");
+      if (params.action === "delete") {
+        const expected = confirmToken(locale, row);
+        if (confirmFromForm(form) !== expected) toEdit(locale, rowId, "error=confirm");
+        const deleted = await deleteLabTestRow(supabase, rowId);
+        if (!deleted.ok) toEdit(locale, rowId, errorQuery(deleted.reason));
+        revalidate();
+        toList(locale, "saved=1");
+      }
+      let nextState: PublicationState = row.publication_state;
+      if (params.action === "publish") nextState = "published";
+      if (params.action === "unpublish") nextState = "draft";
+      const parsed = parseLabTestWrite(form, nextState === "published");
+      if (!parsed.ok) {
+        toEdit(
+          locale,
+          rowId,
+          parsed.reason === "bilingual" ? bilingualQueryFor(entity, parsed.groups) : errorQuery(parsed.reason),
+        );
+      }
+      if (params.action === "publish" && !hasClinicalCatalogueSignOff()) {
+        toEdit(locale, rowId, "error=signOff");
+      }
+      const written = await writeLabTestRow(supabase, rowId, parsed.columns, nextState);
+      if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
+      revalidate();
+      toEdit(locale, rowId, "saved=1");
+    }
+
+    if (entity === "Equipment") {
+      const row = await readEquipmentRow(supabase, rowId);
+      if (row === null) toList(locale, "error=missing");
+      if (params.action === "delete") {
+        const expected = confirmToken(locale, row);
+        if (confirmFromForm(form) !== expected) toEdit(locale, rowId, "error=confirm");
+        const deleted = await deleteEquipmentRow(supabase, rowId);
+        if (!deleted.ok) toEdit(locale, rowId, errorQuery(deleted.reason));
+        revalidate();
+        toList(locale, "saved=1");
+      }
+      let nextState: PublicationState = row.publication_state;
+      if (params.action === "publish") nextState = "published";
+      if (params.action === "unpublish") nextState = "draft";
+      const parsed = parseEquipmentWrite(form, nextState === "published");
+      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason, parsed.groups));
+      const attach = await checkMediaAssetAttach(
+        supabase,
+        parsed.columns.MediaAsset,
+        nextState === "published",
+      );
+      if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
+      const written = await writeEquipmentRow(supabase, rowId, parsed.columns, nextState);
+      if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
+      revalidate();
+      toEdit(locale, rowId, "saved=1");
+    }
   }
 
   function GET() {
@@ -322,3 +436,5 @@ export const labUnitWriteHandlers = catalogWriteHandlers("LabUnit");
 export const offerWriteHandlers = catalogWriteHandlers("Offer");
 export const videoWriteHandlers = catalogWriteHandlers("Video");
 export const equipmentWriteHandlers = catalogWriteHandlers("Equipment");
+export const programmeWriteHandlers = catalogWriteHandlers("Programme");
+export const labTestWriteHandlers = catalogWriteHandlers("LabTest");
