@@ -24,6 +24,8 @@ These justify decisions. When someone asks in month three why the hotline is
 | `15-mark-colour-sampling.md` | Pixel-level colour sampling of the two committed mark binaries — favicon (source of record) and Facebook cover (corroboration), no network access | 27 Aug 2026 |
 | `16-owner-approved-composition.md` | Approval evidence for the composition the client approved on 29 August 2026, promoted under OD-08. Not a specification — `DESIGN_SYSTEM.md` §9 governs. Moved here from `docs/` at P01-T03-R-M1 | 29 Aug 2026 |
 | `g3-evidence.md` | Computed facts a build can prove at P03 exit. Not a model document, not a G3 verdict. CF-59 and CF-60 are named as absent | 2 Sep 2026 |
+| `m7-role-split-audit.md` | Read-first audit of the Operator/PartnerLab role split — 24 policies inventoried, twelve to change at M7B. Authors nothing | 4 Sep 2026 |
+| `content-source-table.md` | Every content field with its recovered value, source and one of four statuses. Evidence tooling, precedence none — so content entry is transcription, not judgement at the keyboard | 5 Sep 2026 |
 
 ## Still to land here
 

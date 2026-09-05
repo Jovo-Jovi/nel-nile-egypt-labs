@@ -1,12 +1,3 @@
-.form {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  max-inline-size: 1120px;
-  margin-inline: auto;
-  inline-size: 100%;
-}
-
 .body {
   display: flex;
   flex-direction: column;
@@ -162,10 +153,6 @@
   letter-spacing: 0;
 }
 
-.notice {
-  margin: 0;
-}
-
 .errorRow {
   display: flex;
   align-items: center;
@@ -233,23 +220,6 @@
 
 .counterWarn {
   color: var(--nel-color-warning);
-}
-
-.actions {
-  flex: none;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: var(--nel-space-32);
-  margin-block-start: var(--nel-space-96);
-  padding-block: var(--nel-space-16);
-  inline-size: 100%;
-  background-color: var(--nel-color-surface);
-  border-block-start-width: var(--nel-elevation-2-border-width);
-  border-block-start-style: solid;
-  border-block-start-color: var(--nel-color-border);
-  box-shadow: var(--nel-elevation-2-shadow);
 }
 
 .actionsMain {
