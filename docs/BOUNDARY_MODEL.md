@@ -3,6 +3,7 @@
 **Status:** FROZEN at P00-T01 · 2026-08-25 · amend only by explicit supersession
 **Gate:** Boundary — **non-waivable**, cannot be overridden by OD
 **Amended under OD-04 · 25 August 2026 · §3 only.**
+**Amended under OD-16 · 5 September 2026 · §2 only — clarifying, gate unchanged.**
 
 ## §1 What this replaces
 
@@ -21,6 +22,8 @@ The platform holds **no personal data and no medical data of any kind.**
 | Any medical or diagnostic value | Not collected |
 | Patient results in any table, bucket or log | Results live in a separate application |
 | Calling, scraping, **framing** or authenticating against the results portal | Outbound `https://` link only, opening a new browsing context. A frame renders the portal's login inside our origin, where the Visitor cannot verify the address bar. That is a credential-phishing shape and it is forbidden regardless of who requests it |
+
+Publishing a contact detail is not implementing a channel. The hotline has always rendered as published business content, and the laboratory's email address may appear in its own content on the same basis (OD-16). What this table forbids is a mechanism in this system that accepts a submission — a form, a booking, an inbox, a route handler, a field, a log. A visitor who copies a published address and writes to it is corresponding with the laboratory through a service this project does not operate and is not in the path of.
 
 `Visitor` holds no account and submits nothing. `Operator` holds an account with
 MFA and touches only published site content.

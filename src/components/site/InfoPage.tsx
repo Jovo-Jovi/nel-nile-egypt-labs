@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { CatalogKey } from "@/lib/catalog";
+import { splitCopyParagraphs } from "@/lib/copyParagraphs";
 import type { Locale } from "@/lib/locale";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { IsolatedCopy } from "@/components/ui/Isolate";
@@ -42,11 +43,13 @@ export function CopyCard({ locale, title, body, children }: CopyCardProps) {
           <IsolatedCopy locale={locale} text={title} />
         </h2>
       ) : null}
-      {body ? (
-        <p className={styles.copy}>
-          <IsolatedCopy locale={locale} text={body} />
-        </p>
-      ) : null}
+      {body
+        ? splitCopyParagraphs(body).map((paragraph, index) => (
+            <p key={index} className={styles.copy}>
+              <IsolatedCopy locale={locale} text={paragraph} />
+            </p>
+          ))
+        : null}
       {children}
     </article>
   );
