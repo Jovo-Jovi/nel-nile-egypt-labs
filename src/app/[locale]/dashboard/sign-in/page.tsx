@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
+import { CautionIcon } from "@/components/ui/icons";
 import { DashboardChrome, DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
@@ -31,7 +32,12 @@ export default async function SignInPage({ params, searchParams }: Props) {
     <DashboardChrome locale={locale} showSignOut={false}>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.signIn.title" />
       <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/sign-in/submit")} data-nel-container="auth">
-        {failed ? <p className={formStyles.error}>{translate(locale, "dashboard.signIn.failed")}</p> : null}
+        {failed ? (
+          <p className={formStyles.error}>
+            <CautionIcon size={14} />
+            <span>{translate(locale, "dashboard.signIn.failed")}</span>
+          </p>
+        ) : null}
         <div className={formStyles.field}>
           <label className={formStyles.label} htmlFor="dashboard-email">
             {translate(locale, "dashboard.signIn.email")}

@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
-import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import { callingCodeSelectOptions } from "@/lib/dashboard/callingCodes";
 import {
@@ -20,15 +19,18 @@ import {
 } from "@/lib/dashboard/fieldRules";
 import { localeHref } from "@/lib/locale";
 import {
-  ActionSlot,
   ActionStatus,
+  CatalogDeleteBlock,
   CatalogNoticeView,
+  CatalogPublishControls,
   CatalogSection,
   FieldLabel,
   FieldLegend,
   FieldMessage,
   FieldSummary,
   LocaleColumns,
+  PublicationStatus,
+  PublishAside,
   useCatalogFormFlight,
 } from "./catalogFormChrome";
 import extra from "./CatalogEntityForm.module.css";
@@ -224,8 +226,6 @@ export function BranchForm({
   const isCreate = row === null;
   const saveAction = localeHref(locale, "/dashboard/branches/submit/create");
   const editSave = localeHref(locale, "/dashboard/branches/submit/save");
-  const statusKey: CatalogKey =
-    row?.publication_state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";
   const expectedConfirm = row === null ? "" : confirmToken(locale, row);
   const [issues, setIssues] = useState<Record<string, string>>({});
   const [mapsEcho, setMapsEcho] = useState<string | null>(null);
@@ -294,13 +294,6 @@ export function BranchForm({
       {row !== null ? <input type="hidden" name="row_id" value={row.id} /> : null}
       <div className={site.body}>
         <div className={site.intro}>
-          {row !== null ? (
-            <StatusStateBadge
-              state={row.publication_state === "published" ? "published" : "draft"}
-              label={translate(locale, statusKey)}
-            />
-          ) : null}
-          <p className={site.status}>{translate(locale, "dashboard.catalog.unpublishHint")}</p>
           <FieldSummary locale={locale} issues={summaryIssues} />
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
@@ -315,6 +308,23 @@ export function BranchForm({
             defaultAr={row?.name_ar ?? null}
             defaultEn={row?.name_en ?? null}
           />
+          <div className={site.field}>
+            <div className={extra.checkRow}>
+              <input
+                id="is_head_office"
+                type="checkbox"
+                name="is_head_office"
+                value="true"
+                defaultChecked={row?.is_head_office ?? false}
+              />
+              <label className={site.label} htmlFor="is_head_office">
+                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.headOffice")} />
+              </label>
+            </div>
+            <p className={extra.help}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.headOfficeHelp")} />
+            </p>
+          </div>
         </CatalogSection>
 
         <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionContact">
@@ -397,106 +407,55 @@ export function BranchForm({
             </p>
           ) : null}
         </CatalogSection>
-
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionOrder">
-          <TextField
-            locale={locale}
-            name="display_order"
-            labelKey="dashboard.catalog.displayOrder"
-            defaultValue={row === null ? "0" : String(row.display_order)}
-            inputMode="numeric"
-            error={null}
-          />
-          <div className={site.field}>
-            <div className={extra.checkRow}>
-              <input
-                id="is_head_office"
-                type="checkbox"
-                name="is_head_office"
-                value="true"
-                defaultChecked={row?.is_head_office ?? false}
-              />
-              <label className={site.label} htmlFor="is_head_office">
-                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.headOffice")} />
-              </label>
-            </div>
-            <p className={extra.help}>
-              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.headOfficeHelp")} />
-            </p>
-          </div>
-        </CatalogSection>
       </div>
 
-      <aside className={site.publishAside} aria-label={translate(locale, "dashboard.catalog.sectionPublish")}>
-        {isCreate ? (
-          <div className={site.actionsMain}>
-            <ActionSlot
-              locale={locale}
-              slot="create"
-              variant="primary"
-              idleKey="dashboard.catalog.create"
-              flight={flight}
-            />
-          </div>
-        ) : (
-          <>
-            <div className={site.actionsMain}>
-              <ActionSlot
-                locale={locale}
-                slot="save"
-                variant="secondary"
-                idleKey="dashboard.siteSettings.save"
-                flight={flight}
-              />
-              <ActionSlot
-                locale={locale}
-                slot="publish"
-                variant="primary"
-                formAction={localeHref(locale, "/dashboard/branches/submit/publish")}
-                idleKey="dashboard.siteSettings.publish"
-                flight={flight}
-              />
-            </div>
-            <div className={site.actionsUnpublish}>
-              <ActionSlot
-                locale={locale}
-                slot="unpublish"
-                variant="text"
-                formAction={localeHref(locale, "/dashboard/branches/submit/unpublish")}
-                idleKey="dashboard.siteSettings.unpublish"
-                flight={flight}
-              />
-            </div>
-            <div className={extra.deleteBlock}>
-              <p className={extra.help}>
-                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.confirmDeleteHelp")} />
-              </p>
-              <p className={extra.help}>
-                <IsolatedCopy locale={locale} text={expectedConfirm} />
-              </p>
-              <div className={site.field}>
-                <FieldLabel locale={locale} htmlFor="confirm_name" labelKey="dashboard.catalog.confirmDelete" />
-                <input
-                  id="confirm_name"
-                  className={site.control}
-                  type="text"
-                  name="confirm_name"
-                  autoComplete="off"
-                />
-              </div>
-              <ActionSlot
-                locale={locale}
-                slot="delete"
-                variant="text"
-                formAction={localeHref(locale, "/dashboard/branches/submit/delete")}
-                idleKey="dashboard.catalog.delete"
-                flight={flight}
+      <PublishAside locale={locale}>
+        <PublicationStatus
+          locale={locale}
+          state={row === null ? null : row.publication_state === "published" ? "published" : "draft"}
+          reasonKey="dashboard.catalog.draftReason"
+        />
+        {row !== null ? (
+          <p className={site.status}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.unpublishHint")} />
+          </p>
+        ) : null}
+        <TextField
+          locale={locale}
+          name="display_order"
+          labelKey="dashboard.catalog.displayOrder"
+          defaultValue={row === null ? "0" : String(row.display_order)}
+          inputMode="numeric"
+          error={null}
+        />
+        <CatalogPublishControls
+          locale={locale}
+          isCreate={isCreate}
+          publishHref={localeHref(locale, "/dashboard/branches/submit/publish")}
+          unpublishHref={localeHref(locale, "/dashboard/branches/submit/unpublish")}
+          flight={flight}
+        />
+        {isCreate ? null : (
+          <CatalogDeleteBlock
+            locale={locale}
+            expectedConfirm={expectedConfirm}
+            deleteHref={localeHref(locale, "/dashboard/branches/submit/delete")}
+            flight={flight}
+          >
+            <div className={site.field}>
+              <FieldLabel locale={locale} htmlFor="confirm_name" labelKey="dashboard.catalog.confirmDelete" />
+              <input
+                id="confirm_name"
+                className={site.control}
+                type="text"
+                name="confirm_name"
+                autoComplete="off"
               />
             </div>
-          </>
+          </CatalogDeleteBlock>
         )}
         <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
-      </aside>
+      </PublishAside>
     </form>
   );
 }

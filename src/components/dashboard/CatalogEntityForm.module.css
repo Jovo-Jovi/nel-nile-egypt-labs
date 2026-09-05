@@ -24,7 +24,7 @@
   gap: var(--nel-space-16);
   padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-well);
+  border-radius: var(--nel-radius-md);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
@@ -115,7 +115,7 @@
   gap: var(--nel-space-16);
   padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-well);
+  border-radius: var(--nel-radius-md);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
@@ -154,7 +154,7 @@
   inline-size: 100%;
   aspect-ratio: 16 / 9;
   border-width: 0;
-  border-radius: var(--nel-radius-control);
+  border-radius: var(--nel-radius-sm);
 }
 
 .thumbGrid {
@@ -173,7 +173,7 @@
   min-block-size: 44px;
   padding: var(--nel-space-8);
   background-color: var(--nel-color-background);
-  border-radius: var(--nel-radius-control);
+  border-radius: var(--nel-radius-sm);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
@@ -194,7 +194,7 @@
   block-size: auto;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: var(--nel-radius-control);
+  border-radius: var(--nel-radius-sm);
 }
 
 .thumbFallback {
@@ -219,5 +219,5 @@
   border-width: var(--nel-elevation-1-border-width);
   border-style: dashed;
   border-color: var(--nel-color-border);
-  border-radius: var(--nel-radius-control);
+  border-radius: var(--nel-radius-sm);
 }

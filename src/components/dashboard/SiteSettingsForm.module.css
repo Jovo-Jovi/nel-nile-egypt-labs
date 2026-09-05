@@ -25,17 +25,12 @@
   gap: var(--nel-space-24);
   padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-well);
+  border-radius: var(--nel-radius-md);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
   box-shadow: var(--nel-elevation-1-shadow);
-  font-size: var(--nel-size-lg);
-}
-
-.section h2 {
-  font-size: var(--nel-size-xl);
-  line-height: var(--nel-line-height-heading);
+  font-size: var(--nel-size-base);
 }
 
 .missing {
@@ -46,7 +41,7 @@
   margin-inline: auto;
   padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-well);
+  border-radius: var(--nel-radius-md);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
@@ -329,7 +324,7 @@
   gap: var(--nel-space-32);
   padding: var(--nel-space-32);
   background-color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-well);
+  border-radius: var(--nel-radius-md);
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);

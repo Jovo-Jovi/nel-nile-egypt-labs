@@ -2,7 +2,6 @@
 
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
-import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import {
   VIDEO_FORM_COLUMNS,
@@ -12,15 +11,17 @@ import {
 } from "@/lib/dashboard/catalogEntities";
 import { localeHref } from "@/lib/locale";
 import {
-  ActionSlot,
   ActionStatus,
+  CatalogDeleteBlock,
   CatalogNoticeView,
+  CatalogPublishControls,
   CatalogSection,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
+  PublicationStatus,
+  PublishAside,
   useCatalogFormFlight,
-  type Flight,
 } from "./catalogFormChrome";
 import extra from "./CatalogEntityForm.module.css";
 import site from "./SiteSettingsForm.module.css";
@@ -128,89 +129,6 @@ function Pair({
   );
 }
 
-function ActionBar({
-  locale,
-  isCreate,
-  publishHref,
-  unpublishHref,
-  deleteHref,
-  expectedConfirm,
-  confirmInputId,
-  flight,
-  clientNotice,
-}: {
-  locale: Locale;
-  isCreate: boolean;
-  publishHref: string;
-  unpublishHref: string;
-  deleteHref: string;
-  expectedConfirm: string;
-  confirmInputId: string;
-  flight: Flight;
-  clientNotice: CatalogNotice;
-}) {
-  return (
-    <div className={site.actions}>
-      {isCreate ? (
-        <div className={site.actionsMain}>
-          <ActionSlot locale={locale} slot="create" variant="primary" idleKey="dashboard.catalog.create" flight={flight} />
-        </div>
-      ) : (
-        <>
-          <div className={site.actionsMain}>
-            <ActionSlot
-              locale={locale}
-              slot="save"
-              variant="secondary"
-              idleKey="dashboard.siteSettings.save"
-              flight={flight}
-            />
-            <ActionSlot
-              locale={locale}
-              slot="publish"
-              variant="primary"
-              formAction={publishHref}
-              idleKey="dashboard.siteSettings.publish"
-              flight={flight}
-            />
-          </div>
-          <div className={site.actionsUnpublish}>
-            <ActionSlot
-              locale={locale}
-              slot="unpublish"
-              variant="text"
-              formAction={unpublishHref}
-              idleKey="dashboard.siteSettings.unpublish"
-              flight={flight}
-            />
-          </div>
-          <div className={extra.deleteBlock}>
-            <p className={extra.help}>
-              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.confirmDeleteHelp")} />
-            </p>
-            <p className={extra.help}>
-              <IsolatedCopy locale={locale} text={expectedConfirm} />
-            </p>
-            <div className={site.field}>
-              <FieldLabel locale={locale} htmlFor={confirmInputId} labelKey="dashboard.catalog.confirmDelete" />
-              <input id={confirmInputId} className={site.control} type="text" name="confirm_name" autoComplete="off" />
-            </div>
-            <ActionSlot
-              locale={locale}
-              slot="delete"
-              variant="text"
-              formAction={deleteHref}
-              idleKey="dashboard.catalog.delete"
-              flight={flight}
-            />
-          </div>
-        </>
-      )}
-      <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
-    </div>
-  );
-}
-
 export function VideoForm({
   locale,
   row,
@@ -224,8 +142,6 @@ export function VideoForm({
   const isCreate = row === null;
   const saveAction = localeHref(locale, "/dashboard/videos/submit/create");
   const editSave = localeHref(locale, "/dashboard/videos/submit/save");
-  const statusKey: CatalogKey =
-    row?.publication_state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";
   const expectedConfirm = row === null ? "" : confirmToken(locale, row);
   const defaultUrl =
     row?.youtube_id !== null && row?.youtube_id !== undefined && row.youtube_id.length > 0
@@ -235,7 +151,7 @@ export function VideoForm({
 
   return (
     <form
-      className={site.form}
+      className={site.splitForm}
       method="post"
       action={isCreate ? saveAction : editSave}
       encType="multipart/form-data"
@@ -247,130 +163,145 @@ export function VideoForm({
       aria-busy={flight?.phase === "busy" || undefined}
     >
       {row !== null ? <input type="hidden" name="row_id" value={row.id} /> : null}
-      <div className={extra.videoLayout}>
-        <div className={site.body}>
-          <div className={site.intro}>
-            {row !== null ? (
-              <StatusStateBadge
-                state={row.publication_state === "published" ? "published" : "draft"}
-                label={translate(locale, statusKey)}
-              />
-            ) : null}
-            <p className={site.status}>{translate(locale, "dashboard.catalog.unpublishHint")}</p>
-            {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
-          </div>
-
-          <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionHost">
-            <TextField
-              locale={locale}
-              name="youtube_url"
-              labelKey="dashboard.videos.youtubeUrl"
-              defaultValue={defaultUrl.length > 0 ? defaultUrl : null}
-            />
-            <p className={extra.help}>
-              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.urlHelp")} />
-            </p>
-          </CatalogSection>
-
-          <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionCopy">
-            <LocaleColumns locale={locale} />
-            <Pair
-              locale={locale}
-              nameAr="title_ar"
-              nameEn="title_en"
-              legendKey="dashboard.videos.title"
-              defaultAr={row?.title_ar ?? null}
-              defaultEn={row?.title_en ?? null}
-            />
-            <Pair
-              locale={locale}
-              nameAr="description_ar"
-              nameEn="description_en"
-              legendKey="dashboard.videos.description"
-              defaultAr={row?.description_ar ?? null}
-              defaultEn={row?.description_en ?? null}
-              multiline
-            />
-          </CatalogSection>
-
-          <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
-            <div className={site.field}>
-              <div className={extra.checkRow}>
-                <input
-                  id="is_featured"
-                  type="checkbox"
-                  name="is_featured"
-                  value="true"
-                  defaultChecked={row?.is_featured ?? false}
-                />
-                <label className={site.label} htmlFor="is_featured">
-                  <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.featured")} />
-                </label>
-              </div>
-            </div>
-          </CatalogSection>
-
-          <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionOrder">
-            <TextField
-              locale={locale}
-              name="display_order"
-              labelKey="dashboard.catalog.displayOrder"
-              defaultValue={row === null ? "0" : String(row.display_order)}
-              inputMode="numeric"
-            />
-          </CatalogSection>
+      <div className={site.body}>
+        <div className={site.intro}>
+          {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
-        <aside className={extra.videoAside} aria-label={translate(locale, "dashboard.videos.sidebar")}>
-          <CatalogSection locale={locale} titleKey="dashboard.videos.preview">
-            {previewId !== null && previewId.length > 0 ? (
-              <iframe
-                className={extra.previewFrame}
-                title={translate(locale, "dashboard.videos.preview")}
-                src={`https://www.youtube.com/embed/${previewId}`}
-                allow="encrypted-media"
-                allowFullScreen
-              />
-            ) : (
-              <p className={extra.help}>
-                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.previewEmpty")} />
-              </p>
-            )}
-            {row !== null && row.MediaAsset === null ? (
-              <p className={extra.help}>
-                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.posterMissing")} />
-              </p>
-            ) : null}
-          </CatalogSection>
-          <CatalogSection locale={locale} titleKey="dashboard.videos.posterOverride">
-            <div className={site.field}>
-              <FieldLabel locale={locale} htmlFor="poster_file" labelKey="dashboard.media.file" />
+        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionHost">
+          <TextField
+            locale={locale}
+            name="youtube_url"
+            labelKey="dashboard.videos.youtubeUrl"
+            defaultValue={defaultUrl.length > 0 ? defaultUrl : null}
+          />
+          <p className={extra.help}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.urlHelp")} />
+          </p>
+        </CatalogSection>
+
+        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionCopy">
+          <LocaleColumns locale={locale} />
+          <Pair
+            locale={locale}
+            nameAr="title_ar"
+            nameEn="title_en"
+            legendKey="dashboard.videos.title"
+            defaultAr={row?.title_ar ?? null}
+            defaultEn={row?.title_en ?? null}
+          />
+          <Pair
+            locale={locale}
+            nameAr="description_ar"
+            nameEn="description_en"
+            legendKey="dashboard.videos.description"
+            defaultAr={row?.description_ar ?? null}
+            defaultEn={row?.description_en ?? null}
+            multiline
+          />
+        </CatalogSection>
+
+        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
+          <div className={site.field}>
+            <div className={extra.checkRow}>
               <input
-                id="poster_file"
-                className={site.control}
-                type="file"
-                name="poster_file"
-                accept="image/jpeg,image/png,image/webp"
+                id="is_featured"
+                type="checkbox"
+                name="is_featured"
+                value="true"
+                defaultChecked={row?.is_featured ?? false}
               />
+              <label className={site.label} htmlFor="is_featured">
+                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.featured")} />
+              </label>
             </div>
+          </div>
+        </CatalogSection>
+
+        <CatalogSection locale={locale} titleKey="dashboard.videos.preview">
+          {previewId !== null && previewId.length > 0 ? (
+            <iframe
+              className={extra.previewFrame}
+              title={translate(locale, "dashboard.videos.preview")}
+              src={`https://www.youtube.com/embed/${previewId}`}
+              allow="encrypted-media"
+              allowFullScreen
+            />
+          ) : (
             <p className={extra.help}>
-              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.posterHelp")} />
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.previewEmpty")} />
             </p>
-          </CatalogSection>
-        </aside>
+          )}
+          {row !== null && row.MediaAsset === null ? (
+            <p className={extra.help}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.posterMissing")} />
+            </p>
+          ) : null}
+        </CatalogSection>
+
+        <CatalogSection locale={locale} titleKey="dashboard.videos.posterOverride">
+          <div className={site.field}>
+            <FieldLabel locale={locale} htmlFor="poster_file" labelKey="dashboard.media.file" />
+            <input
+              id="poster_file"
+              className={site.control}
+              type="file"
+              name="poster_file"
+              accept="image/jpeg,image/png,image/webp"
+            />
+          </div>
+          <p className={extra.help}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.videos.posterHelp")} />
+          </p>
+        </CatalogSection>
       </div>
 
-      <ActionBar
-        locale={locale}
-        isCreate={isCreate}
-        publishHref={localeHref(locale, "/dashboard/videos/submit/publish")}
-        unpublishHref={localeHref(locale, "/dashboard/videos/submit/unpublish")}
-        deleteHref={localeHref(locale, "/dashboard/videos/submit/delete")}
-        expectedConfirm={expectedConfirm}
-        confirmInputId="video-confirm_name"
-        flight={flight}
-        clientNotice={clientNotice}
-      />
+      <PublishAside locale={locale}>
+        <PublicationStatus
+          locale={locale}
+          state={row === null ? null : row.publication_state === "published" ? "published" : "draft"}
+          reasonKey="dashboard.catalog.draftReason"
+        />
+        {row !== null ? (
+          <p className={site.status}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.unpublishHint")} />
+          </p>
+        ) : null}
+        <TextField
+          locale={locale}
+          name="display_order"
+          labelKey="dashboard.catalog.displayOrder"
+          defaultValue={row === null ? "0" : String(row.display_order)}
+          inputMode="numeric"
+        />
+        <CatalogPublishControls
+          locale={locale}
+          isCreate={isCreate}
+          publishHref={localeHref(locale, "/dashboard/videos/submit/publish")}
+          unpublishHref={localeHref(locale, "/dashboard/videos/submit/unpublish")}
+          flight={flight}
+        />
+        {isCreate ? null : (
+          <CatalogDeleteBlock
+            locale={locale}
+            expectedConfirm={expectedConfirm}
+            deleteHref={localeHref(locale, "/dashboard/videos/submit/delete")}
+            flight={flight}
+          >
+            <div className={site.field}>
+              <FieldLabel locale={locale} htmlFor="video-confirm_name" labelKey="dashboard.catalog.confirmDelete" />
+              <input
+                id="video-confirm_name"
+                className={site.control}
+                type="text"
+                name="confirm_name"
+                autoComplete="off"
+              />
+            </div>
+          </CatalogDeleteBlock>
+        )}
+        <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
+      </PublishAside>
     </form>
   );
 }
