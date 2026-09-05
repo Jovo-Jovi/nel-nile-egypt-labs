@@ -5,6 +5,7 @@ import { ImageFrame } from "@/components/ui/ImageFrame";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import { GreaterCairoMap } from "@/components/ui/GreaterCairoMap";
+import { resultsPortalVisitorHref } from "@/lib/resultsPortalLink";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
 import { ScrollDownIcon, PlayIcon } from "@/components/ui/icons";
@@ -90,6 +91,9 @@ export function SiteHome({
 }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
+  // UNRATIFIED (P05-T19 residual, PR-19): three home actions omitted href
+  // and kept emitting the placeholder after the Visitor URL was resolved.
+  const portalHref = resultsPortalVisitorHref()?.href;
 
   return (
     <div className={styles.page}>
@@ -116,7 +120,12 @@ export function SiteHome({
                 </div>
               </ApprovalGate>
               <div className={styles.actions}>
-                <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" pill />
+                <ResultsPortalLinkAction
+                  label={translate(locale, "hero.portalAction")}
+                  variant="secondary"
+                  pill
+                  href={portalHref}
+                />
                 {whatsappHref ? (
                   <WhatsAppAction
                     label={translate(locale, "hero.whatsappAction")}
@@ -188,7 +197,12 @@ export function SiteHome({
             </ApprovalGate>
           )}
           <div className={styles.actions}>
-            <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" pill />
+            <ResultsPortalLinkAction
+              label={translate(locale, "hero.portalAction")}
+              variant="primary"
+              pill
+              href={portalHref}
+            />
           </div>
           <div id="programmes">
             <SitePanels locale={locale} />
@@ -362,7 +376,12 @@ export function SiteHome({
           <div className={styles.ctaPanel}>
             <p className={styles.ctaPanelBody}>{translate(locale, "labToLab.ctaBody")}</p>
             <div className={styles.actions}>
-              <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" pill />
+              <ResultsPortalLinkAction
+                label={translate(locale, "hero.portalAction")}
+                variant="primary"
+                pill
+                href={portalHref}
+              />
               {whatsappHref ? (
                 <WhatsAppAction
                   label={translate(locale, "hero.whatsappAction")}

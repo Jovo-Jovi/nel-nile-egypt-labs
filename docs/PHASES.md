@@ -191,7 +191,8 @@ in the project, and it should not be first.
 - [x] **P05-T16A** — Verify the existing Operator account
 - [x] **P05-T16** — The wireframe layout, across every module
 - [x] **P05-T17A** — Record the attestation, land the content source table, clear the residue
-- [ ] **P05-T18** — The M6 Site Settings fields, an honest refusal, and the schema guard
+- [x] **P05-T18** — The M6 Site Settings fields, an honest refusal, and the schema guard
+- [ ] **P05-T19** — The results portal URL, the allowlist, and the one-action rule
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
