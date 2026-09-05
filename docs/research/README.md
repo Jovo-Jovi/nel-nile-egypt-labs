@@ -26,6 +26,7 @@ These justify decisions. When someone asks in month three why the hotline is
 | `g3-evidence.md` | Computed facts a build can prove at P03 exit. Not a model document, not a G3 verdict. CF-59 and CF-60 are named as absent | 2 Sep 2026 |
 | `m7-role-split-audit.md` | Read-first audit of the Operator/PartnerLab role split — 24 policies inventoried, twelve to change at M7B. Authors nothing | 4 Sep 2026 |
 | `content-source-table.md` | Every content field with its recovered value, source and one of four statuses. Evidence tooling, precedence none — so content entry is transcription, not judgement at the keyboard | 5 Sep 2026 |
+| `region-map.md` | Public-page region mapping derived from the rendering components at P05-T17A2. Precedence none. The authority is the code; this table is the audit that produced the constant at P05-T17 | 5 Sep 2026 |
 
 ## Still to land here
 
