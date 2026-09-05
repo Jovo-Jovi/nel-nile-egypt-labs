@@ -153,7 +153,13 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
             {translate(locale, "footer.privacy")}
           </Link>
           <div className={styles.chips}>
-            <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="secondary" pill />
+            {/* UNRATIFIED (P05-T19 residual, PR-19): chip omitted href. */}
+            <ResultsPortalLinkAction
+              label={translate(locale, "hero.portalAction")}
+              variant="secondary"
+              pill
+              href={portal?.href}
+            />
             {chrome.whatsappHref ? (
               <WhatsAppAction
                 label={translate(locale, "hero.whatsappAction")}

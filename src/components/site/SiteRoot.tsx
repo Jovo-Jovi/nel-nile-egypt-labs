@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Locale } from "@/lib/catalog";
 import { loadPublicChrome } from "@/lib/publicChrome";
+import { resultsPortalVisitorHref } from "@/lib/resultsPortalLink";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import styles from "./SiteRoot.module.css";
@@ -15,6 +16,9 @@ interface SiteRootProps {
 // [data-locale="ar"] / [data-locale="en"].
 export async function SiteRoot({ locale, children }: SiteRootProps) {
   const chrome = await loadPublicChrome(locale);
+  // UNRATIFIED (P05-T19 residual, PR-19): header chips omitted href and
+  // kept emitting the placeholder after the Visitor URL was resolved.
+  const portalHref = resultsPortalVisitorHref()?.href ?? null;
 
   return (
     <div className={styles.root} data-locale={locale}>
@@ -28,7 +32,7 @@ export async function SiteRoot({ locale, children }: SiteRootProps) {
           <rect width="100%" height="100%" fill="url(#nel-site-hex)" />
         </svg>
       </div>
-      <SiteHeader locale={locale} whatsappHref={chrome.whatsappHref} />
+      <SiteHeader locale={locale} whatsappHref={chrome.whatsappHref} portalHref={portalHref} />
       <main className={styles.main}>{children}</main>
       <SiteFooter locale={locale} chrome={chrome} />
     </div>

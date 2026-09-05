@@ -46,12 +46,21 @@ export default async function Page({ params }: Props) {
       </PendingActions>
     );
   } else if (visitorReady && labToLabReady && visitorAction && labToLabAction) {
-    outbound = (
-      <>
-        {visitorAction}
-        {labToLabAction}
-      </>
-    );
+    if (visitor.href === labToLab.href) {
+      outbound = (
+        <>
+          {visitorAction}
+          <CopyCard locale={locale} body={translate(locale, "portal.labToLabNote")} />
+        </>
+      );
+    } else {
+      outbound = (
+        <>
+          {visitorAction}
+          {labToLabAction}
+        </>
+      );
+    }
   } else {
     outbound = <PendingSlot locale={locale} pendingLabelKey="approval.pending.businessData" />;
   }

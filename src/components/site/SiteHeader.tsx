@@ -16,9 +16,12 @@ import styles from "./SiteHeader.module.css";
 interface SiteHeaderProps {
   locale: Locale;
   whatsappHref: string | null;
+  // UNRATIFIED (P05-T19 residual, PR-19): serialised resolved href; this
+  // file is a client component and must not read the build-time env pair.
+  portalHref: string | null;
 }
 
-export function SiteHeader({ locale, whatsappHref }: SiteHeaderProps) {
+export function SiteHeader({ locale, whatsappHref, portalHref }: SiteHeaderProps) {
   const [navOpen, setNavOpen] = useState(false);
   const [compact, setCompact] = useState(false);
 
@@ -89,7 +92,12 @@ export function SiteHeader({ locale, whatsappHref }: SiteHeaderProps) {
         </nav>
         <div className={styles.actions}>
           <span className={styles.portalAction}>
-            <ResultsPortalLinkAction label={translate(locale, "hero.portalAction")} variant="primary" pill />
+            <ResultsPortalLinkAction
+              label={translate(locale, "hero.portalAction")}
+              variant="primary"
+              pill
+              href={portalHref ?? undefined}
+            />
           </span>
           {whatsappHref ? (
             <WhatsAppAction
