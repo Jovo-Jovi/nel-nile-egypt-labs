@@ -168,10 +168,10 @@ in the project, and it should not be first.
 - [x] **P05-T01c** — OD-13, Auth, enrolment and sessions with executable proof
 - [x] **P05-T01c-F** — Narrow the R3 exemption to the files that need it
 - [x] **P05-T01c-F2** — Define what a checked box means, and make the guard enforce it
-- [ ] the two real Operator accounts, created with their factors enrolled
+- [x] the two real Operator accounts, created with their factors enrolled
 - [x] **P05-T02** — Site Settings module
 - [x] **P05-T04** — Compose the dashboard against the design system
-- [ ] **P05-T05** — Restore the §9 page wash, and put it behind the dashboard too
+- [x] **P05-T05** — Restore the §9 page wash, and put it behind the dashboard too
 - [x] **P05-T06** — Restore the hex lattice and reconcile §9 with what was approved
 - [x] **P05-T07** — Fix the dashboard scroll, then feedback states
 - [x] **P05-T10** — Media Library module, bucket authored unapplied
@@ -189,7 +189,8 @@ in the project, and it should not be first.
 - [x] **M6A** — Author the hero, reason-card and media-role columns. Do not apply
 - [x] **M6B** — Unpublish, apply M6, verify, leave in draft
 - [x] **P05-T16A** — Verify the existing Operator account
-- [ ] **P05-T16** — The wireframe layout, across every module
+- [x] **P05-T16** — The wireframe layout, across every module
+- [ ] **P05-T17A** — Record the attestation, land the content source table, clear the residue
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
