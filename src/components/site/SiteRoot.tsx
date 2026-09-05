@@ -16,8 +16,8 @@ interface SiteRootProps {
 // [data-locale="ar"] / [data-locale="en"].
 export async function SiteRoot({ locale, children }: SiteRootProps) {
   const chrome = await loadPublicChrome(locale);
-  // UNRATIFIED (P05-T19 residual, PR-19): header chips omitted href and
-  // kept emitting the placeholder after the Visitor URL was resolved.
+  // header chips omitted href and
+  // kept emitting the placeholder after the Visitor URL was resolved. Ratified at the P05-T19 verdict.
   const portalHref = resultsPortalVisitorHref()?.href ?? null;
 
   return (
