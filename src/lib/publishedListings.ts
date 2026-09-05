@@ -3,8 +3,9 @@
 // Unpublished rows are never selected: fetchAnonPublishedJson appends
 // the filter where a caller cannot omit it (PR-08). An empty list is
 // D-42 failing closed — the pass condition, not a gap to fill.
-// youtube_id is not selected: a listing must never emit a host thumbnail
-// or an autoloading embed (D-13, BOUNDARY_MODEL.md §5).
+// youtube_id is selected as the watch destination only. The poster stays
+// the linked MediaAsset. A listing must never emit a host thumbnail or an
+// autoloading embed (D-13, OD-14, BOUNDARY_MODEL.md §5).
 // Programme listings select name and description only. No LabTest name,
 // membership, tier, preparation notes, or slug. The listing card is not
 // a link. Detail membership is resolved by public."programmeLabTests".
@@ -37,6 +38,7 @@ export type PublishedVideo = {
   titleEn: string;
   descriptionAr: string;
   descriptionEn: string;
+  youtubeId: string | null;
   poster: MediaPoster | null;
 };
 
@@ -72,6 +74,11 @@ export type PublishedBranch = {
   isHeadOffice: boolean;
   latitude: number | null;
   longitude: number | null;
+  addressAr: string | null;
+  addressEn: string | null;
+  hoursAr: string | null;
+  hoursEn: string | null;
+  whatsappE164: string | null;
 };
 
 export type BranchMapPin = {
@@ -168,6 +175,14 @@ function asCoordinate(value: unknown): number | null {
   return null;
 }
 
+const YOUTUBE_HOST_ID = /^[A-Za-z0-9_-]{11}$/;
+
+function asYoutubeId(value: unknown): string | null {
+  const text = asNonEmptyString(value);
+  if (text === null || !YOUTUBE_HOST_ID.test(text)) return null;
+  return text;
+}
+
 function parsePoster(value: unknown): MediaPoster | null {
   const record = asRecord(value);
   if (record === null) return null;
@@ -189,7 +204,7 @@ const OFFER_SELECT =
   `select=id,title_ar,title_en,description_ar,description_en,valid_from,valid_until,price_amount,price_currency,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
 
 const VIDEO_SELECT =
-  `select=id,title_ar,title_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+  `select=id,title_ar,title_en,description_ar,description_en,youtube_id,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
 
 const EQUIPMENT_SELECT =
   `select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
@@ -200,8 +215,12 @@ const PROGRAMME_SELECT =
 const LAB_UNIT_SELECT =
   "select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
 
+// address_*, hours_* and whatsapp_e164 are selected so they can render.
+// PR-16 governs where published business data is stored, not whether it
+// renders. CONTENT_MODEL.md row 6 puts addresses in the table precisely
+// so they can be published.
 const BRANCH_SELECT =
-  "select=id,name_ar,name_en,is_head_office,latitude,longitude,publication_state,display_order&order=display_order.asc";
+  "select=id,name_ar,name_en,is_head_office,latitude,longitude,address_ar,address_en,hours_ar,hours_en,whatsapp_e164,publication_state,display_order&order=display_order.asc";
 
 const SITE_SETTINGS_SELECT =
   "select=id,hotline,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,hours_ar,hours_en,facebook_url,instagram_url,linkedin_url,youtube_url,lab_to_lab_ar,lab_to_lab_en,about_body_ar,about_body_en,privacy_body_ar,privacy_body_en,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,hero_eyebrow_ar,hero_eyebrow_en,hero_headline_ar,hero_headline_en,hero_standfirst_ar,hero_standfirst_en,reason1_title_ar,reason1_title_en,reason1_body_ar,reason1_body_en,reason2_title_ar,reason2_title_en,reason2_body_ar,reason2_body_en,reason3_title_ar,reason3_title_en,reason3_body_ar,reason3_body_en,publication_state,display_order&order=display_order.asc";
@@ -250,6 +269,7 @@ function parseVideo(value: unknown): PublishedVideo | null {
     titleEn,
     descriptionAr,
     descriptionEn,
+    youtubeId: asYoutubeId(row.youtube_id),
     poster: parsePoster(row.MediaAsset),
   };
 }
@@ -363,6 +383,11 @@ function parseBranch(value: unknown): PublishedBranch | null {
     isHeadOffice: asBoolean(row.is_head_office),
     latitude: asCoordinate(row.latitude),
     longitude: asCoordinate(row.longitude),
+    addressAr: asNonEmptyString(row.address_ar),
+    addressEn: asNonEmptyString(row.address_en),
+    hoursAr: asNonEmptyString(row.hours_ar),
+    hoursEn: asNonEmptyString(row.hours_en),
+    whatsappE164: asNonEmptyString(row.whatsapp_e164),
   };
 }
 
@@ -418,7 +443,9 @@ export async function publishedSiteSettings(): Promise<PublishedSiteSettings | n
 // both coordinates. The drawing is not georeferenced (CF-69): converting
 // WGS84 into a viewBox point would invent a position, which this task
 // must not do. Coordinates are read so the field is not dropped; they
-// are not drawn. Address, phone and hours are not selected (PR-16).
+// are not drawn. PR-16 governs where published business data is stored,
+// not whether it renders. CONTENT_MODEL.md row 6 puts addresses in the
+// table precisely so they can be published.
 export function branchMapPins(rows: PublishedBranch[], locale: "ar" | "en"): BranchMapPin[] {
   return rows.flatMap((row) => {
     if (row.latitude === null || row.longitude === null) return [];
@@ -445,4 +472,11 @@ export function posterSrc(poster: MediaPoster | null): string | null {
 export function posterAlt(locale: "ar" | "en", poster: MediaPoster | null): string | null {
   if (poster === null) return null;
   return locale === "ar" ? poster.altAr : poster.altEn;
+}
+
+// Destination only. Never a host thumbnail, never an embed. The host
+// string lives here so R5's visitor trees stay clean (D-13, OD-14).
+export function videoWatchHref(youtubeId: string | null): string | null {
+  if (youtubeId === null) return null;
+  return `https://www.youtube.com/watch?v=${youtubeId}`;
 }
