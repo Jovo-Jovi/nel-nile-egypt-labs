@@ -61,6 +61,7 @@ const ar = {
   "dashboard.home.published": "منشور",
   "dashboard.home.draft": "مسودة",
   "dashboard.home.open": "فتح",
+  "dashboard.home.unbuilt": "هذه الوحدة لم تُبنَ بعد.",
   "dashboard.module.eyebrow": "وحدة",
   "dashboard.signIn.title": "دخول لوحة التحكم",
   "dashboard.signIn.email": "البريد الإلكتروني",
@@ -103,6 +104,8 @@ const ar = {
   "dashboard.siteSettings.creating": "جارٍ الإنشاء",
   "dashboard.siteSettings.published": "الحالة: منشور",
   "dashboard.siteSettings.draft": "الحالة: مسودة",
+  "dashboard.siteSettings.draftReason":
+    "الصف يبقى مسودة حتى يصل نص سياسة الخصوصية (نص سياسة الخصوصية بالعربية والإنجليزية). النشر يتطلب أيضاً اكتمال الأزواج الثنائية الأخرى المطلوبة عند النشر: رسالة واتساب، ساعات العمل، نص من نحن، نص معمل لمعمل، وعنوان ووصف محركات البحث. قيد في قاعدة البيانات يرفض النشر إذا بقي أحد الشقين فارغاً.",
   "dashboard.siteSettings.saved": "تم الحفظ.",
   "dashboard.siteSettings.noDelete": "هذا الصف واحد ولا يُحذف. لإخفائه عن الزائر ألغِ النشر.",
   "dashboard.siteSettings.localeAr": "العربية",
@@ -183,6 +186,8 @@ const ar = {
   "dashboard.catalog.confirmDeleteHelp":
     "الحذف نهائي. ألغِ النشر أولاً إن أردت إخفاء الصف عن الزائر دون حذفه.",
   "dashboard.catalog.unpublishHint": "لإخفاء الصف عن الزائر ألغِ النشر. الحذف نهائي.",
+  "dashboard.catalog.draftReason":
+    "النشر يتطلب إكمال كل زوج عربي/إنجليزي المعلَّم «مطلوب عند النشر». قيد في قاعدة البيانات يرفض النشر إذا بقي أحد الشقين فارغاً.",
   "dashboard.catalog.displayOrder": "ترتيب العرض",
   "dashboard.catalog.edit": "تحرير",
   "dashboard.catalog.unnamed": "بلا اسم",
@@ -574,6 +579,7 @@ const en = {
   "dashboard.home.published": "Published",
   "dashboard.home.draft": "Draft",
   "dashboard.home.open": "Open",
+  "dashboard.home.unbuilt": "This module is not yet built.",
   "dashboard.module.eyebrow": "Module",
   "dashboard.signIn.title": "Dashboard sign-in",
   "dashboard.signIn.email": "Email",
@@ -616,6 +622,8 @@ const en = {
   "dashboard.siteSettings.creating": "Creating",
   "dashboard.siteSettings.published": "State: published",
   "dashboard.siteSettings.draft": "State: draft",
+  "dashboard.siteSettings.draftReason":
+    "This row stays draft until the privacy policy text arrives (privacy policy body in Arabic and English). Publishing also requires the other bilingual pairs marked required when publishing: WhatsApp message, working hours, About page body, Lab-to-Lab copy, and the default SEO title and description. A database check refuses publish while either side of a pair is empty.",
   "dashboard.siteSettings.saved": "Saved.",
   "dashboard.siteSettings.noDelete": "This row is a singleton and is never deleted. Unpublish it to hide it from visitors.",
   "dashboard.siteSettings.localeAr": "Arabic",
@@ -696,6 +704,8 @@ const en = {
   "dashboard.catalog.confirmDeleteHelp":
     "Delete is permanent. Unpublish first if you only need the row off the public site.",
   "dashboard.catalog.unpublishHint": "Unpublish to hide the row from visitors. Delete is permanent.",
+  "dashboard.catalog.draftReason":
+    "Publishing requires every Arabic/English pair marked required when publishing. A database check refuses publish while either side is empty.",
   "dashboard.catalog.displayOrder": "Display order",
   "dashboard.catalog.edit": "Edit",
   "dashboard.catalog.unnamed": "Unnamed",

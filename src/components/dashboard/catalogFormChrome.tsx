@@ -411,3 +411,132 @@ export function useCatalogFormFlight() {
     onSubmit,
   };
 }
+
+export function PublishAside({
+  locale,
+  children,
+}: {
+  locale: Locale;
+  children: ReactNode;
+}) {
+  return (
+    <aside className={site.publishAside} aria-label={translate(locale, "dashboard.catalog.sectionPublish")}>
+      <SectionHeader locale={locale} titleKey="dashboard.catalog.sectionPublish" level="h2" />
+      {children}
+    </aside>
+  );
+}
+
+export function PublicationStatus({
+  locale,
+  state,
+  reasonKey,
+}: {
+  locale: Locale;
+  state: "draft" | "published" | null;
+  reasonKey?: CatalogKey;
+}) {
+  if (state === null) return null;
+  const statusKey: CatalogKey =
+    state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";
+  return (
+    <>
+      <StatusStateBadge state={state} label={translate(locale, statusKey)} />
+      {state === "draft" && reasonKey !== undefined ? (
+        <p className={site.status}>
+          <IsolatedCopy locale={locale} text={translate(locale, reasonKey)} />
+        </p>
+      ) : null}
+    </>
+  );
+}
+
+export function CatalogPublishControls({
+  locale,
+  isCreate,
+  publishHref,
+  unpublishHref,
+  flight,
+  createIdleKey = "dashboard.catalog.create",
+}: {
+  locale: Locale;
+  isCreate: boolean;
+  publishHref: string;
+  unpublishHref: string;
+  flight: Flight;
+  createIdleKey?: CatalogKey;
+}) {
+  if (isCreate) {
+    return (
+      <div className={site.actionsMain}>
+        <ActionSlot locale={locale} slot="create" variant="primary" idleKey={createIdleKey} flight={flight} />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className={site.actionsMain}>
+        <ActionSlot
+          locale={locale}
+          slot="save"
+          variant="secondary"
+          idleKey="dashboard.siteSettings.save"
+          flight={flight}
+        />
+        <ActionSlot
+          locale={locale}
+          slot="publish"
+          variant="primary"
+          formAction={publishHref}
+          idleKey="dashboard.siteSettings.publish"
+          flight={flight}
+        />
+      </div>
+      <div className={site.actionsUnpublish}>
+        <ActionSlot
+          locale={locale}
+          slot="unpublish"
+          variant="text"
+          formAction={unpublishHref}
+          idleKey="dashboard.siteSettings.unpublish"
+          flight={flight}
+        />
+      </div>
+    </>
+  );
+}
+
+export function CatalogDeleteBlock({
+  locale,
+  expectedConfirm,
+  deleteHref,
+  flight,
+  children,
+}: {
+  locale: Locale;
+  expectedConfirm: string;
+  deleteHref: string;
+  flight: Flight;
+  children: ReactNode;
+}) {
+  return (
+    <div className={extra.deleteBlock}>
+      <p className={extra.help}>
+        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.confirmDeleteHelp")} />
+      </p>
+      <p className={extra.help}>
+        <IsolatedCopy locale={locale} text={expectedConfirm} />
+      </p>
+      {children}
+      <ActionSlot
+        locale={locale}
+        slot="delete"
+        variant="text"
+        formAction={deleteHref}
+        idleKey="dashboard.catalog.delete"
+        flight={flight}
+      />
+    </div>
+  );
+}

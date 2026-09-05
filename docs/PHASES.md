@@ -188,7 +188,8 @@ in the project, and it should not be first.
 - [x] **P05-T15** — Delete the invented public content
 - [x] **M6A** — Author the hero, reason-card and media-role columns. Do not apply
 - [x] **M6B** — Unpublish, apply M6, verify, leave in draft
-- [ ] **P05-T16A** — Verify the existing Operator account
+- [x] **P05-T16A** — Verify the existing Operator account
+- [ ] **P05-T16** — The wireframe layout, across every module
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module

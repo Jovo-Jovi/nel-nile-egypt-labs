@@ -2,7 +2,6 @@
 
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
-import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import {
   LAB_UNIT_FORM_COLUMNS,
@@ -12,13 +11,16 @@ import {
 } from "@/lib/dashboard/catalogEntities";
 import { localeHref } from "@/lib/locale";
 import {
-  ActionSlot,
   ActionStatus,
+  CatalogDeleteBlock,
   CatalogNoticeView,
+  CatalogPublishControls,
   CatalogSection,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
+  PublicationStatus,
+  PublishAside,
   useCatalogFormFlight,
 } from "./catalogFormChrome";
 import extra from "./CatalogEntityForm.module.css";
@@ -135,13 +137,11 @@ export function LabUnitForm({
   const isCreate = row === null;
   const saveAction = localeHref(locale, "/dashboard/lab-units/submit/create");
   const editSave = localeHref(locale, "/dashboard/lab-units/submit/save");
-  const statusKey: CatalogKey =
-    row?.publication_state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";
   const expectedConfirm = row === null ? "" : confirmToken(locale, row);
 
   return (
     <form
-      className={site.form}
+      className={site.splitForm}
       method="post"
       action={isCreate ? saveAction : editSave}
       id={isCreate ? "create" : undefined}
@@ -154,13 +154,6 @@ export function LabUnitForm({
       {row !== null ? <input type="hidden" name="row_id" value={row.id} /> : null}
       <div className={site.body}>
         <div className={site.intro}>
-          {row !== null ? (
-            <StatusStateBadge
-              state={row.publication_state === "published" ? "published" : "draft"}
-              label={translate(locale, statusKey)}
-            />
-          ) : null}
-          <p className={site.status}>{translate(locale, "dashboard.catalog.unpublishHint")}</p>
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
@@ -194,88 +187,54 @@ export function LabUnitForm({
             multiline
           />
         </CatalogSection>
-
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionOrder">
-          <TextField
-            locale={locale}
-            name="display_order"
-            labelKey="dashboard.catalog.displayOrder"
-            defaultValue={row === null ? "0" : String(row.display_order)}
-            inputMode="numeric"
-          />
-        </CatalogSection>
       </div>
 
-      <div className={site.actions}>
-        {isCreate ? (
-          <div className={site.actionsMain}>
-            <ActionSlot
-              locale={locale}
-              slot="create"
-              variant="primary"
-              idleKey="dashboard.catalog.create"
-              flight={flight}
-            />
-          </div>
-        ) : (
-          <>
-            <div className={site.actionsMain}>
-              <ActionSlot
-                locale={locale}
-                slot="save"
-                variant="secondary"
-                idleKey="dashboard.siteSettings.save"
-                flight={flight}
-              />
-              <ActionSlot
-                locale={locale}
-                slot="publish"
-                variant="primary"
-                formAction={localeHref(locale, "/dashboard/lab-units/submit/publish")}
-                idleKey="dashboard.siteSettings.publish"
-                flight={flight}
-              />
-            </div>
-            <div className={site.actionsUnpublish}>
-              <ActionSlot
-                locale={locale}
-                slot="unpublish"
-                variant="text"
-                formAction={localeHref(locale, "/dashboard/lab-units/submit/unpublish")}
-                idleKey="dashboard.siteSettings.unpublish"
-                flight={flight}
-              />
-            </div>
-            <div className={extra.deleteBlock}>
-              <p className={extra.help}>
-                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.confirmDeleteHelp")} />
-              </p>
-              <p className={extra.help}>
-                <IsolatedCopy locale={locale} text={expectedConfirm} />
-              </p>
-              <div className={site.field}>
-                <FieldLabel locale={locale} htmlFor="labunit-confirm_name" labelKey="dashboard.catalog.confirmDelete" />
-                <input
-                  id="labunit-confirm_name"
-                  className={site.control}
-                  type="text"
-                  name="confirm_name"
-                  autoComplete="off"
-                />
-              </div>
-              <ActionSlot
-                locale={locale}
-                slot="delete"
-                variant="text"
-                formAction={localeHref(locale, "/dashboard/lab-units/submit/delete")}
-                idleKey="dashboard.catalog.delete"
-                flight={flight}
+      <PublishAside locale={locale}>
+        <PublicationStatus
+          locale={locale}
+          state={row === null ? null : row.publication_state === "published" ? "published" : "draft"}
+          reasonKey="dashboard.catalog.draftReason"
+        />
+        {row !== null ? (
+          <p className={site.status}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.unpublishHint")} />
+          </p>
+        ) : null}
+        <TextField
+          locale={locale}
+          name="display_order"
+          labelKey="dashboard.catalog.displayOrder"
+          defaultValue={row === null ? "0" : String(row.display_order)}
+          inputMode="numeric"
+        />
+        <CatalogPublishControls
+          locale={locale}
+          isCreate={isCreate}
+          publishHref={localeHref(locale, "/dashboard/lab-units/submit/publish")}
+          unpublishHref={localeHref(locale, "/dashboard/lab-units/submit/unpublish")}
+          flight={flight}
+        />
+        {isCreate ? null : (
+          <CatalogDeleteBlock
+            locale={locale}
+            expectedConfirm={expectedConfirm}
+            deleteHref={localeHref(locale, "/dashboard/lab-units/submit/delete")}
+            flight={flight}
+          >
+            <div className={site.field}>
+              <FieldLabel locale={locale} htmlFor="labunit-confirm_name" labelKey="dashboard.catalog.confirmDelete" />
+              <input
+                id="labunit-confirm_name"
+                className={site.control}
+                type="text"
+                name="confirm_name"
+                autoComplete="off"
               />
             </div>
-          </>
+          </CatalogDeleteBlock>
         )}
         <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
-      </div>
+      </PublishAside>
     </form>
   );
 }

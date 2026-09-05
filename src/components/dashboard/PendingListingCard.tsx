@@ -31,9 +31,9 @@ export function PendingListingCards({
                 <SkeletonBar size="lg" widthPercent={100} fill />
               </div>
               <div className={styles.body}>
-                <SkeletonBar size="lg" widthPercent={72} />
-                <SkeletonBar size="base" widthPercent={100} />
-                <SkeletonBar size="base" widthPercent={64} />
+                <SkeletonBar size="xl" widthPercent={72} />
+                <SkeletonBar size="lg" widthPercent={100} />
+                <SkeletonBar size="sm" widthPercent={64} />
               </div>
             </article>
           </ApprovalGate>

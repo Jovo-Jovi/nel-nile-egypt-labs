@@ -20,7 +20,14 @@ import {
   splitE164,
 } from "@/lib/dashboard/fieldRules";
 import { localeHref } from "@/lib/locale";
-import { FieldLegend, FieldMessage, FieldSummary } from "./catalogFormChrome";
+import {
+  CatalogPublishControls,
+  FieldLegend,
+  FieldMessage,
+  FieldSummary,
+  PublicationStatus,
+  PublishAside,
+} from "./catalogFormChrome";
 import styles from "./SiteSettingsForm.module.css";
 
 // Form `name` → `"SiteSettings"` column. Every rendered field is listed.
@@ -596,10 +603,6 @@ export function SiteSettingsForm({
   const [flight, setFlight] = useState<Flight>(null);
   const [clientNotice, setClientNotice] = useState<SiteSettingsNotice>(null);
   const saveAction = localeHref(locale, "/dashboard/site-settings/submit/save");
-  const statusKey: CatalogKey =
-    row.publication_state === "published"
-      ? "dashboard.siteSettings.published"
-      : "dashboard.siteSettings.draft";
   const showQueryNotice = clientNotice === null && flight === null;
   const [issues, setIssues] = useState<Record<string, string>>({});
   const activeNotice = clientNotice !== null ? clientNotice : showQueryNotice ? notice : null;
@@ -690,11 +693,6 @@ export function SiteSettingsForm({
     >
       <div className={styles.body}>
         <div className={styles.intro}>
-          <StatusStateBadge
-            state={row.publication_state === "published" ? "published" : "draft"}
-            label={translate(locale, statusKey)}
-          />
-          <p className={styles.status}>{translate(locale, "dashboard.siteSettings.noDelete")}</p>
           <FieldSummary locale={locale} issues={summaryIssues} />
           {showQueryNotice ? <Notice locale={locale} notice={notice} /> : null}
         </div>
@@ -849,36 +847,24 @@ export function SiteSettingsForm({
         </SettingsSection>
       </div>
 
-      <aside className={styles.publishAside} aria-label={translate(locale, "dashboard.catalog.sectionPublish")}>
-        <div className={styles.actionsMain}>
-          <ActionSlot
-            locale={locale}
-            slot="save"
-            variant="secondary"
-            idleKey="dashboard.siteSettings.save"
-            flight={flight}
-          />
-          <ActionSlot
-            locale={locale}
-            slot="publish"
-            variant="primary"
-            formAction={localeHref(locale, "/dashboard/site-settings/submit/publish")}
-            idleKey="dashboard.siteSettings.publish"
-            flight={flight}
-          />
-        </div>
-        <div className={styles.actionsUnpublish}>
-          <ActionSlot
-            locale={locale}
-            slot="unpublish"
-            variant="text"
-            formAction={localeHref(locale, "/dashboard/site-settings/submit/unpublish")}
-            idleKey="dashboard.siteSettings.unpublish"
-            flight={flight}
-          />
-        </div>
+      <PublishAside locale={locale}>
+        <PublicationStatus
+          locale={locale}
+          state={row.publication_state === "published" ? "published" : "draft"}
+          reasonKey="dashboard.siteSettings.draftReason"
+        />
+        <p className={styles.status}>
+          <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.noDelete")} />
+        </p>
+        <CatalogPublishControls
+          locale={locale}
+          isCreate={false}
+          publishHref={localeHref(locale, "/dashboard/site-settings/submit/publish")}
+          unpublishHref={localeHref(locale, "/dashboard/site-settings/submit/unpublish")}
+          flight={flight}
+        />
         <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
-      </aside>
+      </PublishAside>
     </form>
   );
 }

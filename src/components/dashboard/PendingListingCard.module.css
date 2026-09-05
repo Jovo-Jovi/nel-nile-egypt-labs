@@ -1,21 +1,15 @@
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--nel-space-64);
   margin-block: 0;
   padding-inline-start: 0;
   list-style: none;
 }
 
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
 .wellGate {
-  --nel-gate-radius: var(--nel-radius-well);
-  border-radius: var(--nel-radius-well);
+  --nel-gate-radius: var(--nel-radius-md);
+  border-radius: var(--nel-radius-md);
   background-color: var(--nel-color-surface);
   box-shadow: var(--nel-elevation-1-shadow);
 }

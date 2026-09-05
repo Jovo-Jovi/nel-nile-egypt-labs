@@ -281,4 +281,18 @@ D-08 still requires a minimum of two accounts and G5 still checks for two. T16 i
 
 CF-109 landed OPEN: the locked public email and D-09's WhatsApp-only contact channel disagree; the client decides before launch.
 
+---
+
+## 2026-09-05 — P05-T16: the wireframe layout, across every module
+
+Every module form is one main column and one sticky sidebar. The sidebar holds publication state, the reason a draft cannot yet publish, display order, save, publish, unpublish and delete. The main column keeps the grouped sections ADMIN_SPEC.md §4f already required. Video preview sits in the main column so there is not a second aside.
+
+The Programmes card on the dashboard home states that the module is not yet built and no longer links. `/dashboard/programmes` remains only as the list key.
+
+Sign-in, enrolment, challenge, pending listings, listings and forms now share existing tokens: `--nel-radius-md`, elevation 1, `--nel-space-64` between groups. Six of §4's nine type steps are in use: xs, sm, base, lg, xl, 2xl. Nothing was introduced. Public pages were not restyled.
+
+The singleton is still `draft`. The Site Settings sidebar names the privacy policy body and the other required-on-publish pairs so an Operator seeing draft does not try to publish into a database check. No field was filled and nothing was republished. No account was created, altered or deleted.
+
+CF-109 remains OPEN, owner client, P07.
+
 

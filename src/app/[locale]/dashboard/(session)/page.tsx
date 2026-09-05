@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
+import { IsolatedCopy } from "@/components/ui/Isolate";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate, type CatalogKey } from "@/lib/catalog";
 import { countDashboardModules, type PublicationCounts } from "@/lib/dashboard/moduleCounts";
@@ -69,19 +70,29 @@ export default async function DashboardHomePage({ params }: Props) {
       <DashboardModuleTitle locale={locale} titleKey="dashboard.home.title" />
       <div className={extra.groups} data-nel-container="home">
         <ul className={extra.list}>
-          {MODULE_CARDS.map((mod) => (
-            <li key={mod.suffix}>
-              <article className={extra.row}>
-                <div className={extra.rowMain}>
-                  <p className={extra.rowName}>{translate(locale, mod.labelKey)}</p>
-                  <p className={extra.rowMeta}>{countLabel(locale, counts[mod.table])}</p>
-                </div>
-                <Link className={extra.editLink} href={localeHref(locale, mod.suffix)}>
-                  {translate(locale, "dashboard.home.open")}
-                </Link>
-              </article>
-            </li>
-          ))}
+          {MODULE_CARDS.map((mod) => {
+            const unbuilt = mod.table === "Programme";
+            return (
+              <li key={mod.suffix}>
+                <article className={extra.row}>
+                  <div className={extra.rowMain}>
+                    <p className={extra.rowName}>{translate(locale, mod.labelKey)}</p>
+                    <p className={extra.rowMeta}>{countLabel(locale, counts[mod.table])}</p>
+                    {unbuilt ? (
+                      <p className={extra.rowMeta}>
+                        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.home.unbuilt")} />
+                      </p>
+                    ) : null}
+                  </div>
+                  {unbuilt ? null : (
+                    <Link className={extra.editLink} href={localeHref(locale, mod.suffix)}>
+                      {translate(locale, "dashboard.home.open")}
+                    </Link>
+                  )}
+                </article>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </>

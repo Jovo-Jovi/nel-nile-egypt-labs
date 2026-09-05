@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { Isolate } from "@/components/ui/Isolate";
+import { CautionIcon } from "@/components/ui/icons";
 import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
@@ -31,7 +32,17 @@ export default async function EnrolPage({ params, searchParams }: Props) {
 
   const supabase = await createSupabaseServerClient();
   if (supabase === null) {
-    return <p className={formStyles.error}>{translate(locale, "dashboard.enrol.failed")}</p>;
+    return (
+      <>
+        <DashboardModuleTitle locale={locale} titleKey="dashboard.enrol.title" />
+        <div className={formStyles.form} data-nel-container="auth">
+          <p className={formStyles.error}>
+            <CautionIcon size={14} />
+            <span>{translate(locale, "dashboard.enrol.failed")}</span>
+          </p>
+        </div>
+      </>
+    );
   }
 
   const listed = await supabase.auth.mfa.listFactors();
@@ -48,7 +59,17 @@ export default async function EnrolPage({ params, searchParams }: Props) {
   });
 
   if (enrolled.error || enrolled.data === null) {
-    return <p className={formStyles.error}>{translate(locale, "dashboard.enrol.failed")}</p>;
+    return (
+      <>
+        <DashboardModuleTitle locale={locale} titleKey="dashboard.enrol.title" />
+        <div className={formStyles.form} data-nel-container="auth">
+          <p className={formStyles.error}>
+            <CautionIcon size={14} />
+            <span>{translate(locale, "dashboard.enrol.failed")}</span>
+          </p>
+        </div>
+      </>
+    );
   }
 
   const qrRaw = enrolled.data.totp.qr_code;
@@ -69,7 +90,12 @@ export default async function EnrolPage({ params, searchParams }: Props) {
           <Isolate>{secret}</Isolate>
         </p>
       </div>
-      {failed ? <p className={formStyles.error}>{translate(locale, "dashboard.enrol.failed")}</p> : null}
+      {failed ? (
+        <p className={formStyles.error}>
+          <CautionIcon size={14} />
+          <span>{translate(locale, "dashboard.enrol.failed")}</span>
+        </p>
+      ) : null}
       <input type="hidden" name="factorId" value={factorId} />
       <div className={formStyles.field}>
         <label className={formStyles.label} htmlFor="dashboard-enrol-code">
