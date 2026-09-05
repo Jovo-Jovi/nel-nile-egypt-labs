@@ -54,6 +54,8 @@ export const MEDIA_ASSET_FORM_COLUMNS = {
   display_order: "display_order",
 } as const;
 
+const MEDIA_ASSET_BILINGUAL_PAIRS = [["alt_ar", "alt_en"]] as const;
+
 const MEDIA_ASSET_SELECT = [
   "id",
   "storage_path",
@@ -223,8 +225,12 @@ export function parseMediaAssetWrite(
     display_order,
   };
 
-  if (requireBilingual && (columns.alt_ar === null || columns.alt_en === null)) {
-    return { ok: false, reason: "bilingual" };
+  if (requireBilingual) {
+    for (const [arField, enField] of MEDIA_ASSET_BILINGUAL_PAIRS) {
+      if (columns[arField] === null || columns[enField] === null) {
+        return { ok: false, reason: "bilingual" };
+      }
+    }
   }
   return { ok: true, columns };
 }

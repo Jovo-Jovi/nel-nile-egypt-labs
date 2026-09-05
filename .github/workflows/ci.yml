@@ -46,6 +46,9 @@ jobs:
       - name: Naming guard
         run: npm run guard:naming
 
+      - name: Schema guard
+        run: npm run guard:schema
+
       - name: Design guard
         run: npm run guard:design
 

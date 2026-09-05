@@ -4,13 +4,13 @@ import { SiteSettingsCreateForm, SiteSettingsForm } from "@/components/dashboard
 import type { SiteSettingsNotice } from "@/components/dashboard/SiteSettingsForm";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
-import { readSiteSettingsRow } from "@/lib/dashboard/siteSettings";
+import { readSiteSettingsRow, parseBilingualGroupsParam } from "@/lib/dashboard/siteSettings";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ error?: string; saved?: string }>;
+  searchParams: Promise<{ error?: string; saved?: string; groups?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -31,7 +31,9 @@ function noticeFromQuery(query: { error?: string; saved?: string }): SiteSetting
 
 export default async function SiteSettingsPage({ params, searchParams }: Props) {
   const locale = await requireLocale(params);
-  const notice = noticeFromQuery(await searchParams);
+  const query = await searchParams;
+  const notice = noticeFromQuery(query);
+  const bilingualGroups = parseBilingualGroupsParam(query.groups);
 
   const supabase = await createSupabaseServerClient();
   if (supabase === null) {
@@ -51,7 +53,7 @@ export default async function SiteSettingsPage({ params, searchParams }: Props) 
       {row === null ? (
         <SiteSettingsCreateForm locale={locale} notice={notice} />
       ) : (
-        <SiteSettingsForm locale={locale} row={row} notice={notice} />
+        <SiteSettingsForm locale={locale} row={row} notice={notice} bilingualGroups={bilingualGroups} />
       )}
     </>
   );
