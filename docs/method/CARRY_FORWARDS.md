@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-127**
+**Next free id: CF-128**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -132,6 +132,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-124 | §4h.3 grades zero published Offers as COMPLETE while `/offers` renders an empty §12 pending shell. The dashboard would report complete for a page showing pending. One of the two is wrong. | reviewer | OPEN | G5 |
 | CF-125 | `docs/BOUNDARY_MODEL.md` is FROZEN and its gate cannot be overridden by an OD, yet it now carries two OD amendments recorded only as header lines. A frozen document accumulating amendments needs its amendment history readable in one place — each one's OD, date, scope, and whether it touched the gate — rather than as a growing stack of header annotations a reader must reconstruct. | reviewer | OPEN | G7 |
 | CF-126 | OD-16 is recorded `SIGNED — 5 September 2026 · client countersignature pending`. The client approved the principle and the corrected privacy-policy direction in conversation and has not reviewed the OD's full text, including the allocation-of-responsibility paragraph that assigns the `info@` mailbox and everything sent to it to the laboratory. That paragraph is the reason the OD exists; an unread clause allocating responsibility for clinical information is worth less than the paper it is on. Closes when the client countersigns the text as written or asks for it to change. | client | OPEN | G7 |
+| CF-127 | Programme and LabTest modules now list every clinical row, save at draft, and refuse publish until docs/research/clinical-signoff.md exists. Deleting a Programme from the dashboard cascades through ProgrammeTier and ProgrammeLabTest, with counts named at confirmation. There is still no ProgrammeTier or ProgrammeLabTest editor, so an Operator can destroy unreviewed memberships before T24B lands. Eligibility stays unreviewed (CF-82). | builder | OPEN | P05-T24B |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -57,12 +57,27 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "instagram_url" ||
     error === "linkedin_url" ||
     error === "youtube_url" ||
-    error === "posterMissing"
+    error === "posterMissing" ||
+    error === "signOff"
   ) {
     return error;
   }
   if (error === "1") return "write";
   return "write";
+}
+
+export function groupsFromHref(href: string): string[] {
+  try {
+    const url = new URL(href);
+    const raw = url.searchParams.get("groups");
+    if (raw === null || raw.length === 0) return [];
+    return raw
+      .split(",")
+      .map((group) => group.trim())
+      .filter((group) => group.length > 0);
+  } catch {
+    return [];
+  }
 }
 
 function isSignInHref(href: string): boolean {
@@ -83,6 +98,7 @@ function slotFromActionUrl(url: string): FlightSlot {
 
 function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "bilingual") return "dashboard.siteSettings.errorBilingual";
+  if (notice === "signOff") return "dashboard.catalog.errorSignOff";
   if (notice === "missing") return "dashboard.catalog.errorMissing";
   if (notice === "create") return "dashboard.catalog.errorCreate";
   if (notice === "held") return "dashboard.catalog.errorHeld";
@@ -126,7 +142,17 @@ function busyKey(slot: FlightSlot): CatalogKey {
   return "dashboard.siteSettings.saving";
 }
 
-export function CatalogNoticeView({ locale, notice }: { locale: Locale; notice: CatalogNotice }) {
+export function CatalogNoticeView({
+  locale,
+  notice,
+  bilingualGroups = [],
+  pairLegend,
+}: {
+  locale: Locale;
+  notice: CatalogNotice;
+  bilingualGroups?: readonly string[];
+  pairLegend?: Record<string, CatalogKey>;
+}) {
   if (notice === null) return null;
   if (notice === "saved") {
     return (
@@ -143,12 +169,32 @@ export function CatalogNoticeView({ locale, notice }: { locale: Locale; notice: 
       </>
     );
   }
+  const message =
+    notice === "bilingual" && bilingualGroups.length > 0
+      ? bilingualNoticeText(locale, bilingualGroups, pairLegend)
+      : translate(locale, errorKey(notice));
   return (
     <p className={site.errorRow}>
       <CautionIcon size={14} />
-      <span>{translate(locale, errorKey(notice))}</span>
+      <span>{message}</span>
     </p>
   );
+}
+
+function bilingualNoticeText(
+  locale: Locale,
+  groups: readonly string[],
+  pairLegend: Record<string, CatalogKey> | undefined,
+): string {
+  if (groups.length === 0 || pairLegend === undefined) {
+    return translate(locale, "dashboard.siteSettings.errorBilingual");
+  }
+  const labels = groups.map((stem) => {
+    const key = pairLegend[stem];
+    return key ? translate(locale, key) : stem;
+  });
+  const joined = locale === "ar" ? labels.join("، ") : labels.join(", ");
+  return `${translate(locale, "dashboard.siteSettings.errorBilingualFields")} ${joined}. ${translate(locale, "dashboard.siteSettings.errorBilingualNoRetry")}`;
 }
 
 export function FieldLabel({
@@ -335,21 +381,32 @@ export function ActionStatus({
   locale,
   flight,
   clientNotice,
+  bilingualGroups = [],
+  pairLegend,
 }: {
   locale: Locale;
   flight: Flight;
   clientNotice: CatalogNotice;
+  bilingualGroups?: readonly string[];
+  pairLegend?: Record<string, CatalogKey>;
 }) {
   let message = "";
   if (flight?.phase === "busy") message = translate(locale, busyKey(flight.slot));
   else if (flight?.phase === "saved") message = translate(locale, "dashboard.siteSettings.saved");
 
+  const errorText =
+    clientNotice !== null && clientNotice !== "saved"
+      ? clientNotice === "bilingual" && bilingualGroups.length > 0
+        ? bilingualNoticeText(locale, bilingualGroups, pairLegend)
+        : translate(locale, errorKey(clientNotice))
+      : null;
+
   return (
     <div className={site.live} role="status" aria-live="polite" aria-atomic="true">
-      {clientNotice !== null && clientNotice !== "saved" ? (
+      {errorText !== null ? (
         <p className={site.errorRow}>
           <CautionIcon size={14} />
-          <span>{translate(locale, errorKey(clientNotice))}</span>
+          <span>{errorText}</span>
         </p>
       ) : message ? (
         <span className={site.visuallyHidden}>{message}</span>
@@ -372,6 +429,7 @@ export function useCatalogFormFlight() {
   const router = useRouter();
   const [flight, setFlight] = useState<Flight>(null);
   const [clientNotice, setClientNotice] = useState<CatalogNotice>(null);
+  const [clientGroups, setClientGroups] = useState<string[]>([]);
   const showQueryNotice = clientNotice === null && flight === null;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -383,6 +441,7 @@ export function useCatalogFormFlight() {
     const slot = slotFromActionUrl(actionUrl);
     setFlight({ slot, phase: "busy" });
     setClientNotice(null);
+    setClientGroups([]);
     try {
       const href = await postForm(form, actionUrl);
       if (isSignInHref(href)) {
@@ -397,9 +456,11 @@ export function useCatalogFormFlight() {
       }
       setFlight(null);
       setClientNotice(next);
+      setClientGroups(groupsFromHref(href));
     } catch {
       setFlight(null);
       setClientNotice("write");
+      setClientGroups([]);
     }
   }
 
@@ -407,6 +468,7 @@ export function useCatalogFormFlight() {
     flight,
     setFlight,
     clientNotice,
+    clientGroups,
     showQueryNotice,
     onSubmit,
   };

@@ -47,7 +47,9 @@ export function CatalogRowList({
     | "/dashboard/offers"
     | "/dashboard/videos"
     | "/dashboard/equipment"
-    | "/dashboard/media-assets";
+    | "/dashboard/media-assets"
+    | "/dashboard/programmes"
+    | "/dashboard/lab-tests";
 }) {
   if (rows.length === 0) {
     return <CatalogEmptyState locale={locale} createHref="#create" />;

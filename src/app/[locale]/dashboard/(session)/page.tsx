@@ -4,8 +4,13 @@ import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { requireLocale } from "@/components/site/StaticShellPage";
-import { translate, type CatalogKey } from "@/lib/catalog";
-import { countDashboardModules, type PublicationCounts } from "@/lib/dashboard/moduleCounts";
+import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
+import {
+  countClinicalProgress,
+  countDashboardModules,
+  type ClinicalProgressCounts,
+  type PublicationCounts,
+} from "@/lib/dashboard/moduleCounts";
 import { gateModuleRoute } from "@/lib/dashboard/gates";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
 import { pageMetadata } from "@/lib/pageMetadata";
@@ -23,6 +28,7 @@ const MODULE_CARDS: {
     | "Equipment"
     | "Branch"
     | "Programme"
+    | "LabTest"
     | "LabUnit"
     | "SiteSettings"
     | "MediaAsset";
@@ -32,6 +38,7 @@ const MODULE_CARDS: {
   { suffix: "/dashboard/equipment", labelKey: "dashboard.nav.equipment", table: "Equipment" },
   { suffix: "/dashboard/branches", labelKey: "dashboard.nav.branches", table: "Branch" },
   { suffix: "/dashboard/programmes", labelKey: "dashboard.nav.programmes", table: "Programme" },
+  { suffix: "/dashboard/lab-tests", labelKey: "dashboard.nav.labTests", table: "LabTest" },
   { suffix: "/dashboard/lab-units", labelKey: "dashboard.nav.labUnits", table: "LabUnit" },
   { suffix: "/dashboard/site-settings", labelKey: "dashboard.nav.siteSettings", table: "SiteSettings" },
   { suffix: "/dashboard/media-assets", labelKey: "dashboard.nav.mediaAssets", table: "MediaAsset" },
@@ -42,10 +49,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageMetadata(locale, "dashboard.home.title", "/dashboard");
 }
 
-function countLabel(locale: "ar" | "en", counts: PublicationCounts): string {
+function countLabel(locale: Locale, counts: PublicationCounts): string {
   const published = translate(locale, "dashboard.home.published");
   const draft = translate(locale, "dashboard.home.draft");
   return `${counts.published} ${published} · ${counts.draft} ${draft}`;
+}
+
+function clinicalLines(locale: Locale, progress: ClinicalProgressCounts): string[] {
+  return [
+    translate(locale, "dashboard.home.awaitingSignOff"),
+    `${progress.labTestArabicNamed} / ${progress.labTestTotal} ${translate(locale, "dashboard.home.arabicNames")}`,
+    `${progress.membershipsReviewed} / ${progress.membershipsTotal} ${translate(locale, "dashboard.home.membershipsReviewed")}`,
+    `${progress.qaFlagsOutstanding} ${translate(locale, "dashboard.home.qaFlagsOutstanding")}`,
+  ];
 }
 
 export default async function DashboardHomePage({ params }: Props) {
@@ -63,7 +79,10 @@ export default async function DashboardHomePage({ params }: Props) {
     );
   }
 
-  const counts = await countDashboardModules(supabase);
+  const [counts, progress] = await Promise.all([
+    countDashboardModules(supabase),
+    countClinicalProgress(supabase),
+  ]);
 
   return (
     <>
@@ -71,24 +90,25 @@ export default async function DashboardHomePage({ params }: Props) {
       <div className={extra.groups} data-nel-container="home">
         <ul className={extra.list}>
           {MODULE_CARDS.map((mod) => {
-            const unbuilt = mod.table === "Programme";
+            const clinical = mod.table === "Programme" || mod.table === "LabTest";
             return (
               <li key={mod.suffix}>
                 <article className={extra.row}>
                   <div className={extra.rowMain}>
                     <p className={extra.rowName}>{translate(locale, mod.labelKey)}</p>
-                    <p className={extra.rowMeta}>{countLabel(locale, counts[mod.table])}</p>
-                    {unbuilt ? (
-                      <p className={extra.rowMeta}>
-                        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.home.unbuilt")} />
-                      </p>
-                    ) : null}
+                    {clinical ? (
+                      clinicalLines(locale, progress).map((line) => (
+                        <p key={line} className={extra.rowMeta}>
+                          <IsolatedCopy locale={locale} text={line} />
+                        </p>
+                      ))
+                    ) : (
+                      <p className={extra.rowMeta}>{countLabel(locale, counts[mod.table])}</p>
+                    )}
                   </div>
-                  {unbuilt ? null : (
-                    <Link className={extra.editLink} href={localeHref(locale, mod.suffix)}>
-                      {translate(locale, "dashboard.home.open")}
-                    </Link>
-                  )}
+                  <Link className={extra.editLink} href={localeHref(locale, mod.suffix)}>
+                    {translate(locale, "dashboard.home.open")}
+                  </Link>
                 </article>
               </li>
             );

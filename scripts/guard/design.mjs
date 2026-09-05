@@ -72,7 +72,8 @@ const ALLOWED_HEX = /^#25D366$/i;
 // as two exact paths; P05-T09 added OfferForm.tsx, VideoForm.tsx and
 // EquipmentForm.tsx as three exact paths, no directory, no pattern;
 // P05-T10 added MediaAssetForm.tsx as one exact path, no directory, no
-// pattern).
+// pattern; P05-T24A added ProgrammeForm.tsx and LabTestForm.tsx as two
+// exact paths, no directory, no pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
@@ -85,6 +86,8 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/VideoForm.tsx",
   "src/components/dashboard/EquipmentForm.tsx",
   "src/components/dashboard/MediaAssetForm.tsx",
+  "src/components/dashboard/ProgrammeForm.tsx",
+  "src/components/dashboard/LabTestForm.tsx",
 ]);
 
 // Exact paths. Host strings may appear in these two files and nowhere

@@ -114,6 +114,7 @@ export type CatalogWriteReason =
   | "bucket"
   | "alt"
   | "file"
+  | "signOff"
   | "facebook_url"
   | "instagram_url"
   | "linkedin_url"
@@ -217,6 +218,17 @@ const LAB_UNIT_BILINGUAL_PAIRS = [
   ["name_ar", "name_en"],
   ["description_ar", "description_en"],
 ] as const;
+
+export const PROGRAMME_BILINGUAL_PAIRS = [
+  ["name_ar", "name_en"],
+  ["description_ar", "description_en"],
+  ["preparation_notes_ar", "preparation_notes_en"],
+] as const;
+
+export const LAB_TEST_BILINGUAL_PAIRS = [["name_ar", "name_en"]] as const;
+
+export const PROGRAMME_PAIR_STEMS = ["name", "description", "preparation_notes"] as const;
+export const LAB_TEST_PAIR_STEMS = ["name"] as const;
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
@@ -380,7 +392,9 @@ export type LabUnitWriteColumns = {
   display_order: number;
 };
 
-export type ParseResult<T> = { ok: true; columns: T } | { ok: false; reason: CatalogWriteReason };
+export type ParseResult<T> =
+  | { ok: true; columns: T }
+  | { ok: false; reason: CatalogWriteReason; groups?: string[] };
 
 export function branchStoredCoordinates(row: BranchRow): {
   latitude: number | null;
@@ -471,17 +485,24 @@ function nowIso(): string {
   return new Date().toISOString();
 }
 
-function uniqueReason(
-  message: string | undefined,
-  entity: "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment",
-): CatalogWriteReason {
+type CatalogEntityName =
+  | "Branch"
+  | "LabUnit"
+  | "Offer"
+  | "Video"
+  | "Equipment"
+  | "Programme"
+  | "LabTest";
+
+function uniqueReason(message: string | undefined, entity: CatalogEntityName): CatalogWriteReason {
   const text = message ?? "";
-  if (entity === "LabUnit" && text.includes("LabUnit") && text.toLowerCase().includes("slug")) {
+  const slugEntity = entity === "LabUnit" || entity === "Programme" || entity === "LabTest";
+  if (slugEntity && text.includes(entity) && text.toLowerCase().includes("slug")) {
     return "slugTaken";
   }
   if (entity === "Branch" && text.includes("head_office")) return "headOffice";
   if (text.includes("23505") || text.toLowerCase().includes("duplicate")) {
-    return entity === "LabUnit" ? "slugTaken" : "headOffice";
+    return slugEntity ? "slugTaken" : "headOffice";
   }
   return "write";
 }
@@ -489,7 +510,7 @@ function uniqueReason(
 function writeReason(
   code: string | undefined,
   message: string | undefined,
-  entity: "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment",
+  entity: CatalogEntityName,
 ): CatalogWriteReason {
   if (code === "23514") return "dates";
   if (code === "23503") return "held";
@@ -667,7 +688,8 @@ export function noticeFromQuery(query: { error?: string; saved?: string; poster?
     error === "hostId" ||
     error === "bucket" ||
     error === "alt" ||
-    error === "file"
+    error === "file" ||
+    error === "signOff"
   ) {
     return error;
   }
@@ -1186,3 +1208,409 @@ export async function deleteEquipmentRow(
   if (remaining !== null) return { ok: false, reason: "write" };
   return { ok: true };
 }
+
+export type ProgrammeRow = {
+  id: string;
+  slug: string;
+  name_ar: string | null;
+  name_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  preparation_notes_ar: string | null;
+  preparation_notes_en: string | null;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
+export type LabTestRow = {
+  id: string;
+  slug: string;
+  name_ar: string | null;
+  name_en: string | null;
+  aliases: string[];
+  qa_flag: string | null;
+  LabUnit: string | null;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
+export const PROGRAMME_FORM_COLUMNS = {
+  slug: "slug",
+  name_ar: "name_ar",
+  name_en: "name_en",
+  description_ar: "description_ar",
+  description_en: "description_en",
+  preparation_notes_ar: "preparation_notes_ar",
+  preparation_notes_en: "preparation_notes_en",
+  display_order: "display_order",
+} as const;
+
+export const LAB_TEST_FORM_COLUMNS = {
+  slug: "slug",
+  name_ar: "name_ar",
+  name_en: "name_en",
+  aliases: "aliases",
+  qa_flag: "qa_flag",
+  LabUnit: "LabUnit",
+  display_order: "display_order",
+} as const;
+
+const PROGRAMME_SELECT = [
+  "id",
+  "slug",
+  "name_ar",
+  "name_en",
+  "description_ar",
+  "description_en",
+  "preparation_notes_ar",
+  "preparation_notes_en",
+  "publication_state",
+  "display_order",
+].join(",");
+
+const LAB_TEST_SELECT = [
+  "id",
+  "slug",
+  "name_ar",
+  "name_en",
+  "aliases",
+  "qa_flag",
+  "LabUnit",
+  "publication_state",
+  "display_order",
+].join(",");
+
+export type ProgrammeWriteColumns = {
+  slug: string;
+  name_ar: string | null;
+  name_en: string | null;
+  description_ar: string | null;
+  description_en: string | null;
+  preparation_notes_ar: string | null;
+  preparation_notes_en: string | null;
+  display_order: number;
+};
+
+export type LabTestWriteColumns = {
+  slug: string;
+  name_ar: string | null;
+  name_en: string | null;
+  aliases: string[];
+  qa_flag: string | null;
+  LabUnit: string | null;
+  display_order: number;
+};
+
+export type ProgrammeDependentCounts = {
+  tiers: number;
+  memberships: number;
+};
+
+function asTextArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const out: string[] = [];
+  for (const item of value) {
+    if (typeof item === "string" && item.length > 0) out.push(item);
+  }
+  return out;
+}
+
+function parseAliasesFromForm(form: FormData): string[] {
+  const values = form.getAll("aliases");
+  const out: string[] = [];
+  for (const value of values) {
+    const text = emptyToNull(value);
+    if (text !== null) out.push(text);
+  }
+  return out;
+}
+
+function parseSlug(raw: string | null): string | null {
+  if (raw === null || !SLUG_PATTERN.test(raw) || raw.length > 80) return null;
+  return raw;
+}
+
+export function bilingualErrorQuery(groups: readonly string[], allowed: readonly string[]): string {
+  const allowedSet = new Set(allowed);
+  const named = [...new Set(groups)].filter((group) => allowedSet.has(group));
+  if (named.length === 0) return "error=bilingual";
+  return `error=bilingual&groups=${named.join(",")}`;
+}
+
+export function parseCatalogBilingualGroups(
+  raw: string | null | undefined,
+  allowed: readonly string[],
+): string[] {
+  if (raw === null || raw === undefined || raw.length === 0) return [];
+  const allowedSet = new Set(allowed);
+  return raw
+    .split(",")
+    .map((group) => group.trim())
+    .filter((group) => allowedSet.has(group));
+}
+
+export function parseProgrammeRow(value: unknown): ProgrammeRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const publication_state = asPublicationState(row.publication_state);
+  const slug = asOptionalText(row.slug);
+  if (id === null || publication_state === null || slug === null) return null;
+  return {
+    id,
+    slug,
+    name_ar: asOptionalText(row.name_ar),
+    name_en: asOptionalText(row.name_en),
+    description_ar: asOptionalText(row.description_ar),
+    description_en: asOptionalText(row.description_en),
+    preparation_notes_ar: asOptionalText(row.preparation_notes_ar),
+    preparation_notes_en: asOptionalText(row.preparation_notes_en),
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export function parseLabTestRow(value: unknown): LabTestRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const publication_state = asPublicationState(row.publication_state);
+  const slug = asOptionalText(row.slug);
+  if (id === null || publication_state === null || slug === null) return null;
+  const labUnit = row.LabUnit === null || row.LabUnit === undefined ? null : asId(row.LabUnit);
+  if (row.LabUnit !== null && row.LabUnit !== undefined && labUnit === null) return null;
+  return {
+    id,
+    slug,
+    name_ar: asOptionalText(row.name_ar),
+    name_en: asOptionalText(row.name_en),
+    aliases: asTextArray(row.aliases),
+    qa_flag: asOptionalText(row.qa_flag),
+    LabUnit: labUnit,
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export async function listProgrammeRows(supabase: SupabaseClient): Promise<ProgrammeRow[]> {
+  const { data, error } = await supabase
+    .from("Programme")
+    .select(PROGRAMME_SELECT)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseProgrammeRow);
+}
+
+export async function listLabTestRows(supabase: SupabaseClient): Promise<LabTestRow[]> {
+  const { data, error } = await supabase
+    .from("LabTest")
+    .select(LAB_TEST_SELECT)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseLabTestRow);
+}
+
+export async function readProgrammeRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<ProgrammeRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase
+    .from("Programme")
+    .select(PROGRAMME_SELECT)
+    .eq("id", rowId)
+    .maybeSingle();
+  if (error || data === null) return null;
+  return parseProgrammeRow(data);
+}
+
+export async function readLabTestRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<LabTestRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase.from("LabTest").select(LAB_TEST_SELECT).eq("id", rowId).maybeSingle();
+  if (error || data === null) return null;
+  return parseLabTestRow(data);
+}
+
+export function parseProgrammeWrite(
+  form: FormData,
+  requireBilingual: boolean,
+): ParseResult<ProgrammeWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const slug = parseSlug(emptyToNull(form.get("slug")));
+  if (slug === null) return { ok: false, reason: "slug" };
+
+  const columns: ProgrammeWriteColumns = {
+    slug,
+    name_ar: emptyToNull(form.get("name_ar")),
+    name_en: emptyToNull(form.get("name_en")),
+    description_ar: emptyToNull(form.get("description_ar")),
+    description_en: emptyToNull(form.get("description_en")),
+    preparation_notes_ar: emptyToNull(form.get("preparation_notes_ar")),
+    preparation_notes_en: emptyToNull(form.get("preparation_notes_en")),
+    display_order,
+  };
+
+  if (requireBilingual) {
+    const groups: string[] = [];
+    if (columns.name_ar === null || columns.name_en === null) groups.push("name");
+    if (columns.description_ar === null || columns.description_en === null) groups.push("description");
+    const notesMissing =
+      (columns.preparation_notes_ar === null) !== (columns.preparation_notes_en === null);
+    if (notesMissing) groups.push("preparation_notes");
+    if (groups.length > 0) return { ok: false, reason: "bilingual", groups };
+  }
+  return { ok: true, columns };
+}
+
+export function parseLabTestWrite(form: FormData, requireBilingual: boolean): ParseResult<LabTestWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const slug = parseSlug(emptyToNull(form.get("slug")));
+  if (slug === null) return { ok: false, reason: "slug" };
+
+  const LabUnit = parseOptionalRowId(emptyToNull(form.get("LabUnit")));
+  if (LabUnit === "invalid") return { ok: false, reason: "reference" };
+
+  const columns: LabTestWriteColumns = {
+    slug,
+    name_ar: emptyToNull(form.get("name_ar")),
+    name_en: emptyToNull(form.get("name_en")),
+    aliases: parseAliasesFromForm(form),
+    qa_flag: emptyToNull(form.get("qa_flag")),
+    LabUnit,
+    display_order,
+  };
+
+  if (requireBilingual) {
+    if (columns.name_ar === null || columns.name_en === null) {
+      return { ok: false, reason: "bilingual", groups: ["name"] };
+    }
+  }
+  return { ok: true, columns };
+}
+
+export async function createProgrammeRow(
+  supabase: SupabaseClient,
+  columns: ProgrammeWriteColumns,
+): Promise<{ ok: true; id: string } | { ok: false; reason: CatalogWriteReason }> {
+  const { data, error } = await supabase
+    .from("Programme")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Programme") };
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function createLabTestRow(
+  supabase: SupabaseClient,
+  columns: LabTestWriteColumns,
+): Promise<{ ok: true; id: string } | { ok: false; reason: CatalogWriteReason }> {
+  const { data, error } = await supabase
+    .from("LabTest")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "LabTest") };
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function writeProgrammeRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: ProgrammeWriteColumns,
+  publicationState: PublicationState,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase
+    .from("Programme")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Programme") };
+  return { ok: true };
+}
+
+export async function writeLabTestRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: LabTestWriteColumns,
+  publicationState: PublicationState,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase
+    .from("LabTest")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "LabTest") };
+  return { ok: true };
+}
+
+export async function countProgrammeDependents(
+  supabase: SupabaseClient,
+  programmeId: string,
+): Promise<ProgrammeDependentCounts> {
+  const tiers = await supabase.from("ProgrammeTier").select("id").eq("Programme", programmeId);
+  if (tiers.error || !Array.isArray(tiers.data)) return { tiers: 0, memberships: 0 };
+  const tierIds = tiers.data
+    .map((row) => asId(asRecord(row)?.id))
+    .filter((id): id is string => id !== null);
+  if (tierIds.length === 0) return { tiers: 0, memberships: 0 };
+  const memberships = await supabase.from("ProgrammeLabTest").select("id").in("ProgrammeTier", tierIds);
+  const membershipCount = memberships.error || !Array.isArray(memberships.data) ? 0 : memberships.data.length;
+  return { tiers: tierIds.length, memberships: membershipCount };
+}
+
+export async function countLabTestMemberships(supabase: SupabaseClient, labTestId: string): Promise<number> {
+  const { data, error } = await supabase.from("ProgrammeLabTest").select("id").eq("LabTest", labTestId);
+  if (error || !Array.isArray(data)) return 0;
+  return data.length;
+}
+
+export async function deleteProgrammeRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase.from("Programme").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Programme") };
+  const remaining = await readProgrammeRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
+}
+
+export async function deleteLabTestRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const memberships = await countLabTestMemberships(supabase, rowId);
+  if (memberships > 0) return { ok: false, reason: "held" };
+  const { error } = await supabase.from("LabTest").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "LabTest") };
+  const remaining = await readLabTestRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
+}
+
