@@ -269,4 +269,16 @@ M6 applied: twenty-one nullable columns, nine bilingual-when-published checks, t
 
 CF-108 landed OPEN: empty string satisfies `is not null` on every `bilingual_when_published` check of that form. The application write path nulls empty fields; the database checks do not.
 
+---
+
+## 2026-09-05 — P05-T16A: verify the existing Operator account
+
+One Operator session reached a module form at aal2 on a local production build. Sign-in established aal1, the module route at aal1 was refused to the TOTP challenge, a code generated from the enrolled secret was accepted, and the same module route then returned 200 with a form. Site Settings at aal2 read `draft`. No field was filled and nothing was republished.
+
+`npx supabase db query --linked` on `auth.users` and `auth.mfa_factors` is the source for the account count, the quoted TOTP `verified` status, and the absence of `operator` / `nel_principal` in `app_metadata`. A claim was not set. This process did not create, alter or delete an account.
+
+D-08 still requires a minimum of two accounts and G5 still checks for two. T16 is not started.
+
+CF-109 landed OPEN: the locked public email and D-09's WhatsApp-only contact channel disagree; the client decides before launch.
+
 
