@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { localizedText } from "@/lib/listingFormat";
-import { listPublishedVideos, posterAlt, posterSrc } from "@/lib/publishedListings";
+import { listPublishedVideos, posterAlt, posterSrc, videoWatchHref } from "@/lib/publishedListings";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { PublishedListingPage } from "@/components/site/PublishedListingPage";
 import { VideoCard } from "@/components/ui/VideoCard";
@@ -32,6 +32,7 @@ export default async function Page({ params }: Props) {
             description={localizedText(locale, row.descriptionAr, row.descriptionEn)}
             posterSrc={posterSrc(row.poster)}
             posterAlt={posterAlt(locale, row.poster)}
+            watchHref={videoWatchHref(row.youtubeId)}
           />
         </li>
       ))}

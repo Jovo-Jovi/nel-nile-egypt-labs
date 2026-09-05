@@ -3,6 +3,7 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { translate, type CatalogKey } from "@/lib/catalog";
 import { localizedText } from "@/lib/listingFormat";
 import { branchMapPins, listPublishedBranches } from "@/lib/publishedListings";
+import { buildWhatsAppHref } from "@/lib/whatsappLink";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { PublishedListingPage } from "@/components/site/PublishedListingPage";
 import listing from "@/components/site/PublishedListingPage.module.css";
@@ -66,6 +67,17 @@ export default async function Page({ params }: Props) {
             locale={locale}
             name={localizedText(locale, row.nameAr, row.nameEn)}
             isHeadOffice={row.isHeadOffice}
+            address={
+              row.addressAr !== null && row.addressEn !== null
+                ? localizedText(locale, row.addressAr, row.addressEn)
+                : null
+            }
+            hours={
+              row.hoursAr !== null && row.hoursEn !== null
+                ? localizedText(locale, row.hoursAr, row.hoursEn)
+                : null
+            }
+            whatsappHref={buildWhatsAppHref(row.whatsappE164, null)}
           />
         </li>
       ))}

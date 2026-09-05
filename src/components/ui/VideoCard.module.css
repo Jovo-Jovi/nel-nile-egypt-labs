@@ -50,6 +50,7 @@
   background: transparent;
   color: var(--nel-color-primary);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .playMark {
