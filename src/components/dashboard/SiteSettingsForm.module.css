@@ -24,6 +24,23 @@
   font-size: var(--nel-size-base);
 }
 
+.groupedSections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-48);
+}
+
+.reasonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-24);
+  padding: var(--nel-space-24);
+  border-width: var(--nel-elevation-1-border-width);
+  border-style: solid;
+  border-color: var(--nel-color-border);
+  border-radius: var(--nel-radius-md);
+}
+
 .missing {
   display: flex;
   flex-direction: column;

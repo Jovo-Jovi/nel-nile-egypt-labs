@@ -8,6 +8,7 @@ import {
   parseSiteSettingsWrite,
   readSiteSettingsRow,
   writeSiteSettingsRow,
+  bilingualRedirectQuery,
   type PublicationState,
 } from "@/lib/dashboard/siteSettings";
 import { localeHref } from "@/lib/locale";
@@ -61,11 +62,14 @@ export async function POST(
     if (parsed.reason === "https") {
       back(locale, parsed.field ? `error=${parsed.field}` : "error=https");
     }
-    back(locale, "error=bilingual");
+    back(locale, bilingualRedirectQuery(parsed.groups ?? []));
   }
 
   const written = await writeSiteSettingsRow(supabase, row.id, parsed.columns, nextState);
-  if (!written) back(locale, "error=write");
+  if (!written.ok) {
+    if (written.reason === "bilingual") back(locale, bilingualRedirectQuery(written.groups));
+    back(locale, "error=write");
+  }
 
   revalidatePublicSite();
   back(locale, "saved=1");

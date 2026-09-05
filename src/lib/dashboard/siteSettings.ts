@@ -35,6 +35,24 @@ export type SiteSettingsRow = {
   seo_title_en: string | null;
   seo_description_ar: string | null;
   seo_description_en: string | null;
+  hero_eyebrow_ar: string | null;
+  hero_eyebrow_en: string | null;
+  hero_headline_ar: string | null;
+  hero_headline_en: string | null;
+  hero_standfirst_ar: string | null;
+  hero_standfirst_en: string | null;
+  reason1_title_ar: string | null;
+  reason1_title_en: string | null;
+  reason1_body_ar: string | null;
+  reason1_body_en: string | null;
+  reason2_title_ar: string | null;
+  reason2_title_en: string | null;
+  reason2_body_ar: string | null;
+  reason2_body_en: string | null;
+  reason3_title_ar: string | null;
+  reason3_title_en: string | null;
+  reason3_body_ar: string | null;
+  reason3_body_en: string | null;
   publication_state: PublicationState;
 };
 
@@ -61,6 +79,24 @@ export const SITE_SETTINGS_FORM_COLUMNS = {
   seo_title_en: "seo_title_en",
   seo_description_ar: "seo_description_ar",
   seo_description_en: "seo_description_en",
+  hero_eyebrow_ar: "hero_eyebrow_ar",
+  hero_eyebrow_en: "hero_eyebrow_en",
+  hero_headline_ar: "hero_headline_ar",
+  hero_headline_en: "hero_headline_en",
+  hero_standfirst_ar: "hero_standfirst_ar",
+  hero_standfirst_en: "hero_standfirst_en",
+  reason1_title_ar: "reason1_title_ar",
+  reason1_title_en: "reason1_title_en",
+  reason1_body_ar: "reason1_body_ar",
+  reason1_body_en: "reason1_body_en",
+  reason2_title_ar: "reason2_title_ar",
+  reason2_title_en: "reason2_title_en",
+  reason2_body_ar: "reason2_body_ar",
+  reason2_body_en: "reason2_body_en",
+  reason3_title_ar: "reason3_title_ar",
+  reason3_title_en: "reason3_title_en",
+  reason3_body_ar: "reason3_body_ar",
+  reason3_body_en: "reason3_body_en",
 } as const;
 
 export type SiteSettingsFormField = keyof typeof SITE_SETTINGS_FORM_COLUMNS;
@@ -72,7 +108,9 @@ const HTTPS_FIELDS = new Set<SiteSettingsFormField>([
   "youtube_url",
 ]);
 
-const BILINGUAL_PAIRS: readonly [SiteSettingsFormField, SiteSettingsFormField][] = [
+// One list feeds the form's required-on-publish mark and the publish check.
+// Names match public."SiteSettings" bilingual_when_published constraints.
+export const BILINGUAL_PAIRS: readonly [SiteSettingsFormField, SiteSettingsFormField][] = [
   ["whatsapp_message_ar", "whatsapp_message_en"],
   ["hours_ar", "hours_en"],
   ["about_body_ar", "about_body_en"],
@@ -80,7 +118,33 @@ const BILINGUAL_PAIRS: readonly [SiteSettingsFormField, SiteSettingsFormField][]
   ["lab_to_lab_ar", "lab_to_lab_en"],
   ["seo_title_ar", "seo_title_en"],
   ["seo_description_ar", "seo_description_en"],
+  ["hero_eyebrow_ar", "hero_eyebrow_en"],
+  ["hero_headline_ar", "hero_headline_en"],
+  ["hero_standfirst_ar", "hero_standfirst_en"],
+  ["reason1_title_ar", "reason1_title_en"],
+  ["reason1_body_ar", "reason1_body_en"],
+  ["reason2_title_ar", "reason2_title_en"],
+  ["reason2_body_ar", "reason2_body_en"],
+  ["reason3_title_ar", "reason3_title_en"],
+  ["reason3_body_ar", "reason3_body_en"],
 ];
+
+export function bilingualStemFromArField(arField: string): string {
+  return arField.endsWith("_ar") ? arField.slice(0, -3) : arField;
+}
+
+export function bilingualPairRequiredOnPublish(
+  nameAr: SiteSettingsFormField,
+  nameEn: SiteSettingsFormField,
+): "publish" | undefined {
+  return BILINGUAL_PAIRS.some(([arField, enField]) => arField === nameAr && enField === nameEn)
+    ? "publish"
+    : undefined;
+}
+
+export const SITE_SETTINGS_PAIR_STEMS: readonly string[] = BILINGUAL_PAIRS.map(([arField]) =>
+  bilingualStemFromArField(arField),
+);
 
 const OPERATOR_SELECT = [
   "id",
@@ -104,6 +168,24 @@ const OPERATOR_SELECT = [
   "seo_title_en",
   "seo_description_ar",
   "seo_description_en",
+  "hero_eyebrow_ar",
+  "hero_eyebrow_en",
+  "hero_headline_ar",
+  "hero_headline_en",
+  "hero_standfirst_ar",
+  "hero_standfirst_en",
+  "reason1_title_ar",
+  "reason1_title_en",
+  "reason1_body_ar",
+  "reason1_body_en",
+  "reason2_title_ar",
+  "reason2_title_en",
+  "reason2_body_ar",
+  "reason2_body_en",
+  "reason3_title_ar",
+  "reason3_title_en",
+  "reason3_body_ar",
+  "reason3_body_en",
   "publication_state",
 ].join(",");
 
@@ -155,6 +237,24 @@ export function parseSiteSettingsRow(value: unknown): SiteSettingsRow | null {
     seo_title_en: asOptionalText(row.seo_title_en),
     seo_description_ar: asOptionalText(row.seo_description_ar),
     seo_description_en: asOptionalText(row.seo_description_en),
+    hero_eyebrow_ar: asOptionalText(row.hero_eyebrow_ar),
+    hero_eyebrow_en: asOptionalText(row.hero_eyebrow_en),
+    hero_headline_ar: asOptionalText(row.hero_headline_ar),
+    hero_headline_en: asOptionalText(row.hero_headline_en),
+    hero_standfirst_ar: asOptionalText(row.hero_standfirst_ar),
+    hero_standfirst_en: asOptionalText(row.hero_standfirst_en),
+    reason1_title_ar: asOptionalText(row.reason1_title_ar),
+    reason1_title_en: asOptionalText(row.reason1_title_en),
+    reason1_body_ar: asOptionalText(row.reason1_body_ar),
+    reason1_body_en: asOptionalText(row.reason1_body_en),
+    reason2_title_ar: asOptionalText(row.reason2_title_ar),
+    reason2_title_en: asOptionalText(row.reason2_title_en),
+    reason2_body_ar: asOptionalText(row.reason2_body_ar),
+    reason2_body_en: asOptionalText(row.reason2_body_en),
+    reason3_title_ar: asOptionalText(row.reason3_title_ar),
+    reason3_title_en: asOptionalText(row.reason3_title_en),
+    reason3_body_ar: asOptionalText(row.reason3_body_ar),
+    reason3_body_en: asOptionalText(row.reason3_body_en),
     publication_state,
   };
 }
@@ -184,7 +284,28 @@ export type WriteColumns = Record<SiteSettingsFormField, string | null>;
 
 export type ParseWriteResult =
   | { ok: true; columns: WriteColumns }
-  | { ok: false; reason: "https" | "bilingual" | "whatsapp_e164"; field?: SiteSettingsFormField };
+  | {
+      ok: false;
+      reason: "https" | "bilingual" | "whatsapp_e164";
+      field?: SiteSettingsFormField;
+      groups?: string[];
+    };
+
+export function bilingualRedirectQuery(groups: readonly string[]): string {
+  const allowed = new Set(SITE_SETTINGS_PAIR_STEMS);
+  const named = [...new Set(groups)].filter((group) => allowed.has(group));
+  if (named.length === 0) return "error=bilingual";
+  return `error=bilingual&groups=${named.join(",")}`;
+}
+
+export function parseBilingualGroupsParam(raw: string | null | undefined): string[] {
+  if (raw === null || raw === undefined || raw.length === 0) return [];
+  const allowed = new Set(SITE_SETTINGS_PAIR_STEMS);
+  return raw
+    .split(",")
+    .map((group) => group.trim())
+    .filter((group) => allowed.has(group));
+}
 
 export function parseSiteSettingsWrite(
   form: FormData,
@@ -209,13 +330,36 @@ export function parseSiteSettingsWrite(
     columns[field] = raw;
   }
   if (requireBilingual) {
+    const groups: string[] = [];
     for (const [arField, enField] of BILINGUAL_PAIRS) {
       if (columns[arField] === null || columns[enField] === null) {
-        return { ok: false, reason: "bilingual" };
+        groups.push(bilingualStemFromArField(arField));
       }
     }
+    if (groups.length > 0) return { ok: false, reason: "bilingual", groups };
   }
   return { ok: true, columns };
+}
+
+export type WriteSiteSettingsResult =
+  | { ok: true }
+  | { ok: false; reason: "bilingual"; groups: string[] }
+  | { ok: false; reason: "write" };
+
+type PostgresWriteError = {
+  code?: string;
+  message?: string;
+  details?: string;
+};
+
+function groupsFromCheckConstraint(error: PostgresWriteError): string[] | null {
+  if (error.code !== "23514") return null;
+  const text = `${error.message ?? ""}\n${error.details ?? ""}`;
+  const match = text.match(
+    /constraint "SiteSettings_([A-Za-z0-9_]+)_bilingual_when_published"/,
+  );
+  if (match === null) return [];
+  return [match[1]];
 }
 
 export async function writeSiteSettingsRow(
@@ -223,7 +367,7 @@ export async function writeSiteSettingsRow(
   rowId: string,
   columns: WriteColumns,
   publicationState: PublicationState,
-): Promise<boolean> {
+): Promise<WriteSiteSettingsResult> {
   const { error } = await supabase
     .from("SiteSettings")
     .update({
@@ -232,5 +376,8 @@ export async function writeSiteSettingsRow(
       updated_at: new Date().toISOString(),
     })
     .eq("id", rowId);
-  return error === null;
+  if (error === null) return { ok: true };
+  const groups = groupsFromCheckConstraint(error);
+  if (groups !== null) return { ok: false, reason: "bilingual", groups };
+  return { ok: false, reason: "write" };
 }

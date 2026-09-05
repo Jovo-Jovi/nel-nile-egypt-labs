@@ -190,7 +190,8 @@ in the project, and it should not be first.
 - [x] **M6B** — Unpublish, apply M6, verify, leave in draft
 - [x] **P05-T16A** — Verify the existing Operator account
 - [x] **P05-T16** — The wireframe layout, across every module
-- [ ] **P05-T17A** — Record the attestation, land the content source table, clear the residue
+- [x] **P05-T17A** — Record the attestation, land the content source table, clear the residue
+- [ ] **P05-T18** — The M6 Site Settings fields, an honest refusal, and the schema guard
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module

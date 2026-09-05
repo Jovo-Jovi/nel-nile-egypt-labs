@@ -10,7 +10,14 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import { callingCodeSelectOptions } from "@/lib/dashboard/callingCodes";
-import type { SiteSettingsRow } from "@/lib/dashboard/siteSettings";
+import {
+  BILINGUAL_PAIRS,
+  bilingualPairRequiredOnPublish,
+  bilingualStemFromArField,
+  parseBilingualGroupsParam,
+  type SiteSettingsFormField,
+  type SiteSettingsRow,
+} from "@/lib/dashboard/siteSettings";
 import {
   SEO_DESCRIPTION_WARN_CHARS,
   SEO_TITLE_WARN_CHARS,
@@ -53,6 +60,24 @@ import styles from "./SiteSettingsForm.module.css";
 // seo_title_en → seo_title_en
 // seo_description_ar → seo_description_ar
 // seo_description_en → seo_description_en
+// hero_eyebrow_ar → hero_eyebrow_ar
+// hero_eyebrow_en → hero_eyebrow_en
+// hero_headline_ar → hero_headline_ar
+// hero_headline_en → hero_headline_en
+// hero_standfirst_ar → hero_standfirst_ar
+// hero_standfirst_en → hero_standfirst_en
+// reason1_title_ar → reason1_title_ar
+// reason1_title_en → reason1_title_en
+// reason1_body_ar → reason1_body_ar
+// reason1_body_en → reason1_body_en
+// reason2_title_ar → reason2_title_ar
+// reason2_title_en → reason2_title_en
+// reason2_body_ar → reason2_body_ar
+// reason2_body_en → reason2_body_en
+// reason3_title_ar → reason3_title_ar
+// reason3_title_en → reason3_title_en
+// reason3_body_ar → reason3_body_ar
+// reason3_body_en → reason3_body_en
 // Publish / unpublish write publication_state. No map field (no column).
 // No ResultsPortalLink field (D-07).
 //
@@ -79,6 +104,45 @@ export type SiteSettingsNotice =
 
 type FlightSlot = "save" | "publish" | "unpublish" | "create";
 type Flight = { slot: FlightSlot; phase: "busy" | "saved" } | null;
+
+const PAIR_LEGEND: Record<string, CatalogKey> = {
+  whatsapp_message: "dashboard.siteSettings.whatsappMessage",
+  hours: "dashboard.siteSettings.hours",
+  about_body: "dashboard.siteSettings.aboutBody",
+  privacy_body: "dashboard.siteSettings.privacyBody",
+  lab_to_lab: "dashboard.siteSettings.labToLab",
+  seo_title: "dashboard.siteSettings.seoTitle",
+  seo_description: "dashboard.siteSettings.seoDescription",
+  hero_eyebrow: "dashboard.siteSettings.heroEyebrow",
+  hero_headline: "dashboard.siteSettings.heroHeadline",
+  hero_standfirst: "dashboard.siteSettings.heroStandfirst",
+  reason1_title: "dashboard.siteSettings.reason1Title",
+  reason1_body: "dashboard.siteSettings.reason1Body",
+  reason2_title: "dashboard.siteSettings.reason2Title",
+  reason2_body: "dashboard.siteSettings.reason2Body",
+  reason3_title: "dashboard.siteSettings.reason3Title",
+  reason3_body: "dashboard.siteSettings.reason3Body",
+};
+
+const REASON_CARD_TITLE: Record<1 | 2 | 3, CatalogKey> = {
+  1: "dashboard.siteSettings.reasonCard1",
+  2: "dashboard.siteSettings.reasonCard2",
+  3: "dashboard.siteSettings.reasonCard3",
+};
+
+function pairIsMultiline(stem: string): boolean {
+  return stem.endsWith("_body") || stem.endsWith("_standfirst") || stem === "seo_description";
+}
+
+function bilingualNoticeText(locale: Locale, groups: readonly string[]): string {
+  if (groups.length === 0) return translate(locale, "dashboard.siteSettings.errorBilingual");
+  const labels = groups.map((stem) => {
+    const key = PAIR_LEGEND[stem];
+    return key ? translate(locale, key) : stem;
+  });
+  const joined = locale === "ar" ? labels.join("، ") : labels.join(", ");
+  return `${translate(locale, "dashboard.siteSettings.errorBilingualFields")} ${joined}. ${translate(locale, "dashboard.siteSettings.errorBilingualNoRetry")}`;
+}
 
 function noticeFromHref(href: string): SiteSettingsNotice {
   let url: URL;
@@ -140,17 +204,31 @@ function busyKey(slot: FlightSlot): CatalogKey {
   return "dashboard.siteSettings.saving";
 }
 
-function Notice({ locale, notice }: { locale: Locale; notice: SiteSettingsNotice }) {
+function Notice({
+  locale,
+  notice,
+  groups,
+}: {
+  locale: Locale;
+  notice: SiteSettingsNotice;
+  groups?: readonly string[];
+}) {
   if (notice === null) return null;
   if (notice === "saved") {
     return (
       <StatusStateBadge state="current" label={translate(locale, "dashboard.siteSettings.saved")} />
     );
   }
+  const message =
+    notice === "bilingual"
+      ? bilingualNoticeText(locale, groups ?? [])
+      : translate(locale, errorKey(notice));
   return (
     <p className={styles.errorRow}>
       <CautionIcon size={14} />
-      <span>{translate(locale, errorKey(notice))}</span>
+      <span>
+        <IsolatedCopy locale={locale} text={message} />
+      </span>
     </p>
   );
 }
@@ -287,13 +365,14 @@ function Pair({
   multiline,
 }: {
   locale: Locale;
-  nameAr: string;
-  nameEn: string;
+  nameAr: SiteSettingsFormField;
+  nameEn: SiteSettingsFormField;
   legendKey: CatalogKey;
   defaultAr: string | null;
   defaultEn: string | null;
   multiline?: boolean;
 }) {
+  const required = bilingualPairRequiredOnPublish(nameAr, nameEn);
   const control = (id: string, value: string | null) =>
     multiline ? (
       <textarea
@@ -309,7 +388,7 @@ function Pair({
 
   return (
     <fieldset className={styles.group}>
-      <FieldLegend locale={locale} legendKey={legendKey} required="publish" />
+      <FieldLegend locale={locale} legendKey={legendKey} required={required} />
       <div className={styles.pair}>
         <div className={styles.field}>
           <label className={styles.pairLocale} htmlFor={nameAr}>
@@ -365,8 +444,8 @@ function CountedPair({
   warnKey,
 }: {
   locale: Locale;
-  nameAr: string;
-  nameEn: string;
+  nameAr: SiteSettingsFormField;
+  nameEn: SiteSettingsFormField;
   legendKey: CatalogKey;
   defaultAr: string | null;
   defaultEn: string | null;
@@ -376,6 +455,7 @@ function CountedPair({
 }) {
   const [lenAr, setLenAr] = useState(defaultAr?.length ?? 0);
   const [lenEn, setLenEn] = useState(defaultEn?.length ?? 0);
+  const required = bilingualPairRequiredOnPublish(nameAr, nameEn);
 
   const control = (id: string, value: string | null, onLength: (n: number) => void) =>
     multiline ? (
@@ -401,7 +481,7 @@ function CountedPair({
 
   return (
     <fieldset className={styles.group}>
-      <FieldLegend locale={locale} legendKey={legendKey} required="publish" />
+      <FieldLegend locale={locale} legendKey={legendKey} required={required} />
       <div className={styles.pair}>
         <div className={styles.field}>
           <label className={styles.pairLocale} htmlFor={nameAr}>
@@ -494,10 +574,12 @@ function ActionStatus({
   locale,
   flight,
   clientNotice,
+  groups,
 }: {
   locale: Locale;
   flight: Flight;
   clientNotice: SiteSettingsNotice;
+  groups?: readonly string[];
 }) {
   let message = "";
   if (flight?.phase === "busy") message = translate(locale, busyKey(flight.slot));
@@ -508,7 +590,16 @@ function ActionStatus({
       {clientNotice !== null && clientNotice !== "saved" ? (
         <p className={styles.errorRow}>
           <CautionIcon size={14} />
-          <span>{translate(locale, errorKey(clientNotice))}</span>
+          <span>
+            <IsolatedCopy
+              locale={locale}
+              text={
+                clientNotice === "bilingual"
+                  ? bilingualNoticeText(locale, groups ?? [])
+                  : translate(locale, errorKey(clientNotice))
+              }
+            />
+          </span>
         </p>
       ) : message ? (
         <span className={styles.visuallyHidden}>{message}</span>
@@ -594,18 +685,22 @@ export function SiteSettingsForm({
   locale,
   row,
   notice,
+  bilingualGroups,
 }: {
   locale: Locale;
   row: SiteSettingsRow;
   notice: SiteSettingsNotice;
+  bilingualGroups: readonly string[];
 }) {
   const router = useRouter();
   const [flight, setFlight] = useState<Flight>(null);
   const [clientNotice, setClientNotice] = useState<SiteSettingsNotice>(null);
+  const [clientGroups, setClientGroups] = useState<string[] | null>(null);
   const saveAction = localeHref(locale, "/dashboard/site-settings/submit/save");
   const showQueryNotice = clientNotice === null && flight === null;
   const [issues, setIssues] = useState<Record<string, string>>({});
   const activeNotice = clientNotice !== null ? clientNotice : showQueryNotice ? notice : null;
+  const activeGroups = clientGroups ?? (showQueryNotice && notice === "bilingual" ? bilingualGroups : []);
 
   function setIssue(id: string, message: string | null) {
     setIssues((current) => {
@@ -659,6 +754,7 @@ export function SiteSettingsForm({
     const slot = slotFromActionUrl(actionUrl);
     setFlight({ slot, phase: "busy" });
     setClientNotice(null);
+    setClientGroups(null);
     try {
       const href = await postForm(form, actionUrl);
       if (isSignInHref(href)) {
@@ -673,9 +769,11 @@ export function SiteSettingsForm({
       }
       setFlight(null);
       setClientNotice(next);
+      setClientGroups(next === "bilingual" ? parseBilingualGroupsParam(new URL(href).searchParams.get("groups")) : []);
     } catch {
       setFlight(null);
       setClientNotice("write");
+      setClientGroups([]);
     }
   }
 
@@ -694,7 +792,9 @@ export function SiteSettingsForm({
       <div className={styles.body}>
         <div className={styles.intro}>
           <FieldSummary locale={locale} issues={summaryIssues} />
-          {showQueryNotice ? <Notice locale={locale} notice={notice} /> : null}
+          {showQueryNotice ? (
+            <Notice locale={locale} notice={notice} groups={bilingualGroups} />
+          ) : null}
         </div>
 
         <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionContact">
@@ -845,6 +945,58 @@ export function SiteSettingsForm({
             warnKey="dashboard.validation.counterWarnDescription"
           />
         </SettingsSection>
+
+        <div className={styles.groupedSections}>
+          <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionHero">
+            <LocaleColumns locale={locale} />
+            {BILINGUAL_PAIRS.filter(([ar]) => bilingualStemFromArField(ar).startsWith("hero_")).map(
+              ([ar, en]) => {
+                const stem = bilingualStemFromArField(ar);
+                const legendKey = PAIR_LEGEND[stem];
+                if (legendKey === undefined) return null;
+                return (
+                  <Pair
+                    key={ar}
+                    locale={locale}
+                    nameAr={ar}
+                    nameEn={en}
+                    legendKey={legendKey}
+                    defaultAr={row[ar]}
+                    defaultEn={row[en]}
+                    multiline={pairIsMultiline(stem)}
+                  />
+                );
+              },
+            )}
+          </SettingsSection>
+          <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionReasonCards">
+            <LocaleColumns locale={locale} />
+            {([1, 2, 3] as const).map((n) => (
+              <div key={n} className={styles.reasonCard}>
+                <SectionHeader locale={locale} titleKey={REASON_CARD_TITLE[n]} level="h3" />
+                {BILINGUAL_PAIRS.filter(([ar]) =>
+                  bilingualStemFromArField(ar).startsWith(`reason${n}_`),
+                ).map(([ar, en]) => {
+                  const stem = bilingualStemFromArField(ar);
+                  const legendKey = PAIR_LEGEND[stem];
+                  if (legendKey === undefined) return null;
+                  return (
+                    <Pair
+                      key={ar}
+                      locale={locale}
+                      nameAr={ar}
+                      nameEn={en}
+                      legendKey={legendKey}
+                      defaultAr={row[ar]}
+                      defaultEn={row[en]}
+                      multiline={pairIsMultiline(stem)}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </SettingsSection>
+        </div>
       </div>
 
       <PublishAside locale={locale}>
@@ -863,7 +1015,12 @@ export function SiteSettingsForm({
           unpublishHref={localeHref(locale, "/dashboard/site-settings/submit/unpublish")}
           flight={flight}
         />
-        <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
+        <ActionStatus
+          locale={locale}
+          flight={flight}
+          clientNotice={clientNotice}
+          groups={activeGroups}
+        />
       </PublishAside>
     </form>
   );

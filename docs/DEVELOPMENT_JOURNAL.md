@@ -295,4 +295,32 @@ The singleton is still `draft`. The Site Settings sidebar names the privacy poli
 
 CF-109 remains OPEN, owner client, P07.
 
+---
+
+## 2026-09-05 — P05-T18: the M6 Site Settings fields, an honest refusal, and the schema guard
+
+The Operator can now fill the nine M6 bilingual pairs that publish requires.
+Hero (eyebrow, headline, standfirst) and three reason cards (title and body
+each) sit in two grouped sections on Site Settings. Nothing is prefilled.
+Those nine pairs are not in the source table; three of the cards are
+reviewer-authored and still await client approval. The fields exist so the
+client can write them. Favicon, app-icon and hero media remain a successor.
+
+Publish no longer returns a false "try again" when a bilingual check refuses
+the row. A Postgres `23514` names the missing field group and the form says
+retrying will not help. A genuine write failure still asks the Operator to
+retry. Save is not stricter than the database: the nine pairs may stay empty
+on a draft.
+
+`guard:schema` is the check CF-110 asked for. It parses forward migrations
+offline and fails the build when the database pair set and the application
+pair set differ. Inventory total 33.
+
+The singleton was published only as an N2 probe through a throwaway aal2
+account, then restored to `draft` with the client's values. 46 of 46 columns
+matched the before-capture by md5. The throwaway account was deleted.
+
+CF-110 CLOSED. CF-113 OPEN, owner client, G5. CF-06 stays OPEN until privacy
+is on a published row.
+
 
