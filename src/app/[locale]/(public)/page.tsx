@@ -6,12 +6,37 @@ import {
   listPublishedLabUnits,
   listPublishedProgrammes,
   publishedSiteSettings,
+  type PublishedSiteSettings,
 } from "@/lib/publishedListings";
 import { chromeFromPublishedSettings } from "@/lib/publicChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
-import { SiteHome } from "@/components/site/SiteHome";
+import { SiteHome, type HomeM6Copy } from "@/components/site/SiteHome";
 
 type Props = { params: Promise<{ locale: string }> };
+
+function homeM6CopyFromSettings(settings: PublishedSiteSettings | null): HomeM6Copy | null {
+  if (settings === null) return null;
+  return {
+    hero_eyebrow_ar: settings.heroEyebrowAr,
+    hero_eyebrow_en: settings.heroEyebrowEn,
+    hero_headline_ar: settings.heroHeadlineAr,
+    hero_headline_en: settings.heroHeadlineEn,
+    hero_standfirst_ar: settings.heroStandfirstAr,
+    hero_standfirst_en: settings.heroStandfirstEn,
+    reason1_title_ar: settings.reason1TitleAr,
+    reason1_title_en: settings.reason1TitleEn,
+    reason1_body_ar: settings.reason1BodyAr,
+    reason1_body_en: settings.reason1BodyEn,
+    reason2_title_ar: settings.reason2TitleAr,
+    reason2_title_en: settings.reason2TitleEn,
+    reason2_body_ar: settings.reason2BodyAr,
+    reason2_body_en: settings.reason2BodyEn,
+    reason3_title_ar: settings.reason3TitleAr,
+    reason3_title_en: settings.reason3TitleEn,
+    reason3_body_ar: settings.reason3BodyAr,
+    reason3_body_en: settings.reason3BodyEn,
+  };
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await requireLocale(params);
@@ -48,6 +73,7 @@ export default async function Page({ params }: Props) {
       }))}
       branchCount={branches.length}
       programmeCount={programmes.length}
+      homeM6Copy={homeM6CopyFromSettings(settings)}
     />
   );
 }

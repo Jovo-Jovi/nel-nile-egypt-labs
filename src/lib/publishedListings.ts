@@ -104,6 +104,24 @@ export type PublishedSiteSettings = {
   seoTitleEn: string | null;
   seoDescriptionAr: string | null;
   seoDescriptionEn: string | null;
+  heroEyebrowAr: string | null;
+  heroEyebrowEn: string | null;
+  heroHeadlineAr: string | null;
+  heroHeadlineEn: string | null;
+  heroStandfirstAr: string | null;
+  heroStandfirstEn: string | null;
+  reason1TitleAr: string | null;
+  reason1TitleEn: string | null;
+  reason1BodyAr: string | null;
+  reason1BodyEn: string | null;
+  reason2TitleAr: string | null;
+  reason2TitleEn: string | null;
+  reason2BodyAr: string | null;
+  reason2BodyEn: string | null;
+  reason3TitleAr: string | null;
+  reason3TitleEn: string | null;
+  reason3BodyAr: string | null;
+  reason3BodyEn: string | null;
 };
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -186,7 +204,7 @@ const BRANCH_SELECT =
   "select=id,name_ar,name_en,is_head_office,latitude,longitude,publication_state,display_order&order=display_order.asc";
 
 const SITE_SETTINGS_SELECT =
-  "select=id,hotline,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,hours_ar,hours_en,facebook_url,instagram_url,linkedin_url,youtube_url,lab_to_lab_ar,lab_to_lab_en,about_body_ar,about_body_en,privacy_body_ar,privacy_body_en,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,publication_state,display_order&order=display_order.asc";
+  "select=id,hotline,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,hours_ar,hours_en,facebook_url,instagram_url,linkedin_url,youtube_url,lab_to_lab_ar,lab_to_lab_en,about_body_ar,about_body_en,privacy_body_ar,privacy_body_en,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,hero_eyebrow_ar,hero_eyebrow_en,hero_headline_ar,hero_headline_en,hero_standfirst_ar,hero_standfirst_en,reason1_title_ar,reason1_title_en,reason1_body_ar,reason1_body_en,reason2_title_ar,reason2_title_en,reason2_body_ar,reason2_body_en,reason3_title_ar,reason3_title_en,reason3_body_ar,reason3_body_en,publication_state,display_order&order=display_order.asc";
 
 function parseOffer(value: unknown): PublishedOffer | null {
   const row = asRecord(value);
@@ -309,6 +327,24 @@ function parseSiteSettings(value: unknown): PublishedSiteSettings | null {
     seoTitleEn: asNonEmptyString(row.seo_title_en),
     seoDescriptionAr: asNonEmptyString(row.seo_description_ar),
     seoDescriptionEn: asNonEmptyString(row.seo_description_en),
+    heroEyebrowAr: asNonEmptyString(row.hero_eyebrow_ar),
+    heroEyebrowEn: asNonEmptyString(row.hero_eyebrow_en),
+    heroHeadlineAr: asNonEmptyString(row.hero_headline_ar),
+    heroHeadlineEn: asNonEmptyString(row.hero_headline_en),
+    heroStandfirstAr: asNonEmptyString(row.hero_standfirst_ar),
+    heroStandfirstEn: asNonEmptyString(row.hero_standfirst_en),
+    reason1TitleAr: asNonEmptyString(row.reason1_title_ar),
+    reason1TitleEn: asNonEmptyString(row.reason1_title_en),
+    reason1BodyAr: asNonEmptyString(row.reason1_body_ar),
+    reason1BodyEn: asNonEmptyString(row.reason1_body_en),
+    reason2TitleAr: asNonEmptyString(row.reason2_title_ar),
+    reason2TitleEn: asNonEmptyString(row.reason2_title_en),
+    reason2BodyAr: asNonEmptyString(row.reason2_body_ar),
+    reason2BodyEn: asNonEmptyString(row.reason2_body_en),
+    reason3TitleAr: asNonEmptyString(row.reason3_title_ar),
+    reason3TitleEn: asNonEmptyString(row.reason3_title_en),
+    reason3BodyAr: asNonEmptyString(row.reason3_body_ar),
+    reason3BodyEn: asNonEmptyString(row.reason3_body_en),
   };
 }
 

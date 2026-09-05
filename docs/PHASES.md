@@ -194,7 +194,8 @@ in the project, and it should not be first.
 - [x] **P05-T18** — The M6 Site Settings fields, an honest refusal, and the schema guard
 - [x] **P05-T19** — The results portal URL, the allowlist, and the one-action rule
 - [x] **P05-T20** — Land ADMIN_SPEC §4h, retire the UNRATIFIED labels, record the reason-card approval
-- [ ] **P05-T17A2** — Enumerate the region mapping §4h.7 depends on
+- [x] **P05-T17A2** — Enumerate the region mapping §4h.7 depends on
+- [ ] **P05-T21** — Wire M6's public half
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module

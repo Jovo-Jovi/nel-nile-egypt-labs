@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-122**
+**Next free id: CF-125**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -127,6 +127,9 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-119 | A well-formed but non-allowlisted `RESULTS_PORTAL_*` value ships live placeholder anchors. With both variables set to a rejected host, the host appears 0 times across the 25 built pages and `https://example.invalid/portal-placeholder` appears 84 — the page body falls to its pending slot while the header and footer chips fall back to the placeholder, because `ResultsPortalLinkAction` defaults to it when `href` is undefined. P05-T19 improved this and did not cause it. The component should render nothing or the pending state rather than a placeholder anchor. Cutover reads the rendered href rather than confirming a variable is set (CF-117). | reviewer | OPEN | P07 |
 | CF-120 | `ADMIN_SPEC.md` §4h.3's required-field table is the pair set `guard:schema` proves for `"SiteSettings"` against the forward migrations, not against the live database. A constraint added or dropped outside a migration is invisible to both the guard and the section. The gate check reads the live constraint set once and compares it to the guard's inventory. | reviewer | OPEN | G5 |
 | CF-121 | The region mapping derived at P05-T17A2 from the public rendering components has 27 rows (python count of data rows in `docs/research/region-map.md`). `ADMIN_SPEC.md:606` states twenty-one pending regions as G5 criterion 1. That twenty-one originated as the P02-T15 home-composition pending census (CF-75) and was reused here. The figures measure different things. This audit does not amend the specification. P05-T17 reads the mapping. The twenty-one figure is amended only by a task that names `ADMIN_SPEC.md`. | reviewer | OPEN | G5 |
+| CF-122 | `/{locale}/locations` renders branch names and a head-office flag and nothing else. `address_ar`, `address_en`, `hours_ar`, `hours_en` and `whatsapp_e164` are not selected. §4h.3's own words are that a branch a Visitor cannot contact is not a listing, and that is the page as built. BRANCH_SELECT's comment cites PR-16, which governs where published business data is stored, not whether it renders — `CONTENT_MODEL.md` row 6 puts addresses in the table precisely so they can be published. | reviewer | OPEN | G5 |
+| CF-123 | `youtube_id` is required by §4h.3 for a published Video and is not selected, so a published Video card cannot reach the video. | reviewer | OPEN | G5 |
+| CF-124 | §4h.3 grades zero published Offers as COMPLETE while `/offers` renders an empty §12 pending shell. The dashboard would report complete for a page showing pending. One of the two is wrong. | reviewer | OPEN | G5 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
