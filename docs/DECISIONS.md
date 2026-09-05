@@ -513,7 +513,7 @@ publication or expiry semantics (D-48 stands).
 
 ### OD-16 — Published contact details are not implemented channels
 
-**Status:** SIGNED — 5 September 2026
+**Status:** SIGNED — 5 September 2026 · client countersignature pending
 
 **Amends:** D-09. Consequential amendment to `BOUNDARY_MODEL.md` header and §2.
 
@@ -524,6 +524,8 @@ publication or expiry semantics (D-48 stands).
 **Allocation of responsibility.** The laboratory operates the `info@` mailbox and has named an employee responsible for monitoring it. NEL does not receive, monitor, store, process, log or respond to anything sent there, and holds no credential for it. **A patient may send clinical information to that address.** When that happens it is received by the laboratory, under the laboratory's own control, and this system is not in the path. That is the reason this OD exists in writing and carries a date.
 
 **Recorded, not decided here.** The laboratory revised its privacy policy on 5 September 2026 so that the published text describes the system as built — no visitor accounts, no forms, booking or enquiry inbox, no visitor-submitted personal or medical data collected or stored, no public cookies, and the results portal as an external service that is linked and nothing more. Correcting or maintaining that text is the laboratory's and its adviser's, not a build task, and this OD neither ratifies nor amends it.
+
+**Countersignature.** The client approved the principle and the corrected privacy-policy direction on 5 September 2026 and has not reviewed the full text of this OD, including the allocation-of-responsibility paragraph above. Tracked as a carry-forward to G7.
 
 **Closes:** CF-109.
 
