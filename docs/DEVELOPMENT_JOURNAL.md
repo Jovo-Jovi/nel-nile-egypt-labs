@@ -323,4 +323,28 @@ matched the before-capture by md5. The throwaway account was deleted.
 CF-110 CLOSED. CF-113 OPEN, owner client, G5. CF-06 stays OPEN until privacy
 is on a published row.
 
+---
+
+## 2026-09-05 — P05-T21: wire M6's public half
+
+The home page now reads the nine M6 bilingual pairs through the same
+published path as the rest of the chrome. `SITE_SETTINGS_SELECT` is 39
+content columns. A published eyebrow, headline and standfirst in the
+active locale replace the signed-copy pending gate; the catalogue eyebrow
+remains the fallback when that pair is empty. The why band renders three
+reason cards from the published title and body pairs, in order 1, 2, 3,
+and keeps the existing pending occupancy when any card is absent. IsolatedCopy
+wraps the published values. Section order and classes are unchanged.
+
+The linked singleton was already `published` with all eighteen M6 text
+columns populated. Capture was UTF-8, 46 of 46 columns. Probe strings were
+not written: a publish of synthetic copy would have overwritten Visitor-facing
+fields. GET `/ar` and `/en` against `npx next start` showed the signed-copy
+pending gone from both sections, the catalogue eyebrow absent from `#home`,
+and the nine section ids in the approved order.
+
+CF-122, CF-123 and CF-124 OPEN, owner reviewer, G5 — the Branch render gap,
+the unselected `youtube_id`, and §4h.3 grading zero published Offers complete
+while `/offers` still shows a pending shell.
+
 

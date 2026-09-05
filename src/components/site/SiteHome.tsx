@@ -17,6 +17,30 @@ export type HomeLabUnit = {
   name: string;
 };
 
+// View model for the M6 hero and reason-card columns selected by
+// publishedSiteSettings. Names match public."SiteSettings". Media-role
+// columns are not in this shape.
+export type HomeM6Copy = {
+  hero_eyebrow_ar: string | null;
+  hero_eyebrow_en: string | null;
+  hero_headline_ar: string | null;
+  hero_headline_en: string | null;
+  hero_standfirst_ar: string | null;
+  hero_standfirst_en: string | null;
+  reason1_title_ar: string | null;
+  reason1_title_en: string | null;
+  reason1_body_ar: string | null;
+  reason1_body_en: string | null;
+  reason2_title_ar: string | null;
+  reason2_title_en: string | null;
+  reason2_body_ar: string | null;
+  reason2_body_en: string | null;
+  reason3_title_ar: string | null;
+  reason3_title_en: string | null;
+  reason3_body_ar: string | null;
+  reason3_body_en: string | null;
+};
+
 interface SiteHomeProps {
   locale: Locale;
   whatsappHref: string | null;
@@ -24,6 +48,7 @@ interface SiteHomeProps {
   labUnits: HomeLabUnit[];
   branchCount: number;
   programmeCount: number;
+  homeM6Copy: HomeM6Copy | null;
 }
 
 const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
@@ -33,6 +58,45 @@ const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }
 ];
 
 const OCCUPANCY = [0, 1, 2] as const;
+
+function pickLocaleText(locale: Locale, ar: string | null, en: string | null): string | null {
+  const text = locale === "ar" ? ar : en;
+  return text !== null && text.length > 0 ? text : null;
+}
+
+function publishedHeroCopy(
+  locale: Locale,
+  copy: HomeM6Copy | null,
+): { eyebrow: string; headline: string; standfirst: string } | null {
+  if (copy === null) return null;
+  const eyebrow = pickLocaleText(locale, copy.hero_eyebrow_ar, copy.hero_eyebrow_en);
+  const headline = pickLocaleText(locale, copy.hero_headline_ar, copy.hero_headline_en);
+  const standfirst = pickLocaleText(locale, copy.hero_standfirst_ar, copy.hero_standfirst_en);
+  if (eyebrow === null || headline === null || standfirst === null) return null;
+  return { eyebrow, headline, standfirst };
+}
+
+function publishedReasonCards(
+  locale: Locale,
+  copy: HomeM6Copy | null,
+): { title: string; body: string }[] | null {
+  if (copy === null) return null;
+  const cards: { title: string; body: string }[] = [];
+  const pairs: [string | null, string | null, string | null, string | null][] = [
+    [copy.reason1_title_ar, copy.reason1_title_en, copy.reason1_body_ar, copy.reason1_body_en],
+    [copy.reason2_title_ar, copy.reason2_title_en, copy.reason2_body_ar, copy.reason2_body_en],
+    [copy.reason3_title_ar, copy.reason3_title_en, copy.reason3_body_ar, copy.reason3_body_en],
+  ];
+  for (const [titleAr, titleEn, bodyAr, bodyEn] of pairs) {
+    const title = pickLocaleText(locale, titleAr, titleEn);
+    const body = pickLocaleText(locale, bodyAr, bodyEn);
+    // A half-present pair is pending, not a half card. The database forbids
+    // half-published pairs; this path is defence.
+    if (title === null || body === null) return null;
+    cards.push({ title, body });
+  }
+  return cards;
+}
 
 function PendingCopyBlock() {
   return (
@@ -88,12 +152,19 @@ export function SiteHome({
   labUnits,
   branchCount,
   programmeCount,
+  homeM6Copy,
 }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
   // three home actions omitted href
   // and kept emitting the placeholder after the Visitor URL was resolved. Ratified at the P05-T19 verdict.
   const portalHref = resultsPortalVisitorHref()?.href;
+  const heroCopy = publishedHeroCopy(locale, homeM6Copy);
+  const publishedEyebrow = homeM6Copy
+    ? pickLocaleText(locale, homeM6Copy.hero_eyebrow_ar, homeM6Copy.hero_eyebrow_en)
+    : null;
+  const eyebrowText = publishedEyebrow ?? translate(locale, "hero.eyebrow");
+  const reasonCards = publishedReasonCards(locale, homeM6Copy);
 
   return (
     <div className={styles.page}>
@@ -110,15 +181,32 @@ export function SiteHome({
             </div>
             <div className={styles.veil} aria-hidden="true" />
             <div className={styles.copy}>
-              <p className={styles.eyebrow}>{translate(locale, "hero.eyebrow")}</p>
-              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.signedCopy">
-                <div className={styles.pendingCopy}>
-                  <SkeletonBar size="xl" widthPercent={88} />
-                  <SkeletonBar size="xl" widthPercent={64} />
-                  <SkeletonBar size="base" widthPercent={100} />
-                  <SkeletonBar size="base" widthPercent={72} />
-                </div>
-              </ApprovalGate>
+              <p className={styles.eyebrow}>
+                {publishedEyebrow ? (
+                  <IsolatedCopy locale={locale} text={eyebrowText} />
+                ) : (
+                  eyebrowText
+                )}
+              </p>
+              {heroCopy ? (
+                <>
+                  <h1 className={styles.headline}>
+                    <IsolatedCopy locale={locale} text={heroCopy.headline} />
+                  </h1>
+                  <p className={styles.standfirst}>
+                    <IsolatedCopy locale={locale} text={heroCopy.standfirst} />
+                  </p>
+                </>
+              ) : (
+                <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.signedCopy">
+                  <div className={styles.pendingCopy}>
+                    <SkeletonBar size="xl" widthPercent={88} />
+                    <SkeletonBar size="xl" widthPercent={64} />
+                    <SkeletonBar size="base" widthPercent={100} />
+                    <SkeletonBar size="base" widthPercent={72} />
+                  </div>
+                </ApprovalGate>
+              )}
               <div className={styles.actions}>
                 <ResultsPortalLinkAction
                   label={translate(locale, "hero.portalAction")}
@@ -229,20 +317,37 @@ export function SiteHome({
 
       <section className={`${styles.band} ${styles.inset}`} id="why">
         <p className={styles.kicker}>{translate(locale, "why.heading")}</p>
-        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.signedCopy">
+        {reasonCards ? (
           <ol className={styles.reasons}>
-            {OCCUPANCY.map((slot) => (
-              <li key={slot}>
-                <div className={styles.pendingCopy}>
-                  <SkeletonBar size="xs" widthPercent={20} />
-                  <SkeletonBar size="lg" widthPercent={70} />
-                  <SkeletonBar size="sm" widthPercent={100} />
-                  <SkeletonBar size="sm" widthPercent={58} />
+            {reasonCards.map((card, index) => (
+              <li key={index}>
+                <div>
+                  <h3>
+                    <IsolatedCopy locale={locale} text={card.title} />
+                  </h3>
+                  <p>
+                    <IsolatedCopy locale={locale} text={card.body} />
+                  </p>
                 </div>
               </li>
             ))}
           </ol>
-        </ApprovalGate>
+        ) : (
+          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.signedCopy">
+            <ol className={styles.reasons}>
+              {OCCUPANCY.map((slot) => (
+                <li key={slot}>
+                  <div className={styles.pendingCopy}>
+                    <SkeletonBar size="xs" widthPercent={20} />
+                    <SkeletonBar size="lg" widthPercent={70} />
+                    <SkeletonBar size="sm" widthPercent={100} />
+                    <SkeletonBar size="sm" widthPercent={58} />
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </ApprovalGate>
+        )}
         <ul className={styles.stats}>
           <TrustStat
             locale={locale}
