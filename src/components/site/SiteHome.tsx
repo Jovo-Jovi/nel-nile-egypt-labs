@@ -91,8 +91,8 @@ export function SiteHome({
 }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
-  // UNRATIFIED (P05-T19 residual, PR-19): three home actions omitted href
-  // and kept emitting the placeholder after the Visitor URL was resolved.
+  // three home actions omitted href
+  // and kept emitting the placeholder after the Visitor URL was resolved. Ratified at the P05-T19 verdict.
   const portalHref = resultsPortalVisitorHref()?.href;
 
   return (

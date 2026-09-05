@@ -236,6 +236,265 @@ Operator decides.
 
 ---
 
+### §4h Content completeness
+
+The dashboard reports, **field by field**, which required content fields are
+populated and which are empty or hold a placeholder. It is a checklist, not a
+binary indicator: a module reported incomplete always names the fields
+responsible, and a module reported complete can be opened to see what was
+checked. That is the entire claim. It says nothing about whether the
+content is correct, whether the laboratory has approved it, whether the
+commercial terms are settled, or whether the site is ready to launch. A module
+showing complete means every required field holds a value; it does not mean
+anyone has read that value.
+
+The rules below are derived from two sources and from nowhere else: the `NOT
+NULL` columns in `DATA_MODEL.md` §6 as the migrations actually created them,
+and §8's publish-time bilingual checks. A requirement the database does not
+have is not invented here. Where the dashboard is stricter than the database,
+this section says which field and why.
+
+#### §4h.1 The three states
+
+A module is **COMPLETE**, **INCOMPLETE**, or **AWAITING SIGN-OFF**. There is no
+fourth state and no percentage that mixes them.
+
+- **Complete** — every required field on every published row holds a value, and
+  no required field holds a placeholder. Stated as "all required content
+  populated", never as ready, operational, approved or live.
+- **Incomplete** — at least one required field is empty, or holds a
+  placeholder. The module names which fields, per row.
+- **Awaiting sign-off** — Programmes only. See §4h.5.
+
+Every state carries an icon and a word. Colour never carries the state alone
+(`DESIGN_SYSTEM.md` §8).
+
+#### §4h.2 A placeholder counts as empty
+
+A required field holding a placeholder is **incomplete**, not complete. A field
+that looks filled and is not is worse than an empty one, because nothing draws
+the eye to it and it ships.
+
+A value is a placeholder when it matches any of:
+
+- a string from `src/lib/placeholders.ts`, including
+  `https://example.invalid/portal-placeholder` and the
+  `wa.me/200000000000` number
+- a value containing `PROOF`, `PLACEHOLDER`, `TEST`, `SAMPLE`, `TODO`, `XXX`,
+  `lorem`, or `example.invalid`, case-insensitive
+- a task identifier of the form `P0n-Tnn` or `M n`, which is verification
+  residue rather than content
+
+The list lives in one module and the completeness check and the tests read the
+same list. It is extended when a new placeholder shape is found, not
+rediscovered each time.
+
+Match `PROOF`, `PLACEHOLDER`, `TEST`, `SAMPLE`, `TODO` and `XXX` **on a word
+boundary**, not as a substring. P05-T18's residue classify found four
+substring hits on `TEST` inside the laboratory's own English copy across
+`lab_to_lab_en`, `privacy_body_en`, `seo_description_en` and `seo_title_en` —
+a laboratory's marketing copy will contain the word *test* constantly, and a
+check that reads those as verification residue reports a permanently
+incomplete module and teaches the Operator to ignore it. `lorem` and
+`example.invalid` match as substrings, because neither belongs in a sentence.
+
+#### §4h.3 Required per module, derived
+
+**Site Settings** — one row. Two single columns are required when published:
+`hotline` and `whatsapp_e164`.
+
+Sixteen bilingual pairs are required when published. Each is required because
+the database carries a `SiteSettings_<field>_bilingual_when_published` check of
+the form `publication_state <> 'published' or (both is not null)`. This
+section invents none of them and omits none of them:
+
+| Pair | Landed by |
+|---|---|
+| `whatsapp_message_ar` / `_en` | M2 |
+| `hours_ar` / `_en` | M2 |
+| `about_body_ar` / `_en` | M2 |
+| `privacy_body_ar` / `_en` | M2 |
+| `lab_to_lab_ar` / `_en` | M2 |
+| `seo_title_ar` / `_en` | M2 |
+| `seo_description_ar` / `_en` | M2 |
+| `hero_eyebrow_ar` / `_en` | M6 |
+| `hero_headline_ar` / `_en` | M6 |
+| `hero_standfirst_ar` / `_en` | M6 |
+| `reason1_title_ar` / `_en` | M6 |
+| `reason1_body_ar` / `_en` | M6 |
+| `reason2_title_ar` / `_en` | M6 |
+| `reason2_body_ar` / `_en` | M6 |
+| `reason3_title_ar` / `_en` | M6 |
+| `reason3_body_ar` / `_en` | M6 |
+
+**This list is trustworthy because a guard enforces it, not because it was read
+carefully.** It was read carefully once and it was wrong. The first draft of
+this section listed the seven M2 pairs and none of the nine M6 added, because
+it was derived against the schema as it stood before M6 and nothing obliged it
+to be re-derived. A module reporting COMPLETE against that list would have
+reported complete on a singleton the database refuses to publish, which is the
+exact failure §4h.1 exists to prevent — and it is what happened in production
+on 5 September 2026, when the laboratory filled every field the form offered,
+pressed publish, and was told only that saving had failed and to try again.
+
+`scripts/guard/schema.mjs`, landed at **P05-T18**, parses the forward
+migrations for `<Table>_<field>_bilingual_when_published` and fails CI when the
+application's pair lists and the database's constraint set differ in either
+direction. **Until P05-T18 has landed on `main` and `npm run guard:schema`
+exits 0, treat the table above as a proposal and not as verified.** The
+sixteen entries are what that guard proves for `"SiteSettings"`; before the
+guard existed there was no mechanism by which such a list could be right other
+than someone remembering to check, and someone did not.
+
+Two limits on what the guard proves, stated so this section is not read as
+claiming more than it can:
+
+- The guard reads the **migrations**, not the live database. The migrations
+  are the record of what was pushed to the linked remote; they are the best
+  available evidence and they are not the database itself. A constraint added
+  or dropped outside a migration is invisible to it.
+- The guard compares against the pair lists the application **declares**. For
+  a table whose module does not yet exist, a declared list is not an enforced
+  one. See CF-114.
+
+The four social URLs are **not required** — a laboratory without a LinkedIn
+page is not incomplete. Required only in the sense that a populated one must be
+a valid `https://` URL, which §4g already enforces.
+
+`hero_media`, `favicon_media` and `app_icon_media` are **not required**. They
+are nullable, carry no check constraint, and have no form field until the
+media-role task lands. A missing app icon is reported under §4h.4 as a client
+material, never as an incomplete field the Operator could have filled.
+
+`privacy_body_*` is required for completeness and is separately blocked by
+CF-06: the laboratory has not supplied its policy text. Populated is not
+signed.
+
+`hero_*` and `reason*` are required for completeness and are separately
+blocked by CF-113: the hero copy is the client's to write and the three reason
+cards are reviewer-authored proposals awaiting his approval or his own
+wording. A populated hero is not an approved hero.
+
+**Branches** — at least one published row. Per row: `name_ar`, `name_en`,
+`address_ar`, `address_en`, `hours_ar`, `hours_en`. `whatsapp_e164` is
+required per row because a branch a Visitor cannot contact is not a listing.
+`latitude` and `longitude` are **not required** — CF-69 records that the
+addresses have not been verified, and an invented coordinate is a defect, not
+a completion. Exactly one row must carry `is_head_office`; zero is incomplete,
+and the database already prevents two.
+
+**Departments** — at least one published `LabUnit`. Per row: `slug`,
+`name_ar`, `name_en`, `description_ar`, `description_en`.
+
+**Offers** — **zero published Offers is COMPLETE, not incomplete.** A
+laboratory running no promotion this month is in a correct state, and a
+dashboard that nags for one invites invented content. Where a published Offer
+exists: `title_ar`, `title_en`, `description_ar`, `description_en`,
+`valid_from`, `valid_until`. `price_amount` and `price_currency` are required
+together or neither — a price without a currency is meaningless and a currency
+without a price is noise. An Offer past its `valid_until` is complete and
+expired, not incomplete; expiry is a visibility filter and never a state
+(D-48).
+
+**Videos** — zero published Videos is complete, on the same reasoning. Where
+one exists: `youtube_id`, `title_ar`, `title_en`, `description_ar`,
+`description_en`, and a linked `"MediaAsset"` poster. The poster is required
+because D-13 forbids the host's thumbnail and a card with neither has no image.
+
+**Equipment** — zero published Equipment is complete. Where one exists:
+`name_ar`, `name_en`, `description_ar`, `description_en`. The `"MediaAsset"`
+and `"Video"` links are optional.
+
+**Media Library** — complete when every published `"MediaAsset"` carries
+`alt_ar` and `alt_en`. An asset without alt text in both languages fails the
+bilingual rule and the accessibility floor. The count of assets is never a
+completeness criterion; one correct asset is complete and forty without alt
+text are not.
+
+#### §4h.4 What the Operator cannot supply
+
+Four inputs are the client's and no amount of dashboard work produces them.
+They are listed separately, never mixed into a module's state, and never
+counted toward or against completeness:
+
+- the mark as a scalable file (CF-74) — the favicon and app icon
+- photography for frontage, departments, equipment and branches (CF-65)
+- accreditation evidence: scheme, number, issuing body, expiry
+- the four verified branch addresses (CF-69)
+
+Shown as outstanding client materials with the region count each one unblocks.
+An Operator seeing a module incomplete should be able to tell at a glance
+whether it is their work or the client's.
+
+Hero copy and reason-card approval (CF-113) belong to the client in the same
+way, and differ in one respect that matters to the display: their destination
+is a required field, so they appear in **both** places — as an incomplete
+field under Site Settings, and here as a client material with the note that no
+Operator can close it. A field the Operator cannot fill must never be shown as
+though they had simply not got to it yet.
+
+#### §4h.5 Programmes is never graded
+
+Programmes reports **awaiting clinical sign-off** and reports nothing else,
+whatever its fields hold.
+
+Publishing a Programme is a clinical act. All 72 `LabTest` Arabic names are
+empty (CF-81), 121 memberships default to `unreviewed` eligibility (CF-82),
+and five records carry QA flags of which two are high severity (CF-83). A
+green tick on that module would tell an Operator the work is done while the
+laboratory has signed nothing, and that is the failure the clinical gate
+exists to prevent.
+
+The module may report progress against the clinical work — names translated,
+memberships reviewed, flags resolved — as counts. It never converts those
+counts into a completeness state, and it never turns green.
+
+#### §4h.6 The check is server-side and recomputed on write
+
+Completeness is evaluated where the rows are, not in the browser, and it is
+recomputed after every write so a save updates the header without a reload.
+The evaluation reads published rows through the same path the public site
+uses, so the header answers the question a Visitor's page would answer.
+
+The header reads the same `BILINGUAL_PAIRS` lists the write path enforces and
+`guard:schema` checks. One list, three readers. A completeness header with its
+own copy of the requirements is a second thing to keep in step with the
+database, and the first one already fell out of step.
+
+#### §4h.7 Presented by page, derived by column
+
+The rules above are defined per column because that is where the requirement
+lives. The header presents them **per page**, because that is what an Operator
+sees and what a Visitor sees. One column can appear under several pages —
+`hotline` and `whatsapp_e164` render in the chrome on every public URL, while
+`about_body_ar` renders only on `/about`, and the three `hero_*` pairs and six
+`reason*` pairs render only on the home page. The mapping is the one the
+wiring audit produced at P05-T12, extended by M6's columns, and it is read
+from that mapping rather than restated.
+
+Each page lists its required fields with a filled or missing mark and the
+field's name in the Operator's language. **An optional field does not appear
+at all** — not greyed, not marked satisfied. A checklist that lists things
+nobody needs teaches the reader to skim it.
+
+The summary is a count of the same checklist: *"32 of 38 required fields
+populated."* The denominator is computed, never fixed. It grows with published
+rows — each published `Branch` contributes its seven required fields, each
+published `Video` its six — so the count answers "what is missing from what
+exists", not "how close is this to a target nobody set". State the denominator
+alongside the numerator so a reader can see it move when a row is added.
+
+Three things stay out of that count and are shown beside it, never inside it:
+
+- **Client-owned materials** (§4h.4). Listed with the field or region each one
+  unblocks, so an Operator can see at a glance that the gap is not theirs.
+- **Programmes** (§4h.5), which reports clinical progress and no completeness
+  state.
+- **Fields the system does not have.** No email address, no contact form
+  field, no enquiry inbox — D-09 struck the inbox and WhatsApp is the only
+  channel. A checklist entry for a field this system will never hold is a
+  standing invitation to add one.
+
 ## §5 The eight modules
 
 Eight (D-16, first eight). Login is authentication, not a module. The activity log is a

@@ -153,7 +153,7 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
             {translate(locale, "footer.privacy")}
           </Link>
           <div className={styles.chips}>
-            {/* UNRATIFIED (P05-T19 residual, PR-19): chip omitted href. */}
+            {/* chip omitted href. Ratified at the P05-T19 verdict. */}
             <ResultsPortalLinkAction
               label={translate(locale, "hero.portalAction")}
               variant="secondary"

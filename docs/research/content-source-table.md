@@ -93,9 +93,9 @@ one.
 
 | # | Arabic | English | Status |
 |---|---|---|---|
-| 1 | **شبكة فروع في القاهرة الكبرى** — أربعة فروع تخدم المرضى في مواقع مختلفة من القاهرة الكبرى. | **A branch network across Greater Cairo** — four branches serving patients in different parts of Greater Cairo. | `REVIEWER-AUTHORED — AWAITING CLIENT APPROVAL` |
-| 2 | **أربعة أقسام معملية** — المناعة والكيمياء وأمراض الدم والبيولوجيا الجزيئية تحت سقف واحد. | **Four laboratory departments** — immunology, chemistry, haematology and molecular biology under one roof. | `REVIEWER-AUTHORED — AWAITING CLIENT APPROVAL` |
-| 3 | **خبرة منذ ٢٠٠٧** — معمل قائم منذ عام ٢٠٠٧ في خدمة الأسرة المصرية. | **Serving since 2007** — a laboratory operating since 2007 in service of Egyptian families. | `REVIEWER-AUTHORED — AWAITING CLIENT APPROVAL` |
+| 1 | **شبكة فروع في القاهرة الكبرى** — أربعة فروع تخدم المرضى في مواقع مختلفة من القاهرة الكبرى. | **A branch network across Greater Cairo** — four branches serving patients in different parts of Greater Cairo. | `CONFIRMED — approved by the laboratory as written, 5 September 2026, attested by the human` |
+| 2 | **أربعة أقسام معملية** — المناعة والكيمياء وأمراض الدم والبيولوجيا الجزيئية تحت سقف واحد. | **Four laboratory departments** — immunology, chemistry, haematology and molecular biology under one roof. | `REVIEWER-AUTHORED — APPROVED, TWO NAMES UNCONFIRMED — the laboratory approved the card on 5 September 2026, and that approval confirms Haematology and Chemistry only. Immunology and Molecular Biology remain RECOVERED-UNCONFIRMED (§6) and the card names all four, so it does not publish as written` |
+| 3 | **خبرة منذ ٢٠٠٧** — معمل قائم منذ عام ٢٠٠٧ في خدمة الأسرة المصرية. | **Serving since 2007** — a laboratory operating since 2007 in service of Egyptian families. | `CONFIRMED — approved by the laboratory as written, 5 September 2026, attested by the human` |
 
 Card 2 depends on the four department names, which are `RECOVERED-UNCONFIRMED` (§6). If the
 client corrects them, the card changes with them. Card 3 uses Western digits in English and
@@ -131,7 +131,8 @@ Exactly one row carries `is_head_office`; the database enforces it.
 
 | Value | Status | Source |
 |---|---|---|
-| Immunology · Chemistry · Haematology · Molecular Biology | `RECOVERED-UNCONFIRMED` | `08` line 96, from the old site's `about-us.html`. No owner question was answered on the department list |
+| Chemistry · Haematology | `CONFIRMED` — confirmed by the laboratory's approval of reason card 2, 5 September 2026 | `08` line 96, from the old site's `about-us.html` |
+| Immunology · Molecular Biology | `RECOVERED-UNCONFIRMED` | `08` line 96, from the old site's `about-us.html`. No owner question was answered on the department list |
 | Arabic names | `NOT IN SOURCE` | The old site's department names are English only. Operator entry |
 | Descriptions, both languages | `NOT IN SOURCE` | Operator entry |
 
@@ -158,7 +159,7 @@ Four items, none of which any amount of build work resolves:
    now also blocks republishing `SiteSettings`, because `privacy_body_ar` and `_en` are two of
    the twenty-five bilingual pairs the publish-time checks require.
 2. **Hero copy** — three lines, two languages. Nothing to extract.
-3. **Reason-card approval** — the three above, or his own.
+3. **Reason-card approval** — cards 1 and 3 approved 5 September 2026. Card 2 is approved but names two departments the laboratory has not confirmed; it does not publish until Immunology and Molecular Biology are confirmed or the card is rewritten and re-approved.
 4. **The public-email conflict** between `09` §1 item 2 and D-09.
 
 Everything else in this table is either `CONFIRMED` and enterable today, or an Operator
