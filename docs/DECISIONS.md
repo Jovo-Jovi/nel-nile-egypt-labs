@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-eight decisions. Fifteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-eight decisions. Sixteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -511,6 +511,24 @@ publication or expiry semantics (D-48 stands).
 
 ---
 
+### OD-16 — Published contact details are not implemented channels
+
+**Status:** SIGNED — 5 September 2026
+
+**Amends:** D-09. Consequential amendment to `BOUNDARY_MODEL.md` header and §2.
+
+**Decides.** D-09 governs the contact channels this system **implements**, not the contact details the laboratory **publishes**. That rule is already in force and unremarked: `hotline` is a published column rendering in the footer of every page, and a telephone number has never been treated as a breach of "WhatsApp deep link only". `info@nileegyptlabs.org` is the same shape and may appear in the laboratory's published content on the same basis. D-09 is restated as: **WhatsApp is the only contact channel NEL builds, operates or instruments.**
+
+**What does not change.** No contact form, no booking, no enquiry inbox, no route handler, no field, no log. `QUOTATION_AMENDMENTS.md` §2 C3 stands: the inbox module remains struck from the deliverable and this OD adds no priced line. No interactive email affordance exists and none is to be added — no anchor with a `mailto:` or `tel:` href on any public page. The boundary gate is untouched and remains non-waivable: no table, column, bucket, form, route handler or log accepts or retains personal or medical data. This OD adds no inbound path to this system. WhatsApp remains the contact affordance wherever the site offers one.
+
+**Allocation of responsibility.** The laboratory operates the `info@` mailbox and has named an employee responsible for monitoring it. NEL does not receive, monitor, store, process, log or respond to anything sent there, and holds no credential for it. **A patient may send clinical information to that address.** When that happens it is received by the laboratory, under the laboratory's own control, and this system is not in the path. That is the reason this OD exists in writing and carries a date.
+
+**Recorded, not decided here.** The laboratory revised its privacy policy on 5 September 2026 so that the published text describes the system as built — no visitor accounts, no forms, booking or enquiry inbox, no visitor-submitted personal or medical data collected or stored, no public cookies, and the results portal as an external service that is linked and nothing more. Correcting or maintaining that text is the laboratory's and its adviser's, not a build task, and this OD neither ratifies nor amends it.
+
+**Closes:** CF-109.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze
@@ -547,7 +565,7 @@ Minimum two. MFA is REQUIRED, not optional. GLOSSARY §2 is precedence 1 and bea
 
 ### D-09 — Contact
 
-WhatsApp deep link only, opened client-side. No form, no booking, no inbox. The quotation's incoming-message inbox module is struck from the module list. Adding a form later is a `BOUNDARY_MODEL.md` amendment plus a changed compliance position plus separate paid scope — not a version bump.
+WhatsApp deep link only, opened client-side. No form, no booking, no inbox. The quotation's incoming-message inbox module is struck from the module list. Adding a form later is a `BOUNDARY_MODEL.md` amendment plus a changed compliance position plus separate paid scope — not a version bump. Restated by OD-16: WhatsApp is the only contact channel NEL builds, operates or instruments. Contact details the laboratory publishes in its own content — the hotline, and its email address — are business content and not implemented channels.
 
 ### D-10 — Language
 

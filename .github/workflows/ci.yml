@@ -64,5 +64,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Boundary guard
+        run: npm run guard:boundary
+
       - name: Verify seed data
         run: python data/seed/verify_seed.py
