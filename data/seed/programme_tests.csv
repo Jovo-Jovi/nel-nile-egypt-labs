@@ -13,7 +13,7 @@ general-checkup,Silver,URINALYSIS,urinalysis,11
 general-checkup,Silver,STOOL ANALYSIS,stool-analysis,12
 general-checkup,Silver,PSA Total (male>45only),psa,13
 general-checkup,Gold,Occult blood in stool,occult-blood,1
-general-checkup,Gold,FSH,fsh,2
+general-checkup,Gold,FSH,tsh,2
 general-checkup,Gold,FT4,ft4,3
 general-checkup,Gold,HCV Ab,hcv-ab,4
 general-checkup,Gold,HBsAg,hbsag,5
@@ -39,13 +39,15 @@ general-checkup,Children,RH,rh,3
 general-checkup,Children,Hemoglobin electrophoresis,hb-electrophoresis,4
 general-checkup,Children,CRP (Nephelometry),crp,5
 general-checkup,Children,E.S.R. (Westergreen),esr,6
-general-checkup,Children,Creatinine\urea,creatinine-urea-combined,7
-general-checkup,Children,Glycosylated Hb (HbA1C),hba1c,8
-general-checkup,Children,SCOT (AST),ast,9
-general-checkup,Children,Ferritin,ferritin,10
-general-checkup,Children,Calcium,calcium,11
-general-checkup,Children,Stool Analysis,stool-analysis,12
-general-checkup,Children,Urine Analysis,urinalysis,13
+general-checkup,Children,added by 6 September 2026 decision,creatinine,7
+general-checkup,Children,added by 6 September 2026 decision,urea,8
+general-checkup,Children,Glycosylated Hb (HbA1C),hba1c,9
+general-checkup,Children,SCOT (AST),ast,10
+general-checkup,Children,Ferritin,ferritin,11
+general-checkup,Children,Calcium,calcium,12
+general-checkup,Children,Stool Analysis,stool-analysis,13
+general-checkup,Children,Urine Analysis,urinalysis,14
+general-checkup,Children,added by 6 September 2026 decision,alt,15
 kidney-profile,,Urea,urea,1
 kidney-profile,,Creatinine,creatinine,2
 kidney-profile,,Uric acid,uric-acid,3
@@ -98,6 +100,7 @@ infertility,Female,Progesterone,progesterone,4
 infertility,Female,Prolactin,prolactin,5
 infertility,Female,TSH,tsh,6
 infertility,Female,Estradiol – E2,estradiol,7
+infertility,Female,added by 6 September 2026 decision,testosterone-free,8
 pregnancy-follow-up,,Glucose (1 hour after 50 g oral glucose intake),gct-50g,1
 pregnancy-follow-up,,Blood grouping (ABO),blood-group-abo,2
 pregnancy-follow-up,,CBC,cbc,3

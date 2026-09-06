@@ -376,3 +376,23 @@ was written. The throwaway aal2 account was deleted.
 
 
 
+## 2026-09-06 — P05-T26A: amend the seed to the signed catalogue
+
+The signed worklist and the pending sign-off artefact landed byte-exact.
+`tests.csv` is 71 rows with Arabic names copied from Section A; `qa_flag`
+is empty on every row; `app-afp` `name_en` is AFP (Alpha-Fetoprotein).
+`programme_tests.csv` is 124 memberships: Gold FSH retargeted to TSH,
+the Children combined row split into creatinine and urea, ALT added to
+Children, free testosterone added to the Infertility female panel.
+
+`verify_seed.py` prints `124 -> 71` and PASS. `catalogue.json` stays the
+2018 snapshot; its count-equality checks are an UNRATIFIED residual
+repair (PR-19) because this fence forbade editing that file.
+
+CF-133 OPEN. The database is still 72 / 121. No laboratory row was written.
+
+
+
+
+
+

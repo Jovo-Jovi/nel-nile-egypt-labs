@@ -28,6 +28,8 @@ These justify decisions. When someone asks in month three why the hotline is
 | `content-source-table.md` | Every content field with its recovered value, source and one of four statuses. Evidence tooling, precedence none — so content entry is transcription, not judgement at the keyboard | 5 Sep 2026 |
 | `clinical-worklist.md` | The laboratory's clinical worklist — 72 Arabic `"LabTest"` names, 121 eligibility judgements, 5 QA-flagged records including 2 HIGH, and 4 tests promised in a description but absent from its list. Every count enumerated by its own contents. Not the sign-off | 5 Sep 2026 |
 | `region-map.md` | Public-page region mapping derived from the rendering components at P05-T17A2. Precedence none. The authority is the code; this table is the audit that produced the constant at P05-T17 | 5 Sep 2026 |
+| `clinical-worklist.md` | The signed clinical catalogue — 71 `"LabTest"` names with Arabic, 124 programme memberships with eligibility, 5 QA findings resolved, 4 description decisions. Counts computed from the document. The hash the sign-off attaches to | 6 Sep 2026 |
+| `clinical-signoff.md` | The publish-gate artefact. Status PENDING as received. Attaches to `clinical-worklist.md` by SHA-256. The status line is not altered | 6 Sep 2026 |
 
 ## Still to land here
 
