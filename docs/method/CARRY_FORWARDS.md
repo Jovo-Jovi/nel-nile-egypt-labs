@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-128**
+**Next free id: CF-130**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -133,6 +133,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-125 | `docs/BOUNDARY_MODEL.md` is FROZEN and its gate cannot be overridden by an OD, yet it now carries two OD amendments recorded only as header lines. A frozen document accumulating amendments needs its amendment history readable in one place — each one's OD, date, scope, and whether it touched the gate — rather than as a growing stack of header annotations a reader must reconstruct. | reviewer | OPEN | G7 |
 | CF-126 | OD-16 is recorded `SIGNED — 5 September 2026 · client countersignature pending`. The client approved the principle and the corrected privacy-policy direction in conversation and has not reviewed the OD's full text, including the allocation-of-responsibility paragraph that assigns the `info@` mailbox and everything sent to it to the laboratory. That paragraph is the reason the OD exists; an unread clause allocating responsibility for clinical information is worth less than the paper it is on. Closes when the client countersigns the text as written or asks for it to change. | client | OPEN | G7 |
 | CF-127 | Programme and LabTest modules now list every clinical row, save at draft, and refuse publish until docs/research/clinical-signoff.md exists. Deleting a Programme from the dashboard cascades through ProgrammeTier and ProgrammeLabTest, with counts named at confirmation. There is still no ProgrammeTier or ProgrammeLabTest editor, so an Operator can destroy unreviewed memberships before T24B lands. Eligibility stays unreviewed (CF-82). The membership list is reachable and readable on the ProgrammeTier page before any destructive action is offered. Closed at P05-T24B. | builder | CLOSED at P05-T24B | P05-T24B |
+| CF-128 | `hasClinicalCatalogueSignOff()` reads `docs/research/clinical-signoff.md` from `process.cwd()` at request time, and `next.config.ts` sets no `outputFileTracingIncludes`. Next does not trace `docs/` into a deployment bundle, so in production the file is absent, the catch returns false, and publish is refused **even after the laboratory signs**. Fail-closed is the right direction and this is not a security defect; it is a gate the intended process cannot open, and a gate that cannot be opened legitimately is one somebody edits out under deadline pressure. Either trace the artefact into the bundle or resolve it to a build-time constant. | reviewer | OPEN | P07 |
+| CF-129 | The clinical sign-off artefact is satisfied by two literal lines, `# Clinical catalogue sign-off` and `Status: SIGNED`. Nothing requires it to name who signed, on what date, or which catalogue version — the 72 `"LabTest"` names, 121 memberships and 5 QA flags it covers. A non-waivable gate opened by two strings anyone can type is weaker than the gate it implements. Its required contents should identify the signatory, the date and the scope, and should reference `docs/research/clinical-worklist.md` by hash so the signature attaches to a specific set of answers. | reviewer | OPEN | G6 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

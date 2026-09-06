@@ -449,17 +449,53 @@ The module may report progress against the clinical work — names translated,
 memberships reviewed, flags resolved — as counts. It never converts those
 counts into a completeness state, and it never turns green.
 
-#### §4h.6 The check is server-side and recomputed on write
+#### §4h.6 The check is server-side, recomputed on write, and honest about what renders
 
 Completeness is evaluated where the rows are, not in the browser, and it is
 recomputed after every write so a save updates the header without a reload.
-The evaluation reads published rows through the same path the public site
-uses, so the header answers the question a Visitor's page would answer.
 
-The header reads the same `BILINGUAL_PAIRS` lists the write path enforces and
-`guard:schema` checks. One list, three readers. A completeness header with its
-own copy of the requirements is a second thing to keep in step with the
-database, and the first one already fell out of step.
+The evaluation reads published rows through the same path the public site
+uses. Where a required field renders on a public page, the header therefore
+answers the question a Visitor's page would answer. That was not true when
+this section was first written: eighteen `"SiteSettings"` columns and five
+`"Branch"` columns were required to publish and reached no component, so a
+header built on the original wording would have reported content populated
+that no Visitor could see. P05-T21 and P05-T22 wired those and `youtube_id`.
+The claim is made now because it is true now, and it is bounded by the three
+exceptions below rather than asserted without them.
+
+**Three exceptions, each named rather than implied.**
+
+- `"LabUnit"`.`slug` is required by §4h.3 and renders on no page as content.
+  It is data identity and a path segment, `not null unique` in the schema, so
+  it is always present and never absent for a reader to notice. The header
+  counts it because the database requires it, and it appears under no page.
+- The media roles — `hero_media`, `favicon_media`, `app_icon_media` — are
+  nullable, carry no check constraint, and have no form field. They are not
+  counted and are reported under §4h.4 as client materials.
+- `"Programme"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and `"LabTest"` render
+  nothing on a public page while `NEL_LABTEST_CONTENT` is off, and publishing
+  them is refused until the sign-off artefact exists. The header reports them
+  under §4h.5 and grades none of them. Their absence from a Visitor's page is
+  the clinical gate working, not an incompleteness.
+
+Any fourth exception is a defect in one of the two things, not a fourth entry
+here. Either the field belongs on a page and does not reach it, or it is not
+required. A section that accumulates exceptions is a section describing a
+system nobody is maintaining.
+
+**One list, three readers.** The header reads the same `BILINGUAL_PAIRS`
+declarations the write path enforces and `scripts/guard/schema.mjs` checks
+against the migrations. A completeness header with its own copy of the
+requirements is a second thing to keep in step with the database, and the
+first one already fell out of step — §4h.3 listed seven `"SiteSettings"` pairs
+where the schema had sixteen, and the laboratory met the consequence in
+production on 5 September 2026.
+
+`guard:schema` compares the application's declarations to the forward
+migrations, not to the live database, and for a table whose module does not
+exist a declaration is not an enforced list. Both limits are stated in §4h.3
+and neither is restated here.
 
 #### §4h.7 Presented by page, derived by column
 
