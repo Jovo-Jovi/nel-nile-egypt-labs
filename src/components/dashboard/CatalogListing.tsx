@@ -41,15 +41,7 @@ export function CatalogRowList({
 }: {
   locale: Locale;
   rows: CatalogListRow[];
-  editPrefix:
-    | "/dashboard/branches"
-    | "/dashboard/lab-units"
-    | "/dashboard/offers"
-    | "/dashboard/videos"
-    | "/dashboard/equipment"
-    | "/dashboard/media-assets"
-    | "/dashboard/programmes"
-    | "/dashboard/lab-tests";
+  editPrefix: string;
 }) {
   if (rows.length === 0) {
     return <CatalogEmptyState locale={locale} createHref="#create" />;

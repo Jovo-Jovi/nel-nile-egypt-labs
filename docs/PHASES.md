@@ -197,8 +197,9 @@ in the project, and it should not be first.
 - [x] **P05-T17A2** — Enumerate the region mapping §4h.7 depends on
 - [x] **P05-T21** — Wire M6's public half
 - [x] **P05-T22** — Wire the Branch and Video render paths
-- [ ] **P05-T23** — Land OD-16, amend D-09 and the boundary model, fix CopyCard, add the boundary guard
-- [ ] **P05-T24A** — The Programme and LabTest modules
+- [x] **P05-T23** — Land OD-16, amend D-09 and the boundary model, fix CopyCard, add the boundary guard
+- [x] **P05-T24A** — The Programme and LabTest modules
+- [ ] **P05-T24B** — The tier and membership editors
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
