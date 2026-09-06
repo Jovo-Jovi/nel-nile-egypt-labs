@@ -7,15 +7,21 @@
 //   R1  A checked `- [x] **<id>**` task box whose id has no done-step row.
 //   R2  A checked task box whose Verdict cell is `pushed — verdict at push`
 //       or empty; or a checked box whose verdict is FAIL-prefixed and which
-//       has no done-step row for its fix task (`{id}-F`, or `{id}-F2` and
-//       onward for a chain). Checked-but-not-certified.
-//   R3  An unchecked `- [ ] **<id>**` task box whose Verdict cell is
-//       PASS-prefixed, or FAIL-prefixed with a done-step row for its fix
-//       task. The box should have been checked. An unchecked FAIL with no
-//       fix row is not a finding.
+//       has no done-step row for its successor. Tasks use the fix chain
+//       (`{id}-F`, or `{id}-F2` and onward). Gate ids (`G` plus digits only)
+//       use the re-run chain (`{id}-R`, then `{id}-R2` and onward) and also
+//       accept the fix chain. Checked-but-not-certified.
+//   R3  An unchecked `- [ ] **<id>**` box whose Verdict cell is
+//       PASS-prefixed, or FAIL-prefixed with a successor row. The box
+//       should have been checked. An unchecked FAIL with no successor
+//       is not a finding. The `-F` chain is unchanged, including
+//       P05-T01c-F2's checked-box semantics.
 //   R4  A checked gate box `- [x] **G<n>**` whose phase-map Gate cell does
-//       not read `PASSED`. Gate ids are `G` plus digits and nothing else, so
-//       `G3-R` is a task id and is evaluated by R1–R3 and R6.
+//       not read `PASSED`, except when that gate's Verdict is FAIL and a
+//       successor row exists — a gate FAIL is superseded by its own re-run,
+//       not repaired by a fix task. Gate ids are `G` plus digits and
+//       nothing else, so `G3-R` is a task id and is evaluated by R1–R3
+//       and R6.
 //   R5  A done-step row whose pipe count is not 5 (an unescaped `|` in a
 //       cell of the four-column table). Report-only until CF-100's seventeen
 //       rows are escaped; a later P05 task turns this rule blocking.
@@ -24,9 +30,13 @@
 //       Unclassifiable: report it, never guess.
 //
 // FAIL is classified as FAIL, not as an undifferentiated "reviewer verdict".
-// Cases: checked FAIL with no fix → R2; unchecked PASS → R3; unchecked FAIL
-// with a fix row → R3; unchecked FAIL with no fix row → allowed; a verdict
-// that is none of placeholder / PASS-prefixed / FAIL-prefixed → R6.
+// Cases: checked FAIL with no successor → R2; unchecked PASS → R3; unchecked
+// FAIL with a successor row → R3; unchecked FAIL with no successor → allowed;
+// a verdict that is none of placeholder / PASS-prefixed / FAIL-prefixed → R6.
+// A gate is not a task. A gate FAIL is superseded by `{id}-R`, then `{id}-R2`
+// and onward, in a chain parallel to `-F` / `-F2`. Either chain counts when
+// deciding whether a gate box has a successor. The `-F` chain for task ids
+// is unchanged.
 //
 // Done-step rows are parsed from the right: Date is the last cell, Verdict
 // the one before it. Task-cell pipes therefore cannot steal the verdict.
@@ -152,8 +162,37 @@ function nextFixStepId(id) {
   return `${id}-F`;
 }
 
+function nextRerunStepId(id) {
+  const numbered = /^(.*)-R(\d+)$/.exec(id);
+  if (numbered) {
+    return `${numbered[1]}-R${Number(numbered[2]) + 1}`;
+  }
+  if (id.endsWith("-R")) {
+    return `${id}2`;
+  }
+  return `${id}-R`;
+}
+
 function hasFixRow(id, byStep) {
   return byStep.has(nextFixStepId(id));
+}
+
+function hasSuccessorRow(id, byStep) {
+  if (isGateId(id)) {
+    return byStep.has(nextRerunStepId(id)) || byStep.has(nextFixStepId(id));
+  }
+  return hasFixRow(id, byStep);
+}
+
+function successorIdForReason(id, byStep) {
+  if (isGateId(id)) {
+    const rerun = nextRerunStepId(id);
+    if (byStep.has(rerun)) return rerun;
+    const fix = nextFixStepId(id);
+    if (byStep.has(fix)) return fix;
+    return rerun;
+  }
+  return nextFixStepId(id);
 }
 
 function parseCheckboxes(lines) {
@@ -242,11 +281,42 @@ function main() {
 
   for (const box of boxes) {
     if (isGateId(box.id)) {
+      const row = byStep.get(box.id);
+      const verdict = row?.verdict ?? "";
+      const kind = row ? classifyVerdict(verdict) : null;
+      const successor = row ? hasSuccessorRow(box.id, byStep) : false;
+      const failSuperseded = kind === "fail" && successor;
+
+      if (kind === "unclassifiable") {
+        blocking.push({
+          file: PHASES_PATH,
+          line: box.line,
+          rule: "R6",
+          reason: `box **${box.id}** has unclassifiable Verdict \`${verdict}\`; neither placeholder, PASS-prefixed, nor FAIL-prefixed`,
+        });
+      }
+
       if (box.checked) {
+        if (kind === "placeholder" || kind === "empty") {
+          blocking.push({
+            file: PHASES_PATH,
+            line: box.line,
+            rule: "R2",
+            reason: `checked box **${box.id}** has Verdict \`${verdict || "(empty)"}\``,
+          });
+        } else if (kind === "fail" && !successor) {
+          blocking.push({
+            file: PHASES_PATH,
+            line: box.line,
+            rule: "R2",
+            reason: `checked box **${box.id}** has a FAIL verdict but no successor row (\`${successorIdForReason(box.id, byStep)}\`)`,
+          });
+        }
+
         const phase = phaseForGateId(box.id);
         const mapped = phase ? phaseGates.get(phase) : undefined;
         const gateCell = mapped?.gate ?? "";
-        if (!gateCell.includes("PASSED")) {
+        if (!gateCell.includes("PASSED") && !failSuperseded && kind !== "fail") {
           blocking.push({
             file: PHASES_PATH,
             line: box.line,
@@ -254,6 +324,20 @@ function main() {
             reason: `checked gate box **${box.id}** but phase-map Gate cell for ${phase} does not read PASSED (cell: \`${gateCell || "(missing)"}\`)`,
           });
         }
+      } else if (kind === "pass") {
+        blocking.push({
+          file: PHASES_PATH,
+          line: box.line,
+          rule: "R3",
+          reason: `unchecked box **${box.id}** has a PASS verdict (\`${verdict}\`); the box should have been checked`,
+        });
+      } else if (kind === "fail" && successor) {
+        blocking.push({
+          file: PHASES_PATH,
+          line: box.line,
+          rule: "R3",
+          reason: `unchecked box **${box.id}** has a FAIL verdict and a successor row (\`${successorIdForReason(box.id, byStep)}\`); the box should have been checked`,
+        });
       }
       continue;
     }

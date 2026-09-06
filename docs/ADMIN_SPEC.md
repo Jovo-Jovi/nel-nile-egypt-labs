@@ -559,7 +559,7 @@ Notes that change behaviour rather than describe it:
   design question and the module must not wait on it.
 - **Site Settings.** One row. Every value here is one the public site renders and no value is
   hardcoded anywhere in source (PR-16). Publishing this row is what clears most of the
-  twenty-one pending regions.
+  pending regions enumerated in `src/lib/regions.ts`.
 - **Media Library.** Images only. The bucket accepts image MIME types and rejects everything
   else at the policy, not in the form — a PDF upload path is a route by which a patient result
   could enter this system, and the boundary gate forbids it. Alt text in both languages is
@@ -639,8 +639,9 @@ reverts to pending, which the hash delivers on its own.
 The gate is not "the modules exist". It is:
 
 1. **An Operator publishes a change and a Visitor sees it.** End to end, both locales, on a
-   real deployment. At least one of the twenty-one pending regions clears by a dashboard
-   action and no other means.
+   real deployment. At least one region enumerated in `src/lib/regions.ts` clears by a
+   dashboard action and no other means. No count is stated here: the constant is the authority
+   and its length is read at the gate, not quoted from this document.
 2. **Two Operator accounts exist, both with a verified TOTP factor.** Proved by reading the
    auth state, not asserted. An account without a verified factor fails this gate.
 3. **An unenrolled session reaches only the enrolment screen.** Demonstrated, not described.
@@ -650,8 +651,26 @@ The gate is not "the modules exist". It is:
    or medical data. The Media Library rejects a non-image upload at the policy.
 6. **Bilingual holds.** Every dashboard screen renders in `ar` and `en` with rendered
    evidence, and the Programmes module refuses a row with an empty `name_ar`.
-7. **Nothing clinical reached production.** The flag is off unless sign-off has landed, and
-   `eligibility_audience` was not set to anything except by a clinical review that is recorded.
+7. **Nothing clinical reached production.** Three legs, each measurable without a
+   hosting-platform credential.
+   a. **No `LabTest` name and no `Programme` slug is reachable on any public URL.** Every
+      public URL is fetched in both locales and searched for every `"LabTest"` name in both
+      languages and every `"Programme"` slug, both read from the database at the gate. Zero
+      occurrences, and the URL count is stated.
+   b. **`eligibility_audience` was set only by a recorded clinical review.** Every value is
+      compared against the worklist the sign-off binds by SHA-256. Zero mismatches and zero
+      `unreviewed`.
+   c. **`NEL_LABTEST_CONTENT` is off or inert.** The flag's value need not be read. Its only
+      read is named by `file:line`, its only caller is named, and either that caller is proved
+      unreachable in the deployment or the flag is proved off. A criterion that cannot be
+      evidenced without a credential this project does not hold is a defect in this document,
+      not a finding against the build.
+
+   **Method constraint, binding on the gate run itself.** No leg of this criterion is tested
+   by an action that can write to the production database. A negative proof whose failure mode
+   is a production publish is executed against a disposable environment, never against
+   production. The G5 run of 6 September 2026 published a row because this constraint was
+   absent from this document.
 
 Nothing about the region question is a G5 criterion. It is a decision, not a build output, and
 it needs answering before the first Operator account is created rather than before the gate.
