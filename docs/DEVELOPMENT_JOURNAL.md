@@ -348,3 +348,31 @@ the unselected `youtube_id`, and §4h.3 grading zero published Offers complete
 while `/offers` still shows a pending shell.
 
 
+## 2026-09-06 — P05-T25B: the completeness header
+
+The Operator dashboard now reports, field by field, which required content
+is populated. `src/lib/regions.ts` is the authority for which
+`"SiteSettings"` column renders on which page. The region map was refreshed
+only for `home.hero` and `home.reasons`, which P05-T21 had already wired.
+
+The denominator is `slots.length` on every evaluation. It is never stored.
+Zero published Offers, Videos or Equipment contribute nothing; each
+published Branch contributes seven fields plus the head-office slot; each
+published Video contributes six. Programmes and LabTests report awaiting
+clinical sign-off and the 72 / 121 / 5 counts. They have no percentage, no
+progress bar and no complete/incomplete state.
+
+A placeholder matches `TEST` as an uppercase token on a word boundary, so
+the laboratory's English containing the word *test* is not residue. Live
+GET `/ar/dashboard` and `/en/dashboard` both read 36 of 38, incomplete,
+with the eighteen hero and reason columns on the home checklist.
+
+`guard:schema` now fails when a required SiteSettings column is missing
+from the constant. FILE MODE outside the repository: unmodified exit 0;
+`hero_eyebrow_ar` removed exit 1 naming it.
+
+CF-130, CF-131 and CF-132 OPEN. Open count 76 + 3 = 79. No laboratory row
+was written. The throwaway aal2 account was deleted.
+
+
+

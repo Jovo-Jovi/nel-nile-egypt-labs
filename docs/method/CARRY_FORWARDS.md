@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-130**
+**Next free id: CF-133**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -135,6 +135,9 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-127 | Programme and LabTest modules now list every clinical row, save at draft, and refuse publish until docs/research/clinical-signoff.md exists. Deleting a Programme from the dashboard cascades through ProgrammeTier and ProgrammeLabTest, with counts named at confirmation. There is still no ProgrammeTier or ProgrammeLabTest editor, so an Operator can destroy unreviewed memberships before T24B lands. Eligibility stays unreviewed (CF-82). The membership list is reachable and readable on the ProgrammeTier page before any destructive action is offered. Closed at P05-T24B. | builder | CLOSED at P05-T24B | P05-T24B |
 | CF-128 | `hasClinicalCatalogueSignOff()` reads `docs/research/clinical-signoff.md` from `process.cwd()` at request time, and `next.config.ts` sets no `outputFileTracingIncludes`. Next does not trace `docs/` into a deployment bundle, so in production the file is absent, the catch returns false, and publish is refused **even after the laboratory signs**. Fail-closed is the right direction and this is not a security defect; it is a gate the intended process cannot open, and a gate that cannot be opened legitimately is one somebody edits out under deadline pressure. Either trace the artefact into the bundle or resolve it to a build-time constant. | reviewer | OPEN | P07 |
 | CF-129 | The clinical sign-off artefact is satisfied by two literal lines, `# Clinical catalogue sign-off` and `Status: SIGNED`. Nothing requires it to name who signed, on what date, or which catalogue version — the 72 `"LabTest"` names, 121 memberships and 5 QA flags it covers. A non-waivable gate opened by two strings anyone can type is weaker than the gate it implements. Its required contents should identify the signatory, the date and the scope, and should reference `docs/research/clinical-worklist.md` by hash so the signature attaches to a specific set of answers. | reviewer | OPEN | G6 |
+| CF-130 | P05-T24B's review gate was Sonnet High (PR-06). The reviewer waived it for budget, bounded to that task by name. The compensating control is that P06 reviews clinical-adjacent work at the named gate. The waiver is not a standing Grok exception. | reviewer | OPEN | P06 |
+| CF-131 | `ADMIN_SPEC.md` §4h.5's rule that Programmes is never graded depended on a module that did not exist when the section was written. The Programme and LabTest modules now exist (P05-T24A / P05-T24B). Completeness must keep reporting awaiting clinical sign-off and must never convert the 72 / 121 / 5 counts into a percentage or a complete/incomplete state. | reviewer | OPEN | G5 |
+| CF-132 | `docs/research/region-map.md` `locations.branches` and `videos.listing` still describe the pre-P05-T22 select lists. `src/lib/regions.ts` is the authority as of P05-T25B and includes the Branch address/hours/WhatsApp columns and `youtube_id` because those now render. This task refreshed only `home.hero` and `home.reasons`. The map is dated evidence; those two rows should be brought in line with the constant, not the other way around. | reviewer | OPEN | G5 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -3,6 +3,7 @@
 **Precedence:** none. Derived at P05-T17A2 by reading the components. The
 authority is the code; this table is the audit that produced the constant at
 P05-T17. Where they disagree, the code wins.
+Refreshed at P05-T25B against src/lib/regions.ts, which is now the authority.
 
 **What a row is.** One Visitor-facing content slot on a public route (or the
 shared chrome) that either reads database columns, or is a hard-coded §12
@@ -33,8 +34,8 @@ This file does not amend the specification.
 | `/{locale}/**` | chrome.hours | `src/components/site/SiteFooter.tsx:101` | `hours_ar`, `hours_en` | `"SiteSettings"` | content when both published, else §12 pending |
 | `/{locale}/**` | chrome.about | `src/components/site/SiteFooter.tsx:38` | `about_body_ar`, `about_body_en` | `"SiteSettings"` | content when both published, else §12 pending |
 | `/{locale}/**` | chrome.social | `src/components/site/SiteFooter.tsx:120` | `facebook_url`, `instagram_url`, `linkedin_url`, `youtube_url` | `"SiteSettings"` | content when at least one published https URL, else §12 pending. Optional under §4h.3 |
-| `/{locale}` | home.hero | `src/components/site/SiteHome.tsx:114` | none | — | §12 pending, hard-coded. `hero_eyebrow_*`, `hero_headline_*`, `hero_standfirst_*` exist on `"SiteSettings"` and are not in `SITE_SETTINGS_SELECT` (`src/lib/publishedListings.ts:188`); `SiteHome` does not read them. Eyebrow on the page is a catalogue string |
-| `/{locale}` | home.reasons | `src/components/site/SiteHome.tsx:232` | none | — | §12 pending, hard-coded. `reason1`–`reason3` title and body pairs exist on `"SiteSettings"` and are not in `SITE_SETTINGS_SELECT`; `SiteHome` does not read them |
+| `/{locale}` | home.hero | `src/components/site/SiteHome.tsx:171` | `hero_eyebrow_ar`, `hero_eyebrow_en`, `hero_headline_ar`, `hero_headline_en`, `hero_standfirst_ar`, `hero_standfirst_en` | `"SiteSettings"` | content when all three pairs are present in the active locale, else §12 pending. Catalogue eyebrow is the fallback when that pair is empty. Selected by `SITE_SETTINGS_SELECT` (`src/lib/publishedListings.ts:225`) |
+| `/{locale}` | home.reasons | `src/components/site/SiteHome.tsx:318` | `reason1_title_ar`, `reason1_title_en`, `reason1_body_ar`, `reason1_body_en`, `reason2_title_ar`, `reason2_title_en`, `reason2_body_ar`, `reason2_body_en`, `reason3_title_ar`, `reason3_title_en`, `reason3_body_ar`, `reason3_body_en` | `"SiteSettings"` | content when all six pairs are present in the active locale, else the existing pending occupancy. Selected by `SITE_SETTINGS_SELECT` |
 | `/{locale}` | home.about | `src/components/site/SiteHome.tsx:186` | `about_body_ar`, `about_body_en` | `"SiteSettings"` | content when both published, else §12 pending |
 | `/{locale}` | home.departments | `src/components/site/SiteHome.tsx:151` | `name_ar`, `name_en` | `"LabUnit"` | content when published rows exist, else §12 pending. Description is not passed. Photography inside each tile is a separate ungated-to-this-map frame |
 | `/{locale}` | home.seo | `src/app/[locale]/(public)/page.tsx:20` | `seo_title_ar`, `seo_title_en`, `seo_description_ar`, `seo_description_en` | `"SiteSettings"` | document title from both title columns when present, else catalogue title; description only when both description columns are also present. No other public `generateMetadata` reads these columns |
