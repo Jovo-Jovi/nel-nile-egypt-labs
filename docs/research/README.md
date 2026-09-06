@@ -30,6 +30,7 @@ These justify decisions. When someone asks in month three why the hotline is
 | `region-map.md` | Public-page region mapping derived from the rendering components at P05-T17A2. Precedence none. The authority is the code; this table is the audit that produced the constant at P05-T17 | 5 Sep 2026 |
 | `clinical-worklist.md` | The signed clinical catalogue — 71 `"LabTest"` names with Arabic, 124 programme memberships with eligibility, 5 QA findings resolved, 4 description decisions. Counts computed from the document. The hash the sign-off attaches to | 6 Sep 2026 |
 | `clinical-signoff.md` | The publish-gate artefact. Status PENDING as received. Attaches to `clinical-worklist.md` by SHA-256. The status line is not altered | 6 Sep 2026 |
+| `g5-evidence.md` | The G5 gate run. Result FAIL, halted at criterion 7: the CF-128 publish test on the deployment succeeded. One section per §9 criterion with the command that measured it, then four secondary findings, unfixed. Precedence none — evidence, not a verdict | 6 Sep 2026 |
 
 ## Still to land here
 
