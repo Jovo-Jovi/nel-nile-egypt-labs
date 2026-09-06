@@ -3,7 +3,12 @@
 Date: 7 September 2026
 To: Androw
 From: the developer
-Status: draft for sending — this file is not the notice until it is sent
+Status: SENT
+
+## Sending record
+
+Sent on: 7 September 2026
+Channel: Written message sent to Androw
 
 ## The fact
 
@@ -39,11 +44,16 @@ The correction sits beside the signed document. It does not edit it.
 - File: `docs/research/clinical-signoff-addendum.md`
 - Title: Clinical catalogue sign-off — addendum 1
 - Issued: 7 September 2026
-- Status: UNCOUNTERSIGNED
+- Status: COUNTERSIGNED
 
-Please read it and countersign. Countersigning confirms that the laboratory
-has read this correction and that its approval of the clinical catalogue is
-unchanged.
+The addendum was read and countersigned by Androw. Countersigning confirms
+that the laboratory has read this correction and that its approval of the
+clinical catalogue is unchanged.
+
+One clarification: the addendum originally asked for a "countersignature
+keyword" without specifying the keyword. That omission was in the
+developer-authored instruction, not on the laboratory side. The required
+status value was subsequently established as `COUNTERSIGNED`.
 
 From 6 September 2026, publishing the catalogue is a decision the dashboard
 will carry out rather than refuse. Timing that decision is the laboratory's.

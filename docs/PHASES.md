@@ -212,6 +212,7 @@ in the project, and it should not be first.
 - [ ] Programmes, tiers and memberships module
 - [x] **G5-R** — re-run in full
 - [x] **G5** — the owner can edit every unlocked region himself
+- [ ] **M7B-1** — Stamp the Operator claim, and land the countersignature
 
 ### P06 — Content and Arabic · LONGEST POLE
 
