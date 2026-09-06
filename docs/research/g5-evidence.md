@@ -614,12 +614,24 @@ names and 121 judgements, the second says 71 names and 124 memberships. The
 status line is not altered", which the file contradicts at line 3, where it
 reads `Status: SIGNED`.
 
-**4. `docs/admin_spec_4h6_v2.md` is untracked residue in the working tree.** It
-is the §4h.6 replacement payload from P05-T25 STEP 0, 2,839 bytes, left behind
-after that task landed the text into `docs/ADMIN_SPEC.md`, which carries the
-same heading at line 452. The file itself is well-formed UTF-8 — its first line
-is `#### §4h.6 The check is server-side, recomputed on write, and honest…`, the
-section sign encoded correctly as `c2 a7`; an earlier reading of this file in
-this run reported it as mojibake and that reading was a console codepage
-artefact, not a defect in the file. `git status --porcelain` reports it as `??`.
-No guard fails with it present.
+**4. `docs/admin_spec_4h6_v2.md` was untracked residue in the working tree, and
+disappeared during this run.** It is the §4h.6 replacement payload from P05-T25
+STEP 0, left behind after that task landed the text into `docs/ADMIN_SPEC.md`,
+which carries the same heading at line 452.
+
+Observed at the start of this run and repeatedly during it, as
+`?? docs/admin_spec_4h6_v2.md` in `git status --porcelain`. Read successfully
+mid-run: 2,839 bytes, first line
+`#### §4h.6 The check is server-side, recomputed on write, and honest…`, the
+section sign encoded correctly as `c2 a7`. The file is well-formed UTF-8; an
+earlier reading in this run called it mojibake and that reading was a console
+codepage artefact, not a defect in the file.
+
+By the time this run committed, the file was gone: `Test-Path` false,
+`git status --porcelain --untracked-files=all -- docs/` empty, and the commit
+contains four files, none of them this one. **No step of this run deleted it**
+— nothing here issued a delete, a `git clean`, or a checkout that could remove
+an untracked file — and the cause is therefore undetermined and is not
+speculated about here. The finding is recorded as observed rather than dropped,
+because a finding that disappears without a recorded reason is exactly the kind
+of thing that should not vanish from the record.
