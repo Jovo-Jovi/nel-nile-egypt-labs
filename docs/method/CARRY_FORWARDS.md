@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-140**
+**Next free id: CF-143**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -140,11 +140,14 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-132 | `docs/research/region-map.md` `locations.branches` and `videos.listing` still describe the pre-P05-T22 select lists. `src/lib/regions.ts` is the authority as of P05-T25B and includes the Branch address/hours/WhatsApp columns and `youtube_id` because those now render. This task refreshed only `home.hero` and `home.reasons`. The map is dated evidence; those two rows should be brought in line with the constant, not the other way around. | reviewer | OPEN | G5 |
 | CF-133 | The seed now carries the signed catalogue — 71 tests with Arabic names, 124 memberships — and the database does not. Until P05-T26B transcribes it, `data/seed/` and the live rows disagree, and the dashboard shows 72 tests, 121 memberships and 121 `unreviewed` eligibilities. Closed at P05-T26B: M8 transcribed the signed seed; live rows are 71 `"LabTest"` and 124 `"ProgrammeLabTest"`, eligibility 94 · 16 · 14, all draft. | reviewer | CLOSED at P05-T26B | P05-T26B |
 | CF-134 | The clinical publish gate is now open on disk: `docs/research/clinical-signoff.md` is SIGNED and bound to the worklist hash `22b2c73b…`, and a throwaway Programme publish at P05-T26B succeeded (`error=signOff` no longer appears). CF-128 still keeps the same gate shut in a Vercel deployment because `next.config.ts` sets no `outputFileTracingIncludes` for `docs/`. Local `npx next start` from the repository and production therefore disagree about whether publishing is possible. Second half disproved at the G5 run of 6 September 2026: local and production do not disagree, both gates are open. Superseded by the CF-128 rewrite at P05-T27. | reviewer | CLOSED at P05-T27 | P07 |
-| CF-135 | clinical-signoff.md's "Build-side requirements" section states that the production gate cannot open and that a signed copy is not evidence it will. That is false as of 6 September 2026 and it is the statement the laboratory relied on when signing. The file is not edited; the remedy is a countersigned addendum and a written notice to the client. | reviewer | OPEN | P06 |
-| CF-136 | Androw must be told, in writing, that his signature opened the production clinical publish gate immediately, contrary to what the document he signed told him. | human | OPEN | P06 |
+| CF-135 | clinical-signoff.md's "Build-side requirements" section states that the production gate cannot open and that a signed copy is not evidence it will. That is false as of 6 September 2026 and it is the statement the laboratory relied on when signing. The file is not edited; the remedy is a countersigned addendum and a written notice to the client. Addendum authored at P05-T28 as docs/research/clinical-signoff-addendum.md, UNCOUNTERSIGNED. clinical-signoff.md was not edited. Closes when the laboratory countersigns. | reviewer | OPEN | P06 |
+| CF-136 | Androw must be told, in writing, that his signature opened the production clinical publish gate immediately, contrary to what the document he signed told him. Notice drafted at P05-T28 at client-outbound/2026-09-07-clinical-gate-correction.md. Closes when it is sent, not when it is drafted. | human | OPEN | P06 |
 | CF-137 | RESULTS_PORTAL_VISITOR_URL and RESULTS_PORTAL_LAB_TO_LAB_URL are unset or empty in the production build environment; the deployment serves the D-07 placeholder in both locales. Reported by the G5 run, not independently fetched. | human | OPEN | G7 |
 | CF-138 | SESSION_CONTEXT.md states the results portal production URL is set in the deployment environment. CF-137 contradicts it. The sentence is not edited by this task; a task that reads the deployment corrects it. | reviewer | OPEN | P06 |
 | CF-139 | docs/SCOPE.md is a NOT AUTHORED stub while OD-03 requires it to derive from a signed quotation, and one has been signed since 4 September 2026. Document 4 in the precedence order is unauthored at P05 close. | reviewer | OPEN | P06 |
+| CF-140 | scripts/guard/phases.mjs builds a fix-row id as {id}-F, so G5-R is outside the chain. When the re-run passes and the G5 box is checked, R2 fires on the G5 done-step row's FAIL verdict. Settle before G5-R runs: either teach the guard the -R suffix or rule how a gate re-run supersedes a gate FAIL. Never by blanking the verdict. | reviewer | OPEN | G5-R |
+| CF-141 | CF-129's Item text states 72 names, 121 memberships and 5 QA flags. The signed catalogue is 71 / 124 / 0. The original text stands under PR-32; the escalation paragraph should carry the current figures. | reviewer | OPEN | P06 |
+| CF-142 | CF-121, CF-131 and CF-132 all record Lands-at G5. G5 ran on 6 September 2026 and settled none of them. They now block the re-run rather than riding along with it. | reviewer | OPEN | G5-R |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

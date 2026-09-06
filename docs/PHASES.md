@@ -204,6 +204,8 @@ in the project, and it should not be first.
 - [x] **P05-T25B** — The completeness header
 - [x] **P05-T26A** — Amend the seed to the signed catalogue
 - [x] **P05-T26B** — Transcribe the signed catalogue into the database
+- [x] **P05-T27** — Record the G5 verdict, rewrite CF-128, and rule the findings
+- [ ] **P05-T28** — The sign-off addendum and the client notice
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
