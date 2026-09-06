@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-134**
+**Next free id: CF-135**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -138,7 +138,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-130 | P05-T24B's review gate was Sonnet High (PR-06). The reviewer waived it for budget, bounded to that task by name. The compensating control is that P06 reviews clinical-adjacent work at the named gate. The waiver is not a standing Grok exception. | reviewer | OPEN | P06 |
 | CF-131 | `ADMIN_SPEC.md` §4h.5's rule that Programmes is never graded depended on a module that did not exist when the section was written. The Programme and LabTest modules now exist (P05-T24A / P05-T24B). Completeness must keep reporting awaiting clinical sign-off and must never convert the 72 / 121 / 5 counts into a percentage or a complete/incomplete state. | reviewer | OPEN | G5 |
 | CF-132 | `docs/research/region-map.md` `locations.branches` and `videos.listing` still describe the pre-P05-T22 select lists. `src/lib/regions.ts` is the authority as of P05-T25B and includes the Branch address/hours/WhatsApp columns and `youtube_id` because those now render. This task refreshed only `home.hero` and `home.reasons`. The map is dated evidence; those two rows should be brought in line with the constant, not the other way around. | reviewer | OPEN | G5 |
-| CF-133 | The seed now carries the signed catalogue — 71 tests with Arabic names, 124 memberships — and the database does not. Until P05-T26B transcribes it, `data/seed/` and the live rows disagree, and the dashboard shows 72 tests, 121 memberships and 121 `unreviewed` eligibilities. | reviewer | OPEN | P06 |
+| CF-133 | The seed now carries the signed catalogue — 71 tests with Arabic names, 124 memberships — and the database does not. Until P05-T26B transcribes it, `data/seed/` and the live rows disagree, and the dashboard shows 72 tests, 121 memberships and 121 `unreviewed` eligibilities. Closed at P05-T26B: M8 transcribed the signed seed; live rows are 71 `"LabTest"` and 124 `"ProgrammeLabTest"`, eligibility 94 · 16 · 14, all draft. | reviewer | CLOSED at P05-T26B | P05-T26B |
+| CF-134 | The clinical publish gate is now open on disk: `docs/research/clinical-signoff.md` is SIGNED and bound to the worklist hash `22b2c73b…`, and a throwaway Programme publish at P05-T26B succeeded (`error=signOff` no longer appears). CF-128 still keeps the same gate shut in a Vercel deployment because `next.config.ts` sets no `outputFileTracingIncludes` for `docs/`. Local `npx next start` from the repository and production therefore disagree about whether publishing is possible. | reviewer | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
