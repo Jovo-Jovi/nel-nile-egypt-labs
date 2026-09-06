@@ -207,6 +207,7 @@ in the project, and it should not be first.
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
+- [ ] **G5-R** — re-run in full
 - [ ] **G5** — the owner can edit every unlocked region himself
 
 ### P06 — Content and Arabic · LONGEST POLE
