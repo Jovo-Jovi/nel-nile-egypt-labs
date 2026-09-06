@@ -393,6 +393,28 @@ CF-133 OPEN. The database is still 72 / 121. No laboratory row was written.
 
 
 
+## 2026-09-06 — P05-T26B: transcribe the signed catalogue into the database
+
+M8 copies the signed seed into the linked remote. Forward and down are
+hand-authored. Rehearsal ran `BEGIN; … ROLLBACK;` first: inside, 71 tests
+and 124 memberships at eligibility 94 · 16 · 14; after rollback, 72 / 121
+with no residue. Then the forward was pushed.
+
+Both-direction acceptance against `tests.csv` and `programme_tests.csv` is
+empty. Recapture: 14 `"ProgrammeTier"` rows md5-identical to the pre-task
+dump; 71 `"LabTest"` rows changed and one deleted; 120 memberships changed,
+one deleted, four inserted. Nothing is published.
+
+A throwaway aal2 Operator published a throwaway Programme (`error=signOff`
+gone) and was refused on a throwaway `"LabTest"` with `name_ar` cleared
+(`error=bilingual`). No laboratory-owned row was published. The throwaway
+account is gone.
+
+CF-133 CLOSED. CF-134 OPEN: the gate is open on disk and CF-128 still shuts
+it in production. Open count 80 − 1 + 1 = 80.
+
+
+
 
 
 
