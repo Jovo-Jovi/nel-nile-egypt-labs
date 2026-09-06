@@ -201,7 +201,8 @@ in the project, and it should not be first.
 - [x] **P05-T24A** — The Programme and LabTest modules
 - [x] **P05-T24B** — The tier and membership editors
 - [x] **P05-T25** — The completeness header
-- [ ] **P05-T25B** — The completeness header
+- [x] **P05-T25B** — The completeness header
+- [ ] **P05-T26A** — Amend the seed to the signed catalogue
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
