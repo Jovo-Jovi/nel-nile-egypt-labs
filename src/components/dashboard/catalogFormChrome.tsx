@@ -58,7 +58,13 @@ export function noticeFromHref(href: string): CatalogNotice {
     error === "linkedin_url" ||
     error === "youtube_url" ||
     error === "posterMissing" ||
-    error === "signOff"
+    error === "signOff" ||
+    error === "axesTaken" ||
+    error === "membershipTaken" ||
+    error === "eligibility" ||
+    error === "tierAxis" ||
+    error === "audienceAxis" ||
+    error === "labTest"
   ) {
     return error;
   }
@@ -77,6 +83,17 @@ export function groupsFromHref(href: string): string[] {
       .filter((group) => group.length > 0);
   } catch {
     return [];
+  }
+}
+
+export function existingLabelFromHref(href: string): string | null {
+  try {
+    const url = new URL(href);
+    const label = url.searchParams.get("existing_label");
+    if (label !== null && label.length > 0) return label;
+    return url.searchParams.get("existing");
+  } catch {
+    return null;
   }
 }
 
@@ -99,6 +116,12 @@ function slotFromActionUrl(url: string): FlightSlot {
 function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "bilingual") return "dashboard.siteSettings.errorBilingual";
   if (notice === "signOff") return "dashboard.catalog.errorSignOff";
+  if (notice === "axesTaken") return "dashboard.programmes.errorAxesTaken";
+  if (notice === "membershipTaken") return "dashboard.programmes.errorMembershipTaken";
+  if (notice === "eligibility") return "dashboard.programmes.errorEligibility";
+  if (notice === "tierAxis") return "dashboard.programmes.errorTierAxis";
+  if (notice === "audienceAxis") return "dashboard.programmes.errorAudienceAxis";
+  if (notice === "labTest") return "dashboard.programmes.errorLabTest";
   if (notice === "missing") return "dashboard.catalog.errorMissing";
   if (notice === "create") return "dashboard.catalog.errorCreate";
   if (notice === "held") return "dashboard.catalog.errorHeld";
@@ -147,11 +170,13 @@ export function CatalogNoticeView({
   notice,
   bilingualGroups = [],
   pairLegend,
+  existingLabel,
 }: {
   locale: Locale;
   notice: CatalogNotice;
   bilingualGroups?: readonly string[];
   pairLegend?: Record<string, CatalogKey>;
+  existingLabel?: string | null;
 }) {
   if (notice === null) return null;
   if (notice === "saved") {
@@ -169,10 +194,14 @@ export function CatalogNoticeView({
       </>
     );
   }
+  const named =
+    existingLabel !== null && existingLabel !== undefined && existingLabel.length > 0
+      ? ` ${existingLabel}`
+      : "";
   const message =
     notice === "bilingual" && bilingualGroups.length > 0
       ? bilingualNoticeText(locale, bilingualGroups, pairLegend)
-      : translate(locale, errorKey(notice));
+      : `${translate(locale, errorKey(notice))}${named}`;
   return (
     <p className={site.errorRow}>
       <CautionIcon size={14} />
@@ -383,22 +412,28 @@ export function ActionStatus({
   clientNotice,
   bilingualGroups = [],
   pairLegend,
+  existingLabel,
 }: {
   locale: Locale;
   flight: Flight;
   clientNotice: CatalogNotice;
   bilingualGroups?: readonly string[];
   pairLegend?: Record<string, CatalogKey>;
+  existingLabel?: string | null;
 }) {
   let message = "";
   if (flight?.phase === "busy") message = translate(locale, busyKey(flight.slot));
   else if (flight?.phase === "saved") message = translate(locale, "dashboard.siteSettings.saved");
 
+  const named =
+    existingLabel !== null && existingLabel !== undefined && existingLabel.length > 0
+      ? ` ${existingLabel}`
+      : "";
   const errorText =
     clientNotice !== null && clientNotice !== "saved"
       ? clientNotice === "bilingual" && bilingualGroups.length > 0
         ? bilingualNoticeText(locale, bilingualGroups, pairLegend)
-        : translate(locale, errorKey(clientNotice))
+        : `${translate(locale, errorKey(clientNotice))}${named}`
       : null;
 
   return (
@@ -430,6 +465,7 @@ export function useCatalogFormFlight() {
   const [flight, setFlight] = useState<Flight>(null);
   const [clientNotice, setClientNotice] = useState<CatalogNotice>(null);
   const [clientGroups, setClientGroups] = useState<string[]>([]);
+  const [clientExistingLabel, setClientExistingLabel] = useState<string | null>(null);
   const showQueryNotice = clientNotice === null && flight === null;
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -442,6 +478,7 @@ export function useCatalogFormFlight() {
     setFlight({ slot, phase: "busy" });
     setClientNotice(null);
     setClientGroups([]);
+    setClientExistingLabel(null);
     try {
       const href = await postForm(form, actionUrl);
       if (isSignInHref(href)) {
@@ -457,10 +494,12 @@ export function useCatalogFormFlight() {
       setFlight(null);
       setClientNotice(next);
       setClientGroups(groupsFromHref(href));
+      setClientExistingLabel(existingLabelFromHref(href));
     } catch {
       setFlight(null);
       setClientNotice("write");
       setClientGroups([]);
+      setClientExistingLabel(null);
     }
   }
 
@@ -469,6 +508,7 @@ export function useCatalogFormFlight() {
     setFlight,
     clientNotice,
     clientGroups,
+    clientExistingLabel,
     showQueryNotice,
     onSubmit,
   };

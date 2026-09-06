@@ -11,14 +11,18 @@ import {
   createLabTestRow,
   createLabUnitRow,
   createOfferRow,
+  createProgrammeLabTestRow,
   createProgrammeRow,
+  createProgrammeTierRow,
   createVideoRow,
   deleteBranchRow,
   deleteEquipmentRow,
   deleteLabTestRow,
   deleteLabUnitRow,
   deleteOfferRow,
+  deleteProgrammeLabTestRow,
   deleteProgrammeRow,
+  deleteProgrammeTierRow,
   deleteVideoRow,
   LAB_TEST_PAIR_STEMS,
   parseBranchWrite,
@@ -26,15 +30,22 @@ import {
   parseLabTestWrite,
   parseLabUnitWrite,
   parseOfferWrite,
+  parseProgrammeLabTestWrite,
+  parseProgrammeTierWrite,
   parseProgrammeWrite,
   parseVideoWrite,
+  PROGRAMME_LAB_TEST_PAIR_STEMS,
   PROGRAMME_PAIR_STEMS,
+  programmeLabTestConfirmToken,
+  programmeTierConfirmToken,
   readBranchRow,
   readEquipmentRow,
   readLabTestRow,
   readLabUnitRow,
   readOfferRow,
+  readProgrammeLabTestRow,
   readProgrammeRow,
+  readProgrammeTierRow,
   readVideoRow,
   rowIdFromForm,
   writeBranchRow,
@@ -42,8 +53,11 @@ import {
   writeLabTestRow,
   writeLabUnitRow,
   writeOfferRow,
+  writeProgrammeLabTestRow,
   writeProgrammeRow,
+  writeProgrammeTierRow,
   writeVideoRow,
+  type CatalogWriteFailure,
   type CatalogWriteReason,
   type PublicationState,
 } from "@/lib/dashboard/catalogEntities";
@@ -85,6 +99,16 @@ function errorQuery(reason: CatalogWriteReason, groups?: string[]): string {
     return `error=bilingual&groups=${groups.join(",")}`;
   }
   return `error=${reason}`;
+}
+
+function writeFailureQuery(failure: CatalogWriteFailure): string {
+  const params = new URLSearchParams();
+  params.set("error", failure.reason);
+  if (failure.existingId !== undefined) params.set("existing", failure.existingId);
+  if (failure.existingLabel !== undefined && failure.existingLabel.length > 0) {
+    params.set("existing_label", failure.existingLabel);
+  }
+  return params.toString();
 }
 
 function bilingualQueryFor(entity: CatalogEntity, groups: string[] | undefined): string {
@@ -438,3 +462,179 @@ export const videoWriteHandlers = catalogWriteHandlers("Video");
 export const equipmentWriteHandlers = catalogWriteHandlers("Equipment");
 export const programmeWriteHandlers = catalogWriteHandlers("Programme");
 export const labTestWriteHandlers = catalogWriteHandlers("LabTest");
+
+function programmeEditSuffix(programmeId: string): string {
+  return `/dashboard/programmes/${programmeId}`;
+}
+
+function programmeTierEditSuffix(programmeId: string, tierId: string): string {
+  return `/dashboard/programmes/${programmeId}/tiers/${tierId}`;
+}
+
+function programmeLabTestEditSuffix(programmeId: string, tierId: string, membershipId: string): string {
+  return `/dashboard/programmes/${programmeId}/tiers/${tierId}/memberships/${membershipId}`;
+}
+
+function toHref(locale: "ar" | "en", suffix: string, query?: string): never {
+  const href = localeHref(locale, suffix);
+  redirect(query ? `${href}?${query}` : href);
+}
+
+async function gateCatalogPost(
+  request: Request,
+  params: { locale: string; action: string },
+): Promise<{ locale: "ar" | "en"; form: FormData; supabase: NonNullable<Awaited<ReturnType<typeof createSupabaseServerClient>>> }> {
+  const locale = await requireLocale(Promise.resolve({ locale: params.locale }));
+  if (!WRITE_ACTIONS.has(params.action)) notFound();
+
+  const supabase = await createSupabaseServerClient();
+  if (supabase === null) {
+    redirect(`${localeHref(locale, "/dashboard/sign-in")}?error=1`);
+  }
+
+  const access = await readOperatorAccessFrom(supabase);
+  gateModuleRoute(access, locale);
+
+  const form = await request.formData();
+  return { locale, form, supabase };
+}
+
+export const programmeTierWriteHandlers = {
+  async POST(request: Request, context: { params: Promise<{ locale: string; action: string }> }) {
+    const params = await context.params;
+    const { locale, form, supabase } = await gateCatalogPost(request, params);
+    const revalidate = revalidatePublishedProgrammes;
+
+    if (params.action === "create") {
+      const parsed = parseProgrammeTierWrite(form);
+      if (!parsed.ok) toHref(locale, programmeEditSuffix(emptyParentId(form, "Programme")), errorQuery(parsed.reason));
+      const created = await createProgrammeTierRow(supabase, parsed.columns);
+      if (!created.ok) {
+        toHref(locale, programmeEditSuffix(parsed.columns.Programme), writeFailureQuery(created));
+      }
+      revalidate();
+      toHref(locale, programmeTierEditSuffix(parsed.columns.Programme, created.id), "saved=1");
+    }
+
+    const rowId = rowIdFromForm(form);
+    const programmeId = emptyParentId(form, "Programme");
+    if (rowId === null) toHref(locale, programmeEditSuffix(programmeId), "error=missing");
+
+    const row = await readProgrammeTierRow(supabase, rowId);
+    if (row === null) toHref(locale, programmeEditSuffix(programmeId), "error=missing");
+
+    if (params.action === "delete") {
+      if (confirmFromForm(form) !== programmeTierConfirmToken(row)) {
+        toHref(locale, programmeTierEditSuffix(row.Programme, rowId), "error=confirm");
+      }
+      const deleted = await deleteProgrammeTierRow(supabase, rowId);
+      if (!deleted.ok) toHref(locale, programmeTierEditSuffix(row.Programme, rowId), writeFailureQuery(deleted));
+      revalidate();
+      toHref(locale, programmeEditSuffix(row.Programme), "saved=1");
+    }
+
+    let nextState: PublicationState = row.publication_state;
+    if (params.action === "publish") nextState = "published";
+    if (params.action === "unpublish") nextState = "draft";
+    const parsed = parseProgrammeTierWrite(form);
+    if (!parsed.ok) toHref(locale, programmeTierEditSuffix(row.Programme, rowId), errorQuery(parsed.reason));
+    if (params.action === "publish" && !hasClinicalCatalogueSignOff()) {
+      toHref(locale, programmeTierEditSuffix(row.Programme, rowId), "error=signOff");
+    }
+    const written = await writeProgrammeTierRow(supabase, rowId, parsed.columns, nextState);
+    if (!written.ok) toHref(locale, programmeTierEditSuffix(row.Programme, rowId), writeFailureQuery(written));
+    revalidate();
+    toHref(locale, programmeTierEditSuffix(row.Programme, rowId), "saved=1");
+  },
+  GET() {
+    return new Response(null, { status: 405 });
+  },
+};
+
+export const programmeLabTestWriteHandlers = {
+  async POST(request: Request, context: { params: Promise<{ locale: string; action: string }> }) {
+    const params = await context.params;
+    const { locale, form, supabase } = await gateCatalogPost(request, params);
+    const revalidate = revalidatePublishedProgrammes;
+
+    if (params.action === "create") {
+      const parsed = parseProgrammeLabTestWrite(form, false);
+      const parentTierId = emptyParentId(form, "ProgrammeTier");
+      const parentProgrammeId = emptyParentId(form, "Programme");
+      if (!parsed.ok) {
+        toHref(
+          locale,
+          programmeTierEditSuffix(parentProgrammeId, parentTierId),
+          parsed.reason === "bilingual"
+            ? bilingualErrorQuery(parsed.groups ?? [], PROGRAMME_LAB_TEST_PAIR_STEMS)
+            : errorQuery(parsed.reason),
+        );
+      }
+      const created = await createProgrammeLabTestRow(supabase, parsed.columns);
+      if (!created.ok) {
+        toHref(locale, programmeTierEditSuffix(parentProgrammeId, parsed.columns.ProgrammeTier), writeFailureQuery(created));
+      }
+      revalidate();
+      toHref(
+        locale,
+        programmeLabTestEditSuffix(parentProgrammeId, parsed.columns.ProgrammeTier, created.id),
+        "saved=1",
+      );
+    }
+
+    const rowId = rowIdFromForm(form);
+    const programmeId = emptyParentId(form, "Programme");
+    const tierId = emptyParentId(form, "ProgrammeTier");
+    if (rowId === null) toHref(locale, programmeTierEditSuffix(programmeId, tierId), "error=missing");
+
+    const row = await readProgrammeLabTestRow(supabase, rowId);
+    if (row === null) toHref(locale, programmeTierEditSuffix(programmeId, tierId), "error=missing");
+
+    const parentProgrammeId = programmeId.length > 0 ? programmeId : emptyParentId(form, "Programme");
+
+    if (params.action === "delete") {
+      const labTest = await readLabTestRow(supabase, row.LabTest);
+      const expected = programmeLabTestConfirmToken(row, labTest?.slug ?? null);
+      if (confirmFromForm(form) !== expected) {
+        toHref(locale, programmeLabTestEditSuffix(parentProgrammeId, row.ProgrammeTier, rowId), "error=confirm");
+      }
+      const deleted = await deleteProgrammeLabTestRow(supabase, rowId);
+      if (!deleted.ok) {
+        toHref(locale, programmeLabTestEditSuffix(parentProgrammeId, row.ProgrammeTier, rowId), writeFailureQuery(deleted));
+      }
+      revalidate();
+      toHref(locale, programmeTierEditSuffix(parentProgrammeId, row.ProgrammeTier), "saved=1");
+    }
+
+    let nextState: PublicationState = row.publication_state;
+    if (params.action === "publish") nextState = "published";
+    if (params.action === "unpublish") nextState = "draft";
+    const parsed = parseProgrammeLabTestWrite(form, nextState === "published");
+    if (!parsed.ok) {
+      toHref(
+        locale,
+        programmeLabTestEditSuffix(parentProgrammeId, row.ProgrammeTier, rowId),
+        parsed.reason === "bilingual"
+          ? bilingualErrorQuery(parsed.groups ?? [], PROGRAMME_LAB_TEST_PAIR_STEMS)
+          : errorQuery(parsed.reason),
+      );
+    }
+    if (params.action === "publish" && !hasClinicalCatalogueSignOff()) {
+      toHref(locale, programmeLabTestEditSuffix(parentProgrammeId, row.ProgrammeTier, rowId), "error=signOff");
+    }
+    const written = await writeProgrammeLabTestRow(supabase, rowId, parsed.columns, nextState);
+    if (!written.ok) {
+      toHref(locale, programmeLabTestEditSuffix(parentProgrammeId, row.ProgrammeTier, rowId), writeFailureQuery(written));
+    }
+    revalidate();
+    toHref(locale, programmeLabTestEditSuffix(parentProgrammeId, row.ProgrammeTier, rowId), "saved=1");
+  },
+  GET() {
+    return new Response(null, { status: 405 });
+  },
+};
+
+function emptyParentId(form: FormData, field: "Programme" | "ProgrammeTier"): string {
+  const raw = form.get(field);
+  return typeof raw === "string" && raw.length > 0 ? raw : "";
+}

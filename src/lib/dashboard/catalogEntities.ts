@@ -7,6 +7,12 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Locale } from "@/lib/locale";
+import {
+  parseAudienceAxis,
+  parseTierAxis,
+  type AudienceAxis,
+  type ProgrammeTierAxis,
+} from "@/lib/programmeAxes";
 import { emptyToNull, parseCoordinatePair, parseMapsUrl, parseWhatsAppFromForm } from "./fieldRules";
 import { parseYoutubeUrl } from "./youtubePoster";
 
@@ -115,6 +121,12 @@ export type CatalogWriteReason =
   | "alt"
   | "file"
   | "signOff"
+  | "axesTaken"
+  | "membershipTaken"
+  | "eligibility"
+  | "tierAxis"
+  | "audienceAxis"
+  | "labTest"
   | "facebook_url"
   | "instagram_url"
   | "linkedin_url"
@@ -395,6 +407,16 @@ export type LabUnitWriteColumns = {
 export type ParseResult<T> =
   | { ok: true; columns: T }
   | { ok: false; reason: CatalogWriteReason; groups?: string[] };
+
+export type CatalogWriteFailure = {
+  ok: false;
+  reason: CatalogWriteReason;
+  existingId?: string;
+  existingLabel?: string;
+};
+
+export type CatalogWriteCreate = { ok: true; id: string } | CatalogWriteFailure;
+export type CatalogWriteOk = { ok: true } | CatalogWriteFailure;
 
 export function branchStoredCoordinates(row: BranchRow): {
   latitude: number | null;
@@ -689,7 +711,13 @@ export function noticeFromQuery(query: { error?: string; saved?: string; poster?
     error === "bucket" ||
     error === "alt" ||
     error === "file" ||
-    error === "signOff"
+    error === "signOff" ||
+    error === "axesTaken" ||
+    error === "membershipTaken" ||
+    error === "eligibility" ||
+    error === "tierAxis" ||
+    error === "audienceAxis" ||
+    error === "labTest"
   ) {
     return error;
   }
@@ -1610,6 +1638,485 @@ export async function deleteLabTestRow(
   const { error } = await supabase.from("LabTest").delete().eq("id", rowId);
   if (error) return { ok: false, reason: writeReason(error.code, error.message, "LabTest") };
   const remaining = await readLabTestRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
+}
+
+export const ELIGIBILITY_AUDIENCES = ["unreviewed", "all", "male", "female"] as const;
+export type EligibilityAudience = (typeof ELIGIBILITY_AUDIENCES)[number];
+
+export const PROGRAMME_LAB_TEST_BILINGUAL_PAIRS = [["note_ar", "note_en"]] as const;
+export const PROGRAMME_LAB_TEST_PAIR_STEMS = ["note"] as const;
+
+export type ProgrammeTierRow = {
+  id: string;
+  Programme: string;
+  tier_axis: ProgrammeTierAxis;
+  audience_axis: AudienceAxis;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
+export type ProgrammeLabTestRow = {
+  id: string;
+  ProgrammeTier: string;
+  LabTest: string;
+  source_name: string | null;
+  eligibility_audience: EligibilityAudience;
+  note_ar: string | null;
+  note_en: string | null;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
+export const PROGRAMME_TIER_FORM_COLUMNS = {
+  Programme: "Programme",
+  tier_axis: "tier_axis",
+  audience_axis: "audience_axis",
+  display_order: "display_order",
+} as const;
+
+export const PROGRAMME_LAB_TEST_FORM_COLUMNS = {
+  ProgrammeTier: "ProgrammeTier",
+  LabTest: "LabTest",
+  eligibility_audience: "eligibility_audience",
+  source_name: "source_name",
+  note_ar: "note_ar",
+  note_en: "note_en",
+  display_order: "display_order",
+} as const;
+
+const PROGRAMME_TIER_SELECT = [
+  "id",
+  "Programme",
+  "tier_axis",
+  "audience_axis",
+  "publication_state",
+  "display_order",
+].join(",");
+
+const PROGRAMME_LAB_TEST_SELECT = [
+  "id",
+  "ProgrammeTier",
+  "LabTest",
+  "source_name",
+  "eligibility_audience",
+  "note_ar",
+  "note_en",
+  "publication_state",
+  "display_order",
+].join(",");
+
+export type ProgrammeTierWriteColumns = {
+  Programme: string;
+  tier_axis: ProgrammeTierAxis;
+  audience_axis: AudienceAxis;
+  display_order: number;
+};
+
+export type ProgrammeLabTestWriteColumns = {
+  ProgrammeTier: string;
+  LabTest: string;
+  eligibility_audience: EligibilityAudience;
+  source_name: string | null;
+  note_ar: string | null;
+  note_en: string | null;
+  display_order: number;
+};
+
+function parseEligibilityAudience(value: unknown): EligibilityAudience | null {
+  if (typeof value !== "string") return null;
+  for (const audience of ELIGIBILITY_AUDIENCES) {
+    if (audience === value) return audience;
+  }
+  return null;
+}
+
+export function existingIdFromQuery(raw: string | null | undefined): string | null {
+  if (raw === null || raw === undefined || raw.length === 0) return null;
+  return isRowId(raw) ? raw : null;
+}
+
+export function programmeTierConfirmToken(row: ProgrammeTierRow): string {
+  return `${row.tier_axis} · ${row.audience_axis}`;
+}
+
+export function programmeLabTestConfirmToken(row: ProgrammeLabTestRow, labTestSlug: string | null): string {
+  if (labTestSlug !== null && labTestSlug.length > 0) return labTestSlug;
+  return row.id;
+}
+
+export function parseProgrammeTierRow(value: unknown): ProgrammeTierRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const programme = asId(row.Programme);
+  const publication_state = asPublicationState(row.publication_state);
+  const tier_axis = parseTierAxis(row.tier_axis);
+  const audience_axis = parseAudienceAxis(row.audience_axis);
+  if (
+    id === null ||
+    programme === null ||
+    publication_state === null ||
+    tier_axis === null ||
+    audience_axis === null
+  ) {
+    return null;
+  }
+  return {
+    id,
+    Programme: programme,
+    tier_axis,
+    audience_axis,
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export function parseProgrammeLabTestRow(value: unknown): ProgrammeLabTestRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const programmeTier = asId(row.ProgrammeTier);
+  const labTest = asId(row.LabTest);
+  const publication_state = asPublicationState(row.publication_state);
+  const eligibility_audience = parseEligibilityAudience(row.eligibility_audience);
+  if (
+    id === null ||
+    programmeTier === null ||
+    labTest === null ||
+    publication_state === null ||
+    eligibility_audience === null
+  ) {
+    return null;
+  }
+  return {
+    id,
+    ProgrammeTier: programmeTier,
+    LabTest: labTest,
+    source_name: asOptionalText(row.source_name),
+    eligibility_audience,
+    note_ar: asOptionalText(row.note_ar),
+    note_en: asOptionalText(row.note_en),
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export async function listProgrammeTierRows(
+  supabase: SupabaseClient,
+  programmeId: string,
+): Promise<ProgrammeTierRow[]> {
+  if (!isRowId(programmeId)) return [];
+  const { data, error } = await supabase
+    .from("ProgrammeTier")
+    .select(PROGRAMME_TIER_SELECT)
+    .eq("Programme", programmeId)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseProgrammeTierRow);
+}
+
+export async function listProgrammeLabTestRows(
+  supabase: SupabaseClient,
+  programmeTierId: string,
+): Promise<ProgrammeLabTestRow[]> {
+  if (!isRowId(programmeTierId)) return [];
+  const { data, error } = await supabase
+    .from("ProgrammeLabTest")
+    .select(PROGRAMME_LAB_TEST_SELECT)
+    .eq("ProgrammeTier", programmeTierId)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseProgrammeLabTestRow);
+}
+
+export async function readProgrammeTierRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<ProgrammeTierRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase
+    .from("ProgrammeTier")
+    .select(PROGRAMME_TIER_SELECT)
+    .eq("id", rowId)
+    .maybeSingle();
+  if (error || data === null) return null;
+  return parseProgrammeTierRow(data);
+}
+
+export async function readProgrammeLabTestRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<ProgrammeLabTestRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase
+    .from("ProgrammeLabTest")
+    .select(PROGRAMME_LAB_TEST_SELECT)
+    .eq("id", rowId)
+    .maybeSingle();
+  if (error || data === null) return null;
+  return parseProgrammeLabTestRow(data);
+}
+
+export async function findProgrammeTierByAxes(
+  supabase: SupabaseClient,
+  programmeId: string,
+  tier_axis: ProgrammeTierAxis,
+  audience_axis: AudienceAxis,
+): Promise<ProgrammeTierRow | null> {
+  const { data, error } = await supabase
+    .from("ProgrammeTier")
+    .select(PROGRAMME_TIER_SELECT)
+    .eq("Programme", programmeId)
+    .eq("tier_axis", tier_axis)
+    .eq("audience_axis", audience_axis)
+    .maybeSingle();
+  if (error || data === null) return null;
+  return parseProgrammeTierRow(data);
+}
+
+export async function findProgrammeLabTestByPair(
+  supabase: SupabaseClient,
+  programmeTierId: string,
+  labTestId: string,
+): Promise<ProgrammeLabTestRow | null> {
+  const { data, error } = await supabase
+    .from("ProgrammeLabTest")
+    .select(PROGRAMME_LAB_TEST_SELECT)
+    .eq("ProgrammeTier", programmeTierId)
+    .eq("LabTest", labTestId)
+    .maybeSingle();
+  if (error || data === null) return null;
+  return parseProgrammeLabTestRow(data);
+}
+
+export function parseProgrammeTierWrite(form: FormData): ParseResult<ProgrammeTierWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const programme = parseOptionalRowId(emptyToNull(form.get("Programme")));
+  if (programme === "invalid" || programme === null) return { ok: false, reason: "missing" };
+
+  const tierRaw = emptyToNull(form.get("tier_axis"));
+  if (tierRaw === null) return { ok: false, reason: "tierAxis" };
+  const tier_axis = parseTierAxis(tierRaw);
+  if (tier_axis === null) return { ok: false, reason: "tierAxis" };
+
+  const audienceRaw = emptyToNull(form.get("audience_axis"));
+  if (audienceRaw === null) return { ok: false, reason: "audienceAxis" };
+  const audience_axis = parseAudienceAxis(audienceRaw);
+  if (audience_axis === null) return { ok: false, reason: "audienceAxis" };
+
+  return {
+    ok: true,
+    columns: {
+      Programme: programme,
+      tier_axis,
+      audience_axis,
+      display_order,
+    },
+  };
+}
+
+export function parseProgrammeLabTestWrite(
+  form: FormData,
+  requireBilingual: boolean,
+): ParseResult<ProgrammeLabTestWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const programmeTier = parseOptionalRowId(emptyToNull(form.get("ProgrammeTier")));
+  if (programmeTier === "invalid" || programmeTier === null) return { ok: false, reason: "missing" };
+
+  const labTestRaw = emptyToNull(form.get("LabTest"));
+  if (labTestRaw === null) return { ok: false, reason: "labTest" };
+  const LabTest = parseOptionalRowId(labTestRaw);
+  if (LabTest === "invalid" || LabTest === null) return { ok: false, reason: "labTest" };
+
+  const eligibilityRaw = emptyToNull(form.get("eligibility_audience"));
+  if (eligibilityRaw === null) return { ok: false, reason: "eligibility" };
+  const eligibility_audience = parseEligibilityAudience(eligibilityRaw);
+  if (eligibility_audience === null) return { ok: false, reason: "eligibility" };
+
+  const columns: ProgrammeLabTestWriteColumns = {
+    ProgrammeTier: programmeTier,
+    LabTest,
+    eligibility_audience,
+    source_name: emptyToNull(form.get("source_name")),
+    note_ar: emptyToNull(form.get("note_ar")),
+    note_en: emptyToNull(form.get("note_en")),
+    display_order,
+  };
+
+  if (requireBilingual) {
+    const notesMissing = (columns.note_ar === null) !== (columns.note_en === null);
+    if (notesMissing) return { ok: false, reason: "bilingual", groups: ["note"] };
+  }
+  return { ok: true, columns };
+}
+
+function programmeTierAxesLabel(row: ProgrammeTierRow): string {
+  return `${row.tier_axis} · ${row.audience_axis}`;
+}
+
+async function axesTakenFailure(
+  supabase: SupabaseClient,
+  columns: ProgrammeTierWriteColumns,
+  exceptId?: string,
+): Promise<CatalogWriteFailure> {
+  const existing = await findProgrammeTierByAxes(
+    supabase,
+    columns.Programme,
+    columns.tier_axis,
+    columns.audience_axis,
+  );
+  if (existing !== null && existing.id !== exceptId) {
+    return {
+      ok: false,
+      reason: "axesTaken",
+      existingId: existing.id,
+      existingLabel: programmeTierAxesLabel(existing),
+    };
+  }
+  return { ok: false, reason: "axesTaken" };
+}
+
+async function membershipTakenFailure(
+  supabase: SupabaseClient,
+  columns: ProgrammeLabTestWriteColumns,
+  exceptId?: string,
+): Promise<CatalogWriteFailure> {
+  const existing = await findProgrammeLabTestByPair(supabase, columns.ProgrammeTier, columns.LabTest);
+  if (existing !== null && existing.id !== exceptId) {
+    const labTest = await readLabTestRow(supabase, existing.LabTest);
+    return {
+      ok: false,
+      reason: "membershipTaken",
+      existingId: existing.id,
+      existingLabel: labTest?.slug ?? existing.id,
+    };
+  }
+  return { ok: false, reason: "membershipTaken" };
+}
+
+export async function createProgrammeTierRow(
+  supabase: SupabaseClient,
+  columns: ProgrammeTierWriteColumns,
+): Promise<CatalogWriteCreate> {
+  const { data, error } = await supabase
+    .from("ProgrammeTier")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) {
+    if (error.code === "23505") return axesTakenFailure(supabase, columns);
+    return { ok: false, reason: writeReason(error.code, error.message, "Programme") };
+  }
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function createProgrammeLabTestRow(
+  supabase: SupabaseClient,
+  columns: ProgrammeLabTestWriteColumns,
+): Promise<CatalogWriteCreate> {
+  const { data, error } = await supabase
+    .from("ProgrammeLabTest")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) {
+    if (error.code === "23505") return membershipTakenFailure(supabase, columns);
+    return { ok: false, reason: writeReason(error.code, error.message, "LabTest") };
+  }
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function writeProgrammeTierRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: ProgrammeTierWriteColumns,
+  publicationState: PublicationState,
+): Promise<CatalogWriteOk> {
+  const { error } = await supabase
+    .from("ProgrammeTier")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) {
+    if (error.code === "23505") return axesTakenFailure(supabase, columns, rowId);
+    return { ok: false, reason: writeReason(error.code, error.message, "Programme") };
+  }
+  return { ok: true };
+}
+
+export async function writeProgrammeLabTestRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: ProgrammeLabTestWriteColumns,
+  publicationState: PublicationState,
+): Promise<CatalogWriteOk> {
+  const { error } = await supabase
+    .from("ProgrammeLabTest")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) {
+    if (error.code === "23505") return membershipTakenFailure(supabase, columns, rowId);
+    if (error.code === "23514") return { ok: false, reason: "bilingual", existingLabel: undefined };
+    return { ok: false, reason: writeReason(error.code, error.message, "LabTest") };
+  }
+  return { ok: true };
+}
+
+export async function countProgrammeTierMemberships(
+  supabase: SupabaseClient,
+  programmeTierId: string,
+): Promise<number> {
+  const { data, error } = await supabase
+    .from("ProgrammeLabTest")
+    .select("id")
+    .eq("ProgrammeTier", programmeTierId);
+  if (error || !Array.isArray(data)) return 0;
+  return data.length;
+}
+
+export async function deleteProgrammeTierRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<CatalogWriteOk> {
+  const { error } = await supabase.from("ProgrammeTier").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Programme") };
+  const remaining = await readProgrammeTierRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
+}
+
+export async function deleteProgrammeLabTestRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<CatalogWriteOk> {
+  const { error } = await supabase.from("ProgrammeLabTest").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "LabTest") };
+  const remaining = await readProgrammeLabTestRow(supabase, rowId);
   if (remaining !== null) return { ok: false, reason: "write" };
   return { ok: true };
 }

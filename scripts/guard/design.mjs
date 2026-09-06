@@ -31,7 +31,15 @@
 //       form files, no directory, no pattern. An eleventh path,
 //       src/components/dashboard/MediaAssetForm.tsx, was granted at P05-T10
 //       for an Operator form behind aal2 writing only to named columns.
-//       One form file, no directory, no pattern. A path is exempt only when it
+//       One form file, no directory, no pattern. A twelfth and thirteenth
+//       path, src/components/dashboard/ProgrammeForm.tsx and
+//       src/components/dashboard/LabTestForm.tsx, were granted at P05-T24A
+//       for Operator forms behind aal2 writing named columns. A fourteenth
+//       and fifteenth path, src/components/dashboard/ProgrammeTierForm.tsx
+//       and src/components/dashboard/ProgrammeLabTestForm.tsx, were granted
+//       at P05-T24B for Operator forms behind aal2 writing named columns.
+//       Nested under Programme / ProgrammeTier; two form files, no
+//       directory, no pattern. A path is exempt only when it
 //       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
 //       Adding a path is a boundary decision requiring a reviewer verdict,
 //       never a builder's call.
@@ -88,6 +96,8 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/MediaAssetForm.tsx",
   "src/components/dashboard/ProgrammeForm.tsx",
   "src/components/dashboard/LabTestForm.tsx",
+  "src/components/dashboard/ProgrammeTierForm.tsx",
+  "src/components/dashboard/ProgrammeLabTestForm.tsx",
 ]);
 
 // Exact paths. Host strings may appear in these two files and nowhere
