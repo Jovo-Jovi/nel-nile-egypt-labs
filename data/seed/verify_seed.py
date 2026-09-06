@@ -28,11 +28,11 @@ for l in links:
         errs.append(f"unknown programme_id: {l['programme_id']}")
 
 b = json.load(open(d/"catalogue.json", encoding="utf-8"))
-# UNRATIFIED residual repair (PR-19) at P05-T26A. catalogue.json is the 2018
-# extraction snapshot (PR-09) at 72 tests / 121 links. This fence forbids
-# editing it and requires PASS after the signed seed is 71 / 124. The two
-# count-equality assertions would fail for that reason alone and are not
-# applied. Reviewer: ratify or revert.
+# Ratified at P05-T27. The P05-T26A PR-19 removal of the catalogue.json
+# count-equality assertions stands. catalogue.json is the 2018 extraction
+# snapshot (PR-09) and is deliberately superseded by the signed catalogue.
+# The successor assertion is against docs/research/clinical-worklist.md
+# and is not landed by this task.
 print(
     "catalogue.json snapshot (not asserted): "
     f"tests {len(b['tests'])} links {len(b['programme_tests'])}"
