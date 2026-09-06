@@ -204,6 +204,61 @@ function parseDatabasePairs(sqlPaths) {
   return byTable;
 }
 
+function parseRegionsRequiredSiteSettings(source) {
+  const start = source.indexOf("export const REGIONS");
+  if (start === -1) return null;
+  const eq = source.indexOf("=", start);
+  if (eq === -1) return null;
+  const open = source.indexOf("[", eq);
+  if (open === -1) return null;
+  const close = matchingBracket(source, open);
+  if (close === -1) return null;
+  const body = source.slice(open, close + 1);
+  const columns = new Set();
+  let depth = 0;
+  let objectStart = -1;
+  for (let i = 0; i < body.length; i += 1) {
+    const ch = body[i];
+    if (ch === "{") {
+      if (depth === 0) objectStart = i;
+      depth += 1;
+    } else if (ch === "}") {
+      depth -= 1;
+      if (depth === 0 && objectStart !== -1) {
+        const objectSource = body.slice(objectStart, i + 1);
+        objectStart = -1;
+        if (/\boptional\s*:\s*true\b/.test(objectSource)) continue;
+        const tablesMatch = objectSource.match(/tables\s*:\s*\[([\s\S]*?)\]/);
+        if (tablesMatch === null || !/"SiteSettings"/.test(tablesMatch[1])) continue;
+        const columnsMatch = objectSource.match(/columns\s*:\s*\[([\s\S]*?)\]/);
+        if (columnsMatch === null) continue;
+        const nameRe = /"([a-z][a-z0-9_]*)"/g;
+        let name;
+        while ((name = nameRe.exec(columnsMatch[1])) !== null) {
+          columns.add(name[1]);
+        }
+      }
+    }
+  }
+  return columns;
+}
+
+function findRegionsSource(tsPaths) {
+  for (const path of tsPaths) {
+    if (posixLabel(path) === "src/lib/regions.ts") return readFileSync(path, "utf8");
+  }
+  return null;
+}
+
+function requiredSiteSettingsFromPairs(appByTable) {
+  const required = new Set(["hotline", "whatsapp_e164"]);
+  for (const stem of appByTable.get("SiteSettings") ?? new Set()) {
+    required.add(`${stem}_ar`);
+    required.add(`${stem}_en`);
+  }
+  return required;
+}
+
 function parseApplicationPairs(tsPaths) {
   const byTable = new Map();
   const unknown = [];
@@ -304,6 +359,30 @@ function main() {
       findings.push(
         `${table}: in application, missing from database: ${missingFromDb.join(", ")}`,
       );
+    }
+  }
+
+  const regionsSource = findRegionsSource(tsPaths);
+  if (regionsSource === null) {
+    findings.push("src/lib/regions.ts is missing.");
+  } else {
+    const mapped = parseRegionsRequiredSiteSettings(regionsSource);
+    if (mapped === null) {
+      findings.push("src/lib/regions.ts has no parseable REGIONS constant.");
+    } else {
+      const required = requiredSiteSettingsFromPairs(app);
+      const missingFromRegions = difference(required, mapped);
+      const extraInRegions = difference(mapped, required);
+      if (missingFromRegions.length > 0) {
+        findings.push(
+          `SiteSettings required columns missing from regions.ts: ${missingFromRegions.join(", ")}`,
+        );
+      }
+      if (extraInRegions.length > 0) {
+        findings.push(
+          `regions.ts required SiteSettings columns not in BILINGUAL_PAIRS plus hotline and whatsapp_e164: ${extraInRegions.join(", ")}`,
+        );
+      }
     }
   }
 

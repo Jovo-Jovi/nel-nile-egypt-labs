@@ -166,6 +166,8 @@ branch and settings content.
 | P05-T23-F | Restored the three countersignature records omitted at P05-T23: the qualifier · client countersignature pending on the OD-16 status line, the Countersignature paragraph, and CF-126. | PASS at reviewer verdict — 5 September 2026 | 2026-09-05 |
 | P05-T24A | The Programme and LabTest modules. Branched p05-t24a from p05-t23 at 4b15bbf, not from main. CF live maximum 126 (re.findall over CF-nn rows) before allocating; next-free was CF-127. STEP 0 — P05-T23 Verdict cell left FAIL as written and appended · fix verified PASS 5 September 2026. Checking the P05-T23 box fired R2 (checked FAIL, no P05-T23-F done-step row); box left unchecked (PR-19). Unchecked P05-T24A box added immediately after it. guard:phases exit 0 afterwards; R5 still the 17 CF-100 rows. STEP 1 — programmes and lab-tests modules reuse CatalogListing, PublishAside and catalogSubmit. PROGRAMME_BILINGUAL_PAIRS 3 and LAB_TEST_BILINGUAL_PAIRS 1 (the fence named LABTEST_BILINGUAL_PAIRS; guard PREFIX_TO_TABLE maps LAB_TEST, not LABTEST). ProgrammeLabTest 1 stays declared-only. guard:schema total 33. STEP 2-3 — draft save unrestricted; publish refuses unless docs/research/clinical-signoff.md carries the heading and Status: SIGNED. Refusal is error=signOff, bilingual first. clinicalFlag.ts untouched. STEP 4 — home cards for programmes and lab-tests report awaiting clinical sign-off plus computed counts, no completeness state, never green. Four percent signs on GET /ar/dashboard are SVG 100% on DashboardChrome, not a grade. STEP 5 — LabTest in a membership returns held; Programme confirmation names computed ProgrammeTier and ProgrammeLabTest counts. STEP 6 — npx next start -p 3042, throwaway aal2, curl.exe --max-redirs 0, UTF-8 both ends. C4 POST /ar/dashboard/programmes/submit/create 307 Location .../767b8ae4-2460-4c54-8951-c3a9139ecf1f?saved=1, name_ar_bytes 0. C1 POST publish 307 error=bilingual&groups=name; GET ar and en 200, pair named. C2 POST publish 307 error=signOff, not write; GET ar and en 200. C3 scratch artefact outside the repo copied into docs/research then removed; same POST 307 saved=1, publication_state published. C5 POST delete seeded slug acr 307 error=held; name_en_md5 4c045449d1011c99dc4ab7fd50b9e235 unchanged. C6 python -X utf8 data/seed/verify_seed.py 121 -> 72 PASS; four table counts 9, 72, 14, 121 unchanged; getUserById 404. Redirects are 307 from next/navigation. STEP 7 — CF-127 OPEN. Open CF 74 + 1 - 0 = 75. D headings 48, OD headings 16, git ls-files supabase/migrations/ 20, unchanged. Catalogue ar=486 en=486 identical, 0 duplicates. Guards naming, design (173 files), schema, phases, boundary (26 html) exit 0. lint silent. tsc silent. build 25 static HTML excluding _global-error.html, 0 dashboard. git diff origin/main HEAD on public trees is 2 files from T23 (CopyCard.escape.spec.ts, InfoPage.tsx); this task versus 4b15bbf is 0. No migration. Do not merge before the verdict. | PASS at reviewer verdict — 5 September 2026 | 2026-09-06 |
 | P05-T24B | The tier and membership editors. Branched p05-t24b from p05-t24a at 9107e2a, not from main. CF live maximum 127 (re.findall over CF-nn rows) before allocating; next-free CF-128. STEP 0 — P05-T23-F done-step row added recording the three restorations; P05-T23 box checked with its FAIL cell left as written; P05-T24A Verdict cell only set to PASS at reviewer verdict — 5 September 2026 and its box checked; unchecked P05-T24B box added. guard:phases exit 0; R5 still the 17 CF-100 rows. STEP 1 — ProgrammeTier nested under Programme. Axes are required selects over the migration enums (ProgrammeTierAxis none · Silver · Gold · Platinum · Children; AudienceAxis none · Male · Female). Duplicate (Programme, tier_axis, audience_axis) is error=axesTaken naming the existing tier, never error=write. none · none is a creatable pair. STEP 2 — ProgrammeLabTest nested under ProgrammeTier. eligibility_audience is required with no form default; omit is error=eligibility naming the field; unreviewed is selectable and must be chosen. Duplicate (ProgrammeTier, LabTest) is error=membershipTaken naming the existing membership. The membership list is reachable and readable before any delete control. STEP 3 — Programme delete names live ProgrammeTier and ProgrammeLabTest counts; ProgrammeTier delete names its live membership count; membership delete says it affects nothing else. STEP 4 — both entities publish through hasClinicalCatalogueSignOff, error=signOff, never error=write. clinicalSignOff.ts and clinicalFlag.ts untouched. ProgrammeLabTest note is both-or-neither on publish, enforced by parseProgrammeLabTestWrite when requireBilingual is true on the memberships submit publish path. STEP 5 — the visitor-resolved preview calls resolveSlotLabTests (public.programmeLabTests). Owned editor rows are listed from ProgrammeLabTest so drafts remain visible. No second cumulation path. STEP 6 — npx next start -p 3043, throwaway aal2, curl.exe --max-redirs 0, UTF-8 both ends. D1 POST create duplicate axes 307 error=axesTaken existing_label Silver · Male, not write. D2 POST none · none 307 saved=1. D3 omit eligibility 307 error=eligibility; explicit unreviewed 307 saved=1, stored unreviewed. D4 duplicate pair 307 error=membershipTaken naming the LabTest slug. D5 publish tier and membership without artefact 307 error=signOff both; scratch artefact outside the repo copied into docs/research then removed; both 307 saved=1, publication_state published. D6 note_ar only 307 error=bilingual and groups=note; GET ar and en 200, pair named; both empty with artefact 307 saved=1. D7 GET programme page 1 ProgrammeTier · 1 ProgrammeLabTest then 2 and 1 after creating none · none. D8 python -X utf8 data/seed/verify_seed.py 121 -> 72 PASS; table counts 9 / 72 / 14 / 121 unchanged; leftover throwaways 0; getUserById 404. Redirects are 307. STEP 7 — CF-127 CLOSED. No new CF row: n=0. The T24A verdict's two described rows against the sign-off artefact were not numbered here; this fence forbade modifying those files and told this task to land only what it surfaced. Open CF 75 - 1 + 0 = 74. D headings 48, OD headings 16, git ls-files supabase/migrations/ 20, unchanged. Catalogue ar=513 en=513 identical, 0 duplicates. Guards naming, design (179 files), schema total 33 with ProgrammeLabTest 1 now enforced, phases, boundary exit 0. lint silent. tsc silent. build 25 static HTML excluding _global-error.html, 0 dashboard. This task versus 9107e2a on the public trees and clinicalFlag.ts and clinicalSignOff.ts is 0. No migration. Do not merge before the verdict. | PASS at reviewer verdict — 5 September 2026; Sonnet High review gate waived for budget, bounded to this task | 2026-09-06 |
+| P05-T25 | Land the clinical worklist, replace ADMIN_SPEC section 4h.6, and open CF-128 and CF-129. Branched p05-t25a from p05-t24b at d55687e. Clinical worklist 26,109 bytes, sha256 f756dec0, LF 469, CRLF 0, no BOM, every Section A and Section B answer cell blank. Section 4h.6 span hash cdeaa3cb, identical to the payload. Payload left untracked. CF-128 OPEN reviewer P07; CF-129 OPEN reviewer G6. Open CF 74 + 2 = 76. No src change. | PASS at reviewer verdict — 5 September 2026 | 2026-09-06 |
+| P05-T25B | The completeness header. Branched p05-t25b from p05-t25a at 4389c98, not from main. CF live maximum 129 (re.findall over CF-nn rows) before allocating; next-free was CF-130. STEP 0 — P05-T25 Verdict cell set to PASS at reviewer verdict — 5 September 2026; PHASES.md P05-T25 box checked; unchecked P05-T25B box added. guard:phases exit 0; R5 still the 17 CF-100 rows. STEP 1 — src/lib/regions.ts derived from the render path, not from the map. required SiteSettings columns 34; required-minus-mapped [] and mapped-minus-required [] (npx tsx import of completenessTally). STEP 2 — region-map home.hero and home.reasons refreshed to P05-T21; header notes regions.ts is the authority. STEP 3 — guard:schema compares the constant's required set to BILINGUAL_PAIRS plus hotline and whatsapp_e164 both ways. FILE MODE in %TEMP%\nel-p05-t25b-schema: unmodified exit 0; hero_eyebrow_ar removed from the constant exit 1 naming it. STEP 4-6 — server-side tally, denominator = slots.length every call, never stored. Three states with icon and word. Programmes and LabTests report awaiting clinical sign-off and counts, no percentage. Optional social URLs absent. Client materials listed beside the count. STEP 7 — npx next start -p 3044, throwaway aal2, curl.exe --max-redirs 0, client JS bypassed. E1 GET /ar/dashboard and /en/dashboard 200, 36 of 38 incomplete both locales; Arabic field name العنوان الرئيسي (العربية), English Hero headline (Arabic). E2 no laboratory write; evaluateCompleteness empty 36, plus one published Branch 43, plus one published Video on empty 42. Live 38 = 34 SiteSettings + Branch listing slot + LabUnit listing slot + two MediaAsset alts. E3 TEST whole word empty; blood test in a sentence populated; live seo_title_en, seo_description_en, privacy_body_en, lab_to_lab_en all marked populated. E4 four % on each GET: two SVG width/height 100% on DashboardChrome, two inside an RSC script; completeness copy has none. E5 eighteen hero and reason columns on the home checklist, facebook_url absent. E6 python -X utf8 data/seed/verify_seed.py 121 -> 72 PASS; table counts 9 / 72 / 14 / 121 unchanged; getUserById 404. STEP 8 — CF-130, CF-131, CF-132 OPEN. Open CF 76 + 3 = 79. D headings 48, OD headings 16, git ls-files supabase/migrations/ 20. Catalogue ar=535 en=535. Guards naming, design (185 files), schema total 33, phases, boundary exit 0. lint silent. tsc silent. build 25 static HTML excluding _global-error.html, 0 dashboard. Versus origin/main the public trees still show CopyCard.escape.spec.ts, InfoPage.tsx and clinicalSignOff.ts from T23/T24A; this task does not touch them. No migration. Do not merge before the verdict. | pushed — verdict at push | 2026-09-06 |
 
 ---
 
@@ -174,7 +176,7 @@ branch and settings content.
 Computed by (run after M5B):
 `grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md`
 
-**Open — 74:** CF-01 · CF-03 · CF-04 · CF-05 · CF-07 · CF-08 · CF-09 ·
+**Open — 79:** CF-01 · CF-03 · CF-04 · CF-05 · CF-07 · CF-08 · CF-09 ·
 CF-10 · CF-11 · CF-14 · CF-17 · CF-18 · CF-22 · CF-24 · CF-25 · CF-26 · CF-27 ·
 CF-28 · CF-37 · CF-41 · CF-45 · CF-46 · CF-49 · CF-51 ·
 CF-52 · CF-54 · CF-62 · CF-63 · CF-65 · CF-66 · CF-67 ·
@@ -183,7 +185,7 @@ CF-82 · CF-83 · CF-86 · CF-87 · CF-89 · CF-90 · CF-92 · CF-93 · CF-94 ·
 CF-95 · CF-96 · CF-97 · CF-98 · CF-99 · CF-100 · CF-101 · CF-103 · CF-104 ·
 CF-105 · CF-106 · CF-108 · CF-111 · CF-112 · CF-114 ·
 CF-115 · CF-116 · CF-117 · CF-118 · CF-119 · CF-120 · CF-121 · CF-124 ·
-CF-125 · CF-126
+CF-125 · CF-126 · CF-128 · CF-129 · CF-130 · CF-131 · CF-132
 
 **Closed 25 Aug 2026 (pre-T03V):** CF-12 (`ProgrammeTier` — two axes) · CF-13
 (`ResultsPortalLink` — build-time constant) · CF-15 (route and module
@@ -472,6 +474,11 @@ paragraph. CF-109 stays CLOSED. CF-125 stays OPEN. Open count
 **Closed at P05-T24B:** CF-127. The membership list is reachable and readable on the ProgrammeTier page before any destructive action is offered. No new row: n=0. Open count 75 − 1 + 0 = 74
 (`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 74).
 
+**Landed OPEN at P05-T25:** CF-128 (reviewer, P07) and CF-129 (reviewer, G6). Open count 74 + 2 − 0 = 76.
+
+**Landed OPEN at P05-T25B:** CF-130 (reviewer, P06) — P05-T24B's Sonnet High review gate was waived for budget, bounded to that task, compensating control at P06. CF-131 (reviewer, G5) — §4h.5 now depends on the Programme module that exists. CF-132 (reviewer, G5) — region-map `locations.branches` and `videos.listing` still describe pre-T22 selects; `src/lib/regions.ts` is the authority. Open count 76 + 3 − 0 = 79
+(`grep -cE '^\| CF-[0-9]+ .*\| OPEN \|' docs/method/CARRY_FORWARDS.md` → 79).
+
 
 CF-01 to CF-11 are client dependencies. CF-14 is a bilingual gap owned by the
 lab. CF-17 and CF-18 are quotation amendments. CF-22 is the live sequencing
@@ -654,9 +661,8 @@ nothing and must never be cited as authority. v2 is reordered under OD-12.
 
 ## Next action
 
-P05-T24B is on `p05-t24b`. Do not merge before the verdict. Completeness
-header remains P05-T17. CF-127 is CLOSED at P05-T24B. Open count
-75 − 1 + 0 = 74.
+P05-T25B is on `p05-t25b`. Do not merge before the verdict. Completeness
+header is this task. Open count 76 + 3 − 0 = 79.
 
 OD-03's freeze lapses 15 September 2026.
 
@@ -664,9 +670,16 @@ CF-125 is OPEN, owner reviewer, G7: the FROZEN boundary model needs its OD
 amendment history in one place.
 
 CF-126 is OPEN, owner client, G7: the client has not countersigned OD-16's
-full text, including the allocation-of-responsibility paragraph. Open count
-73 + 1 − 0 = 74 after P05-T23-F. After P05-T24A: 74 + 1 − 0 = 75. After
-P05-T24B: 75 − 1 + 0 = 74.
+full text, including the allocation-of-responsibility paragraph.
+
+CF-130 is OPEN, owner reviewer, P06: the P05-T24B Sonnet High waiver is
+bounded to that task.
+
+CF-131 is OPEN, owner reviewer, G5: Programmes stays ungraded now that the
+module exists.
+
+CF-132 is OPEN, owner reviewer, G5: region-map `locations.branches` and
+`videos.listing` still describe pre-T22 selects.
 
 G5 criterion 1 evidence exists: the home hero (`#home`) and reason cards
 (`#why`) cleared in both locales at P05-T21 from the published singleton.
@@ -676,16 +689,15 @@ is **not** in the repository. `.env.example` documents both variable names
 with the placeholder only.
 
 The `"SiteSettings"` singleton is `published` (read at P05-T21: 18 of 18 M6
-text columns populated; three media-role columns null). Probe publish and a
-throwaway aal2 account were not run; writing synthetic copy would overwrite
-Visitor-facing fields. Capture was UTF-8, 46 of 46 columns, unmutated.
-Favicon, app-icon and hero media pickers are a named successor, not started.
-Completeness header remains P05-T17. CF-124 stays OPEN, owner reviewer, G5:
+text columns populated; three media-role columns null). This task did not
+publish, unpublish or mutate any laboratory-owned row. Completeness live
+read 36 of 38 required fields populated, incomplete, same numbers in both
+locales. CF-124 stays OPEN, owner reviewer, G5:
 §4h.3 grades zero published Offers complete while `/offers` is a pending
 shell. The public Offers page still prerenders; removing it is P08. OD-15
 document amendments — `GLOSSARY.md`, `SECURITY_MODEL.md` §3,
 `CONTENT_MODEL.md` §3c, `PHASES.md` — land after G5, not now. Unchecked P05
-items that already have a box: the Programmes module and G5.
+items that already have a box: G5. P05-T25B is unchecked pending verdict.
 
 The client supplied bilingual privacy policy text on 5 September 2026. It is
 staged untracked and is not committed: `privacy_body_ar` and `_en` are

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { CompletenessHeader } from "@/components/dashboard/CompletenessHeader";
 import { ModuleNav } from "@/components/dashboard/ModuleNav";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
@@ -16,6 +17,7 @@ export default async function ModulesLayout({
   gateModuleRoute(access, locale);
   return (
     <>
+      <CompletenessHeader locale={locale} variant="compact" />
       <ModuleNav locale={locale} />
       {children}
     </>

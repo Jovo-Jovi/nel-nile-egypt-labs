@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CompletenessAwaitingLine, CompletenessHeader } from "@/components/dashboard/CompletenessHeader";
 import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
 import { IsolatedCopy } from "@/components/ui/Isolate";
@@ -87,6 +88,7 @@ export default async function DashboardHomePage({ params }: Props) {
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.home.title" />
+      <CompletenessHeader locale={locale} variant="full" />
       <div className={extra.groups} data-nel-container="home">
         <ul className={extra.list}>
           {MODULE_CARDS.map((mod) => {
@@ -97,11 +99,19 @@ export default async function DashboardHomePage({ params }: Props) {
                   <div className={extra.rowMain}>
                     <p className={extra.rowName}>{translate(locale, mod.labelKey)}</p>
                     {clinical ? (
-                      clinicalLines(locale, progress).map((line) => (
-                        <p key={line} className={extra.rowMeta}>
-                          <IsolatedCopy locale={locale} text={line} />
-                        </p>
-                      ))
+                      <>
+                        <CompletenessAwaitingLine
+                          locale={locale}
+                          text={translate(locale, "dashboard.home.awaitingSignOff")}
+                        />
+                        {clinicalLines(locale, progress)
+                          .slice(1)
+                          .map((line) => (
+                            <p key={line} className={extra.rowMeta}>
+                              <IsolatedCopy locale={locale} text={line} />
+                            </p>
+                          ))}
+                      </>
                     ) : (
                       <p className={extra.rowMeta}>{countLabel(locale, counts[mod.table])}</p>
                     )}
