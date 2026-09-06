@@ -206,12 +206,12 @@ in the project, and it should not be first.
 - [x] **P05-T26B** — Transcribe the signed catalogue into the database
 - [x] **P05-T27** — Record the G5 verdict, rewrite CF-128, and rule the findings
 - [x] **P05-T28** — The sign-off addendum and the client notice
-- [ ] **P05-T29** — Clear the three G5-R blockers and amend §9
+- [x] **P05-T29** — Clear the three G5-R blockers and amend §9
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
 - [ ] Programmes, tiers and memberships module
-- [ ] **G5-R** — re-run in full
-- [ ] **G5** — the owner can edit every unlocked region himself
+- [x] **G5-R** — re-run in full
+- [x] **G5** — the owner can edit every unlocked region himself
 
 ### P06 — Content and Arabic · LONGEST POLE
 
