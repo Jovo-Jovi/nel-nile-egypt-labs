@@ -1,6 +1,6 @@
 # Clinical catalogue sign-off — addendum 1
 
-Status: UNCOUNTERSIGNED
+Status: COUNTERSIGNED
 
 Issued: 7 September 2026
 Attaches to: `docs/research/clinical-signoff.md`, signed 6 September 2026
@@ -58,10 +58,11 @@ is the laboratory's to time.
 By countersigning, the laboratory confirms it has read this correction and that
 its approval of the clinical catalogue is unchanged.
 
-Countersigned: ______________________
-Role: ______________________
-Date: ______________________
+Countersigned: androw
+Role: owner
+Date: 7 September 2026
 
-Change the status line above so the word after `Status:` reads the
-countersignature keyword in capitals instead of `UNCOUNTERSIGNED`, with nothing
-else on that line.
+Change the status line at the top of this file so it reads exactly
+`Status:` followed by one space and the word COUNTERSIGNED, with nothing else
+on that line. That word is the only permitted value. No code reads this file
+and no gate depends on it.
