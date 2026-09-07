@@ -57,12 +57,16 @@ const ar = {
   "page.labToLab.title": "معامل للمعامل",
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
+  // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
   "partnerLab.signUp.title": "تسجيل معمل شريك",
   "partnerLab.signUp.email": "البريد الإلكتروني",
   "partnerLab.signUp.password": "كلمة المرور",
   "partnerLab.signUp.submit": "إنشاء الحساب",
   "partnerLab.signUp.failed": "تعذّر إنشاء الحساب. حاول مرة أخرى.",
-  "partnerLab.signUp.created": "تم إنشاء الحساب.",
+  "partnerLab.signUp.received": "تم استلام طلبك. سيراجعه أحد المشغّلين.",
+  "partnerLab.signUp.passwordTooShort": "كلمة المرور أقصر من الحد الأدنى المسموح.",
+  "partnerLab.signUp.invalidEmail": "صيغة البريد الإلكتروني غير صالحة.",
+  "partnerLab.signUp.weakPassword": "يجب أن تحتوي كلمة المرور على حرف صغير وحرف كبير ورقم ورمز.",
 
   // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
   "dashboard.home.title": "لوحة التحكم",
@@ -684,12 +688,16 @@ const en = {
   "page.labToLab.title": "Lab-to-Lab",
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
+  // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
   "partnerLab.signUp.title": "Partner laboratory sign-up",
   "partnerLab.signUp.email": "Email",
   "partnerLab.signUp.password": "Password",
   "partnerLab.signUp.submit": "Create account",
   "partnerLab.signUp.failed": "Could not create the account. Try again.",
-  "partnerLab.signUp.created": "The account was created.",
+  "partnerLab.signUp.received": "We have received your request. An Operator will review it.",
+  "partnerLab.signUp.passwordTooShort": "The password is shorter than the minimum length.",
+  "partnerLab.signUp.invalidEmail": "The email address is not valid.",
+  "partnerLab.signUp.weakPassword": "The password must include a lowercase letter, an uppercase letter, a number, and a symbol.",
 
   // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
   "dashboard.home.title": "Dashboard",
