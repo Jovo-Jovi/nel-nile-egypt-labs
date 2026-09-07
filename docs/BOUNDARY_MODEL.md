@@ -59,8 +59,12 @@ Evidence this gate requires at P08 and at G7, in addition to §4's items:
 **The gate is not waived and remains non-waivable.** This amendment states
 what it was always excluding; it does not permit a new class of collection.
 
-`Visitor` holds no account and submits nothing. `Operator` holds an account with
-MFA and touches only published site content.
+`Visitor` holds no account and submits nothing but an authentication credential, and
+only when choosing to become a `PartnerLab` (OD-15 §4). That submission carries an email
+address and a password and no other field. Everything the table above excludes is still
+excluded from it. `Operator` holds an account with MFA and touches only published site
+content. `PartnerLab` holds an account without MFA, writes nothing anywhere, and reads
+approved `Offer` rows only.
 
 ## §3 Why the results portal stays separate
 
