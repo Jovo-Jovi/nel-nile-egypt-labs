@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-146**
+**Next free id: CF-148**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -151,6 +151,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-143 | docs/PHASES.md:121's phase-overview table is stale — P05 reads Gate G5 / "Next · spec unwritten" after G5-R passed and ADMIN_SPEC landed at P05-T00, and P03 reads "Active" though it closed at G3. guard:phases reads the SESSION_CONTEXT phase map, so nothing catches this. | reviewer | OPEN | P07 |
 | CF-144 | client-outbound/2026-09-07-clinical-gate-correction.md was amended after sending; its body is a post-hoc reconstruction of the sent text, not a verbatim copy. Ratified at M7B-2. An outbound record amended after despatch should say so in the file. | reviewer | OPEN | P07 |
 | CF-145 | A task must never write its own Verdict cell. G5-R landed `PASS at reviewer verdict` before the verdict existed, on the reviewer's own instruction. The successor task's STEP 0 records a verdict, gates included. Candidate for a PRECEDENTS row; the reviewer allocates the PR id, not this task. | reviewer | OPEN | P06 |
+| CF-146 | M7B-2 applied a migration to the live database from a Grok window, against OD-13 absolute exception 1. The output was verified correct on inspection and was not reverted. The control that failed was routing, not review: nothing on this project checks which model a fence actually reaches. PRECEDENTS candidate alongside CF-145; the reviewer allocates the PR ids. | reviewer | OPEN | P06 |
+| CF-147 | M7B-2's reverse has never been executed, joining CF-83. Six reverses are now authored and unapplied. | reviewer | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
