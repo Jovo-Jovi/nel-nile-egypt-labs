@@ -527,6 +527,24 @@ metadata.
 Open count 87 + 0 − 0 = 87. No SQL, no policy, no migration. Signed
 clinical artefacts unchanged.
 
+## 2026-09-07 — P08-T03-F: re-run Q5, and log what its failure found
+
+Q5c executed: a third form key is rejected before `signUp`, 303 to
+`/ar/partner-lab/sign-up?error=1`. Q5a did not mint an account. The form
+POST 303'd to `error=1`, and a follow-up Auth signup returned 429
+`over_email_send_rate_limit`. Prefix match 0; no access token; nothing to
+delete. The mailer window had not cleared. The limit was not raised, the
+mailer was not switched, and confirmation was left on.
+
+CF-153 OPEN: confirmation mail, when it can send, goes to a member of the
+public, and neither BOUNDARY_MODEL §2 nor SECURITY_MODEL §4 as amended
+rules outbound authentication mail. CF-154 OPEN: the hosted built-in
+mailer is not a production path and throttled this proof.
+
+Open count 87 + 2 = 89. No SQL, no source change, no migration. Signed
+clinical artefacts unchanged.
+
+
 
 
 
