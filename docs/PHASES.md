@@ -231,7 +231,8 @@ OD-12's sequence is unamended; this phase was signed later.
 - [x] **P08-T02** — Close the amendment residue before anything is built
 - [x] **P08-T03** — The PartnerLab claim model, and signup behind a flag
 - [x] **P08-T03-F** — Re-run Q5, and log what its failure found
-- [ ] **P08-T04** — Land the P08-T03-F verdict and OD-18 as a draft
+- [x] **P08-T04** — Land the P08-T03-F verdict and OD-18 as a draft
+- [ ] **P08-T05** — Sign OD-18, then run Q5 once
 
 ### P06 — Content and Arabic · LONGEST POLE
 
