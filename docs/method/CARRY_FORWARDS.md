@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-155**
+**Next free id: CF-156**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -160,6 +160,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-152 | OD-12's delivery order does not name P08, so whether P08 ships before G7 or after it is undecided. Before means the launch the laboratory is waiting for waits on unpriced scope (OD-15 §10, CF-150). After means a second cutover on a live site. This is a commercial and client decision, not a reviewer one, and it needs an OD. | human | OPEN | P08 |
 | CF-153 | signup sends a confirmation email to a member of the public (`mailer_autoconfirm` false). This platform has never sent mail to a non-Operator. BOUNDARY_MODEL §2 forbids an inbox and does not address outbound authentication mail; SECURITY_MODEL §4 as amended is silent. Needs a reviewer ruling before signup is reachable, alongside CF-149. | reviewer | OPEN | P08 |
 | CF-154 | signup runs on Supabase's built-in mailer, which is not a production mail path and throttles at low volume; `signUp` returned 429 `over_email_send_rate_limit` at P08-T03. A production sender is a vendor and cost decision. | human | OPEN | P08 |
+| CF-155 | OD-18 §2 is conditional on Supabase Auth returning byte-identical signup responses for a known and an unknown address. That has never been executed on this project. It becomes Q5d and Q5e in the P08-T03 re-run: sign up a fresh address, then sign up the same address again, and compare status, Location and body byte for byte. If they differ, OD-18 §2 returns to the reviewer before signature. | reviewer | OPEN | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

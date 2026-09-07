@@ -544,6 +544,19 @@ mailer is not a production path and throttled this proof.
 Open count 87 + 2 = 89. No SQL, no source change, no migration. Signed
 clinical artefacts unchanged.
 
+## 2026-09-07 — P08-T04: land the P08-T03-F verdict and OD-18 as a draft
+
+Documents only. Cut from unmerged `p08-t03-f` at 2d6dc95; stacked, not
+diffed against `main`. P08-T03-F Verdict cell set to PASS; P08-T03's FAIL
+cell unedited. OD-18 landed DRAFT after OD-17, not in force, Status line
+unsigned. Count sentence Seventeen to Eighteen. D headings stay 48.
+
+CF-155 OPEN, reviewer, P08: OD-18 §2 is unproven until Q5d and Q5e compare
+a known address with an unknown one byte for byte. Open count 89 + 1 = 90.
+
+No SQL, no source, no migration. ADR-001 unedited. Signed clinical
+artefacts unchanged. Do not sign OD-18.
+
 
 
 
