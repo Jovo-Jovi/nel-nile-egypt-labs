@@ -595,6 +595,21 @@ Open count 91 + 1 = 92.
 No SQL, no migration. ADR-001 unedited. Signed clinical artefacts
 unchanged. Flag off outside the proofs. Do not merge before the verdict.
 
+## 2026-09-08 — P08-T07: HALT, no known address for the ordering test
+
+Cut from unmerged `p08-t06` at c3a323d; stacked, not diffed against
+`main`. P08-T06 Verdict cell set to PASS; P08-T03's FAIL cell unedited.
+
+HALTED at STEP 1 E2. P08-T06 STEP 1 returned HTTP 422, `error_code`
+`weak_password`. That is password validation before confirmation is sent,
+so it did not create a user. The fence names that request as the only
+allowed known address, and forbids creating one to obtain a subject.
+Zero POSTs reached `/auth/v1/signup`. E1 was not sent. The handler is
+unedited. CF-157 stays OPEN. Open count 92 + 0 − 0 = 92.
+
+No SQL, no source, no migration. ADR-001 unedited. Signed clinical
+artefacts unchanged. Do not merge before the verdict.
+
 
 
 
