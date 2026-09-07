@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-eight decisions. Seventeen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-eight decisions. Eighteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -590,6 +590,61 @@ signable.
 **Does not decide:** anything about the boundary gate, the clinical gate,
 the content prohibition, or the requirement that counts be computed rather
 than asserted.
+
+---
+
+### OD-18 — Re-application, rejection persistence, and reinstatement
+
+**Status:** DRAFT — awaiting signature. Not in force. Nothing is built against this
+until the Status line reads SIGNED with a date.
+
+**Requested by:** the human, 7 September 2026.
+**Amends:** OD-15 §4, which stops at approve and reject and is silent on what happens
+when a rejected applicant returns.
+
+**Decides:**
+
+**§1 Rejection persists.** `app_metadata.nel_partner_state = "rejected"` under ADR-001
+survives re-application. No new table and no column in `public` — BOUNDARY_MODEL.md §2
+evidence item 10 forbids a column identifying an account holder, and that gate is not
+waivable by this or any OD. The rejection record already exists in the `auth` schema and
+no second store is created.
+
+**§2 Re-application is silently inert, by the platform's own behaviour and never by a
+lookup.** A rejected address that signs up again receives a response indistinguishable
+from a first-time signup, and no new application enters the `Operator`'s queue. This is
+satisfied by Supabase Auth's own uniform response to a repeated address. It is NOT
+implemented by the public route asking whether an address is known, because that requires
+the service-role key on an unauthenticated route, which ADR-001 refuses. If the
+platform's responses prove measurably distinguishable, §2 is not implementable under
+ADR-001, and the question returns to the reviewer rather than being implemented by a
+lookup.
+
+**§3 The outcome is delivered behind authentication.** A rejected account that signs in
+sees a clear declined state; a pending account sees a pending state. Both are facts about
+the holder's own account, disclosed only to someone holding that account's password.
+
+**§4 Reinstatement is an `Operator` action.** Clearing `nel_partner_state` returns the
+account to pending and it re-enters the queue. Only an `Operator`, only behind AAL2, only
+through Auth Admin, merging `app_metadata` rather than replacing it.
+
+**§5 The dashboard gains a rejected view** alongside pending and approved, enumerated
+server-side through Auth Admin. A view, not a module. D-15's module count is unchanged
+and D-16's list is unamended.
+
+**§6 No enumeration.** A public route must not return a response that varies on whether
+an address is known to this system. Today that binds signup, the only public route that
+accepts an address. It binds any future password-reset or account-recovery route on the
+day that route is authored. There is no password-reset route in `src/` at signing.
+
+**Because:** a rejected applicant re-submitting indefinitely is a real burden on a
+two-person team and the human is right to want it stopped. The obvious implementation —
+telling the applicant they are blocked — publishes which laboratories NEL declined to
+anyone who can type an address, about third parties who never consented to that being
+discoverable. §2 and §3 deliver the outcome without the disclosure.
+
+**Does not decide:** whether signup sends a confirmation email (CF-153), the mail vendor
+(CF-154), the privacy text (CF-149), or the vocabulary of any dashboard label.
 
 ---
 
