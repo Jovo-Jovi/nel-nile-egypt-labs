@@ -212,7 +212,8 @@ in the project, and it should not be first.
 - [ ] Programmes, tiers and memberships module
 - [x] **G5-R** — re-run in full
 - [x] **G5** — the owner can edit every unlocked region himself
-- [ ] **M7B-1** — Stamp the Operator claim, and land the countersignature
+- [x] **M7B-1** — Stamp the Operator claim, and land the countersignature
+- [ ] **M7B-2** — Tighten the twelve write policies to the Operator claim
 
 ### P06 — Content and Arabic · LONGEST POLE
 

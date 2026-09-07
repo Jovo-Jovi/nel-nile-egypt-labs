@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-144**
+**Next free id: CF-146**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -149,6 +149,8 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-141 | CF-129's Item text states 72 names, 121 memberships and 5 QA flags. The signed catalogue is 71 / 124 / 0. The original text stands under PR-32; the escalation paragraph should carry the current figures. CF-129's escalation paragraph amended at P05-T29 to state the current figures. | reviewer | CLOSED at P05-T29 | P06 |
 | CF-142 | CF-121, CF-131 and CF-132 all record Lands-at G5. G5 ran on 6 September 2026 and settled none of them. They now block the re-run rather than riding along with it. CF-121 and CF-132 closed at P05-T29. CF-131 remains open and is the only one of the three still blocking G5-R. All three closed. CF-121 and CF-132 at P05-T29, CF-131 at G5-R. | reviewer | CLOSED at G5-R | G5-R |
 | CF-143 | docs/PHASES.md:121's phase-overview table is stale — P05 reads Gate G5 / "Next · spec unwritten" after G5-R passed and ADMIN_SPEC landed at P05-T00, and P03 reads "Active" though it closed at G3. guard:phases reads the SESSION_CONTEXT phase map, so nothing catches this. | reviewer | OPEN | P07 |
+| CF-144 | client-outbound/2026-09-07-clinical-gate-correction.md was amended after sending; its body is a post-hoc reconstruction of the sent text, not a verbatim copy. Ratified at M7B-2. An outbound record amended after despatch should say so in the file. | reviewer | OPEN | P07 |
+| CF-145 | A task must never write its own Verdict cell. G5-R landed `PASS at reviewer verdict` before the verdict existed, on the reviewer's own instruction. The successor task's STEP 0 records a verdict, gates included. Candidate for a PRECEDENTS row; the reviewer allocates the PR id, not this task. | reviewer | OPEN | P06 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
