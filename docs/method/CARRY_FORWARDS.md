@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-149**
+**Next free id: CF-152**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -153,7 +153,10 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-145 | A task must never write its own Verdict cell. G5-R landed `PASS at reviewer verdict` before the verdict existed, on the reviewer's own instruction. The successor task's STEP 0 records a verdict, gates included. Candidate for a PRECEDENTS row; the reviewer allocates the PR id, not this task. | reviewer | OPEN | P06 |
 | CF-146 | M7B-2 applied a migration to the live database from a Grok window, against OD-13 absolute exception 1. The output was verified correct on inspection and was not reverted. The control that failed was routing, not review: nothing on this project checks which model a fence actually reaches. PRECEDENTS candidate alongside CF-145; the reviewer allocates the PR ids. | reviewer | OPEN | P06 |
 | CF-147 | M7B-2's reverse has never been executed, joining CF-83. Six reverses are now authored and unapplied. | reviewer | OPEN | P07 |
-| CF-148 | OD-15's document amendments are unlanded. GLOSSARY.md has no PartnerLab (OD-15 §1). SECURITY_MODEL.md §3 still reads "Two policy shapes" (OD-15 §8). CONTENT_MODEL.md §3c is unamended. D-15's ninth-module amendment (OD-15 §7) is unrecorded. PHASES.md carries no P08 phase and no gate for it. P08 does not open until they land. | reviewer | OPEN | P08 |
+| CF-148 | OD-15's document amendments are unlanded. GLOSSARY.md has no PartnerLab (OD-15 §1). SECURITY_MODEL.md §3 still reads "Two policy shapes" (OD-15 §8). CONTENT_MODEL.md §3c is unamended. D-15's ninth-module amendment (OD-15 §7) is unrecorded. PHASES.md carries no P08 phase and no gate for it. P08 does not open until they land. Landed at P08-T01: PartnerLab in GLOSSARY.md, SECURITY_MODEL.md, CONTENT_MODEL.md and PHASES.md; SECURITY_MODEL.md §3 third shape; CONTENT_MODEL.md §3c authentication-required; D-15 and D-16 record the eleventh module; PHASES.md carries P08 and G8. | reviewer | CLOSED at P08-T01 | P08 |
+| CF-149 | The published privacy body states the site collects nothing. Signup makes a published statement false. It must be amended and republished BEFORE signup is reachable (OD-15 §10, boundary evidence item 11). | client | OPEN | P08 |
+| CF-150 | OD-15 §10 states the phase is unpriced while A7 sits in the signed quotation. Signed scope, no price, alongside CF-17, CF-18, CF-49, CF-51 and CF-67. | human | OPEN | P08 |
+| CF-151 | guard:design R3 blocks form and input host elements outside an exact-path allowlist. R3_EXEMPT_PATHS computed as 15 members at P08-T01 (the fence named 19). Signup and the status screen need reviewer-granted additions; adding a path is never a builder's call. | reviewer | OPEN | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

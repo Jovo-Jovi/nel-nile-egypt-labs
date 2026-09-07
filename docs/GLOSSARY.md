@@ -28,6 +28,7 @@ rebuild exists to solve.
 | `Video` | A published video record surfaced on the public site and managed from the dashboard. Third-party embeds carry boundary consequences — see BOUNDARY_MODEL §4 |
 | `Visitor` | A person browsing the public site. Holds no account |
 | `Operator` | A dashboard user. Minimum two accounts, MFA required |
+| `PartnerLab` | Another laboratory holding an account on this site. An authenticated reader with no write access anywhere |
 | `ResultsPortalLink` | The outbound link to the separate results application. Whether its target is a build-time constant or an Operator-editable value is NOT decided here — see CONTENT_MODEL. If Operator-editable, the target host must be allowlisted; an unconstrained editable target is an open redirect on a medical site. |
 
 ## §3 Forbidden bare nouns
@@ -35,6 +36,7 @@ rebuild exists to solve.
 ```
 test · result · patient · branch · unit · programme · package · profile
 panel · checkup · device · offer · service · user · admin · content · item
+lab account
 ```
 
 ## §4 Qualified replacements
@@ -52,6 +54,7 @@ panel · checkup · device · offer · service · user · admin · content · it
 | `offer` | `Offer` | |
 | `service` | **forbidden** | Used three inconsistent ways on the old site |
 | `content` | name the entity | |
+| `lab account` | `PartnerLab` | Bare noun; never enters the codebase (OD-15 §1) |
 
 ## §5 Boundary vocabulary
 

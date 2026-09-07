@@ -448,6 +448,38 @@ staging branch (CF-79); §3.3 is the control that makes the OD signable.
 No CF row opened or closed. Open count 84 + 0 − 0 = 84. CF-148 stays OPEN.
 No SQL was authored or applied. Signed clinical artefacts are unchanged.
 
+## 2026-09-07 — P08-T01: land OD-15's document amendments and open P08
+
+Documents only. OD-15 is countersigned in the file: Androw approved the
+full text on 7 September 2026. The 4 September quotation signature stays
+the record of agreement to the scope; this records agreement to the text.
+OD-15's Status line and §7 wording are unedited.
+
+The boundary gate is restated, not waived. An authentication credential is
+not the class of data it excludes; a `PartnerLab` is another laboratory,
+not a member of the public seeking care. Signup still accepts nothing
+beyond that credential, and anything more needs a reviewer verdict.
+
+`GLOSSARY.md` gains `PartnerLab` after `Operator`. `SECURITY_MODEL.md` §3
+gains partner-read as a third policy shape. `CONTENT_MODEL.md` §3c row 5
+becomes an authentication-required state; the home Offers band is the same
+state. D-15 and D-16 record account review as the eleventh module: OD-09
+had already taken nine and ten, so OD-15 §7's "ninth" is left as signed
+and the count is corrected in the amendment text (PR-32).
+
+P08 opens with gate G8, non-waivable Boundary. It follows G5 and precedes
+G7. It is not in OD-12's sequence.
+
+CF-148 CLOSED. CF-149, CF-150 and CF-151 OPEN. Open count 84 + 3 − 1 = 86.
+No SQL, no route, no claim, no account. Signed clinical artefacts
+unchanged.
+
+A residual repair, labelled UNRATIFIED in `SECURITY_MODEL.md` §2: the
+heading and principals table now include `PartnerLab`, because leaving
+"There is no third" next to the partner-read shape would have been a
+self-contradiction.
+
+
 
 
 

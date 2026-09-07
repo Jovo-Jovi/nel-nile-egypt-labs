@@ -175,7 +175,7 @@ Path segments below are Visitor-facing strings, not identifiers. They are govern
 | 2 | static | `/{locale}/about` | `SiteSettings` | About |
 | 3 | static | `/{locale}/departments` | `LabUnit` | `LabUnit` listing |
 | 4 | static | `/{locale}/programmes` | `Programme` | `Programme` listing, and the search UI |
-| 5 | static | `/{locale}/offers` | `Offer` | `Offer` listing |
+| 5 | static | `/{locale}/offers` | `Offer` | Authentication-required state (OD-15 §2). An anonymous Visitor sees no title, description, price or image. The home Offers band becomes the same state. Reachable by an approved `PartnerLab`. |
 | 6 | static | `/{locale}/videos` | `Video` | `Video` listing |
 | 7 | static | `/{locale}/equipment` | `Equipment` | `Equipment` listing |
 | 8 | static | `/{locale}/locations` | `Branch` | `Branch` listing |
