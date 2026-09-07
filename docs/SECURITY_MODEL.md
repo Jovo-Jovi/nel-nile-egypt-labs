@@ -27,15 +27,20 @@ system with very different obligations.
 
 ---
 
-## §2 Two principals, and only two
+## §2 Three principals
+
+**UNRATIFIED residual repair, PR-19, P08-T01.** OD-15 adds `PartnerLab` as a third
+principal. Leaving "There is no third" in place would contradict the partner-read
+shape this task is required to land in §3.
 
 | Principal | Authenticates | Holds a row | Can read | Can write |
 |---|---|---|---|---|
 | `Visitor` | never | never | published material only | never |
 | `Operator` | yes, with MFA | in the auth schema only | everything in the application schema | published material only |
+| `PartnerLab` | yes, without MFA | in the auth schema only | approved Offers only | never |
 
-There is no third. No API consumer, no machine account for a partner, no integration
-identity. `ResultsPortalLink` is a build-time constant and not a principal (D-07).
+No API consumer, no machine account, no integration identity. `ResultsPortalLink` is
+a build-time constant and not a principal (D-07).
 
 **`Visitor` is unauthenticated and is never given a session.** No cookie, no token, no
 local storage, no hardware fingerprint, no locale preference (`I18N_MODEL.md` §2). A
@@ -51,7 +56,7 @@ writable by anyone holding the publishable key, and the publishable key ships in
 browser by design. "This table is only opening hours" is how the first unprotected table
 gets created, and the second one is never only opening hours.
 
-**Two policy shapes, and every table uses one of them.**
+**Three policy shapes, and every table uses one of them.**
 
 *Published-read.* Anonymous `SELECT` restricted to rows whose publication state is
 published, and nothing else. No `INSERT`, no `UPDATE`, no `DELETE` for the anonymous
@@ -64,6 +69,11 @@ role, ever. Applies to `Programme`, `ProgrammeTier`, `ProgrammeLabTest`, `LabTes
 manages the whole site. A two-person lab does not need a permission matrix, and inventing
 one produces a system where a mistake is untraceable rather than one where it is
 impossible.
+
+*Partner-read.* `for select to authenticated`, gated on the approved claim. A
+`PartnerLab` with that claim may `SELECT` published Offers; rejected and pending
+accounts read nothing (OD-15 §8). No write of any kind. The two shapes above are
+unchanged.
 
 **An unpublished row is not visible to an anonymous request.** This is the mechanism
 behind `DESIGN_SYSTEM.md` §12 and behind the clinical gate: a `ClinicalNotice` without a

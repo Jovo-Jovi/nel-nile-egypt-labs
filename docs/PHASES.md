@@ -104,13 +104,14 @@ owner. See §5.
 **The order below is not the order the phases are numbered in.** `OD-12` reorders delivery to
 P03 → P05 → P06 → P04 → P07. Phases keep their identifiers and their gates — G4 is still P04's
 gate, it simply falls later — because renumbering would break every historical reference in
-`DECISIONS.md`, `CARRY_FORWARDS.md` and the done-steps table.
+`DECISIONS.md`, `CARRY_FORWARDS.md` and the done-steps table. P08 follows G5 and precedes G7
+(OD-15) and is not in OD-12's sequence.
 
 ---
 
 ## §3 The phases, in delivery order
 
-Delivery order under `OD-12`: **P03 → P05 → P06 → P04 → P07**.
+Delivery order under `OD-12`: **P03 → P05 → P06 → P04 → P07**. P08 follows G5 and precedes G7 (OD-15) and is not in OD-12's sequence.
 
 | Order | Phase | What it produces | Gate | Non-waivable | State |
 |---|---|---|---|---|---|
@@ -119,6 +120,7 @@ Delivery order under `OD-12`: **P03 → P05 → P06 → P04 → P07**.
 | — | P02 Design system | Colour and type tokens, RTL primitives, executable lint rules | G2 | — | **Closed** — 1 Sep 2026 |
 | 1 | P03 Public site | The thirteen pages, both locales, 42 URLs | G3 | Boundary · Bilingual | **Active** |
 | 2 | P05 Admin dashboard | Eight modules, Operator accounts, login and MFA | G5 | Boundary · Bilingual | Next · spec unwritten |
+| — | P08 PartnerLab accounts | `PartnerLab` signup and private Offers (OD-15) | G8 | Boundary | After G5 · precedes G7 · **Opening** |
 | 3 | P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | Longest pole |
 | 4 | P04 Catalogue search | Bilingual search over Programmes and LabTests | G4 | Clinical · Data integrity · Bilingual | After P06, by necessity |
 | 5 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | Runbook unwritten |
@@ -138,6 +140,10 @@ what the owner was promised.
 phasing already matches: a public site without a dashboard is launchable, a dashboard without
 a public site is invisible to a visitor. P05 also carries Auth and MFA, the highest-risk work
 in the project, and it should not be first.
+
+**P08 follows G5 and precedes G7.** OD-15 §9 makes the role split the precondition; private
+Offers and `PartnerLab` accounts cannot ship before M7, and they must ship before launch.
+OD-12's sequence is unamended; this phase was signed later.
 
 ---
 
@@ -217,6 +223,7 @@ in the project, and it should not be first.
 - [x] **M7B-2-F** — Supply the missing review gate and record the lockout check
 - [x] **M7C** — The application gate reads the Operator claim
 - [ ] **P08-T00** — Land OD-17
+- [ ] **P08-T01** — Land OD-15's document amendments and open P08
 
 ### P06 — Content and Arabic · LONGEST POLE
 
@@ -242,6 +249,19 @@ in the project, and it should not be first.
 - [ ] revert the repository to private (OD-04)
 - [ ] Owner handover — unscoped, see §5
 - [ ] **G7** launch — all four standards
+
+### P08 — PartnerLab accounts and private Offers · OPENING
+
+Follows G5. Precedes G7. Not in OD-12's delivery sequence; OD-12 predates OD-15.
+
+- [ ] Open signup; a new account is pending and can sign in, reaching only a status screen
+- [ ] An Operator approves or rejects; approved `PartnerLab` accounts read Offers; rejected and pending accounts read nothing
+- [ ] `/{locale}/offers` and the home Offers band become an authentication-required state
+- [ ] Privacy text amended and republished before signup is reachable
+- [ ] Partner-read policy, `for select to authenticated`, gated on the approved claim
+- [ ] Account review as the eleventh dashboard module
+- [ ] No TOTP for a `PartnerLab`
+- [ ] **G8** — Boundary
 
 ---
 

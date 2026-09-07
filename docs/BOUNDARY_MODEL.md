@@ -4,6 +4,8 @@
 **Gate:** Boundary — **non-waivable**, cannot be overridden by OD
 **Amended under OD-04 · 25 August 2026 · §3 only.**
 **Amended under OD-16 · 5 September 2026 · §2 only — clarifying, gate unchanged.**
+**Amended under OD-15 · 7 September 2026 · §2 only — the gate's scope is
+restated, not waived.**
 
 ## §1 What this replaces
 
@@ -24,6 +26,38 @@ The platform holds **no personal data and no medical data of any kind.**
 | Calling, scraping, **framing** or authenticating against the results portal | Outbound `https://` link only, opening a new browsing context. A frame renders the portal's login inside our origin, where the Visitor cannot verify the address bar. That is a credential-phishing shape and it is forbidden regardless of who requests it |
 
 Publishing a contact detail is not implementing a channel. The hotline has always rendered as published business content, and the laboratory's email address may appear in its own content on the same basis (OD-16). What this table forbids is a mechanism in this system that accepts a submission — a form, a booking, an inbox, a route handler, a field, a log. A visitor who copies a published address and writes to it is corresponding with the laboratory through a service this project does not operate and is not in the path of.
+
+**An authentication credential is not the class of data this gate excludes.**
+The gate excludes personal data of a `Visitor` and medical data of anyone.
+An `Operator` has always held an email address and a password in the
+platform's `auth` schema, and OD-15 extends that same surface to a
+`PartnerLab` — another laboratory, a business counterparty, not a member of
+the public seeking care. No public table holds an account row, no `owner_id`
+exists, and D-40 stands unamended.
+
+What that does NOT license. Signup accepts an authentication credential and
+nothing else. Any field beyond it — a name, a phone number, an organisation,
+a free-text note, a reason for applying — is a boundary decision requiring a
+reviewer verdict and is never a builder's call. The approval queue holds
+account records this system created; it is not an inbox and it carries no
+message anyone wrote (OD-15 §6, D-09). Nothing in this amendment touches
+patient data, medical values, dates of birth, or the results portal.
+
+| Never | Instead |
+|---|---|
+| A free-text field anywhere in signup or account review | An authentication credential only; anything more needs a reviewer verdict |
+| A `PartnerLab` row in a public table | A claim in the `auth` schema; D-40 stands |
+| A `PartnerLab` reading anything but approved Offers | Rejected and pending accounts read nothing |
+
+Evidence this gate requires at P08 and at G7, in addition to §4's items:
+9. The signup route handler accepts no field that is not an authentication
+   credential, proved by reading the handler, not the form.
+10. No table in `public` gains a column identifying an account holder.
+11. The published privacy text states what an account holder's signup
+    stores, before signup is reachable by anyone.
+
+**The gate is not waived and remains non-waivable.** This amendment states
+what it was always excluding; it does not permit a new class of collection.
 
 `Visitor` holds no account and submits nothing. `Operator` holds an account with
 MFA and touches only published site content.

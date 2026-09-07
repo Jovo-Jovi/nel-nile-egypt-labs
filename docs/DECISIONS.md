@@ -449,6 +449,13 @@ the amended quotation, which Androw signed on 4 September 2026. That
 signature is the authoritative record and supersedes the relayed approval
 this section previously carried.
 
+**Countersignature.** Androw reviewed the full text of this OD on 7 September
+2026 and confirmed he approves it as written, including the `PartnerLab`
+actor (§1), the account and approval model (§4), the private Offers scope
+(§2), and the responsibilities and boundaries §6 and §10 carry. The
+4 September quotation signature recorded agreement to the scope; this records
+agreement to the text.
+
 This reverses P05-T09's proof V4, which demonstrated an Operator
 publishing an Offer and a Visitor seeing it at `/ar/offers` and
 `/en/offers`, and which G3 certified. The reversal is deliberate and
@@ -648,9 +655,13 @@ One page carrying up to two clearly labelled outbound links, Visitor entry and L
 
 In scope. Static page, copy sourced from `SiteSettings`, no dashboard module of its own. A managed partner-laboratory list is a priced change. The "no ninth module" clause is superseded by OD-09, which adds Announcements and Clinical notices as modules 9 and 10; Lab-to-Lab remains a static page and is not among them.
 
+Amended by OD-15: account review is a dashboard module. D-16 as amended by OD-09 already lists ten modules, so account review is the eleventh, not the ninth that OD-15 §7 names. OD-15 §7 was signed against D-16's original eight; the count differs because OD-09 had already added Announcements and Clinical notices as 9 and 10. The signed OD's wording is unedited (PR-32). Lab-to-Lab remains a static page and is not among the modules.
+
 ### D-16 — Dashboard modules
 
 Ten, as amended by OD-09: Offers · Videos · Equipment · Branches · Programmes · LabUnits · Site Settings · Media Library · Announcements · Clinical notices. The first eight were fixed at P00; the last two are additions requiring a signed price and do not take effect until the quotation carrying them is signed. Login is authentication, not a module. Activity log is a platform feature. The quotation's incoming-message inbox is struck per D-09.
+
+Amended by OD-15: account review is an eleventh module. OD-15 §7 calls it a ninth because it counts from D-16's original eight. This row already listed ten under OD-09, so the module is the eleventh. The count differs from OD-15 §7's wording for that reason; the signed OD is unedited (PR-32).
 
 ### D-17 — Portal coupling
 
