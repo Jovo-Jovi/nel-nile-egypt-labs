@@ -215,7 +215,8 @@ in the project, and it should not be first.
 - [x] **M7B-1** — Stamp the Operator claim, and land the countersignature
 - [x] **M7B-2** — Tighten the twelve write policies to the Operator claim
 - [x] **M7B-2-F** — Supply the missing review gate and record the lockout check
-- [ ] **M7C** — The application gate reads the Operator claim
+- [x] **M7C** — The application gate reads the Operator claim
+- [ ] **P08-T00** — Land OD-17
 
 ### P06 — Content and Arabic · LONGEST POLE
 

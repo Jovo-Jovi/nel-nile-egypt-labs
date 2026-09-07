@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-eight decisions. Sixteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-eight decisions. Seventeen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -371,7 +371,7 @@ loses contents. OD-09 remains DRAFT and unpriced.
 
 ### OD-13 — Model class, replaced by executable proof
 
-**Status:** SIGNED — 2 September 2026
+**Status:** SIGNED — 2 September 2026 · Exception 1 superseded by OD-17, 7 September 2026. Exception 2 stands and was never a model-class rule.
 
 **Decides:** Grok is permitted on authentication, and on any task whose
 fence requires executable negative proofs. The model-class tiers in the
@@ -528,6 +528,61 @@ publication or expiry semantics (D-48 stands).
 **Countersignature.** The client approved the principle and the corrected privacy-policy direction on 5 September 2026 and has not reviewed the full text of this OD, including the allocation-of-responsibility paragraph above. Tracked as a carry-forward to G7.
 
 **Closes:** CF-109.
+
+---
+
+### OD-17 — Grok is permitted on every path
+
+**Status:** SIGNED — 7 September 2026
+
+**Supersedes:** OD-13's exception 1. OD-13's exception 2 is not superseded
+and does not need to be: it was never a model-class rule.
+
+**§1 Decides.** Grok is permitted on every task class in this project,
+including migrations applied against the live database. The model-class
+tiers in the reviewer instructions are advisory throughout and name no
+forbidden path. A fence that names Opus or Sonnet expresses a preference,
+never a prohibition, and a fence reaching a Grok window is not a defect.
+
+**§2 Why.** Two Sonnet and Opus windows are not available to this project.
+The alternative to Grok is not a better model; it is no work. Observed
+output quality across P05, G5-R and M7 has been high, and every task has
+been verified from source by the reviewer rather than accepted on report.
+Cost is a real constraint on a single-developer engagement and pretending
+otherwise produces worse decisions, not safer ones.
+
+**§3 In exchange — the controls that replace the tier.** Every one of these
+is already in force; this OD makes them the whole of the protection.
+
+  1. OD-10 control 7. `BEGIN;` + the forward body verbatim + `ROLLBACK;`
+     against the linked remote, exit 0, before any push. Unchanged.
+  2. The reverse authored in the same task. Unchanged.
+  3. **New — migrations split across two pushes.** A task that applies a
+     migration authors and rehearses it, pushes, and STOPS. The reviewer
+     reads the SQL text and rules on it. Applying is a second push in the
+     same task or a successor. An applied migration the reviewer has not
+     read before execution is a defect regardless of outcome.
+  4. Executable negative proofs, per OD-13's own exchange clause, carried
+     forward unchanged.
+  5. The reviewer verifies from source, not from report, and says which
+     legs were fetched and which were only reported.
+
+**§4 What this does NOT touch.** The boundary gate and the clinical gate
+are evidence requirements, not model-class rules, and remain non-waivable
+by this or any OD. No model — Grok, Sonnet or Opus — composes, corrects or
+translates an Arabic clinical name, sets an eligibility, or resolves a QA
+flag: that is a content prohibition binding every window equally and it is
+unchanged. PR-06's review gate is discharged by the reviewer's verdict when
+the reviewer has read the changed source and says so.
+
+**§5 Accepts.** The residual risk is a migration that is valid SQL and
+semantically wrong, applied to a database with no staging branch (CF-79).
+Control 7 does not catch that class; §3.3 does, and §3.3 is why this OD is
+signable.
+
+**Does not decide:** anything about the boundary gate, the clinical gate,
+the content prohibition, or the requirement that counts be computed rather
+than asserted.
 
 ---
 
