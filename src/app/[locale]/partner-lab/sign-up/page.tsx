@@ -34,7 +34,6 @@ export default async function PartnerLabSignUpPage({ params, searchParams }: Pro
   const failed = query.error === "1";
   const passwordTooShort = query.error === "password";
   const invalidEmail = query.error === "email";
-  const weakPassword = query.error === "weak-password";
 
   return (
     <SiteRoot locale={locale}>
@@ -64,12 +63,6 @@ export default async function PartnerLabSignUpPage({ params, searchParams }: Pro
             <p className={formStyles.error}>
               <CautionIcon size={14} />
               <span>{translate(locale, "partnerLab.signUp.invalidEmail")}</span>
-            </p>
-          ) : null}
-          {weakPassword ? (
-            <p className={formStyles.error}>
-              <CautionIcon size={14} />
-              <span>{translate(locale, "partnerLab.signUp.weakPassword")}</span>
             </p>
           ) : null}
           <div className={formStyles.field}>
