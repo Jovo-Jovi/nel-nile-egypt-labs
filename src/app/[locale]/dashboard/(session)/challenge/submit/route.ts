@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireLocale } from "@/components/site/StaticShellPage";
+import { readOperatorAccessFrom } from "@/lib/dashboard/assurance";
+import { gateChallengePage } from "@/lib/dashboard/gates";
 import { localeHref } from "@/lib/locale";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -14,6 +16,9 @@ export async function POST(
   if (supabase === null) {
     redirect(`${localeHref(locale, "/dashboard/challenge")}?error=1`);
   }
+
+  const access = await readOperatorAccessFrom(supabase);
+  gateChallengePage(access, locale);
 
   const form = await request.formData();
   const code = String(form.get("code") ?? "").trim();

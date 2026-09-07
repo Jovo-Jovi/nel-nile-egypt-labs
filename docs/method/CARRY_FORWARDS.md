@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-148**
+**Next free id: CF-149**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -153,6 +153,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-145 | A task must never write its own Verdict cell. G5-R landed `PASS at reviewer verdict` before the verdict existed, on the reviewer's own instruction. The successor task's STEP 0 records a verdict, gates included. Candidate for a PRECEDENTS row; the reviewer allocates the PR id, not this task. | reviewer | OPEN | P06 |
 | CF-146 | M7B-2 applied a migration to the live database from a Grok window, against OD-13 absolute exception 1. The output was verified correct on inspection and was not reverted. The control that failed was routing, not review: nothing on this project checks which model a fence actually reaches. PRECEDENTS candidate alongside CF-145; the reviewer allocates the PR ids. | reviewer | OPEN | P06 |
 | CF-147 | M7B-2's reverse has never been executed, joining CF-83. Six reverses are now authored and unapplied. | reviewer | OPEN | P07 |
+| CF-148 | OD-15's document amendments are unlanded. GLOSSARY.md has no PartnerLab (OD-15 §1). SECURITY_MODEL.md §3 still reads "Two policy shapes" (OD-15 §8). CONTENT_MODEL.md §3c is unamended. D-15's ninth-module amendment (OD-15 §7) is unrecorded. PHASES.md carries no P08 phase and no gate for it. P08 does not open until they land. | reviewer | OPEN | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

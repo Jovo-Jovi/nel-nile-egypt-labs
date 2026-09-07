@@ -94,6 +94,7 @@ const ar = {
   "dashboard.signIn.password": "كلمة المرور",
   "dashboard.signIn.submit": "دخول",
   "dashboard.signIn.failed": "تعذّر الدخول. حاول مرة أخرى.",
+  "dashboard.signIn.refused": "لا يمكن لهذا الحساب استخدام لوحة التحكم.",
   "dashboard.signOut": "خروج",
   "dashboard.enrol.title": "تفعيل عامل التحقق",
   "dashboard.enrol.instruction":
@@ -712,6 +713,7 @@ const en = {
   "dashboard.signIn.password": "Password",
   "dashboard.signIn.submit": "Sign in",
   "dashboard.signIn.failed": "Sign-in failed. Try again.",
+  "dashboard.signIn.refused": "This account cannot use the dashboard.",
   "dashboard.signOut": "Sign out",
   "dashboard.enrol.title": "Enrol authenticator",
   "dashboard.enrol.instruction":

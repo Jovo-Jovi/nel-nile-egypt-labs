@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireLocale } from "@/components/site/StaticShellPage";
+import { readOperatorAccessFrom } from "@/lib/dashboard/assurance";
+import { gateEnrolPage } from "@/lib/dashboard/gates";
 import { localeHref } from "@/lib/locale";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -14,6 +16,9 @@ export async function POST(
   if (supabase === null) {
     redirect(`${localeHref(locale, "/dashboard/enrol")}?error=1`);
   }
+
+  const access = await readOperatorAccessFrom(supabase);
+  gateEnrolPage(access, locale);
 
   const form = await request.formData();
   const factorId = String(form.get("factorId") ?? "");

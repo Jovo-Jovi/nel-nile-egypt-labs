@@ -5,14 +5,14 @@ import { DashboardChrome, DashboardModuleTitle } from "@/components/dashboard/Da
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
-import { gateSignInPage } from "@/lib/dashboard/gates";
+import { gateSignInPage, NOT_OPERATOR_REASON } from "@/lib/dashboard/gates";
 import { localeHref } from "@/lib/locale";
 import { pageMetadata } from "@/lib/pageMetadata";
 import formStyles from "@/components/dashboard/AuthForm.module.css";
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; reason?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -27,12 +27,19 @@ export default async function SignInPage({ params, searchParams }: Props) {
 
   const query = await searchParams;
   const failed = query.error === "1";
+  const refused =
+    query.reason === NOT_OPERATOR_REASON || (access.signedIn && !access.isOperator);
 
   return (
     <DashboardChrome locale={locale} showSignOut={false}>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.signIn.title" />
       <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/sign-in/submit")} data-nel-container="auth">
-        {failed ? (
+        {refused ? (
+          <p className={formStyles.error}>
+            <CautionIcon size={14} />
+            <span>{translate(locale, "dashboard.signIn.refused")}</span>
+          </p>
+        ) : failed ? (
           <p className={formStyles.error}>
             <CautionIcon size={14} />
             <span>{translate(locale, "dashboard.signIn.failed")}</span>

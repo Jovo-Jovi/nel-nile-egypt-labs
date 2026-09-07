@@ -7,6 +7,7 @@ export type OperatorAccess =
   | { signedIn: false }
   | {
       signedIn: true;
+      isOperator: boolean;
       currentLevel: AssuranceLevel;
       nextLevel: AssuranceLevel;
       hasVerifiedTotp: boolean;
@@ -15,12 +16,26 @@ export type OperatorAccess =
 // Server-only. Imported from layouts, pages and Route Handlers under
 // src/app/[locale]/dashboard. Never imported from a Client Component.
 
+function nelPrincipalFromClaims(claims: unknown): string | null {
+  if (typeof claims !== "object" || claims === null) return null;
+  if (!("app_metadata" in claims)) return null;
+  const appMetadata = claims.app_metadata;
+  if (typeof appMetadata !== "object" || appMetadata === null) return null;
+  if (!("nel_principal" in appMetadata)) return null;
+  const value = appMetadata.nel_principal;
+  return typeof value === "string" ? value : null;
+}
+
 export async function readOperatorAccessFrom(supabase: SupabaseClient): Promise<OperatorAccess> {
   const claims = await supabase.auth.getClaims();
   if (claims.error || claims.data === null) return { signedIn: false };
 
-  // Assurance level is read here, from the verified JWT, not from a
-  // client-set value. ADMIN_SPEC.md §3b / SECURITY_MODEL.md §4.
+  // Authorization is the Operator claim on the verified JWT.
+  // M7B-1 stamped app_metadata.nel_principal = "Operator"; the twelve
+  // write policies test the same string. OD-15 §5 / ADMIN_SPEC.md §3b /
+  // SECURITY_MODEL.md §4.
+  const isOperator = nelPrincipalFromClaims(claims.data.claims) === "Operator";
+
   const aal = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
   if (aal.error || aal.data === null) return { signedIn: false };
 
@@ -31,7 +46,7 @@ export async function readOperatorAccessFrom(supabase: SupabaseClient): Promise<
   const totpFactors = factors.data?.totp ?? [];
   const hasVerifiedTotp = totpFactors.some((factor) => factor.status === "verified");
 
-  return { signedIn: true, currentLevel, nextLevel, hasVerifiedTotp };
+  return { signedIn: true, isOperator, currentLevel, nextLevel, hasVerifiedTotp };
 }
 
 export async function readOperatorAccess(): Promise<OperatorAccess> {
