@@ -39,7 +39,12 @@
 //       and src/components/dashboard/ProgrammeLabTestForm.tsx, were granted
 //       at P05-T24B for Operator forms behind aal2 writing named columns.
 //       Nested under Programme / ProgrammeTier; two form files, no
-//       directory, no pattern. A path is exempt only when it
+//       directory, no pattern. A sixteenth path, src/app/[locale]/partner-lab/sign-up/page.tsx, was
+//       granted at P08-T03. It is the first public form in this project. It is
+//       exempted because BOUNDARY_MODEL.md §2 fixes its fields to an email address
+//       and a password and nothing else, and because it renders only while
+//       NEL_PARTNER_SIGNUP is on. One page file, no directory, no pattern.
+//       A path is exempt only when it
 //       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
 //       Adding a path is a boundary decision requiring a reviewer verdict,
 //       never a builder's call.
@@ -98,6 +103,7 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/LabTestForm.tsx",
   "src/components/dashboard/ProgrammeTierForm.tsx",
   "src/components/dashboard/ProgrammeLabTestForm.tsx",
+  "src/app/[locale]/partner-lab/sign-up/page.tsx",
 ]);
 
 // Exact paths. Host strings may appear in these two files and nowhere
