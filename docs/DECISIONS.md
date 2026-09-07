@@ -595,8 +595,7 @@ than asserted.
 
 ### OD-18 — Re-application, rejection persistence, and reinstatement
 
-**Status:** DRAFT — awaiting signature. Not in force. Nothing is built against this
-until the Status line reads SIGNED with a date.
+**Status:** SIGNED — 7 September 2026
 
 **Requested by:** the human, 7 September 2026.
 **Amends:** OD-15 §4, which stops at approve and reject and is silent on what happens
