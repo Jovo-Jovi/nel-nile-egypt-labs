@@ -431,6 +431,23 @@ No lasting Operator account was signed into.
 CF-148 OPEN, reviewer, P08: OD-15's document amendments are unlanded.
 Open count 83 + 1 = 84.
 
+## 2026-09-07 — P08-T00: land OD-17
+
+OD-17 is SIGNED. Grok is permitted on every task class, including
+migrations applied against the live database. The model-class tiers are
+advisory throughout. OD-13 exception 1 is superseded on the Status line;
+exception 2 stands and was never a model-class rule. OD-13's reasoning is
+unedited.
+
+The replacement for the tier is already in force: OD-10 control 7, a
+reverse authored in the same task, migrations split across two pushes,
+executable negative proofs, and review from source. The residual risk OD-17
+accepts is a semantically wrong but valid migration on a database with no
+staging branch (CF-79); §3.3 is the control that makes the OD signable.
+
+No CF row opened or closed. Open count 84 + 0 − 0 = 84. CF-148 stays OPEN.
+No SQL was authored or applied. Signed clinical artefacts are unchanged.
+
 
 
 
