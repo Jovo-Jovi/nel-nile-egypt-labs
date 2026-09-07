@@ -25,14 +25,26 @@
 //   R5  A done-step row whose pipe count is not 5 (an unescaped `|` in a
 //       cell of the four-column table). Report-only until CF-100's seventeen
 //       rows are escaped; a later P05 task turns this rule blocking.
-//   R6  A task box whose Verdict cell is neither the placeholder, nor
-//       PASS-prefixed, nor FAIL-prefixed (empty and skip excluded).
-//       Unclassifiable: report it, never guess.
+//   R6  A task box whose Verdict cell is neither the placeholder, nor a
+//       halt, nor PASS-prefixed, nor FAIL-prefixed (empty and skip
+//       excluded). Unclassifiable: report it, never guess.
+//
+// UNRATIFIED residual repair, PR-19, landed at M7B-2. A halt verdict is a
+// fourth class and this guard did not have it. `halted` (P01-T03) and
+// `halted at STEP 5c — verdict at push` (P01-T03-R-M3) are both in the
+// done-steps table and both escaped R6 only because neither task has a box
+// in PHASES.md — R6 is evaluated per checkbox. M7B-2 is the first halted
+// task that also carries a box, so the gap surfaced as a blocking R6 on a
+// verdict the reviewer mandated. A halt is treated exactly as the
+// placeholder is: pushed and not yet certified, so it is legitimate on an
+// UNCHECKED box and an R2 finding on a CHECKED one. This does not weaken
+// R6 for anything else. The reviewer ratifies or reverts at verdict.
 //
 // FAIL is classified as FAIL, not as an undifferentiated "reviewer verdict".
 // Cases: checked FAIL with no successor → R2; unchecked PASS → R3; unchecked
 // FAIL with a successor row → R3; unchecked FAIL with no successor → allowed;
-// a verdict that is none of placeholder / PASS-prefixed / FAIL-prefixed → R6.
+// checked halt → R2; unchecked halt → allowed; a verdict that is none of
+// placeholder / halt / PASS-prefixed / FAIL-prefixed → R6.
 // A gate is not a task. A gate FAIL is superseded by `{id}-R`, then `{id}-R2`
 // and onward, in a chain parallel to `-F` / `-F2`. Either chain counts when
 // deciding whether a gate box has a successor. The `-F` chain for task ids
@@ -146,6 +158,11 @@ function classifyVerdict(verdict) {
   if (value === "") return "empty";
   if (value === TASK_STEP_SKIP) return "skip";
   if (value === PLACEHOLDER_VERDICT) return "placeholder";
+  // Prefix, not exact: the three halt verdicts in the table are `halted`,
+  // `halted at STEP 5c — verdict at push` and `halted at precondition —
+  // verdict at push`. Case-insensitive so a `HALTED` cell cannot slip past
+  // into R6 and read as unclassifiable.
+  if (value.toLowerCase().startsWith("halted")) return "halted";
   if (value.startsWith("PASS")) return "pass";
   if (value.startsWith("FAIL")) return "fail";
   return "unclassifiable";
@@ -292,12 +309,12 @@ function main() {
           file: PHASES_PATH,
           line: box.line,
           rule: "R6",
-          reason: `box **${box.id}** has unclassifiable Verdict \`${verdict}\`; neither placeholder, PASS-prefixed, nor FAIL-prefixed`,
+          reason: `box **${box.id}** has unclassifiable Verdict \`${verdict}\`; neither placeholder, halt, PASS-prefixed, nor FAIL-prefixed`,
         });
       }
 
       if (box.checked) {
-        if (kind === "placeholder" || kind === "empty") {
+        if (kind === "placeholder" || kind === "empty" || kind === "halted") {
           blocking.push({
             file: PHASES_PATH,
             line: box.line,
@@ -362,13 +379,13 @@ function main() {
         file: PHASES_PATH,
         line: box.line,
         rule: "R6",
-        reason: `box **${box.id}** has unclassifiable Verdict \`${verdict}\`; neither placeholder, PASS-prefixed, nor FAIL-prefixed`,
+        reason: `box **${box.id}** has unclassifiable Verdict \`${verdict}\`; neither placeholder, halt, PASS-prefixed, nor FAIL-prefixed`,
       });
       continue;
     }
 
     if (box.checked) {
-      if (kind === "placeholder" || kind === "empty") {
+      if (kind === "placeholder" || kind === "empty" || kind === "halted") {
         blocking.push({
           file: PHASES_PATH,
           line: box.line,
