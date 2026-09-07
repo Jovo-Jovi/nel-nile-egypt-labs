@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-158**
+**Next free id: CF-159**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -163,6 +163,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-155 | OD-18 §2 is conditional on Supabase Auth returning byte-identical signup responses for a known and an unknown address. That has never been executed on this project. It becomes Q5d and Q5e in the P08-T03 re-run: sign up a fresh address, then sign up the same address again, and compare status, Location and body byte for byte. If they differ, OD-18 §2 returns to the reviewer before signature. | reviewer | OPEN | P08 |
 | CF-156 | OD-09 is DRAFT and unpriced, yet D-16 records Announcements and Clinical notices as modules 9 and 10, and P08-T01's D-16 amendment builds the "eleventh module" arithmetic on it. Nothing is built against it — neither module exists. Either sign and price OD-09 or amend D-16 to stop counting unsigned scope. | human | OPEN | P08 |
 | CF-157 | OD-18 §6 is enforced on status, Location and body, and not on response TIME. An already-registered signup and a fresh one may take measurably different durations, which is a timing oracle the current design does not close. Assess before signup is reachable, alongside CF-149. | reviewer | OPEN | P08 |
+| CF-158 | supabase/config.toml is not authoritative for this project's hosted auth settings — it declares password_requirements = "" and minimum_password_length = 6 while the live project enforces a character class rule (P08-T06 STEP 1, HTTP 422). Any future code reading that file as truth about hosted behaviour is reading a stale artefact. The local rule at P08-T08 is deliberately stricter so drift fails safe, but the divergence itself is unreviewed. | reviewer | OPEN | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -58,13 +58,16 @@ const ar = {
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
+  // passwordTooShort restated at P08-T08 (four classes and eight-character
+  // minimum). weakPassword kept in both locales even though unreferenced.
   "partnerLab.signUp.title": "تسجيل معمل شريك",
   "partnerLab.signUp.email": "البريد الإلكتروني",
   "partnerLab.signUp.password": "كلمة المرور",
   "partnerLab.signUp.submit": "إنشاء الحساب",
   "partnerLab.signUp.failed": "تعذّر إنشاء الحساب. حاول مرة أخرى.",
   "partnerLab.signUp.received": "تم استلام طلبك. سيراجعه أحد المشغّلين.",
-  "partnerLab.signUp.passwordTooShort": "كلمة المرور أقصر من الحد الأدنى المسموح.",
+  "partnerLab.signUp.passwordTooShort":
+    "يجب أن تتكون كلمة المرور من ثمانية أحرف على الأقل، وأن تحتوي على حرف صغير وحرف كبير ورقم ورمز.",
   "partnerLab.signUp.invalidEmail": "صيغة البريد الإلكتروني غير صالحة.",
   "partnerLab.signUp.weakPassword": "يجب أن تحتوي كلمة المرور على حرف صغير وحرف كبير ورقم ورمز.",
 
@@ -689,13 +692,16 @@ const en = {
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
+  // passwordTooShort restated at P08-T08 (four classes and eight-character
+  // minimum). weakPassword kept in both locales even though unreferenced.
   "partnerLab.signUp.title": "Partner laboratory sign-up",
   "partnerLab.signUp.email": "Email",
   "partnerLab.signUp.password": "Password",
   "partnerLab.signUp.submit": "Create account",
   "partnerLab.signUp.failed": "Could not create the account. Try again.",
   "partnerLab.signUp.received": "We have received your request. An Operator will review it.",
-  "partnerLab.signUp.passwordTooShort": "The password is shorter than the minimum length.",
+  "partnerLab.signUp.passwordTooShort":
+    "The password must be at least eight characters and include a lowercase letter, an uppercase letter, a digit, and a symbol.",
   "partnerLab.signUp.invalidEmail": "The email address is not valid.",
   "partnerLab.signUp.weakPassword": "The password must include a lowercase letter, an uppercase letter, a number, and a symbol.",
 

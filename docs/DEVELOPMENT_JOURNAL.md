@@ -610,6 +610,28 @@ unedited. CF-157 stays OPEN. Open count 92 + 0 − 0 = 92.
 No SQL, no source, no migration. ADR-001 unedited. Signed clinical
 artefacts unchanged. Do not merge before the verdict.
 
+## 2026-09-08 — P08-T08: local password rule, weak_password made NEUTRAL
+
+Cut from unmerged `p08-t07` at 87afeef; stacked, not diffed against
+`main`. P08-T07 Verdict cell set to PASS; P08-T03's FAIL cell unedited.
+
+A local strength check now runs after length and before `signUp`. Length
+minimum is eight. The four character classes are taken from the hosted
+422 body at P08-T06 STEP 1, not from `supabase/config.toml`. Anything
+that passes locally must pass hosted, so `weak_password` is unreachable
+on this route. The SAFE list is malformed email and password strength,
+both decided before any request. Every Auth code, including
+`weak_password`, shares `?created=1`. No signup request was issued.
+Auth API request count: zero.
+
+CF-158 OPEN, reviewer, P08: `supabase/config.toml` is not authoritative
+for hosted auth settings on this project. CF-157 stays OPEN. Open count
+92 + 1 = 93.
+
+No SQL, no migration. ADR-001 unedited. Signed clinical artefacts
+unchanged. Flag off outside the proofs. Do not merge before the verdict.
+
+
 
 
 
