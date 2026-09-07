@@ -413,6 +413,25 @@ account is gone.
 CF-133 CLOSED. CF-134 OPEN: the gate is open on disk and CF-128 still shuts
 it in production. Open count 80 − 1 + 1 = 80.
 
+## 2026-09-07 — M7C: the application gate reads the Operator claim
+
+The dashboard gate now reads `app_metadata.nel_principal` from the same
+`getClaims()` payload it already had. A signed-in session without
+`nel_principal` = `Operator` is redirected to sign-in with
+`reason=not-operator` and never offered TOTP enrolment. Enrolment remains
+the Operator onboarding path: a throwaway with the claim and no verified
+factor still reaches `/dashboard/enrol`.
+
+This window is Cursor Grok 4.6. The fence requires Sonnet High review
+before merge (PR-06). No SQL was authored or applied. No PartnerLab
+account, claim, signup route or Offer gating was created. Two throwaway
+auth users were created, used as P2 and P3/P4, and deleted (Admin GET 404).
+No lasting Operator account was signed into.
+
+CF-148 OPEN, reviewer, P08: OD-15's document amendments are unlanded.
+Open count 83 + 1 = 84.
+
+
 
 
 

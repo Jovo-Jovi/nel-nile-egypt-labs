@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { DashboardChrome } from "@/components/dashboard/DashboardChrome";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
+import { notOperatorSignInHref } from "@/lib/dashboard/gates";
 import { localeHref } from "@/lib/locale";
 
 export default async function SessionLayout({
@@ -15,6 +16,7 @@ export default async function SessionLayout({
   const locale = await requireLocale(params);
   const access = await readOperatorAccess();
   if (!access.signedIn) redirect(localeHref(locale, "/dashboard/sign-in"));
+  if (!access.isOperator) redirect(notOperatorSignInHref(locale));
 
   return (
     <DashboardChrome locale={locale} showSignOut>
