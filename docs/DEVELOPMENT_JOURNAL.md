@@ -557,6 +557,26 @@ a known address with an unknown one byte for byte. Open count 89 + 1 = 90.
 No SQL, no source, no migration. ADR-001 unedited. Signed clinical
 artefacts unchanged. Do not sign OD-18.
 
+## 2026-09-07 — P08-T05: sign OD-18, then run Q5 once
+
+Cut from unmerged `p08-t04` at 9fce647; stacked, not diffed against
+`main`. P08-T04 Verdict cell set to PASS; P08-T03's FAIL cell unedited.
+OD-18 Status line SIGNED — 7 September 2026. Body unedited. D headings
+stay 48. Signature commit `7ff9c45` stands.
+
+CF-156 OPEN, human, P08: OD-09 is DRAFT and unpriced while D-16 still
+counts modules 9 and 10. Open count 90 + 1 = 91.
+
+Q5c: 303 `Location /ar/partner-lab/sign-up?error=1`, body 0 bytes. Q5a
+is not `created=1` (303 `error=1`, body 0 bytes). Q5e and Q5b did not
+run. Prefix match 0; nothing to delete; no 404. Next stdout has no
+`over_email_send_rate_limit` string; no second Auth signup. Halt at Q5a.
+P08-T05 box stays unchecked. Option B is the human's.
+
+No SQL, no source, no migration. ADR-001 unedited. Signed clinical
+artefacts unchanged. Do not unwind OD-18.
+
+
 
 
 
