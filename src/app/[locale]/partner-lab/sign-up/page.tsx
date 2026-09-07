@@ -30,8 +30,11 @@ export default async function PartnerLabSignUpPage({ params, searchParams }: Pro
   if (!isPartnerSignupEnabled()) notFound();
   const locale = await requireLocale(params);
   const query = await searchParams;
+  const received = query.created === "1";
   const failed = query.error === "1";
-  const created = query.created === "1";
+  const passwordTooShort = query.error === "password";
+  const invalidEmail = query.error === "email";
+  const weakPassword = query.error === "weak-password";
 
   return (
     <SiteRoot locale={locale}>
@@ -42,13 +45,31 @@ export default async function PartnerLabSignUpPage({ params, searchParams }: Pro
           method="post"
           action={localeHref(locale, "/partner-lab/sign-up/submit")}
         >
-          {created ? (
-            <p className={formStyles.lede}>{translate(locale, "partnerLab.signUp.created")}</p>
+          {received ? (
+            <p className={formStyles.lede}>{translate(locale, "partnerLab.signUp.received")}</p>
           ) : null}
           {failed ? (
             <p className={formStyles.error}>
               <CautionIcon size={14} />
               <span>{translate(locale, "partnerLab.signUp.failed")}</span>
+            </p>
+          ) : null}
+          {passwordTooShort ? (
+            <p className={formStyles.error}>
+              <CautionIcon size={14} />
+              <span>{translate(locale, "partnerLab.signUp.passwordTooShort")}</span>
+            </p>
+          ) : null}
+          {invalidEmail ? (
+            <p className={formStyles.error}>
+              <CautionIcon size={14} />
+              <span>{translate(locale, "partnerLab.signUp.invalidEmail")}</span>
+            </p>
+          ) : null}
+          {weakPassword ? (
+            <p className={formStyles.error}>
+              <CautionIcon size={14} />
+              <span>{translate(locale, "partnerLab.signUp.weakPassword")}</span>
             </p>
           ) : null}
           <div className={formStyles.field}>

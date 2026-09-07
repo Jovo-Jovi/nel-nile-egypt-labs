@@ -576,6 +576,26 @@ P08-T05 box stays unchecked. Option B is the human's.
 No SQL, no source, no migration. ADR-001 unedited. Signed clinical
 artefacts unchanged. Do not unwind OD-18.
 
+## 2026-09-08 — P08-T06: diagnose the signup error, then make the handler enumeration-safe
+
+Cut from unmerged `p08-t05` at d1173ba; stacked, not diffed against
+`main`. P08-T05 Verdict cell set to PASS; P08-T03's FAIL cell unedited.
+
+One POST to `/auth/v1/signup` with the anon key returned HTTP 422,
+`error_code` `weak_password`, a character-class rule on the password
+string. Not a throttle. The submit handler is now an allowlist: local
+malformed email, local password shorter than six characters, and Auth
+`weak_password` may produce a distinct response. Success, already-
+registered, throttles, project settings, network failure and every
+unrecognised code share `?created=1`. The form-key loop is unchanged.
+
+CF-157 OPEN, reviewer, P08: OD-18 §6 does not close a timing oracle.
+Open count 91 + 1 = 92.
+
+No SQL, no migration. ADR-001 unedited. Signed clinical artefacts
+unchanged. Flag off outside the proofs. Do not merge before the verdict.
+
+
 
 
 

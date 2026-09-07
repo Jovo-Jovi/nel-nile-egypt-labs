@@ -232,7 +232,8 @@ OD-12's sequence is unamended; this phase was signed later.
 - [x] **P08-T03** — The PartnerLab claim model, and signup behind a flag
 - [x] **P08-T03-F** — Re-run Q5, and log what its failure found
 - [x] **P08-T04** — Land the P08-T03-F verdict and OD-18 as a draft
-- [ ] **P08-T05** — Sign OD-18, then run Q5 once
+- [x] **P08-T05** — Sign OD-18, then run Q5 once
+- [ ] **P08-T06** — Diagnose the signup error, then make the handler enumeration-safe
 
 ### P06 — Content and Arabic · LONGEST POLE
 
