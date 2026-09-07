@@ -129,6 +129,9 @@ export type PublishedSiteSettings = {
   reason3TitleEn: string | null;
   reason3BodyAr: string | null;
   reason3BodyEn: string | null;
+  heroMediaId: string | null;
+  faviconMediaId: string | null;
+  appIconMediaId: string | null;
 };
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -223,7 +226,7 @@ const BRANCH_SELECT =
   "select=id,name_ar,name_en,is_head_office,latitude,longitude,address_ar,address_en,hours_ar,hours_en,whatsapp_e164,publication_state,display_order&order=display_order.asc";
 
 const SITE_SETTINGS_SELECT =
-  "select=id,hotline,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,hours_ar,hours_en,facebook_url,instagram_url,linkedin_url,youtube_url,lab_to_lab_ar,lab_to_lab_en,about_body_ar,about_body_en,privacy_body_ar,privacy_body_en,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,hero_eyebrow_ar,hero_eyebrow_en,hero_headline_ar,hero_headline_en,hero_standfirst_ar,hero_standfirst_en,reason1_title_ar,reason1_title_en,reason1_body_ar,reason1_body_en,reason2_title_ar,reason2_title_en,reason2_body_ar,reason2_body_en,reason3_title_ar,reason3_title_en,reason3_body_ar,reason3_body_en,publication_state,display_order&order=display_order.asc";
+  "select=id,hotline,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,hours_ar,hours_en,facebook_url,instagram_url,linkedin_url,youtube_url,lab_to_lab_ar,lab_to_lab_en,about_body_ar,about_body_en,privacy_body_ar,privacy_body_en,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,hero_eyebrow_ar,hero_eyebrow_en,hero_headline_ar,hero_headline_en,hero_standfirst_ar,hero_standfirst_en,reason1_title_ar,reason1_title_en,reason1_body_ar,reason1_body_en,reason2_title_ar,reason2_title_en,reason2_body_ar,reason2_body_en,reason3_title_ar,reason3_title_en,reason3_body_ar,reason3_body_en,hero_media,favicon_media,app_icon_media,publication_state,display_order&order=display_order.asc";
 
 function parseOffer(value: unknown): PublishedOffer | null {
   const row = asRecord(value);
@@ -365,6 +368,9 @@ function parseSiteSettings(value: unknown): PublishedSiteSettings | null {
     reason3TitleEn: asNonEmptyString(row.reason3_title_en),
     reason3BodyAr: asNonEmptyString(row.reason3_body_ar),
     reason3BodyEn: asNonEmptyString(row.reason3_body_en),
+    heroMediaId: asNonEmptyString(row.hero_media),
+    faviconMediaId: asNonEmptyString(row.favicon_media),
+    appIconMediaId: asNonEmptyString(row.app_icon_media),
   };
 }
 
@@ -436,6 +442,21 @@ export async function listPublishedBranches(): Promise<PublishedBranch[]> {
 export async function publishedSiteSettings(): Promise<PublishedSiteSettings | null> {
   const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_SELECT);
   const rows = mapPublished(payload, parseSiteSettings);
+  return rows[0] ?? null;
+}
+
+const MEDIA_ROW_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const MEDIA_POSTER_SELECT = "select=id,storage_path,alt_ar,alt_en,publication_state";
+
+export async function publishedMediaPoster(id: string | null): Promise<MediaPoster | null> {
+  if (id === null || !MEDIA_ROW_ID.test(id)) return null;
+  const payload = await fetchAnonPublishedJson(
+    "MediaAsset",
+    `${MEDIA_POSTER_SELECT}&id=eq.${id}`,
+  );
+  const rows = mapPublished(payload, parsePoster);
   return rows[0] ?? null;
 }
 

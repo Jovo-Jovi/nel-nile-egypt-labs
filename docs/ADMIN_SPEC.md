@@ -362,9 +362,9 @@ page is not incomplete. Required only in the sense that a populated one must be
 a valid `https://` URL, which §4g already enforces.
 
 `hero_media`, `favicon_media` and `app_icon_media` are **not required**. They
-are nullable, carry no check constraint, and have no form field until the
-media-role task lands. A missing app icon is reported under §4h.4 as a client
-material, never as an incomplete field the Operator could have filled.
+are nullable, carry no check constraint, and have pickers on the Site Settings
+form sourced from the Media Library. A missing app icon is reported under §4h.4 as a client
+material, never as an incomplete field.
 
 `privacy_body_*` is required for completeness and is separately blocked by
 CF-06: the laboratory has not supplied its policy text. Populated is not
@@ -471,8 +471,8 @@ exceptions below rather than asserted without them.
   it is always present and never absent for a reader to notice. The header
   counts it because the database requires it, and it appears under no page.
 - The media roles — `hero_media`, `favicon_media`, `app_icon_media` — are
-  nullable, carry no check constraint, and have no form field. They are not
-  counted and are reported under §4h.4 as client materials.
+  nullable, carry no check constraint, and are optional on the Site Settings
+  form. They are not counted and are reported under §4h.4 as client materials.
 - `"Programme"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and `"LabTest"` render
   nothing on a public page while `NEL_LABTEST_CONTENT` is off, and publishing
   them is refused until the sign-off artefact exists. The header reports them

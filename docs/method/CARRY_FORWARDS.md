@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-159**
+**Next free id: CF-160**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -154,7 +154,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-146 | M7B-2 applied a migration to the live database from a Grok window, against OD-13 absolute exception 1. The output was verified correct on inspection and was not reverted. The control that failed was routing, not review: nothing on this project checks which model a fence actually reaches. PRECEDENTS candidate alongside CF-145; the reviewer allocates the PR ids. | reviewer | OPEN | P06 |
 | CF-147 | M7B-2's reverse has never been executed, joining CF-83. Six reverses are now authored and unapplied. | reviewer | OPEN | P07 |
 | CF-148 | OD-15's document amendments are unlanded. GLOSSARY.md has no PartnerLab (OD-15 §1). SECURITY_MODEL.md §3 still reads "Two policy shapes" (OD-15 §8). CONTENT_MODEL.md §3c is unamended. D-15's ninth-module amendment (OD-15 §7) is unrecorded. PHASES.md carries no P08 phase and no gate for it. P08 does not open until they land. Landed at P08-T01: PartnerLab in GLOSSARY.md, SECURITY_MODEL.md, CONTENT_MODEL.md and PHASES.md; SECURITY_MODEL.md §3 third shape; CONTENT_MODEL.md §3c authentication-required; D-15 and D-16 record the eleventh module; PHASES.md carries P08 and G8. | reviewer | CLOSED at P08-T01 | P08 |
-| CF-149 | The published privacy body states the site collects nothing. Signup makes a published statement false. It must be amended and republished BEFORE signup is reachable (OD-15 §10, boundary evidence item 11). | client | OPEN | P08 |
+| CF-149 | The published privacy body states the site collects nothing. Signup makes a published statement false. It must be amended and republished BEFORE signup is reachable (OD-15 §10, boundary evidence item 11). Androw approved updated privacy text on 7 September 2026 (human's report). The text has not reached the reviewer and is not yet published. CF-149 closes when the published privacy_body_ar and privacy_body_en are read from the deployment and found to state what a PartnerLab signup stores, which is BOUNDARY_MODEL §2 evidence item 11. Approval alone does not satisfy item 11. | client | OPEN | P08 |
 | CF-150 | OD-15 §10 states the phase is unpriced while A7 sits in the signed quotation. Signed scope, no price, alongside CF-17, CF-18, CF-49, CF-51 and CF-67. | human | OPEN | P08 |
 | CF-151 | guard:design R3 blocks form and input host elements outside an exact-path allowlist. R3_EXEMPT_PATHS computed as 15 members at P08-T01 (the fence named 19). Signup and the status screen need reviewer-granted additions; adding a path is never a builder's call. | reviewer | OPEN | P08 |
 | CF-152 | OD-12's delivery order does not name P08, so whether P08 ships before G7 or after it is undecided. Before means the launch the laboratory is waiting for waits on unpriced scope (OD-15 §10, CF-150). After means a second cutover on a live site. This is a commercial and client decision, not a reviewer one, and it needs an OD. | human | OPEN | P08 |
@@ -164,6 +164,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-156 | OD-09 is DRAFT and unpriced, yet D-16 records Announcements and Clinical notices as modules 9 and 10, and P08-T01's D-16 amendment builds the "eleventh module" arithmetic on it. Nothing is built against it — neither module exists. Either sign and price OD-09 or amend D-16 to stop counting unsigned scope. | human | OPEN | P08 |
 | CF-157 | OD-18 §6 is enforced on status, Location and body, and not on response TIME. An already-registered signup and a fresh one may take measurably different durations, which is a timing oracle the current design does not close. Assess before signup is reachable, alongside CF-149. | reviewer | OPEN | P08 |
 | CF-158 | supabase/config.toml is not authoritative for this project's hosted auth settings — it declares password_requirements = "" and minimum_password_length = 6 while the live project enforces a character class rule (P08-T06 STEP 1, HTTP 422). Any future code reading that file as truth about hosted behaviour is reading a stale artefact. The local rule at P08-T08 is deliberately stricter so drift fails safe, but the divergence itself is unreviewed. | reviewer | OPEN | P08 |
+| CF-159 | public/mark/nel-mark.png is a raster mark. A vector mark renders correctly at every size and in print. If Androw has an SVG, it is a drop-in replacement; if not, this is a note, not a defect. | human | OPEN | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

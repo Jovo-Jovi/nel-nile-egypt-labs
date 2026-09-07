@@ -53,6 +53,9 @@ export type SiteSettingsRow = {
   reason3_title_en: string | null;
   reason3_body_ar: string | null;
   reason3_body_en: string | null;
+  hero_media: string | null;
+  favicon_media: string | null;
+  app_icon_media: string | null;
   publication_state: PublicationState;
 };
 
@@ -97,9 +100,16 @@ export const SITE_SETTINGS_FORM_COLUMNS = {
   reason3_title_en: "reason3_title_en",
   reason3_body_ar: "reason3_body_ar",
   reason3_body_en: "reason3_body_en",
+  hero_media: "hero_media",
+  favicon_media: "favicon_media",
+  app_icon_media: "app_icon_media",
 } as const;
 
 export type SiteSettingsFormField = keyof typeof SITE_SETTINGS_FORM_COLUMNS;
+
+export const MEDIA_ROLE_FIELDS = ["hero_media", "favicon_media", "app_icon_media"] as const;
+
+const ROW_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const HTTPS_FIELDS = new Set<SiteSettingsFormField>([
   "facebook_url",
@@ -186,6 +196,9 @@ const OPERATOR_SELECT = [
   "reason3_title_en",
   "reason3_body_ar",
   "reason3_body_en",
+  "hero_media",
+  "favicon_media",
+  "app_icon_media",
   "publication_state",
 ].join(",");
 
@@ -255,6 +268,9 @@ export function parseSiteSettingsRow(value: unknown): SiteSettingsRow | null {
     reason3_title_en: asOptionalText(row.reason3_title_en),
     reason3_body_ar: asOptionalText(row.reason3_body_ar),
     reason3_body_en: asOptionalText(row.reason3_body_en),
+    hero_media: asId(row.hero_media),
+    favicon_media: asId(row.favicon_media),
+    app_icon_media: asId(row.app_icon_media),
     publication_state,
   };
 }
@@ -286,7 +302,7 @@ export type ParseWriteResult =
   | { ok: true; columns: WriteColumns }
   | {
       ok: false;
-      reason: "https" | "bilingual" | "whatsapp_e164";
+      reason: "https" | "bilingual" | "whatsapp_e164" | "reference";
       field?: SiteSettingsFormField;
       groups?: string[];
     };
@@ -318,6 +334,16 @@ export function parseSiteSettingsWrite(
   for (const field of Object.keys(SITE_SETTINGS_FORM_COLUMNS) as SiteSettingsFormField[]) {
     if (field === "whatsapp_e164") {
       columns[field] = phone.e164;
+      continue;
+    }
+    if ((MEDIA_ROLE_FIELDS as readonly string[]).includes(field)) {
+      const raw = emptyToNull(form.get(field));
+      if (raw === null) {
+        columns[field] = null;
+        continue;
+      }
+      if (!ROW_ID.test(raw)) return { ok: false, reason: "reference", field };
+      columns[field] = raw;
       continue;
     }
     const raw = emptyToNull(form.get(field));

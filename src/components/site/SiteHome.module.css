@@ -54,6 +54,13 @@
   filter: brightness(0.58);
 }
 
+.photoImage {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
 .veil {
   pointer-events: none;
   /* Copy sits in a flat field; the fade begins after the type column. */

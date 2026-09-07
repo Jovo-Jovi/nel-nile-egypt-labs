@@ -1,9 +1,15 @@
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { dirForLocale, isLocale, LOCALES } from "@/lib/locale";
+import { brandHeadMetadata } from "@/lib/brandHead";
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return brandHeadMetadata();
 }
 
 // Known locales are prerendered. After an Operator publish, revalidatePath

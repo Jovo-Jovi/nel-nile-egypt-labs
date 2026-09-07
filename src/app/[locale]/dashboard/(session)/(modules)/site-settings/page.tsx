@@ -5,6 +5,7 @@ import type { SiteSettingsNotice } from "@/components/dashboard/SiteSettingsForm
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate } from "@/lib/catalog";
 import { readSiteSettingsRow, parseBilingualGroupsParam } from "@/lib/dashboard/siteSettings";
+import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -26,6 +27,8 @@ function noticeFromQuery(query: { error?: string; saved?: string }): SiteSetting
   if (query.error === "write") return "write";
   if (query.error === "create") return "create";
   if (query.error === "exists") return "exists";
+  if (query.error === "reference") return "reference";
+  if (query.error === "alt") return "alt";
   return null;
 }
 
@@ -46,6 +49,7 @@ export default async function SiteSettingsPage({ params, searchParams }: Props) 
   }
 
   const row = await readSiteSettingsRow(supabase);
+  const assets = row === null ? [] : await listMediaAssetOptions(supabase);
 
   return (
     <>
@@ -53,7 +57,13 @@ export default async function SiteSettingsPage({ params, searchParams }: Props) 
       {row === null ? (
         <SiteSettingsCreateForm locale={locale} notice={notice} />
       ) : (
-        <SiteSettingsForm locale={locale} row={row} notice={notice} bilingualGroups={bilingualGroups} />
+        <SiteSettingsForm
+          locale={locale}
+          row={row}
+          notice={notice}
+          bilingualGroups={bilingualGroups}
+          assets={assets}
+        />
       )}
     </>
   );
