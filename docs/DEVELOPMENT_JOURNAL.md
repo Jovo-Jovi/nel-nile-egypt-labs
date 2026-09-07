@@ -479,6 +479,31 @@ heading and principals table now include `PartnerLab`, because leaving
 "There is no third" next to the partner-read shape would have been a
 self-contradiction.
 
+## 2026-09-07 — P08-T02: close the amendment residue before anything is built
+
+Documents only. `SECURITY_MODEL.md` §1 now authenticates `Operator` and
+`PartnerLab` as business parties; the breach sentence is unedited. §4 no
+longer says there is no public sign-up: `PartnerLab` signup is open and
+access is not; MFA remains an `Operator` requirement. `BOUNDARY_MODEL.md`
+§2 records the only submission the system will accept — an authentication
+credential, and only when choosing to become a `PartnerLab`. No new
+header line: the OD-15 amendment line already covers §2.
+
+The P08 State cell no longer asserts that the phase precedes G7. OD-12
+does not name P08 and is unamended. CF-152 OPEN, owner human, lands at
+P08: whether P08 ships before G7 or after it is a commercial decision and
+needs an OD.
+
+The §2 three-principal repair is RATIFIED at P08-T02 under PR-15.
+
+A residual repair, labelled UNRATIFIED in `PHASES.md`: the mandated
+State-cell change would have left that file asserting both "undecided"
+and "precedes G7". The remaining assertions were aligned to the cell.
+
+Open count 86 + 1 = 87. No SQL, no route, no claim, no account. Signed
+clinical artefacts unchanged. OD headings 17, D headings 48, unchanged.
+
+
 
 
 

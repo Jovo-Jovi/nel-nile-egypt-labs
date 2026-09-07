@@ -19,8 +19,11 @@ fixed here; this document fixes the **rules** every table and policy must satisf
 ## §1 The posture in one paragraph
 
 This platform publishes a laboratory's own marketing material and nothing else. It has no
-customers, no accounts for the public, no submissions, no messages, and no medical values.
-The only humans it authenticates are a handful of the lab's own staff. **A breach of this
+customers, no messages, no submissions of personal or medical information, and no
+medical values. It authenticates a handful of the lab's own staff as `Operator`, and
+under OD-15 other laboratories as `PartnerLab`, who hold an authentication credential
+and read approved `Offer` rows. Both are business parties. Neither is a member of the
+public seeking care, and no one who is ever holds an account here. **A breach of this
 database exposes opening hours and equipment photographs.** Every rule below exists to
 keep that true, because the moment it stops being true this becomes a very different
 system with very different obligations.
@@ -29,9 +32,7 @@ system with very different obligations.
 
 ## §2 Three principals
 
-**UNRATIFIED residual repair, PR-19, P08-T01.** OD-15 adds `PartnerLab` as a third
-principal. Leaving "There is no third" in place would contradict the partner-read
-shape this task is required to land in §3.
+**RATIFIED at P08-T02 under PR-15.** The §2 three-principal repair is ratified because landing partner-read in §3 while §2 read "There is no third" would have made one file contradict itself.
 
 | Principal | Authenticates | Holds a row | Can read | Can write |
 |---|---|---|---|---|
@@ -99,9 +100,21 @@ a two-person team is an absent control.
 authenticate and can do nothing else. There is no grace period and no "remind me later" —
 a grace period on a two-account system is permanent.
 
-**No public sign-up. No password reset by email alone without a second factor. No
-social login.** Accounts are created deliberately by a human and there is no route by
-which one appears on its own.
+**No social login. No password reset for an `Operator` by email alone without a second
+factor.** An `Operator` account is created deliberately by a human and there is no route
+by which one appears on its own.
+
+**`PartnerLab` signup is open; access is not (OD-15 §4).** Anyone may create an account.
+A new account is `pending`, may sign in, and reads nothing — no `Offer`, no title, no
+price, no image. An `Operator` approves or rejects it. A rejected account reads nothing
+either. Open signup is not open access: the approved claim is what grants reading, and
+only an `Operator` sets it.
+
+**MFA is an `Operator` requirement and is not a `PartnerLab` one (OD-15 §5).** AAL2 and
+TOTP under D-08 gate write access to the application schema. A `PartnerLab` never writes
+anywhere, so a second factor would protect nothing and would gate approval on an
+unrelated step. `Operator` is AAL2 plus an operator claim; `PartnerLab` is a normal
+authenticated session plus an approved claim. Neither implies the other.
 
 **Sessions are short and re-authentication is required for destructive actions.** Deleting
 a `Programme` or unpublishing the site's contact details asks for the factor again.
