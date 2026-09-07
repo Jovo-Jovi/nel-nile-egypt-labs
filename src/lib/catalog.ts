@@ -56,6 +56,14 @@ const ar = {
   "page.privacyPolicy.title": "سياسة الخصوصية",
   "page.labToLab.title": "معامل للمعامل",
 
+  // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
+  "partnerLab.signUp.title": "تسجيل معمل شريك",
+  "partnerLab.signUp.email": "البريد الإلكتروني",
+  "partnerLab.signUp.password": "كلمة المرور",
+  "partnerLab.signUp.submit": "إنشاء الحساب",
+  "partnerLab.signUp.failed": "تعذّر إنشاء الحساب. حاول مرة أخرى.",
+  "partnerLab.signUp.created": "تم إنشاء الحساب.",
+
   // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
   "dashboard.home.title": "لوحة التحكم",
   "dashboard.home.published": "منشور",
@@ -674,6 +682,14 @@ const en = {
   "page.portal.title": "Results portal",
   "page.privacyPolicy.title": "Privacy policy",
   "page.labToLab.title": "Lab-to-Lab",
+
+  // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
+  "partnerLab.signUp.title": "Partner laboratory sign-up",
+  "partnerLab.signUp.email": "Email",
+  "partnerLab.signUp.password": "Password",
+  "partnerLab.signUp.submit": "Create account",
+  "partnerLab.signUp.failed": "Could not create the account. Try again.",
+  "partnerLab.signUp.created": "The account was created.",
 
   // Operator dashboard chrome — P05-T01c. ADMIN_SPEC.md §4a.
   "dashboard.home.title": "Dashboard",

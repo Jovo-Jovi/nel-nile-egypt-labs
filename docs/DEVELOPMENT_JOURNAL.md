@@ -503,6 +503,31 @@ and "precedes G7". The remaining assertions were aligned to the cell.
 Open count 86 + 1 = 87. No SQL, no route, no claim, no account. Signed
 clinical artefacts unchanged. OD headings 17, D headings 48, unchanged.
 
+## 2026-09-07 — P08-T03: the PartnerLab claim model, and signup behind a flag
+
+ADR-001 accepts two claims with different jobs. `nel_principal` is the only
+security-bearing claim and has exactly two values, `Operator` and
+`PartnerLab`. `nel_partner_state` is the review record and is never a
+policy input. Signup writes neither claim, so ordinary `signUp` needs no
+service-role key on the public route.
+
+The route is `/{locale}/partner-lab/sign-up`, off unless
+`NEL_PARTNER_SIGNUP` is exactly `on`. BOUNDARY_MODEL.md §2 evidence item 11
+holds it unreachable until the privacy text is amended (CF-149). The
+rendered field set is an email address and a password. R3 gained one
+exact path; the allowlist is 16. CF-151 stays OPEN as the ongoing
+allowlist control.
+
+Q5 could not mint a throwaway token: hosted Auth has `disable_signup`
+false and `mailer_autoconfirm` false, and `/auth/v1/signup` returned 429
+`over_email_send_rate_limit` after the proof probes. No throwaway row was
+created. The handler still calls `signUp({ email, password })` with no
+metadata.
+
+Open count 87 + 0 − 0 = 87. No SQL, no policy, no migration. Signed
+clinical artefacts unchanged.
+
+
 
 
 

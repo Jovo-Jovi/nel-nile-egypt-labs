@@ -228,7 +228,8 @@ OD-12's sequence is unamended; this phase was signed later.
 - [x] **M7C** — The application gate reads the Operator claim
 - [x] **P08-T00** — Land OD-17
 - [x] **P08-T01** — Land OD-15's document amendments and open P08
-- [ ] **P08-T02** — Close the amendment residue before anything is built
+- [x] **P08-T02** — Close the amendment residue before anything is built
+- [ ] **P08-T03** — The PartnerLab claim model, and signup behind a flag
 
 ### P06 — Content and Arabic · LONGEST POLE
 
