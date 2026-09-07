@@ -29,16 +29,14 @@
 //       halt, nor PASS-prefixed, nor FAIL-prefixed (empty and skip
 //       excluded). Unclassifiable: report it, never guess.
 //
-// UNRATIFIED residual repair, PR-19, landed at M7B-2. A halt verdict is a
-// fourth class and this guard did not have it. `halted` (P01-T03) and
-// `halted at STEP 5c — verdict at push` (P01-T03-R-M3) are both in the
-// done-steps table and both escaped R6 only because neither task has a box
-// in PHASES.md — R6 is evaluated per checkbox. M7B-2 is the first halted
-// task that also carries a box, so the gap surfaced as a blocking R6 on a
-// verdict the reviewer mandated. A halt is treated exactly as the
-// placeholder is: pushed and not yet certified, so it is legitimate on an
-// UNCHECKED box and an R2 finding on a CHECKED one. This does not weaken
-// R6 for anything else. The reviewer ratifies or reverts at verdict.
+// RATIFIED at M7B-2-F. The UNRATIFIED halt-verdict class landed at M7B-2
+// is ratified here. `halted` is a fourth class treated exactly as
+// `placeholder` — legitimate on an unchecked box, an R2 finding on a
+// checked one. It adds a class rather than loosening a check, and R6
+// still reports anything it cannot classify. No other behaviour changes.
+// `halted` (P01-T03) and `halted at STEP 5c — verdict at push`
+// (P01-T03-R-M3) remain in the done-steps table; R6 is evaluated per
+// checkbox. The class does not change R1–R5.
 //
 // FAIL is classified as FAIL, not as an undifferentiated "reviewer verdict".
 // Cases: checked FAIL with no successor → R2; unchecked PASS → R3; unchecked
