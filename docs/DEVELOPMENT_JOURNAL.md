@@ -755,16 +755,62 @@ Three throwaway Auth users `missing_after=true`. React #418 was not
 reproduced under `next dev` and was not captured authenticated; G8 FAIL
 on 1b. Do not merge before the verdict.
 
+## 2026-09-08 — P08-T13 Part A: phase plan, OD-19 draft, D-49
 
+Parent is `p08-t12` at `343c6e0`, unmerged. No migration.
 
+P08-T12 recorded FAIL at reviewer verdict — 8 September 2026; G8 blocked on
+React #418, signup persistence and Operator review; fixes at P08-T13.
 
+PHASES.md: the OD-12 figure is struck through beside OD-19 (draft), with
+P03-T03 and `9dac44f`. P09 added. `grep -c "^### P0"` → 7. The fence's
+ten-change table was not in the prompt; the reconstruction is UNRATIFIED
+in the file (PR-19). §7 rewritten from the live ledger: three G8 blockers,
+credential rotation, OD-09 unsigned (CF-156), CF-152 settled by OD-19
+draft.
 
+OD-19 landed DRAFT, not signed. Count Eighteen → Nineteen. OD-12 unamended.
+CF-152 still OPEN: settled by OD-19 §1, closes when signed.
 
+D-49 landed: PartnerLab signup does not send email. Count Forty-eight →
+Forty-nine.
 
+Do not merge before the verdict.
 
+## 2026-09-08 — P08-T13 Part B HALT at STEP 5
 
+STEP 4 diagnosis, names only, no values. `applyPartnerLabReviewAction`
+returns `write` when `createSupabaseServiceRoleClient()` is null, or when
+`updateUserById` errors. Production `SUPABASE_SERVICE_ROLE_KEY` present
+false (`npx vercel env ls production`, names only). That is the null-client
+path. Rotation of both keys is still required because `--reveal` printed
+them; setting the service-role variable on Production is what discharges
+this path.
 
+STEP 5 is a human action. This window did not rotate, copy, redeploy, or
+touch mailer settings. HALT awaiting the human's attestation of a–f.
+No key printed, echoed or written to a file.
 
+Do not merge before the verdict. Part A stands.
 
+## 2026-09-09 — P08-T13 Part B HALT at P3
 
+STEP 5 attested by the human (a–f). Production redeploy Ready in 59s on
+the alias. Production `SUPABASE_SERVICE_ROLE_KEY` present true (names
+only).
+
+STEP 6: `next build` then `next start` on 127.0.0.1:3060. Edge console on
+`/ar`, `/en`, `/ar/offers`, `/en/offers` locally and live: no React #418
+named. ABSENCE IS NOT PROOF OF CAUSE. CF-164 stays OPEN. No approved
+PartnerLab session in that capture.
+
+P1 live form POST 303 `Location: /ar/partner-lab/sign-up?created=1`.
+P2 Auth Admin REST not runnable here: `vercel env run` cannot pull
+Production Secret values. Linked `auth.users` after P1: keys
+`provider,providers`; neither `nel_principal` nor `nel_partner_state`.
+P3 HALT: Operator password sidecar missing. No `createUser`, no Admin
+metadata fallback. P7 invite copy both locales. P9 clinical published
+0/0/0/0. Offer 0. P10 24/24 200. G8 FAIL.
+
+Do not merge before the verdict. Part A stands.
 

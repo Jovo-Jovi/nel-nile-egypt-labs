@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-eight decisions. Eighteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Nineteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -647,6 +647,44 @@ discoverable. §2 and §3 deliver the outcome without the disclosure.
 
 ---
 
+### OD-19 — Delivery order after OD-15
+
+**Status:** DRAFT — awaiting signature
+
+**Amends:** OD-12's delivery order. Closes CF-152.
+
+**§1** P08 is delivered before G7. OD-12 was signed on 1 September and ordered
+   P03 → P05 → P06 → P04 → P07. P08 did not exist until OD-15 on 4 September,
+   so OD-12's sequence is silent on it rather than against it. P08 has in fact
+   been delivered between P05 and P06, and that was not a scheduling choice:
+   OD-15 §9 makes the M7 role split a precondition, and twelve write policies
+   reading `for all to authenticated` meant any second account class inherited
+   write on eleven tables. The split had to land before a PartnerLab existed.
+   That is a security ordering and it is now discharged.
+
+**§2** P09 Design is delivered after G7, and does not delay it. Two reasons, and
+   the first is about harm rather than process. The 2018 site is live today
+   with eight-year-old placeholder copy and known clinical errors, and every
+   day before cutover is a day a patient can read a wrong test description on
+   the laboratory's own site. Design iteration is also unbounded by nature —
+   the client looks, requests, sees, requests again, which is the point of it
+   and also why it cannot sit on the critical path to a cutover that fixes a
+   live defect. The designer iterates against production, which is better
+   feedback than a preview URL.
+
+**§3** P09 uses short-lived branches from `main`, reviewed and merged one at a
+   time. A single long-lived design branch produces one large diff to be
+   reviewed against the boundary rules, RTL, accessibility, bilingual parity
+   and the guards simultaneously, under release pressure. Five small reviews
+   are better than one large one.
+
+**§4** The order is therefore P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 → P09 → G9.
+
+**Does not decide:** the design envelope, which is its own OD authored at P09;
+the P09 gate criteria; whether OD-09 is signed (CF-156).
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze
@@ -854,3 +892,27 @@ Operator sees the record unchanged in the dashboard — still published,
 still editable, still auditable — with its expired status shown. An
 expiry that silently unpublishes a row destroys the record of what was
 published and when.
+
+### D-49 — `PartnerLab` signup does not send email
+
+**Decides.** `mailer_autoconfirm` is on. Creating a `PartnerLab` account sends no mail
+and requires no address confirmation.
+
+**Because.** Email confirmation proves only that the applicant controls the address.
+Operator approval proves more: under Option A the `Operator` recognises the laboratory or
+telephones it, and a person who knows the partner labs is a stronger check than an inbox.
+Confirmation is not the authorization boundary here and never was — an unconfirmed and an
+unapproved account read the same nothing: no `Offer`, no title, no price. Removing mail
+also removes an SMTP vendor, deliverability, bounce handling, a signup throttle that
+halted three tasks, and a third party processing partner email addresses while the EU
+adequacy carry-forward is open.
+
+**Accepts.** Someone may register with an address they do not control, including a rival
+laboratory's. They read nothing until an `Operator` approves, and approval is vetted
+out-of-band under Option A. That is the trade, accepted by the human on 8 September 2026.
+
+**Does not decide.** This covers signup only. **Any future flow that depends on email —
+password reset, address verification, account recovery, notification — is a new decision
+and is reviewed as one. It is not inherited from this.** `SECURITY_MODEL.md` §4 promises
+no `PartnerLab` password reset and no such route exists in `src/`; introducing one
+reopens this question rather than assuming it.
