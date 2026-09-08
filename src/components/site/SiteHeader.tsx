@@ -83,7 +83,7 @@ export function SiteHeader({ locale, whatsappHref, portalHref }: SiteHeaderProps
           {navOpen ? <CloseIcon size={20} /> : <MenuIcon size={20} />}
         </button>
         <Link href={localeHref(locale, "")} className={styles.markSlot} onClick={closeNav}>
-          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.mark" dense>
+          <ApprovalGate locale={locale} state="approved">
             <MarkSlot blockSize={48} fallbackLabel={translate(locale, "header.markFallback")} />
           </ApprovalGate>
         </Link>

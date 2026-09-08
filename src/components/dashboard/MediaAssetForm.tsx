@@ -85,7 +85,8 @@ export function MediaAssetPicker({
     if (needle.length === 0) return true;
     const ar = (asset.alt_ar ?? "").toLowerCase();
     const en = (asset.alt_en ?? "").toLowerCase();
-    return ar.includes(needle) || en.includes(needle);
+    const path = asset.storage_path.toLowerCase();
+    return ar.includes(needle) || en.includes(needle) || path.includes(needle);
   });
 
   const Wrapper = legendKey ? "fieldset" : "div";
@@ -115,7 +116,13 @@ export function MediaAssetPicker({
         </li>
         {visible.map((asset) => {
           const alt = locale === "ar" ? asset.alt_ar ?? asset.alt_en : asset.alt_en ?? asset.alt_ar;
-          const base = alt !== null && alt.length > 0 ? alt : translate(locale, "dashboard.catalog.unnamed");
+          const unnamed = translate(locale, "dashboard.catalog.unnamed");
+          const base =
+            alt !== null && alt.length > 0
+              ? alt
+              : asset.storage_path.length > 0
+                ? `${unnamed} — ${asset.storage_path}`
+                : unnamed;
           const incomplete = !mediaAssetHasBilingualAlt(asset);
           const selectedThumb = selected === asset.id;
           return (
@@ -167,7 +174,8 @@ export function MediaLibraryListing({
     if (needle.length === 0) return true;
     const ar = (row.alt_ar ?? "").toLowerCase();
     const en = (row.alt_en ?? "").toLowerCase();
-    return ar.includes(needle) || en.includes(needle);
+    const path = row.storage_path.toLowerCase();
+    return ar.includes(needle) || en.includes(needle) || path.includes(needle);
   });
 
   return (
@@ -184,7 +192,13 @@ export function MediaLibraryListing({
       <ul className={extra.thumbGrid}>
         {visible.map((row) => {
           const alt = locale === "ar" ? row.alt_ar ?? row.alt_en : row.alt_en ?? row.alt_ar;
-          const base = alt !== null && alt.length > 0 ? alt : translate(locale, "dashboard.catalog.unnamed");
+          const unnamed = translate(locale, "dashboard.catalog.unnamed");
+          const base =
+            alt !== null && alt.length > 0
+              ? alt
+              : row.storage_path.length > 0
+                ? `${unnamed} — ${row.storage_path}`
+                : unnamed;
           const href = localeHref(locale, `/dashboard/media-assets/${row.id}`);
           const statusKey: CatalogKey =
             row.publication_state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";

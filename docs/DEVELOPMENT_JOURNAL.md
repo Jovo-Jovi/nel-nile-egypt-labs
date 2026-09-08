@@ -724,6 +724,37 @@ are dynamic so the session JWT can reach Postgres. CF-160 OPEN, owner
 reviewer, G8. CF-149 stays OPEN until P08-T12. Open CF 93 + 1 = 94.
 Do not merge before the verdict. Do not turn on `NEL_PARTNER_SIGNUP`.
 
+## 2026-09-08 — P08-T12: G8 wiring, mark gate, privacy chrome, media labels
+
+Parent is `p08-t11` at `f8dda33`, then fast-forwarded onto `origin/main`
+at `12c8df1` (PR #112). No migration.
+
+The live mark file is 334633 bytes and HTTP 200. The frame was
+`ApprovalGate` `pending` around that file, not `MarkSlot` `onError`.
+Header and footer gates are now `approved`. MarkSlot and HeroPhoto no
+longer swap element type during hydration. React #418 was not reproduced
+under `next dev` (CF-164). `reportAllChanges` is not NEL code (CF-163).
+
+Live privacy bodies already state what a PartnerLab signup stores.
+CF-149 CLOSED. Catalogue chrome on the privacy page no longer claims the
+site stores nothing, and `PendingSlot` for legal fact renders only when
+the signed copy is absent.
+
+Unnamed MediaAsset rows show `storage_path` so the picker is usable.
+
+CF live maximum 160 before allocating CF-161. Closed CF-149 and CF-137.
+Landed CF-161, CF-162, CF-163, CF-164, CF-165. Open 94 − 2 + 5 = 97.
+Next free CF-166. Catalogue 576/576. Migrations 28.
+
+Walkthrough on the production alias (SHA `ef5671b`): form signup returned
+`303` `created=1` with no listable Auth row (CF-153, CF-154); pending,
+approved and declined copy was quoted after Admin `createUser` plus
+Admin metadata fallback because Operator review POSTs returned
+`error=write` (CF-165). Synthetic Offer unpublished and deleted; GET 404.
+Three throwaway Auth users `missing_after=true`. React #418 was not
+reproduced under `next dev` and was not captured authenticated; G8 FAIL
+on 1b. Do not merge before the verdict.
+
 
 
 

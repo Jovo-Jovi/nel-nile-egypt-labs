@@ -40,8 +40,11 @@ export default async function Page({ params }: Props) {
           body={translate(locale, clause.body)}
         />
       ))}
-      {signedCopy ? <CopyCard locale={locale} body={signedCopy} /> : null}
-      <PendingSlot locale={locale} pendingLabelKey="approval.pending.legalFact" />
+      {signedCopy ? (
+        <CopyCard locale={locale} body={signedCopy} />
+      ) : (
+        <PendingSlot locale={locale} pendingLabelKey="approval.pending.legalFact" />
+      )}
     </InfoPage>
   );
 }

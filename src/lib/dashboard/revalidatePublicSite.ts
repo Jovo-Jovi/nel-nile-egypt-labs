@@ -66,6 +66,9 @@ export function revalidatePublishedProgrammes(): void {
 }
 
 export function revalidatePublishedOffers(): void {
+  // CF-162: `/ar/offers` and `/en/offers` are `force-dynamic` as of
+  // P08-T11, so this revalidatePath is a no-op until those pages are
+  // static again. Do not treat this as a cache bust of a static shell.
   for (const path of OFFER_PUBLIC_PATHS) {
     revalidatePath(path);
   }

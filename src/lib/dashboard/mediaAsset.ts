@@ -38,6 +38,7 @@ export type MediaAssetOption = {
   id: string;
   alt_ar: string | null;
   alt_en: string | null;
+  storage_path: string;
   publication_state: PublicationState;
   thumbSrc: string | null;
 };
@@ -179,6 +180,7 @@ export async function listMediaAssetOptions(supabase: SupabaseClient): Promise<M
       id: row.id,
       alt_ar: row.alt_ar,
       alt_en: row.alt_en,
+      storage_path: row.storage_path,
       publication_state: row.publication_state,
       thumbSrc: await signedMediaSrc(supabase, row.storage_path),
     });

@@ -26,7 +26,7 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
           <div className={styles.brand}>
             <Link href={localeHref(locale, "")} className={styles.lockup}>
               <span className={styles.mark}>
-                <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.mark" dense>
+                <ApprovalGate locale={locale} state="approved">
                   <MarkSlot blockSize={40} fallbackLabel={translate(locale, "header.markFallback")} />
                 </ApprovalGate>
               </span>
