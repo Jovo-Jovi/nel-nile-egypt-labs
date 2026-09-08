@@ -835,3 +835,29 @@ S1–S10 and cleanup PASS. MODE operator not run.
 
 Do not merge before the verdict.
 
+## 2026-09-09 — P08-T15: PartnerLab sign-in path and signup discoverability
+
+Parent is unmerged `p08-t14` at `e97e920`, not `main`. No migration.
+
+P08-T14 recorded PASS at reviewer verdict — 8 September 2026.
+
+STEP 1 on the live alias: signup copy was PRESENT in `/ar/offers` and
+`/en/offers`. The flag is on at runtime. It was not removed.
+
+STEP 2 took audience-neutral copy on the existing `/dashboard/sign-in`
+route rather than a second auth entry, because ADR-001 is one Supabase
+auth. Heading and lede in both locales:
+
+- ar: «تسجيل الدخول» / «أدخل البريد الإلكتروني وكلمة المرور للمتابعة.»
+- en: «Sign in» / «Enter your email and password to continue.»
+
+STEP 4 is footer, not header: primary nav stays at six items, the header
+is a client component, and lab-to-lab already sits in the footer.
+
+SSG public pages bake the footer flag at build time. Home, offers, and
+sign-in are request-dynamic, so V3's on/off proof holds there without a
+rebuild. Turning the flag off in production still wants a redeploy so
+the SSG footer matches.
+
+Do not merge before the verdict.
+

@@ -8,7 +8,11 @@ import { readOperatorAccess } from "@/lib/dashboard/assurance";
 import { gateSignInPage, NOT_OPERATOR_REASON } from "@/lib/dashboard/gates";
 import { localeHref } from "@/lib/locale";
 import { pageMetadata } from "@/lib/pageMetadata";
+import { isPartnerSignupEnabled } from "@/lib/partnerSignupFlag";
 import formStyles from "@/components/dashboard/AuthForm.module.css";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -29,11 +33,13 @@ export default async function SignInPage({ params, searchParams }: Props) {
   const failed = query.error === "1";
   const refused =
     query.reason === NOT_OPERATOR_REASON || (access.signedIn && !access.isOperator);
+  const showSignup = isPartnerSignupEnabled();
 
   return (
     <DashboardChrome locale={locale} showSignOut={false}>
-      <DashboardModuleTitle locale={locale} titleKey="dashboard.signIn.title" />
+      <DashboardModuleTitle locale={locale} titleKey="dashboard.signIn.title" showEyebrow={false} />
       <form className={formStyles.form} method="post" action={localeHref(locale, "/dashboard/sign-in/submit")} data-nel-container="auth">
+        <p className={formStyles.lede}>{translate(locale, "dashboard.signIn.lede")}</p>
         {refused ? (
           <p className={formStyles.error}>
             <CautionIcon size={14} />
@@ -74,6 +80,11 @@ export default async function SignInPage({ params, searchParams }: Props) {
         <Button type="submit" variant="primary">
           {translate(locale, "dashboard.signIn.submit")}
         </Button>
+        {showSignup ? (
+          <Button variant="text" href={localeHref(locale, "/partner-lab/sign-up")}>
+            {translate(locale, "partnerLab.offers.signUp")}
+          </Button>
+        ) : null}
       </form>
     </DashboardChrome>
   );
