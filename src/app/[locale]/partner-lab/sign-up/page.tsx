@@ -34,6 +34,7 @@ export default async function PartnerLabSignUpPage({ params, searchParams }: Pro
   const failed = query.error === "1";
   const passwordTooShort = query.error === "password";
   const invalidEmail = query.error === "email";
+  const passwordMismatch = query.error === "confirm";
 
   return (
     <SiteRoot locale={locale}>
@@ -65,6 +66,12 @@ export default async function PartnerLabSignUpPage({ params, searchParams }: Pro
               <span>{translate(locale, "partnerLab.signUp.invalidEmail")}</span>
             </p>
           ) : null}
+          {passwordMismatch ? (
+            <p className={formStyles.error}>
+              <CautionIcon size={14} />
+              <span>{translate(locale, "partnerLab.signUp.passwordMismatch")}</span>
+            </p>
+          ) : null}
           <div className={formStyles.field}>
             <label className={formStyles.label} htmlFor="partner-lab-email">
               {translate(locale, "partnerLab.signUp.email")}
@@ -87,6 +94,19 @@ export default async function PartnerLabSignUpPage({ params, searchParams }: Pro
               className={formStyles.control}
               type="password"
               name="password"
+              autoComplete="new-password"
+              required
+            />
+          </div>
+          <div className={formStyles.field}>
+            <label className={formStyles.label} htmlFor="partner-lab-confirm-password">
+              {translate(locale, "partnerLab.signUp.confirmPassword")}
+            </label>
+            <input
+              id="partner-lab-confirm-password"
+              className={formStyles.control}
+              type="password"
+              name="confirm_password"
               autoComplete="new-password"
               required
             />

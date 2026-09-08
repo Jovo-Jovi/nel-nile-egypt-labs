@@ -1,8 +1,11 @@
 // Published-only listings for Programme, LabUnit, Offer, Video,
 // Equipment, Branch and SiteSettings. Ordered by display_order.
-// Unpublished rows are never selected: fetchAnonPublishedJson appends
-// the filter where a caller cannot omit it (PR-08). An empty list is
-// D-42 failing closed — the pass condition, not a gap to fill.
+// Unpublished rows are never selected. Offers are read through the
+// session client (listPublishedOffers) so M9's partner-read policy can
+// match the JWT; the published filter is appended in that function where
+// a caller cannot omit it (PR-08). Every other listing still uses
+// fetchAnonPublishedJson, which appends the same filter. An empty list
+// is D-42 failing closed — the pass condition, not a gap to fill.
 // youtube_id is selected as the watch destination only. The poster stays
 // the linked MediaAsset. A listing must never emit a host thumbnail or an
 // autoloading embed (D-13, OD-14, BOUNDARY_MODEL.md §5).
@@ -12,6 +15,7 @@
 
 import { fetchAnonPublishedJson } from "./supabaseRest";
 import { offerIsExpired } from "./listingFormat";
+import { createSupabaseServerClient } from "./supabase/server";
 
 export type MediaPoster = {
   storagePath: string;
@@ -203,8 +207,8 @@ function parsePoster(value: unknown): MediaPoster | null {
 
 const MEDIA_EMBED = "MediaAsset(storage_path,alt_ar,alt_en,publication_state)";
 
-const OFFER_SELECT =
-  `select=id,title_ar,title_en,description_ar,description_en,valid_from,valid_until,price_amount,price_currency,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+const OFFER_COLUMNS =
+  `id,title_ar,title_en,description_ar,description_en,valid_from,valid_until,price_amount,price_currency,publication_state,display_order,${MEDIA_EMBED}`;
 
 const VIDEO_SELECT =
   `select=id,title_ar,title_en,description_ar,description_en,youtube_id,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
@@ -408,8 +412,20 @@ function mapPublished<T>(payload: unknown, parse: (value: unknown) => T | null):
 }
 
 export async function listPublishedOffers(): Promise<PublishedOffer[]> {
-  const payload = await fetchAnonPublishedJson("Offer", OFFER_SELECT);
-  return mapPublished(payload, parseOffer);
+  // Session-bound. After M10, Offer_published_read is gone, so the
+  // anonymous REST helper cannot see a row. createSupabaseServerClient
+  // forwards the request cookies; Postgres then sees the JWT and
+  // Offer_partner_read can match nel_principal. The published filter is
+  // still appended here where a caller cannot omit it (PR-08).
+  const supabase = await createSupabaseServerClient();
+  if (supabase === null) return [];
+  const { data, error } = await supabase
+    .from("Offer")
+    .select(OFFER_COLUMNS)
+    .eq("publication_state", "published")
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapPublished(data, parseOffer);
 }
 
 export async function listPublishedVideos(): Promise<PublishedVideo[]> {

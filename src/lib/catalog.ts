@@ -60,15 +60,19 @@ const ar = {
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
   // passwordTooShort restated at P08-T08 (four classes and eight-character
   // minimum). weakPassword kept in both locales even though unreferenced.
+  // confirmPassword / passwordMismatch: P08-T11. confirm_password is the
+  // same credential typed twice, not a new field of personal data.
   "partnerLab.signUp.title": "تسجيل معمل شريك",
   "partnerLab.signUp.email": "البريد الإلكتروني",
   "partnerLab.signUp.password": "كلمة المرور",
+  "partnerLab.signUp.confirmPassword": "تأكيد كلمة المرور",
   "partnerLab.signUp.submit": "إنشاء الحساب",
   "partnerLab.signUp.failed": "تعذّر إنشاء الحساب. حاول مرة أخرى.",
   "partnerLab.signUp.received": "تم استلام طلبك. سيراجعه أحد المشغّلين.",
   "partnerLab.signUp.passwordTooShort":
     "يجب أن تتكون كلمة المرور من ثمانية أحرف على الأقل، وأن تحتوي على حرف صغير وحرف كبير ورقم ورمز.",
   "partnerLab.signUp.invalidEmail": "صيغة البريد الإلكتروني غير صالحة.",
+  "partnerLab.signUp.passwordMismatch": "كلمتا المرور غير متطابقتين.",
   "partnerLab.signUp.weakPassword": "يجب أن تحتوي كلمة المرور على حرف صغير وحرف كبير ورقم ورمز.",
   "partnerLab.status.pendingTitle": "الطلب قيد المراجعة",
   "partnerLab.status.pendingBody": "سيراجع أحد المشغّلين الطلب.",
@@ -724,15 +728,19 @@ const en = {
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
   // passwordTooShort restated at P08-T08 (four classes and eight-character
   // minimum). weakPassword kept in both locales even though unreferenced.
+  // confirmPassword / passwordMismatch: P08-T11. confirm_password is the
+  // same credential typed twice, not a new field of personal data.
   "partnerLab.signUp.title": "Partner laboratory sign-up",
   "partnerLab.signUp.email": "Email",
   "partnerLab.signUp.password": "Password",
+  "partnerLab.signUp.confirmPassword": "Confirm password",
   "partnerLab.signUp.submit": "Create account",
   "partnerLab.signUp.failed": "Could not create the account. Try again.",
   "partnerLab.signUp.received": "We have received your request. An Operator will review it.",
   "partnerLab.signUp.passwordTooShort":
     "The password must be at least eight characters and include a lowercase letter, an uppercase letter, a digit, and a symbol.",
   "partnerLab.signUp.invalidEmail": "The email address is not valid.",
+  "partnerLab.signUp.passwordMismatch": "The two passwords do not match.",
   "partnerLab.signUp.weakPassword": "The password must include a lowercase letter, an uppercase letter, a number, and a symbol.",
   "partnerLab.status.pendingTitle": "Request pending review",
   "partnerLab.status.pendingBody": "An Operator will review the request.",

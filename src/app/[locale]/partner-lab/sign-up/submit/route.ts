@@ -23,7 +23,10 @@ function signUpHref(locale: "ar" | "en", query: "error" | "created"): string {
   return `${localeHref(locale, "/partner-lab/sign-up")}?${query}=1`;
 }
 
-function signUpSafeHref(locale: "ar" | "en", kind: "password" | "email"): string {
+function signUpSafeHref(
+  locale: "ar" | "en",
+  kind: "password" | "email" | "confirm",
+): string {
   return `${localeHref(locale, "/partner-lab/sign-up")}?error=${kind}`;
 }
 
@@ -68,21 +71,31 @@ export async function POST(
   }
 
   const form = await request.formData();
+  // BOUNDARY_MODEL.md §2 evidence item 9, restated at P08-T11, not
+  // inherited from 7e24066. The loop is no longer byte-identical to that
+  // commit. Item 9 now reads: the handler accepts no field that is not an
+  // authentication credential. `confirm_password` is the same credential
+  // typed twice, not new data about anyone. That widening is a reviewer
+  // decision at P08-T11 under the human's instruction of 8 September 2026.
+  // Proved by reading this handler, not the form. The path is already on
+  // the R3 allowlist; no further grant.
   for (const key of form.keys()) {
-    if (key !== "email" && key !== "password") {
+    if (key !== "email" && key !== "password" && key !== "confirm_password") {
       redirect(signUpHref(locale, "error"));
     }
   }
 
   const emailValue = form.get("email");
   const passwordValue = form.get("password");
+  const confirmValue = form.get("confirm_password");
   const email = typeof emailValue === "string" ? emailValue.trim() : "";
   const password = typeof passwordValue === "string" ? passwordValue : "";
+  const confirmPassword = typeof confirmValue === "string" ? confirmValue : "";
 
   // SAFE allowlist — properties of this submission, never of whether the
   // address is known. A code this project has not seen is not assumed safe.
   //
-  // Exactly two entries, both decided locally before any request. No Auth
+  // Exactly three entries, all decided locally before any request. No Auth
   // response code is on the list. A local check cannot vary on whether an
   // address is known, so OD-18 §6 holds by construction rather than by
   // measurement.
@@ -91,8 +104,10 @@ export async function POST(
   //   2. password strength, checked locally: length at least
   //      PASSWORD_MIN_LENGTH, then the four character classes taken
   //      verbatim from the hosted 422 body at P08-T06 STEP 1
+  //   3. confirm_password mismatch, checked locally by comparing the two
+  //      copies of the same credential before signUp is called
   //
-  // weak_password is NEUTRAL. After the two local checks, every path
+  // weak_password is NEUTRAL. After the three local checks, every path
   // shares ?created=1: success, already-registered, throttles,
   // weak_password, unrecognised codes, and a thrown exception.
   //
@@ -107,6 +122,9 @@ export async function POST(
   }
   if (passwordMissesRequiredClass(password)) {
     redirect(signUpSafeHref(locale, "password"));
+  }
+  if (password !== confirmPassword) {
+    redirect(signUpSafeHref(locale, "confirm"));
   }
 
   try {

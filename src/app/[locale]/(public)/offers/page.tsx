@@ -28,10 +28,12 @@ export default async function Page({ params }: Props) {
     return <PartnerLabStatus locale={locale} kind={kind} showSignOut={session.signedIn} />;
   }
 
-  // Listing is fetched only after the PartnerLab claim is confirmed on
-  // the session. fetchAnonPublishedJson still uses the published-read
-  // policy (to anon); the partner-read policy is authored unapplied
-  // (OD-17 §3.3). Pending, rejected, and anonymous paths never call this.
+  // Listing is fetched only after the PartnerLab (or Operator) claim is
+  // confirmed on the session. listPublishedOffers uses
+  // createSupabaseServerClient so the JWT and its nel_principal claim
+  // reach Postgres; fetchAnonPublishedJson is not used here because it
+  // authenticates as anon and cannot match Offer_partner_read. Pending,
+  // rejected, and anonymous paths never call this.
   const rows = await listPublishedOffers();
 
   return (
