@@ -123,6 +123,17 @@ export default async function DashboardHomePage({ params }: Props) {
               </li>
             );
           })}
+          <li>
+            <article className={extra.row}>
+              <div className={extra.rowMain}>
+                <p className={extra.rowName}>{translate(locale, "dashboard.nav.partnerLab")}</p>
+                <p className={extra.rowMeta}>{translate(locale, "dashboard.partnerLab.homeMeta")}</p>
+              </div>
+              <Link className={extra.editLink} href={localeHref(locale, "/dashboard/partner-lab")}>
+                {translate(locale, "dashboard.home.open")}
+              </Link>
+            </article>
+          </li>
         </ul>
       </div>
     </>

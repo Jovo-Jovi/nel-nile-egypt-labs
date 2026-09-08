@@ -1,0 +1,20 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-24);
+  max-inline-size: 720px;
+}
+
+.embedded {
+  max-inline-size: none;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nel-space-16);
+}
+
+.signOut {
+  margin: 0;
+}

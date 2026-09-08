@@ -44,6 +44,16 @@
 //       exempted because BOUNDARY_MODEL.md §2 fixes its fields to an email address
 //       and a password and nothing else, and because it renders only while
 //       NEL_PARTNER_SIGNUP is on. One page file, no directory, no pattern.
+//       A seventeenth path, src/components/partner-lab/PartnerLabStatus.tsx,
+//       was granted at P08-T10. It is the pending and declined status screen
+//       (OD-15 §4, OD-18 §3). The form is sign-out only — the same POST
+//       DashboardChrome already carries — with no email, password, or other
+//       field. One component file, no directory, no pattern.
+//       An eighteenth path, src/components/dashboard/PartnerLabReviewForm.tsx,
+//       was granted at P08-T10. It is the Operator account-review form behind
+//       aal2. Fields are a subject identifier only; approve, reject and
+//       reinstate merge app_metadata through Auth Admin and write nothing to
+//       public. One form file, no directory, no pattern.
 //       A path is exempt only when it
 //       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
 //       Adding a path is a boundary decision requiring a reviewer verdict,
@@ -86,7 +96,9 @@ const ALLOWED_HEX = /^#25D366$/i;
 // EquipmentForm.tsx as three exact paths, no directory, no pattern;
 // P05-T10 added MediaAssetForm.tsx as one exact path, no directory, no
 // pattern; P05-T24A added ProgrammeForm.tsx and LabTestForm.tsx as two
-// exact paths, no directory, no pattern).
+// exact paths, no directory, no pattern; P08-T10 added PartnerLabStatus.tsx
+// and PartnerLabReviewForm.tsx as two exact paths, no directory, no
+// pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
@@ -104,6 +116,8 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/ProgrammeTierForm.tsx",
   "src/components/dashboard/ProgrammeLabTestForm.tsx",
   "src/app/[locale]/partner-lab/sign-up/page.tsx",
+  "src/components/partner-lab/PartnerLabStatus.tsx",
+  "src/components/dashboard/PartnerLabReviewForm.tsx",
 ]);
 
 // Exact paths. Host strings may appear in these two files and nowhere
