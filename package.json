@@ -16,6 +16,8 @@
     "guard:design": "node scripts/guard/design.mjs",
     "guard:phases": "node scripts/guard/phases.mjs",
     "guard:boundary": "node scripts/guard/boundary.mjs",
+    "smoke:public": "node scripts/smoke/partner-lab.mjs public",
+    "smoke:operator": "node scripts/smoke/partner-lab.mjs operator",
     "postinstall": "next telemetry disable"
   },
   "repository": {
