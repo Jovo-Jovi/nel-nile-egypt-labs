@@ -712,6 +712,18 @@ Reverse recreates M5:185 exactly.
 Catalogue 576/576. Migrations on disk 26 + 2 = 28. Do not merge before
 the verdict. Do not `db push`. Do not turn on `NEL_PARTNER_SIGNUP`.
 
+## 2026-09-08 — P08-T11 STEPS 4-6: M10 proved, CF-160 landed
+
+The human applied M10 after STEPS 0-3. Live `pg_policies` 24. Anon
+`GET /rest/v1/Offer?select=*` is `[]` with a published throwaway Offer in
+the table; an approved PartnerLab session sees the title on `/ar/offers`
+and `/en/offers`. Pending, declined, and unauthenticated bodies do not.
+The throwaway was unpublished and deleted. Four clinical tables remain 0
+published. Static HTML 26 → 22: `/ar`, `/en`, `/ar/offers`, `/en/offers`
+are dynamic so the session JWT can reach Postgres. CF-160 OPEN, owner
+reviewer, G8. CF-149 stays OPEN until P08-T12. Open CF 93 + 1 = 94.
+Do not merge before the verdict. Do not turn on `NEL_PARTNER_SIGNUP`.
+
 
 
 

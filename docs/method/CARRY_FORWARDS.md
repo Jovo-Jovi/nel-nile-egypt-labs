@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-160**
+**Next free id: CF-161**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -165,6 +165,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-157 | OD-18 §6 is enforced on status, Location and body, and not on response TIME. An already-registered signup and a fresh one may take measurably different durations, which is a timing oracle the current design does not close. Assess before signup is reachable, alongside CF-149. | reviewer | OPEN | P08 |
 | CF-158 | supabase/config.toml is not authoritative for this project's hosted auth settings — it declares password_requirements = "" and minimum_password_length = 6 while the live project enforces a character class rule (P08-T06 STEP 1, HTTP 422). Any future code reading that file as truth about hosted behaviour is reading a stale artefact. The local rule at P08-T08 is deliberately stricter so drift fails safe, but the divergence itself is unreviewed. | reviewer | OPEN | P08 |
 | CF-159 | public/mark/nel-mark.png is a raster mark. A vector mark renders correctly at every size and in print. If Androw has an SVG, it is a drop-in replacement; if not, this is a note, not a defect. Closed at P08-T10: the reviewer ruling on CF-74 decides PNG with an alpha channel; SVG is not required and §7 states no editable original exists. | human | CLOSED at P08-T10 | P08 |
+| CF-160 | `Offer_published_read` was dropped at M10. Eleven other `*_published_read` policies remain `to anon`, read from live `pg_policies`: `Branch_published_read`, `Equipment_published_read`, `LabTest_published_read`, `LabUnit_published_read`, `MediaAsset_published_read`, `Programme_published_read`, `ProgrammeLabTest_published_read`, `ProgrammeTier_published_read`, `SiteSettings_published_read`, `Video_published_read`, and `storage.objects` `MediaAsset_objects_published_read`. Each of those eleven is public by decision. Offer is not among them. | reviewer | OPEN | G8 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
