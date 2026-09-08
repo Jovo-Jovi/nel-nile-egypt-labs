@@ -689,6 +689,41 @@ R3 16 → 18, two exact paths, no directory, no pattern. Catalogue 574/574.
 Open CF 94 − 1 = 93. Migrations on disk 24 + 2 = 26. Do not merge before
 the verdict. Do not `db push`. Do not turn on `NEL_PARTNER_SIGNUP`.
 
+## 2026-09-08 — P08-T11 STEPS 0-3: confirm-password, session Offer read, M10 authored
+
+Parent is unmerged `p08-t10` at `901b8d6`, not `main`. Stacked.
+
+P08-T10 Verdict cell set to PASS; M9 was applied by the human under
+OD-17 §3.3. Confirm-password is a second typing of the same credential.
+The signup loop is no longer byte-identical to `7e24066`. Evidence item 9
+is restated in the handler: it accepts no field that is not an
+authentication credential. A mismatch is a local SAFE check and cannot
+leak whether an address is known.
+
+`/{locale}/offers` reads Offers through `createSupabaseServerClient`.
+`fetchAnonPublishedJson` stays on Equipment, Videos, Branches,
+Programmes, LabUnits, SiteSettings, MediaAsset, and Programme detail.
+No service-role client on that path.
+
+M10 is one statement: drop `Offer_published_read`. Rehearsed inside
+`BEGIN`/`ROLLBACK`, exit 0. Live `pg_policies` stayed 25. Not pushed.
+Reverse recreates M5:185 exactly.
+
+Catalogue 576/576. Migrations on disk 26 + 2 = 28. Do not merge before
+the verdict. Do not `db push`. Do not turn on `NEL_PARTNER_SIGNUP`.
+
+## 2026-09-08 — P08-T11 STEPS 4-6: M10 proved, CF-160 landed
+
+The human applied M10 after STEPS 0-3. Live `pg_policies` 24. Anon
+`GET /rest/v1/Offer?select=*` is `[]` with a published throwaway Offer in
+the table; an approved PartnerLab session sees the title on `/ar/offers`
+and `/en/offers`. Pending, declined, and unauthenticated bodies do not.
+The throwaway was unpublished and deleted. Four clinical tables remain 0
+published. Static HTML 26 → 22: `/ar`, `/en`, `/ar/offers`, `/en/offers`
+are dynamic so the session JWT can reach Postgres. CF-160 OPEN, owner
+reviewer, G8. CF-149 stays OPEN until P08-T12. Open CF 93 + 1 = 94.
+Do not merge before the verdict. Do not turn on `NEL_PARTNER_SIGNUP`.
+
 
 
 
