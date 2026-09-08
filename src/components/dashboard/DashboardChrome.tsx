@@ -13,13 +13,17 @@ import styles from "./DashboardChrome.module.css";
 export function DashboardModuleTitle({
   locale,
   titleKey,
+  showEyebrow = true,
 }: {
   locale: Locale;
   titleKey: CatalogKey;
+  showEyebrow?: boolean;
 }) {
   return (
     <header className={styles.pageHeader}>
-      <p className={styles.eyebrow}>{translate(locale, "dashboard.module.eyebrow")}</p>
+      {showEyebrow ? (
+        <p className={styles.eyebrow}>{translate(locale, "dashboard.module.eyebrow")}</p>
+      ) : null}
       <h1 className={styles.pageTitle}>{translate(locale, titleKey)}</h1>
     </header>
   );

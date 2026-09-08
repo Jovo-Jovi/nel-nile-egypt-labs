@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { translate, type Locale } from "@/lib/catalog";
 import { localeHref } from "@/lib/locale";
+import { isPartnerSignupEnabled } from "@/lib/partnerSignupFlag";
 import { FOOTER_MEDIA, HEADER_NAV } from "@/lib/siteNav";
 import { resultsPortalVisitorHref } from "@/lib/resultsPortalLink";
 import type { PublicChrome } from "@/lib/publicChrome";
@@ -85,6 +86,11 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
             <Link href={localeHref(locale, "/lab-to-lab")} className={styles.link}>
               {translate(locale, "footer.labToLab")}
             </Link>
+            {isPartnerSignupEnabled() ? (
+              <Link href={localeHref(locale, "/partner-lab/sign-up")} className={styles.link}>
+                {translate(locale, "partnerLab.signUp.title")}
+              </Link>
+            ) : null}
             {chrome.hotline ? (
               <span className={styles.meta}>
                 <span>{translate(locale, "footer.hotlineLabel")}</span>
