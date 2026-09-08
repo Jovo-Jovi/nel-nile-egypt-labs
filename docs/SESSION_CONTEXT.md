@@ -776,7 +776,7 @@ nothing and must never be cited as authority. v2 is ~~reordered under OD-12~~ (P
 
 ## Next action
 
-P08-T13 Part A is on `p08-t13` (`c9e3986`), cut from unmerged `p08-t12`. OD-19 DRAFT, D-49 landed, CF-152 still OPEN pending signature. STEP 4: production `SUPABASE_SERVICE_ROLE_KEY` present false; CF-165 is the null-client path. STEP 5 HALT: awaiting the human's attestation. G8 remains FAIL. Do not sign OD-19. Do not merge before the verdict. No migration. Do not publish a real Offer or any clinical row.
+P08-T13 is on `p08-t13` (`80ad241`), cut from unmerged `p08-t12`. Part A `c9e3986`. OD-19 DRAFT, D-49 landed, CF-152 still OPEN pending signature. STEP 4: production `SUPABASE_SERVICE_ROLE_KEY` present false; CF-165 is the null-client path. STEP 5 HALT: awaiting the human's attestation of a–f. STEPS 6–8 not started. G8 remains FAIL. Do not sign OD-19. Do not merge before the verdict. No migration. Do not publish a real Offer or any clinical row.
 
 OD-03's freeze lapses 15 September 2026.
 
