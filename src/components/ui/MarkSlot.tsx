@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useClientReady } from "./useClientReady";
 import styles from "./MarkSlot.module.css";
 
 interface MarkSlotProps {
@@ -10,17 +11,13 @@ interface MarkSlotProps {
 
 // Slot for public/mark/nel-mark.png. Callers may override size via
 // `--nel-mark-size` on a parent. onError must not swap the element type
-// until after mount: an img that is already failed in the parser would
+// until after hydration: an img that is already failed in the parser would
 // otherwise replace itself with a span during hydration (React #418).
 export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
   const [broken, setBroken] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const ready = useClientReady();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (mounted && broken) {
+  if (ready && broken) {
     return (
       <span
         className={styles.fallback}
