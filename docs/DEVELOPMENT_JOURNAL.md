@@ -775,4 +775,20 @@ CF-152 still OPEN: settled by OD-19 §1, closes when signed.
 D-49 landed: PartnerLab signup does not send email. Count Forty-eight →
 Forty-nine.
 
-Do not merge before the verdict. Part B follows on this branch.
+Do not merge before the verdict.
+
+## 2026-09-08 — P08-T13 Part B HALT at STEP 5
+
+STEP 4 diagnosis, names only, no values. `applyPartnerLabReviewAction`
+returns `write` when `createSupabaseServiceRoleClient()` is null, or when
+`updateUserById` errors. Production `SUPABASE_SERVICE_ROLE_KEY` present
+false (`npx vercel env ls production`, names only). That is the null-client
+path. Rotation of both keys is still required because `--reveal` printed
+them; setting the service-role variable on Production is what discharges
+this path.
+
+STEP 5 is a human action. This window did not rotate, copy, redeploy, or
+touch mailer settings. HALT awaiting the human's attestation of a–f.
+No key printed, echoed or written to a file.
+
+Do not merge before the verdict. Part A stands.
