@@ -814,3 +814,24 @@ metadata fallback. P7 invite copy both locales. P9 clinical published
 
 Do not merge before the verdict. Part A stands.
 
+## 2026-09-09 — P08-T14: PartnerLab smoke, CF-153 and CF-154 closed
+
+Parent is unmerged `p08-t13` at `a15dbde`, not `main`. No migration.
+
+P08-T13 recorded PASS (Part A) at reviewer verdict — 8 September 2026;
+halted at P3, G8 remains FAIL.
+
+PHASES.md: P03 heading CLOSED at G3, 2 September 2026; P05 heading CLOSED
+at G5-R, 7 September 2026; Programmes module checked, landed at P05-T24A /
+P05-T24B; P06 72 / 121 / 5 and the sign-off line struck through with M8
+71 / 124 / 0 and SIGNED 6 September 2026 hash aa0469ee…aef7. P08-T14 box
+added, unchecked.
+
+CF-153 and CF-154 CLOSED at P08-T14, discharged by D-49, not deferred.
+Open 97 − 2 = 95.
+
+`scripts/smoke/partner-lab.mjs` MODE public run against the live alias:
+S1–S10 and cleanup PASS. MODE operator not run.
+
+Do not merge before the verdict.
+

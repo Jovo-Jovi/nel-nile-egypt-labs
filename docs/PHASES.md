@@ -162,7 +162,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 
 ---
 
-### P03 — Public site · ACTIVE
+### P03 — Public site · CLOSED at G3, 2 September 2026
 
 - [x] **P03-T01** — locale routing, `lang` and `dir` from the URL, twelve static patterns
 - [x] **P03-T01-F** — restore the approved home composition at `/{locale}`
@@ -181,7 +181,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **G3-R** — recorded the G3 gate
 - [x] **G3** — rendered evidence in both locales on every page; boundary and bilingual gates
 
-### P05 — Admin dashboard · NEXT
+### P05 — Admin dashboard · CLOSED at G5-R, 7 September 2026
 
 - [x] **P05-T00** — `ADMIN_SPEC.md` — authored one step ahead (CF-91)
 - [x] **P05-T01a** — close out the stale region statements
@@ -230,7 +230,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P05-T29** — Clear the three G5-R blockers and amend §9
 - [x] **P05-T08** — Branches and LabUnits modules
 - [x] **P05-T09** — Offers, Videos and Equipment modules
-- [ ] Programmes, tiers and memberships module
+- [x] Programmes, tiers and memberships module — landed at P05-T24A / P05-T24B
 - [x] **G5-R** — re-run in full
 - [x] **G5** — the owner can edit every unlocked region himself
 - [x] **M7B-1** — Stamp the Operator claim, and land the countersignature
@@ -252,14 +252,15 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P08-T11** — Confirm-password, the authenticated Offer read, and M10
 - [x] **P08-T12** — G8: production wiring, the walkthrough, and three findings
 - [ ] **P08-T12-F** — G8 blockers: React #418, signup persistence, Operator review
-- [ ] **P08-T13** — Reconcile the phase plan, then clear the three G8 blockers
+- [x] **P08-T13** — Reconcile the phase plan, then clear the three G8 blockers
+- [ ] **P08-T14** — A repeatable PartnerLab smoke test
 
 ### P06 — Content and Arabic · LONGEST POLE
 
-- [ ] 72 Arabic `LabTest` names — written and reviewed
-- [ ] 121 membership judgements — which tests belong to which programme and tier
-- [ ] 5 QA-flagged records — two high severity, resolved with the lab
-- [ ] Written clinical sign-off — not waivable by anyone, including the client
+- [ ] ~~72 Arabic `LabTest` names — written and reviewed~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 71
+- [ ] ~~121 membership judgements — which tests belong to which programme and tier~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 124
+- [ ] ~~5 QA-flagged records — two high severity, resolved with the lab~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 0
+- [ ] ~~Written clinical sign-off — not waivable by anyone, including the client~~ SIGNED 6 September 2026, hash aa0469ee…aef7
 - [ ] Content entry — through the dashboard, not through SQL
 - [ ] **G6** — clinical and bilingual gates
 
@@ -418,9 +419,14 @@ close G8 but sit on the ledger beside it.
 **React #418 (CF-164).** Reported on the live site; unnamed under `next dev`. G8
 does not pass while the mismatch is unnamed. Capture and fix at P08-T13.
 
-**Signup persistence (CF-153, CF-154).** The public form returned `created=1` with
+~~**Signup persistence (CF-153, CF-154).** The public form returned `created=1` with
 no listable Auth row. D-49 records `mailer_autoconfirm` as the decision, not a
-workaround. Not proven until P1 on the live path.
+workaround. Not proven until P1 on the live path.~~
+**UNRATIFIED residual repair, PR-19, P08-T14.** CF-153 and CF-154 CLOSED at
+P08-T14, discharged by D-49, not deferred. CF-153 asked for a ruling on
+confirmation email and D-49 is that ruling; CF-154 was the built-in mailer as a
+production path and with autoconfirm on there is no mail path. P08-T13 P2 listed
+the Auth row via `db query --linked`.
 
 **Operator review (CF-165).** Approve, reject and reinstate POSTs returned
 `error=write`. The walkthrough then wrote claims via a local Admin client, which
