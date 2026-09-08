@@ -238,7 +238,8 @@ OD-12's sequence is unamended; this phase was signed later.
 - [x] **P08-T08** — Enforce the password rule locally, and neutralise weak_password
 - [x] **P08-T09** — Wire the brand and media, and clear every placeholder
 - [x] **P08-T10** — The PartnerLab flow, end to end
-- [ ] **P08-T11** — Confirm-password, the authenticated Offer read, and M10
+- [x] **P08-T11** — Confirm-password, the authenticated Offer read, and M10
+- [ ] **P08-T12** — G8: production wiring, the walkthrough, and three findings
 
 ### P06 — Content and Arabic · LONGEST POLE
 

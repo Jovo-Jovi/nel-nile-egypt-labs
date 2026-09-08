@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./MarkSlot.module.css";
 
 interface MarkSlotProps {
@@ -9,13 +9,18 @@ interface MarkSlotProps {
 }
 
 // Slot for public/mark/nel-mark.png. Callers may override size via
-// `--nel-mark-size` on a parent. Until the file loads, onError swaps in a
-// §9 labelled frame (DESIGN_SYSTEM.md §7 / §12, CF-74). The file on disk
-// is a raster; CF-159 records that a vector mark is the drop-in if supplied.
+// `--nel-mark-size` on a parent. onError must not swap the element type
+// until after mount: an img that is already failed in the parser would
+// otherwise replace itself with a span during hydration (React #418).
 export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
   const [broken, setBroken] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  if (broken) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (mounted && broken) {
     return (
       <span
         className={styles.fallback}
