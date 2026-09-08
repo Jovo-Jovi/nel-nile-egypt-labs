@@ -755,16 +755,24 @@ Three throwaway Auth users `missing_after=true`. React #418 was not
 reproduced under `next dev` and was not captured authenticated; G8 FAIL
 on 1b. Do not merge before the verdict.
 
+## 2026-09-08 — P08-T13 Part A: phase plan, OD-19 draft, D-49
 
+Parent is `p08-t12` at `343c6e0`, unmerged. No migration.
 
+P08-T12 recorded FAIL at reviewer verdict — 8 September 2026; G8 blocked on
+React #418, signup persistence and Operator review; fixes at P08-T13.
 
+PHASES.md: the OD-12 figure is struck through beside OD-19 (draft), with
+P03-T03 and `9dac44f`. P09 added. `grep -c "^### P0"` → 7. The fence's
+ten-change table was not in the prompt; the reconstruction is UNRATIFIED
+in the file (PR-19). §7 rewritten from the live ledger: three G8 blockers,
+credential rotation, OD-09 unsigned (CF-156), CF-152 settled by OD-19
+draft.
 
+OD-19 landed DRAFT, not signed. Count Eighteen → Nineteen. OD-12 unamended.
+CF-152 still OPEN: settled by OD-19 §1, closes when signed.
 
+D-49 landed: PartnerLab signup does not send email. Count Forty-eight →
+Forty-nine.
 
-
-
-
-
-
-
-
+Do not merge before the verdict. Part B follows on this branch.
