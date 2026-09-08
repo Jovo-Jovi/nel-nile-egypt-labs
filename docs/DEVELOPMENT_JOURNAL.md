@@ -742,9 +742,18 @@ the signed copy is absent.
 
 Unnamed MediaAsset rows show `storage_path` so the picker is usable.
 
-CF live maximum 160 before allocating CF-161. Open 94 − 1 + 4 = 97.
-Next free CF-165. Catalogue 576/576. Migrations 28. Do not merge before
-the verdict.
+CF live maximum 160 before allocating CF-161. Closed CF-149 and CF-137.
+Landed CF-161, CF-162, CF-163, CF-164, CF-165. Open 94 − 2 + 5 = 97.
+Next free CF-166. Catalogue 576/576. Migrations 28.
+
+Walkthrough on the production alias (SHA `ef5671b`): form signup returned
+`303` `created=1` with no listable Auth row (CF-153, CF-154); pending,
+approved and declined copy was quoted after Admin `createUser` plus
+Admin metadata fallback because Operator review POSTs returned
+`error=write` (CF-165). Synthetic Offer unpublished and deleted; GET 404.
+Three throwaway Auth users `missing_after=true`. React #418 was not
+reproduced under `next dev` and was not captured authenticated; G8 FAIL
+on 1b. Do not merge before the verdict.
 
 
 
