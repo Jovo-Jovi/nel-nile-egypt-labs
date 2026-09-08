@@ -795,8 +795,9 @@ publish, unpublish or mutate any laboratory-owned row. Completeness live
 read 36 of 38 required fields populated, incomplete, same numbers in both
 locales. CF-124 stays OPEN, owner reviewer, G5:
 §4h.3 grades zero published Offers complete while `/offers` is a pending
-shell. The public Offers page still prerenders; removing it is P08 build work
-after this document landing. OD-15 document amendments landed at P08-T01.
+shell. As of P08-T10 `/offers` and the home Offers band are an
+authentication-required state: a Visitor is invited to sign in and sees no
+Offer title or price. OD-15 document amendments landed at P08-T01.
 
 The client supplied bilingual privacy policy text on 5 September 2026. It is
 staged untracked and is not committed: `privacy_body_ar` and `_en` are

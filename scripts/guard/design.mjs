@@ -96,7 +96,9 @@ const ALLOWED_HEX = /^#25D366$/i;
 // EquipmentForm.tsx as three exact paths, no directory, no pattern;
 // P05-T10 added MediaAssetForm.tsx as one exact path, no directory, no
 // pattern; P05-T24A added ProgrammeForm.tsx and LabTestForm.tsx as two
-// exact paths, no directory, no pattern).
+// exact paths, no directory, no pattern; P08-T10 added PartnerLabStatus.tsx
+// and PartnerLabReviewForm.tsx as two exact paths, no directory, no
+// pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
