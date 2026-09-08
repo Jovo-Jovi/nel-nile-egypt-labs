@@ -652,6 +652,43 @@ is a raster mark. Open count 93 + 1 = 94.
 No SQL, no migration. ADR-001 unedited. Signed clinical artefacts
 unchanged. Flag unedited. Do not merge before the verdict.
 
+---
+
+## 2026-09-08 — P08-T10 PartnerLab flow, end to end
+
+Parent is unmerged `p08-t09` at `7bacc16`, not `main`. Stacked.
+
+The transparent PNG is the live mark: 334633 bytes, 537×752, color type 6.
+A format without an alpha channel must not be the live mark; the JPEG is
+gone. CF-74 stays open because the four §7 variants are still outstanding.
+CF-159 closes: the reviewer ruled resolution, not format, and PNG with
+alpha is enough.
+
+A signed-in account with no `nel_principal` sees only pending. A rejected
+account sees only declined. Neither body carries an Offer title or a
+price. Authentication is what makes OD-18 §3 safe. The Operator gate
+order is the M7C order.
+
+M9 is one SELECT policy on `"Offer"` for `authenticated`, predicate
+exactly the PartnerLab claim, matching the twelve Operator-write
+policies. Rehearsed inside `BEGIN`/`ROLLBACK`. Live `pg_policies` stayed
+24. Not pushed. Reverse authored with no timestamp.
+
+Approve, reject and reinstate merge `app_metadata` through Auth Admin
+behind aal2. They write nothing in `public`. The claim lands on the next
+token refresh; the copy says so. The service-role key is server-side and
+does not appear under `partner-lab/`.
+
+`/offers` and the home Offers band are an authentication-required state.
+The route still exists. A Visitor is invited to sign in. T3, the positive
+control, reached listing chrome on a refreshed PartnerLab token. The
+Offer table holds no published rows and this fence forbids publish, so
+the empty-listing copy is the distinguisher.
+
+R3 16 → 18, two exact paths, no directory, no pattern. Catalogue 574/574.
+Open CF 94 − 1 = 93. Migrations on disk 24 + 2 = 26. Do not merge before
+the verdict. Do not `db push`. Do not turn on `NEL_PARTNER_SIGNUP`.
+
 
 
 

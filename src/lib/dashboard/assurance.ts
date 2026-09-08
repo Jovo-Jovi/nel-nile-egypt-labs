@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { principalFromClaims } from "@/lib/nelSession";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type AssuranceLevel = "aal1" | "aal2";
@@ -16,16 +17,6 @@ export type OperatorAccess =
 // Server-only. Imported from layouts, pages and Route Handlers under
 // src/app/[locale]/dashboard. Never imported from a Client Component.
 
-function nelPrincipalFromClaims(claims: unknown): string | null {
-  if (typeof claims !== "object" || claims === null) return null;
-  if (!("app_metadata" in claims)) return null;
-  const appMetadata = claims.app_metadata;
-  if (typeof appMetadata !== "object" || appMetadata === null) return null;
-  if (!("nel_principal" in appMetadata)) return null;
-  const value = appMetadata.nel_principal;
-  return typeof value === "string" ? value : null;
-}
-
 export async function readOperatorAccessFrom(supabase: SupabaseClient): Promise<OperatorAccess> {
   const claims = await supabase.auth.getClaims();
   if (claims.error || claims.data === null) return { signedIn: false };
@@ -34,7 +25,7 @@ export async function readOperatorAccessFrom(supabase: SupabaseClient): Promise<
   // M7B-1 stamped app_metadata.nel_principal = "Operator"; the twelve
   // write policies test the same string. OD-15 §5 / ADMIN_SPEC.md §3b /
   // SECURITY_MODEL.md §4.
-  const isOperator = nelPrincipalFromClaims(claims.data.claims) === "Operator";
+  const isOperator = principalFromClaims(claims.data.claims) === "Operator";
 
   const aal = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
   if (aal.error || aal.data === null) return { signedIn: false };

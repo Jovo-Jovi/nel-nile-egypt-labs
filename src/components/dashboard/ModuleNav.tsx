@@ -16,6 +16,7 @@ const MODULES: { suffix: string; labelKey: CatalogKey }[] = [
   { suffix: "/dashboard/lab-units", labelKey: "dashboard.nav.labUnits" },
   { suffix: "/dashboard/site-settings", labelKey: "dashboard.nav.siteSettings" },
   { suffix: "/dashboard/media-assets", labelKey: "dashboard.nav.mediaAssets" },
+  { suffix: "/dashboard/partner-lab", labelKey: "dashboard.nav.partnerLab" },
 ];
 
 export function ModuleNav({ locale }: { locale: Locale }) {

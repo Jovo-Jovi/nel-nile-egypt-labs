@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { DashboardChrome } from "@/components/dashboard/DashboardChrome";
+import { PartnerLabStatus } from "@/components/partner-lab/PartnerLabStatus";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
-import { notOperatorSignInHref } from "@/lib/dashboard/gates";
+import { partnerLabStatusKind, readNelSession } from "@/lib/nelSession";
 import { localeHref } from "@/lib/locale";
 
 export default async function SessionLayout({
@@ -16,11 +17,21 @@ export default async function SessionLayout({
   const locale = await requireLocale(params);
   const access = await readOperatorAccess();
   if (!access.signedIn) redirect(localeHref(locale, "/dashboard/sign-in"));
-  if (!access.isOperator) redirect(notOperatorSignInHref(locale));
+  if (access.isOperator) {
+    return (
+      <DashboardChrome locale={locale} showSignOut>
+        {children}
+      </DashboardChrome>
+    );
+  }
+
+  const session = await readNelSession();
+  const kind = partnerLabStatusKind(session);
+  if (kind === "approved") redirect(localeHref(locale, "/offers"));
 
   return (
     <DashboardChrome locale={locale} showSignOut>
-      {children}
+      <PartnerLabStatus locale={locale} kind={kind === "declined" ? "declined" : "pending"} />
     </DashboardChrome>
   );
 }

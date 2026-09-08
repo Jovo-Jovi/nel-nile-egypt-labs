@@ -10,9 +10,10 @@ export function notOperatorSignInHref(locale: Locale): string {
 
 export function gateSignInPage(access: OperatorAccess, locale: Locale): void {
   if (!access.signedIn) return;
-  // Stay on sign-in and render the refusal. Redirecting here would loop
-  // when the page is already serving ?reason=not-operator.
-  if (!access.isOperator) return;
+  // Non-Operator sessions belong on the PartnerLab status / Offers
+  // surface, never on the Operator sign-in form. Operator order below
+  // is unchanged (M7C).
+  if (!access.isOperator) redirect(localeHref(locale, "/offers"));
   if (!access.hasVerifiedTotp) redirect(localeHref(locale, "/dashboard/enrol"));
   if (access.currentLevel !== "aal2") redirect(localeHref(locale, "/dashboard/challenge"));
   redirect(localeHref(locale, "/dashboard"));

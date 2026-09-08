@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
 import { formatWesternCount, publishedCountLabel } from "@/lib/listingFormat";
 import { Isolate, IsolatedCopy } from "@/components/ui/Isolate";
@@ -53,6 +54,7 @@ interface SiteHomeProps {
   homeM6Copy: HomeM6Copy | null;
   heroPosterSrc: string | null;
   heroPosterAlt: string | null;
+  offersAudience: ReactNode;
 }
 
 const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
@@ -159,6 +161,7 @@ export function SiteHome({
   homeM6Copy,
   heroPosterSrc,
   heroPosterAlt,
+  offersAudience,
 }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
@@ -411,21 +414,7 @@ export function SiteHome({
 
       <section className={`${styles.band} ${styles.inset}`} id="offers">
         <p className={styles.kicker}>{translate(locale, "offers.heading")}</p>
-        <h2 className={styles.sectionTitle}>{translate(locale, "offers.standfirst")}</h2>
-        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
-          <ol className={styles.cards}>
-            {OCCUPANCY.map((slot) => (
-              <li key={slot}>
-                <div className={styles.pendingCopy}>
-                  <SkeletonBar size="xs" widthPercent={16} />
-                  <SkeletonBar size="lg" widthPercent={78} />
-                  <SkeletonBar size="sm" widthPercent={100} />
-                  <SkeletonBar size="sm" widthPercent={54} />
-                </div>
-              </li>
-            ))}
-          </ol>
-        </ApprovalGate>
+        {offersAudience}
       </section>
 
       <section className={`${styles.band} ${styles.inset}`} id="insights">

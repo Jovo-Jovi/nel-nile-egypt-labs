@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { readOperatorAccessFrom } from "@/lib/dashboard/assurance";
-import { gateSignInPage, notOperatorSignInHref } from "@/lib/dashboard/gates";
+import { gateSignInPage } from "@/lib/dashboard/gates";
 import { localeHref } from "@/lib/locale";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -31,7 +31,7 @@ export async function POST(
     redirect(`${localeHref(locale, "/dashboard/sign-in")}?error=1`);
   }
   if (!access.isOperator) {
-    redirect(notOperatorSignInHref(locale));
+    redirect(localeHref(locale, "/offers"));
   }
   gateSignInPage(access, locale);
 }
