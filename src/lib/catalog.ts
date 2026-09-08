@@ -86,7 +86,7 @@ const ar = {
   "dashboard.completeness.incomplete": "غير مكتمل",
   "dashboard.completeness.allPopulated": "كل المحتوى المطلوب مُدخل",
   "dashboard.completeness.filled": "مُدخل",
-  "dashboard.completeness.missing": "فارغ أو عنصر نائب",
+  "dashboard.completeness.missing": "فارغ أو غير مكتمل",
   "dashboard.completeness.page.chrome": "إطار الموقع (كل صفحة عامة)",
   "dashboard.completeness.publishedRow": "صف منشور واحد على الأقل",
   "dashboard.completeness.headOffice": "مقر رئيسي واحد بالضبط",
@@ -213,6 +213,10 @@ const ar = {
   "dashboard.siteSettings.reason2Body": "نص البطاقة 2",
   "dashboard.siteSettings.reason3Title": "عنوان البطاقة 3",
   "dashboard.siteSettings.reason3Body": "نص البطاقة 3",
+  "dashboard.siteSettings.sectionBrandMedia": "العلامة والوسائط",
+  "dashboard.siteSettings.heroMedia": "صورة المقدمة",
+  "dashboard.siteSettings.faviconMedia": "أيقونة التبويب",
+  "dashboard.siteSettings.appIconMedia": "أيقونة التطبيق",
   "dashboard.siteSettings.errorBilingualFields":
     "تعذّر النشر لأن هذه الحقول ناقصة بالعربية أو الإنجليزية:",
   "dashboard.siteSettings.errorBilingualNoRetry":
@@ -492,7 +496,7 @@ const ar = {
 
   // Video section
   "video.heading": "فيديوهات",
-  "video.posterLabel": "غلاف الفيديو (عنصر نائب)",
+  "video.posterLabel": "غلاف الفيديو (يوفرها العميل)",
   "video.playLabel": "تشغيل الفيديو",
 
   // About / Offers / Equipment / Lab-to-Lab — page chrome for the
@@ -561,10 +565,10 @@ const ar = {
   "footer.labToLab": "معامل للمعامل",
   "footer.media": "من المعمل",
   "footer.social": "تابعنا",
-  "footer.social.facebook": "فيسبوك (رابط نائب)",
-  "footer.social.instagram": "إنستغرام (رابط نائب)",
-  "footer.social.x": "منصة إكس (رابط نائب)",
-  "footer.social.youtube": "يوتيوب (رابط نائب)",
+  "footer.social.facebook": "فيسبوك",
+  "footer.social.instagram": "إنستغرام",
+  "footer.social.x": "منصة إكس",
+  "footer.social.youtube": "يوتيوب",
   "footer.social.pending": "روابط الحسابات تظهر بعد إدخالها في إعدادات الموقع.",
   "footer.notice": "معاينة داخلية فقط، وليست نسخة منشورة. جميع البيانات وهمية.",
 
@@ -645,7 +649,7 @@ const ar = {
 const en = {
   // Preview banner (P02-T09 chrome, not part of the design system itself)
   "preview.banner.text":
-    "Internal client preview — this is a design mock and every string in it is placeholder copy.",
+    "Internal client preview — this is a design mock and every string in it is temporary mock copy.",
   "preview.toggle.landing": "Landing",
   "preview.toggle.system": "Design system",
 
@@ -720,7 +724,7 @@ const en = {
   "dashboard.completeness.incomplete": "Incomplete",
   "dashboard.completeness.allPopulated": "all required content populated",
   "dashboard.completeness.filled": "Populated",
-  "dashboard.completeness.missing": "Empty or placeholder",
+  "dashboard.completeness.missing": "Empty or stand-in",
   "dashboard.completeness.page.chrome": "Site chrome (every public page)",
   "dashboard.completeness.publishedRow": "At least one published row",
   "dashboard.completeness.headOffice": "Exactly one head office",
@@ -847,6 +851,10 @@ const en = {
   "dashboard.siteSettings.reason2Body": "Card 2 body",
   "dashboard.siteSettings.reason3Title": "Card 3 title",
   "dashboard.siteSettings.reason3Body": "Card 3 body",
+  "dashboard.siteSettings.sectionBrandMedia": "Mark and media",
+  "dashboard.siteSettings.heroMedia": "Hero image",
+  "dashboard.siteSettings.faviconMedia": "Tab icon",
+  "dashboard.siteSettings.appIconMedia": "App icon",
   "dashboard.siteSettings.errorBilingualFields":
     "Publishing was refused because these fields are missing in Arabic or English:",
   "dashboard.siteSettings.errorBilingualNoRetry":
@@ -1077,22 +1085,22 @@ const en = {
   // Card band — News
   "news.heading": "News",
   "news.viewAll": "View all",
-  "news.entry1.date": "Date (placeholder)",
-  "news.entry1.title": "Placeholder news title — awaiting a signed ninth dashboard module",
-  "news.entry1.excerpt": "Sample text; not a real news item.",
-  "news.entry2.date": "Date (placeholder)",
-  "news.entry2.title": "Another placeholder news title — same constraint",
-  "news.entry2.excerpt": "Another sample text; not a real news item.",
+  "news.entry1.date": "Date (unconfirmed)",
+  "news.entry1.title": "Proposed news title — awaiting a signed ninth dashboard module",
+  "news.entry1.excerpt": "Filler text; not a real news item.",
+  "news.entry2.date": "Date (unconfirmed)",
+  "news.entry2.title": "Another proposed news title — same constraint",
+  "news.entry2.excerpt": "More filler text; not a real news item.",
 
   // Card band — Cautions
   "cautions.heading": "Cautions",
   "cautions.viewAll": "View all",
-  "cautions.entry1.title": "Placeholder caution 1 — awaiting clinical sign-off",
-  "cautions.entry1.body": "Sample text; not a real clinical instruction.",
-  "cautions.entry2.title": "Placeholder caution 2 — awaiting clinical sign-off",
-  "cautions.entry2.body": "Sample text; not a real clinical instruction.",
-  "cautions.entry3.title": "Placeholder caution 3 — awaiting clinical sign-off",
-  "cautions.entry3.body": "Sample text; not a real clinical instruction.",
+  "cautions.entry1.title": "Proposed caution 1 — awaiting clinical sign-off",
+  "cautions.entry1.body": "Filler text; not a real clinical instruction.",
+  "cautions.entry2.title": "Proposed caution 2 — awaiting clinical sign-off",
+  "cautions.entry2.body": "Filler text; not a real clinical instruction.",
+  "cautions.entry3.title": "Proposed caution 3 — awaiting clinical sign-off",
+  "cautions.entry3.body": "Filler text; not a real clinical instruction.",
 
   // Card band — Locations
   "locations.heading": "Locations",
@@ -1114,19 +1122,19 @@ const en = {
   "programmes.heading": "Programmes",
   "programmes.standfirst": "Published screening programmes — approved names arrive after clinical sign-off.",
   "programmes.viewAll": "View all",
-  "programmes.row1Title": "Placeholder programme 1 — awaiting clinical sign-off",
-  "programmes.row1Subtitle": "Sample subtitle",
-  "programmes.row2Title": "Placeholder programme 2 — awaiting clinical sign-off",
-  "programmes.row2Subtitle": "Sample subtitle",
-  "programmes.row3Title": "Placeholder programme 3 — awaiting clinical sign-off",
-  "programmes.row3Subtitle": "Sample subtitle",
+  "programmes.row1Title": "Proposed programme 1 — awaiting clinical sign-off",
+  "programmes.row1Subtitle": "Secondary line",
+  "programmes.row2Title": "Proposed programme 2 — awaiting clinical sign-off",
+  "programmes.row2Subtitle": "Secondary line",
+  "programmes.row3Title": "Proposed programme 3 — awaiting clinical sign-off",
+  "programmes.row3Subtitle": "Secondary line",
 
   // Departments (LabUnit) — names come from published rows.
   "departments.heading": "Departments",
 
   // Video section
   "video.heading": "Videos",
-  "video.posterLabel": "Video poster (placeholder)",
+  "video.posterLabel": "Video poster (client-supplied)",
   "video.playLabel": "Play video",
 
   // About / Offers / Equipment / Lab-to-Lab — page chrome for the
@@ -1195,10 +1203,10 @@ const en = {
   "footer.labToLab": "Lab-to-Lab",
   "footer.media": "From the laboratory",
   "footer.social": "Follow us",
-  "footer.social.facebook": "Facebook (placeholder link)",
-  "footer.social.instagram": "Instagram (placeholder link)",
-  "footer.social.x": "X (placeholder link)",
-  "footer.social.youtube": "YouTube (placeholder link)",
+  "footer.social.facebook": "Facebook",
+  "footer.social.instagram": "Instagram",
+  "footer.social.x": "X",
+  "footer.social.youtube": "YouTube",
   "footer.social.pending": "Account links appear once they are entered in Site Settings.",
   "footer.notice": "Internal preview only, not a published version. All data is synthetic.",
 
@@ -1244,7 +1252,7 @@ const en = {
   "system.approval.withheldLabel": "Withheld",
   "system.approval.withheldNote":
     "Nothing renders — this caption sits outside the withheld region itself, not inside it.",
-  "system.approval.pendingExampleTitle": "Placeholder programme name — awaiting clinical sign-off",
+  "system.approval.pendingExampleTitle": "Proposed programme name — awaiting clinical sign-off",
 
   "system.accessibility.heading": "Accessibility floor",
   "system.accessibility.closesWith": "Closes with",

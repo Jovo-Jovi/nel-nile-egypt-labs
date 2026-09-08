@@ -5,6 +5,9 @@ import {
   listPublishedBranches,
   listPublishedLabUnits,
   listPublishedProgrammes,
+  posterAlt,
+  posterSrc,
+  publishedMediaPoster,
   publishedSiteSettings,
   type PublishedSiteSettings,
 } from "@/lib/publishedListings";
@@ -61,6 +64,7 @@ export default async function Page({ params }: Props) {
     listPublishedBranches(),
     listPublishedProgrammes(),
   ]);
+  const heroPoster = await publishedMediaPoster(settings?.heroMediaId ?? null);
   const chrome = chromeFromPublishedSettings(settings, locale);
   return (
     <SiteHome
@@ -74,6 +78,8 @@ export default async function Page({ params }: Props) {
       branchCount={branches.length}
       programmeCount={programmes.length}
       homeM6Copy={homeM6CopyFromSettings(settings)}
+      heroPosterSrc={posterSrc(heroPoster)}
+      heroPosterAlt={posterAlt(locale, heroPoster)}
     />
   );
 }

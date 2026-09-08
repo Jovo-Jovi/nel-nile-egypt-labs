@@ -9,8 +9,10 @@ import {
   readSiteSettingsRow,
   writeSiteSettingsRow,
   bilingualRedirectQuery,
+  MEDIA_ROLE_FIELDS,
   type PublicationState,
 } from "@/lib/dashboard/siteSettings";
+import { checkMediaAssetAttach, setMediaAssetPublication } from "@/lib/dashboard/mediaAsset";
 import { localeHref } from "@/lib/locale";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -62,13 +64,34 @@ export async function POST(
     if (parsed.reason === "https") {
       back(locale, parsed.field ? `error=${parsed.field}` : "error=https");
     }
+    if (parsed.reason === "reference") back(locale, "error=reference");
     back(locale, bilingualRedirectQuery(parsed.groups ?? []));
+  }
+
+  for (const field of MEDIA_ROLE_FIELDS) {
+    const attach = await checkMediaAssetAttach(
+      supabase,
+      parsed.columns[field],
+      nextState === "published",
+    );
+    if (attach === "reference") back(locale, "error=reference");
+    if (attach === "alt") back(locale, "error=alt");
+    if (attach !== null) back(locale, "error=write");
   }
 
   const written = await writeSiteSettingsRow(supabase, row.id, parsed.columns, nextState);
   if (!written.ok) {
     if (written.reason === "bilingual") back(locale, bilingualRedirectQuery(written.groups));
     back(locale, "error=write");
+  }
+
+  if (nextState === "published") {
+    for (const field of MEDIA_ROLE_FIELDS) {
+      const mediaId = parsed.columns[field];
+      if (mediaId !== null) {
+        await setMediaAssetPublication(supabase, mediaId, "published");
+      }
+    }
   }
 
   revalidatePublicSite();

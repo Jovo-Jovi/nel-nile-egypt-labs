@@ -8,10 +8,10 @@ interface MarkSlotProps {
   fallbackLabel: string;
 }
 
-// Slot for public/mark/nel-mark.svg. Callers may override size via
-// `--nel-mark-size` on a parent. Until the SVG loads, onError swaps in a
-// §9 labelled frame (DESIGN_SYSTEM.md §7 / §12, CF-74). The 83×100 raster
-// is not referenced and does not satisfy §7.
+// Slot for public/mark/nel-mark.png. Callers may override size via
+// `--nel-mark-size` on a parent. Until the file loads, onError swaps in a
+// §9 labelled frame (DESIGN_SYSTEM.md §7 / §12, CF-74). The file on disk
+// is a raster; CF-159 records that a vector mark is the drop-in if supplied.
 export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
   const [broken, setBroken] = useState(false);
 
@@ -34,7 +34,7 @@ export function MarkSlot({ blockSize, fallbackLabel }: MarkSlotProps) {
     // failed request", so a plain <img> is used here.
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/mark/nel-mark.svg"
+      src="/mark/nel-mark.png"
       alt={fallbackLabel}
       className={styles.mark}
       onError={() => setBroken(true)}

@@ -631,6 +631,27 @@ for hosted auth settings on this project. CF-157 stays OPEN. Open count
 No SQL, no migration. ADR-001 unedited. Signed clinical artefacts
 unchanged. Flag off outside the proofs. Do not merge before the verdict.
 
+## 2026-09-08 — P08-T09: wire the brand mark and media roles, and clear source placeholders
+
+Cut from unmerged `p08-t08` at 7477b1f; stacked, not diffed against
+`main`. P08-T08 Verdict cell set to PASS.
+
+MarkSlot now requests `/mark/nel-mark.png`. Production GET returned
+HTTP/1.1 200 OK, Content-Type: image/png. The three M6 media-role
+columns have pickers on Site Settings, sourced from the Media Library.
+A null column leaves the labelled-frame hero, omits head icons, and
+404s `/site-webmanifest`. They are not graded regions; count stays 27.
+
+Placeholder scan: every public URL still carries the ResultsPortalLink
+placeholder (CF-137, left). Catalogue literals that matched
+`valueIsPlaceholder` were rewritten. SiteSettings text unedited.
+
+CF-149 appended, stays OPEN. CF-159 OPEN, human, P08: the file on disk
+is a raster mark. Open count 93 + 1 = 94.
+
+No SQL, no migration. ADR-001 unedited. Signed clinical artefacts
+unchanged. Flag unedited. Do not merge before the verdict.
+
 
 
 

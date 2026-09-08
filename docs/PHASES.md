@@ -235,7 +235,8 @@ OD-12's sequence is unamended; this phase was signed later.
 - [x] **P08-T05** — Sign OD-18, then run Q5 once
 - [x] **P08-T06** — Diagnose the signup error, then make the handler enumeration-safe
 - [x] **P08-T07** — Test the weak_password ordering, and close CF-157
-- [ ] **P08-T08** — Enforce the password rule locally, and neutralise weak_password
+- [x] **P08-T08** — Enforce the password rule locally, and neutralise weak_password
+- [ ] **P08-T09** — Wire the brand and media, and clear every placeholder
 
 ### P06 — Content and Arabic · LONGEST POLE
 

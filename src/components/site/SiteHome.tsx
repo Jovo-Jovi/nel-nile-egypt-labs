@@ -10,6 +10,7 @@ import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
 import { ScrollDownIcon, PlayIcon } from "@/components/ui/icons";
 import { SitePanels } from "./SitePanels";
+import { HeroPhoto } from "./HeroPhoto";
 import styles from "./SiteHome.module.css";
 
 export type HomeLabUnit = {
@@ -18,8 +19,9 @@ export type HomeLabUnit = {
 };
 
 // View model for the M6 hero and reason-card columns selected by
-// publishedSiteSettings. Names match public."SiteSettings". Media-role
-// columns are not in this shape.
+// publishedSiteSettings. Names match public."SiteSettings". Hero
+// photography is passed separately as heroPosterSrc so a null column
+// keeps the labelled frame.
 export type HomeM6Copy = {
   hero_eyebrow_ar: string | null;
   hero_eyebrow_en: string | null;
@@ -49,6 +51,8 @@ interface SiteHomeProps {
   branchCount: number;
   programmeCount: number;
   homeM6Copy: HomeM6Copy | null;
+  heroPosterSrc: string | null;
+  heroPosterAlt: string | null;
 }
 
 const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
@@ -153,6 +157,8 @@ export function SiteHome({
   branchCount,
   programmeCount,
   homeM6Copy,
+  heroPosterSrc,
+  heroPosterAlt,
 }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
@@ -169,16 +175,20 @@ export function SiteHome({
   return (
     <div className={styles.page}>
       <section className={styles.hero} id="home">
-        <ApprovalGate
-          locale={locale}
-          state="pending"
-          pendingLabelKey="approval.pending.photography"
-          className={styles.wellGate}
-        >
-          <div className={styles.well}>
-            <div className={styles.photo}>
-              <ImageFrame label={photographyLabel} showLabel={false} />
-            </div>
+        <div className={styles.wellGate}>
+          <ApprovalGate
+            locale={locale}
+            state={heroPosterSrc ? "approved" : "pending"}
+            pendingLabelKey="approval.pending.photography"
+          >
+            <div className={styles.well}>
+              <div className={styles.photo}>
+                <HeroPhoto
+                  src={heroPosterSrc}
+                  alt={heroPosterAlt ?? photographyLabel}
+                  fallbackLabel={photographyLabel}
+                />
+              </div>
             <div className={styles.veil} aria-hidden="true" />
             <div className={styles.copy}>
               <p className={styles.eyebrow}>
@@ -234,6 +244,7 @@ export function SiteHome({
             </a>
           </div>
         </ApprovalGate>
+        </div>
       </section>
 
       <section className={styles.offer} id="departments">

@@ -35,6 +35,8 @@ import {
   PublicationStatus,
   PublishAside,
 } from "./catalogFormChrome";
+import { MediaAssetPicker } from "./MediaAssetForm";
+import type { MediaAssetOption } from "@/lib/dashboard/mediaAsset";
 import styles from "./SiteSettingsForm.module.css";
 
 // Form `name` → `"SiteSettings"` column. Every rendered field is listed.
@@ -78,6 +80,9 @@ import styles from "./SiteSettingsForm.module.css";
 // reason3_title_en → reason3_title_en
 // reason3_body_ar → reason3_body_ar
 // reason3_body_en → reason3_body_en
+// hero_media → hero_media
+// favicon_media → favicon_media
+// app_icon_media → app_icon_media
 // Publish / unpublish write publication_state. No map field (no column).
 // No ResultsPortalLink field (D-07).
 //
@@ -100,6 +105,8 @@ export type SiteSettingsNotice =
   | "instagram_url"
   | "linkedin_url"
   | "youtube_url"
+  | "reference"
+  | "alt"
   | null;
 
 type FlightSlot = "save" | "publish" | "unpublish" | "create";
@@ -164,6 +171,8 @@ function noticeFromHref(href: string): SiteSettingsNotice {
   if (error === "write") return "write";
   if (error === "create") return "create";
   if (error === "exists") return "exists";
+  if (error === "reference") return "reference";
+  if (error === "alt") return "alt";
   if (error === "1") return "write";
   return "write";
 }
@@ -194,6 +203,8 @@ function errorKey(notice: Exclude<SiteSettingsNotice, "saved" | null>): CatalogK
   if (notice === "missing") return "dashboard.siteSettings.errorMissing";
   if (notice === "exists") return "dashboard.siteSettings.errorExists";
   if (notice === "create") return "dashboard.siteSettings.errorCreate";
+  if (notice === "reference") return "dashboard.catalog.errorReference";
+  if (notice === "alt") return "dashboard.media.errorAlt";
   return "dashboard.siteSettings.errorWrite";
 }
 
@@ -686,11 +697,13 @@ export function SiteSettingsForm({
   row,
   notice,
   bilingualGroups,
+  assets,
 }: {
   locale: Locale;
   row: SiteSettingsRow;
   notice: SiteSettingsNotice;
   bilingualGroups: readonly string[];
+  assets: MediaAssetOption[];
 }) {
   const router = useRouter();
   const [flight, setFlight] = useState<Flight>(null);
@@ -997,6 +1010,33 @@ export function SiteSettingsForm({
             ))}
           </SettingsSection>
         </div>
+
+        <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionBrandMedia">
+          <MediaAssetPicker
+            locale={locale}
+            assets={assets}
+            selectedId={row.hero_media}
+            fieldName="hero_media"
+            searchId="hero_media-search"
+            legendKey="dashboard.siteSettings.heroMedia"
+          />
+          <MediaAssetPicker
+            locale={locale}
+            assets={assets}
+            selectedId={row.favicon_media}
+            fieldName="favicon_media"
+            searchId="favicon_media-search"
+            legendKey="dashboard.siteSettings.faviconMedia"
+          />
+          <MediaAssetPicker
+            locale={locale}
+            assets={assets}
+            selectedId={row.app_icon_media}
+            fieldName="app_icon_media"
+            searchId="app_icon_media-search"
+            legendKey="dashboard.siteSettings.appIconMedia"
+          />
+        </SettingsSection>
       </div>
 
       <PublishAside locale={locale}>

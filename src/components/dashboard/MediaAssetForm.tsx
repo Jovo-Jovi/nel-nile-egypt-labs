@@ -66,11 +66,17 @@ export function MediaAssetPicker({
   assets,
   selectedId,
   helpKey,
+  fieldName = "MediaAsset",
+  searchId = "media-search",
+  legendKey,
 }: {
   locale: Locale;
   assets: MediaAssetOption[];
   selectedId: string | null;
   helpKey?: CatalogKey;
+  fieldName?: string;
+  searchId?: string;
+  legendKey?: CatalogKey;
 }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(selectedId ?? "");
@@ -82,12 +88,15 @@ export function MediaAssetPicker({
     return ar.includes(needle) || en.includes(needle);
   });
 
+  const Wrapper = legendKey ? "fieldset" : "div";
+
   return (
-    <div className={site.field}>
-      <input type="hidden" name="MediaAsset" value={selected} />
-      <FieldLabel locale={locale} htmlFor="media-search" labelKey="dashboard.media.search" />
+    <Wrapper className={site.field}>
+      {legendKey ? <FieldLegend locale={locale} legendKey={legendKey} /> : null}
+      <input type="hidden" name={fieldName} value={selected} />
+      <FieldLabel locale={locale} htmlFor={searchId} labelKey="dashboard.media.search" />
       <input
-        id="media-search"
+        id={searchId}
         className={site.control}
         type="search"
         value={query}
@@ -141,7 +150,7 @@ export function MediaAssetPicker({
           <IsolatedCopy locale={locale} text={translate(locale, helpKey)} />
         </p>
       ) : null}
-    </div>
+    </Wrapper>
   );
 }
 

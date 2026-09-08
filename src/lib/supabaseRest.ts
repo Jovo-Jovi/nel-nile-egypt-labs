@@ -18,7 +18,8 @@ type PublishedTable =
   | "Video"
   | "Equipment"
   | "Branch"
-  | "SiteSettings";
+  | "SiteSettings"
+  | "MediaAsset";
 
 // Published-only. The publication_state filter is appended here so a
 // caller cannot omit it. Unpublished rows are never selected (PR-08).
