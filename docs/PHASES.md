@@ -257,7 +257,9 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P08-T15** — Fix the PartnerLab sign-in path and make signup findable
 - [ ] **P08-T16** — Halted at STEP 0 on a dirty working tree
 - [x] **P08-T17** — Align the local password rule to the hosted policy
-- [ ] **P08-T18** — Functional UX fixes before G8
+- [x] **P08-T18** — Functional UX fixes before G8
+- [ ] **P08-T18-F** — Named fix row for the P08-T18 FAIL. Issued work is P08-T19
+- [ ] **P08-T19** — Fix what the Operator cannot get past
 
 ### P06 — Content and Arabic · LONGEST POLE
 

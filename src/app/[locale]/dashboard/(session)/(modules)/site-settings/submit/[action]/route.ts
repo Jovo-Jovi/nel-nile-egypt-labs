@@ -55,7 +55,10 @@ export async function POST(
   const form = await request.formData();
   let nextState: PublicationState = row.publication_state;
   if (params.action === "publish") nextState = "published";
-  if (params.action === "unpublish") nextState = "draft";
+  if (params.action === "unpublish") {
+    if (row.publication_state !== "published") back(locale, "error=notPublished");
+    nextState = "draft";
+  }
 
   const requireBilingual = nextState === "published";
   const parsed = parseSiteSettingsWrite(form, requireBilingual);

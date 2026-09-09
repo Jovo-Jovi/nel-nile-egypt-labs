@@ -107,6 +107,7 @@ export type SiteSettingsNotice =
   | "youtube_url"
   | "reference"
   | "alt"
+  | "notPublished"
   | null;
 
 type FlightSlot = "save" | "publish" | "unpublish" | "create";
@@ -173,6 +174,7 @@ function noticeFromHref(href: string): SiteSettingsNotice {
   if (error === "exists") return "exists";
   if (error === "reference") return "reference";
   if (error === "alt") return "alt";
+  if (error === "notPublished") return "notPublished";
   if (error === "1") return "write";
   return "write";
 }
@@ -201,6 +203,7 @@ function errorKey(notice: Exclude<SiteSettingsNotice, "saved" | null>): CatalogK
   if (notice === "whatsapp_e164") return "dashboard.validation.errorPhone";
   if (notice === "bilingual") return "dashboard.siteSettings.errorBilingual";
   if (notice === "missing") return "dashboard.siteSettings.errorMissing";
+  if (notice === "notPublished") return "dashboard.siteSettings.errorNotPublished";
   if (notice === "exists") return "dashboard.siteSettings.errorExists";
   if (notice === "create") return "dashboard.siteSettings.errorCreate";
   if (notice === "reference") return "dashboard.catalog.errorReference";
@@ -1057,6 +1060,7 @@ export function SiteSettingsForm({
           publishHref={localeHref(locale, "/dashboard/site-settings/submit/publish")}
           unpublishHref={localeHref(locale, "/dashboard/site-settings/submit/unpublish")}
           flight={flight}
+          allowUnpublish={row.publication_state === "published"}
         />
         <ActionStatus
           locale={locale}

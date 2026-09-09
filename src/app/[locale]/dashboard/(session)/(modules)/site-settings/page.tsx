@@ -24,6 +24,7 @@ function noticeFromQuery(query: { error?: string; saved?: string }): SiteSetting
   if (query.error === "https") return "https";
   if (query.error === "bilingual") return "bilingual";
   if (query.error === "missing") return "missing";
+  if (query.error === "notPublished") return "notPublished";
   if (query.error === "write") return "write";
   if (query.error === "create") return "create";
   if (query.error === "exists") return "exists";

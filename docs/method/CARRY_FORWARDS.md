@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-167**
+**Next free id: CF-168**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -172,6 +172,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-164 | React #418 was reported against the live site at G8. Under `next dev`, unauthenticated `/ar`, `/en`, `/ar/offers`, `/en/offers` produced no #418 (component, server text and client text were therefore not named). MarkSlot and HeroPhoto wait for a hydration snapshot (`useClientReady`) before swapping element type. Authenticated PartnerLab `/ar` was not captured in this environment (no browser console). G8 FAIL on 1b until a named mismatch is quoted or the reviewer accepts that none fired. Suppressing the warning is not a fix. | builder | OPEN | G8 |
 | CF-165 | Operator PartnerLab review POSTs on the live deployment returned `error=write` for approve, reject and reinstate (`303` to `/ar/dashboard/partner-lab?view=…&error=write`). `applyPartnerLabReviewAction` returns `write` when the service-role client is null or Auth Admin update fails. The walkthrough then applied `app_metadata` via a local Admin client; pending, approved and declined copy was quoted only after that fallback. That is not the Operator dashboard write path. Form signup also returned `303` `created=1` with no listable Auth row (CF-153, CF-154). | human | OPEN | G8 |
 | CF-166 | The hosted password policy is changeable from the Supabase dashboard with no signal to the codebase, and divergence fails silently under OD-18 §6. Either a pre-release check compares the local rule against the hosted policy, or the local rule is set well above any plausible hosted value. Not decided here. | reviewer | OPEN | G8 |
+| CF-167 | An approved PartnerLab cannot be revoked. `PartnerLabReviewForm` renders no controls for `kind === "approved"`. OD-18 §1 and §4 define reject, approve and reinstate and are silent on revocation. If Androw approves the wrong laboratory or a partnership ends, there is no path. OD-18 §4 needs a clause; whether revocation returns the account to pending or to rejected is the decision. No control built at P08-T19. | reviewer | OPEN | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
