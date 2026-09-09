@@ -15,7 +15,7 @@ import { chromeFromPublishedSettings } from "@/lib/publicChrome";
 import { PartnerLabStatus } from "@/components/partner-lab/PartnerLabStatus";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { SiteHome, type HomeM6Copy } from "@/components/site/SiteHome";
-import { partnerLabStatusKind, readNelSession } from "@/lib/nelSession";
+import { loadPartnerFacingSession, partnerLabStatusKind } from "@/lib/nelSession";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -63,16 +63,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
-  const [settings, labUnits, branches, programmes, session] = await Promise.all([
+  const [settings, labUnits, branches, programmes, partnerFacing] = await Promise.all([
     publishedSiteSettings(),
     listPublishedLabUnits(),
     listPublishedBranches(),
     listPublishedProgrammes(),
-    readNelSession(),
+    loadPartnerFacingSession(),
   ]);
   const heroPoster = await publishedMediaPoster(settings?.heroMediaId ?? null);
   const chrome = chromeFromPublishedSettings(settings, locale);
-  const offersKind = partnerLabStatusKind(session);
+  const offersKind = partnerLabStatusKind(partnerFacing.session);
   return (
     <SiteHome
       locale={locale}

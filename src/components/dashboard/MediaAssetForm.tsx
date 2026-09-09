@@ -1,9 +1,12 @@
 "use client";
 
 import { useRef, useState, type DragEvent } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
+import { useClientReady } from "@/components/ui/useClientReady";
 import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import {
@@ -35,6 +38,7 @@ import {
 } from "./catalogFormChrome";
 import extra from "./CatalogEntityForm.module.css";
 import site from "./SiteSettingsForm.module.css";
+import { Button } from "@/components/ui/Button";
 
 // Form `name` → `"MediaAsset"` column. Every rendered field that writes is listed.
 // alt_ar → alt_ar
@@ -78,6 +82,8 @@ export function MediaAssetPicker({
   searchId?: string;
   legendKey?: CatalogKey;
 }) {
+  const pathname = usePathname();
+  const ready = useClientReady();
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(selectedId ?? "");
   const needle = query.trim().toLowerCase();
@@ -88,11 +94,14 @@ export function MediaAssetPicker({
     const path = asset.storage_path.toLowerCase();
     return ar.includes(needle) || en.includes(needle) || path.includes(needle);
   });
+  const selectedAsset = assets.find((asset) => asset.id === selected) ?? null;
+  const altFormId = `nel-media-alt-${fieldName}`;
+  const saveHref = localeHref(locale, "/dashboard/media-assets/submit/save");
 
   const Wrapper = legendKey ? "fieldset" : "div";
 
   return (
-    <Wrapper className={site.field}>
+    <Wrapper className={legendKey ? site.group : site.field}>
       {legendKey ? <FieldLegend locale={locale} legendKey={legendKey} /> : null}
       <input type="hidden" name={fieldName} value={selected} />
       <FieldLabel locale={locale} htmlFor={searchId} labelKey="dashboard.media.search" />
@@ -146,6 +155,33 @@ export function MediaAssetPicker({
           );
         })}
       </ul>
+      {selectedAsset !== null ? (
+        <div key={selectedAsset.id} className={site.field}>
+          <input type="hidden" form={altFormId} name="row_id" value={selectedAsset.id} />
+          <input
+            type="hidden"
+            form={altFormId}
+            name="display_order"
+            value={String(selectedAsset.display_order)}
+          />
+          <input type="hidden" form={altFormId} name="return_to" value={pathname} />
+          <Pair
+            locale={locale}
+            nameAr="alt_ar"
+            nameEn="alt_en"
+            legendKey="dashboard.media.alt"
+            defaultAr={selectedAsset.alt_ar}
+            defaultEn={selectedAsset.alt_en}
+            formId={altFormId}
+          />
+          <p className={extra.help}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.altHelp")} />
+          </p>
+          <Button type="submit" variant="secondary" form={altFormId} formAction={saveHref}>
+            {translate(locale, "dashboard.media.saveAlt")}
+          </Button>
+        </div>
+      ) : null}
       <p className={extra.help}>
         <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.attach")} />
       </p>
@@ -157,6 +193,9 @@ export function MediaAssetPicker({
           <IsolatedCopy locale={locale} text={translate(locale, helpKey)} />
         </p>
       ) : null}
+      {ready
+        ? createPortal(<form id={altFormId} method="post" action={saveHref} />, document.body)
+        : null}
     </Wrapper>
   );
 }
@@ -232,6 +271,7 @@ function Pair({
   legendKey,
   defaultAr,
   defaultEn,
+  formId,
 }: {
   locale: Locale;
   nameAr: string;
@@ -239,35 +279,40 @@ function Pair({
   legendKey: CatalogKey;
   defaultAr: string | null;
   defaultEn: string | null;
+  formId?: string;
 }) {
+  const idAr = formId ? `${formId}-${nameAr}` : nameAr;
+  const idEn = formId ? `${formId}-${nameEn}` : nameEn;
   return (
     <fieldset className={site.group}>
       <FieldLegend locale={locale} legendKey={legendKey} required="publish" />
       <div className={site.pair}>
         <div className={site.field}>
-          <label className={site.pairLocale} htmlFor={nameAr}>
+          <label className={site.pairLocale} htmlFor={idAr}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeAr")} />
           </label>
           <input
-            id={nameAr}
+            id={idAr}
             className={site.control}
             type="text"
             name={nameAr}
             defaultValue={defaultAr ?? ""}
             autoComplete="off"
+            form={formId}
           />
         </div>
         <div className={site.field}>
-          <label className={site.pairLocale} htmlFor={nameEn}>
+          <label className={site.pairLocale} htmlFor={idEn}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeEn")} />
           </label>
           <input
-            id={nameEn}
+            id={idEn}
             className={site.control}
             type="text"
             name={nameEn}
             defaultValue={defaultEn ?? ""}
             autoComplete="off"
+            form={formId}
           />
         </div>
       </div>

@@ -29,6 +29,16 @@ function errorQuery(reason: CatalogWriteReason): string {
   return `error=${reason}`;
 }
 
+function dashboardReturnPath(locale: "ar" | "en", raw: FormDataEntryValue | null): string | null {
+  if (typeof raw !== "string") return null;
+  const path = raw.trim();
+  const prefix = localeHref(locale, "/dashboard");
+  if (path !== prefix && !path.startsWith(`${prefix}/`)) return null;
+  if (/[:\\?#%]/.test(path)) return null;
+  if (path.includes("//")) return null;
+  return path;
+}
+
 function revalidatePublicListings(): void {
   revalidatePublishedOffers();
   revalidatePublishedVideos();
@@ -43,6 +53,19 @@ function toList(locale: "ar" | "en", query?: string): never {
 function toEdit(locale: "ar" | "en", rowId: string, query?: string): never {
   const href = localeHref(locale, `/dashboard/media-assets/${rowId}`);
   redirect(query ? `${href}?${query}` : href);
+}
+
+function toReturnOrEdit(
+  locale: "ar" | "en",
+  rowId: string,
+  form: FormData,
+  query?: string,
+): never {
+  const back = dashboardReturnPath(locale, form.get("return_to"));
+  if (back !== null) {
+    redirect(query ? `${back}?${query}` : back);
+  }
+  toEdit(locale, rowId, query);
 }
 
 export async function POST(
@@ -93,12 +116,12 @@ export async function POST(
   if (params.action === "publish") nextState = "published";
   if (params.action === "unpublish") nextState = "draft";
   const parsed = parseMediaAssetWrite(form, nextState === "published");
-  if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason));
+  if (!parsed.ok) toReturnOrEdit(locale, rowId, form, errorQuery(parsed.reason));
   const file = uploadFileFromForm(form);
   const written = await writeMediaAssetRow(supabase, row, parsed.columns, nextState, file);
-  if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
+  if (!written.ok) toReturnOrEdit(locale, rowId, form, errorQuery(written.reason));
   revalidatePublicListings();
-  toEdit(locale, rowId, "saved=1");
+  toReturnOrEdit(locale, rowId, form, "saved=1");
 }
 
 export function GET() {
