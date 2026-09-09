@@ -5,7 +5,7 @@ import type { OperatorAccess } from "./assurance";
 export const NOT_OPERATOR_REASON = "not-operator";
 
 export function notOperatorSignInHref(locale: Locale): string {
-  return `${localeHref(locale, "/dashboard/sign-in")}?reason=${NOT_OPERATOR_REASON}`;
+  return `${localeHref(locale, "/partner-lab/sign-in")}?reason=${NOT_OPERATOR_REASON}`;
 }
 
 export function gateSignInPage(access: OperatorAccess, locale: Locale): void {
@@ -13,7 +13,7 @@ export function gateSignInPage(access: OperatorAccess, locale: Locale): void {
   // Non-Operator sessions belong on the PartnerLab status / Offers
   // surface, never on the Operator sign-in form. Operator order below
   // is unchanged (M7C).
-  if (!access.isOperator) redirect(localeHref(locale, "/offers"));
+  if (!access.isOperator) redirect(localeHref(locale, "/partner-lab/sign-in"));
   if (!access.hasVerifiedTotp) redirect(localeHref(locale, "/dashboard/enrol"));
   if (access.currentLevel !== "aal2") redirect(localeHref(locale, "/dashboard/challenge"));
   redirect(localeHref(locale, "/dashboard"));

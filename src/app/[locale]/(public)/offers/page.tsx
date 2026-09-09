@@ -3,10 +3,10 @@ import { pageMetadata } from "@/lib/pageMetadata";
 import { translate } from "@/lib/catalog";
 import { formatOfferDate, formatOfferPrice, localizedText, offerIsExpired } from "@/lib/listingFormat";
 import { listPublishedOffers, posterAlt, posterSrc } from "@/lib/publishedListings";
-import { canReadApprovedOffers, partnerLabStatusKind, readNelSession } from "@/lib/nelSession";
+import { canReadApprovedOffers, loadPartnerFacingSession, partnerLabStatusKind } from "@/lib/nelSession";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { PublishedListingPage } from "@/components/site/PublishedListingPage";
-import { PartnerLabStatus } from "@/components/partner-lab/PartnerLabStatus";
+import { PartnerLabSignOut, PartnerLabStatus } from "@/components/partner-lab/PartnerLabStatus";
 import { OfferCard } from "@/components/ui/OfferCard";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
-  const session = await readNelSession();
+  const { session, supabase } = await loadPartnerFacingSession();
   const kind = partnerLabStatusKind(session);
 
   if (!canReadApprovedOffers(session)) {
@@ -33,8 +33,10 @@ export default async function Page({ params }: Props) {
   // createSupabaseServerClient so the JWT and its nel_principal claim
   // reach Postgres; fetchAnonPublishedJson is not used here because it
   // authenticates as anon and cannot match Offer_partner_read. Pending,
-  // rejected, and anonymous paths never call this.
-  const rows = await listPublishedOffers();
+  // rejected, and anonymous paths never call this. The pending path
+  // above already attempted one refreshSession (loadPartnerFacingSession);
+  // approved reads reuse that same client.
+  const rows = await listPublishedOffers(supabase);
 
   return (
     <PublishedListingPage
@@ -42,6 +44,11 @@ export default async function Page({ params }: Props) {
       titleKey="page.offers.title"
       pendingLabelKey="partnerLab.offers.empty"
       isEmpty={rows.length === 0}
+      lead={
+        session.signedIn && session.principal === "PartnerLab" ? (
+          <PartnerLabSignOut locale={locale} />
+        ) : undefined
+      }
     >
       {rows.map((row) => {
         const expired = offerIsExpired(row.validUntil);

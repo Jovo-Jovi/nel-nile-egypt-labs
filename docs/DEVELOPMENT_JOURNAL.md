@@ -884,3 +884,24 @@ CF-158 CLOSED at P08-T17. CF-166 OPEN, reviewer, G8. Open 95 − 1 + 1 = 95.
 
 Do not merge before the verdict.
 
+## 2026-09-09 — P08-T18: Functional UX fixes before G8
+
+Parent is unmerged `p08-t17` at `e2f47e1`. PartnerLab sign-in and sign-out
+moved off `/dashboard/*` without a second session, cookie, or Auth client.
+The Operator form stays at `/dashboard/sign-in`. A signed-in non-Operator
+is redirected by the existing `nel_principal` claim, never by looking up
+an address.
+
+An approved partner's Offers listing now has a sign-out. A pending load
+attempts one `refreshSession`. Site Settings pickers state their role and
+can write alt text through the existing MediaAsset save. A draft Offer
+shows a publish affordance; the publish rules are unchanged. Rejected
+accounts can be hidden from the Operator list in this mount only.
+
+Local `npx next start` password signup from this IP did not persist a
+row (created=1, count 0). The same public form on the live alias did.
+Operator AAL2 was not signed into (sidecar absent), so approved-listing,
+picker, Offer, and hide proofs that need the dashboard were not run.
+
+Do not merge before the verdict.
+

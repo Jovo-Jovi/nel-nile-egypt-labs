@@ -1019,6 +1019,7 @@ export function SiteSettingsForm({
             fieldName="hero_media"
             searchId="hero_media-search"
             legendKey="dashboard.siteSettings.heroMedia"
+            helpKey="dashboard.siteSettings.heroMediaHelp"
           />
           <MediaAssetPicker
             locale={locale}
@@ -1027,6 +1028,7 @@ export function SiteSettingsForm({
             fieldName="favicon_media"
             searchId="favicon_media-search"
             legendKey="dashboard.siteSettings.faviconMedia"
+            helpKey="dashboard.siteSettings.faviconMediaHelp"
           />
           <MediaAssetPicker
             locale={locale}
@@ -1035,6 +1037,7 @@ export function SiteSettingsForm({
             fieldName="app_icon_media"
             searchId="app_icon_media-search"
             legendKey="dashboard.siteSettings.appIconMedia"
+            helpKey="dashboard.siteSettings.appIconMediaHelp"
           />
         </SettingsSection>
       </div>

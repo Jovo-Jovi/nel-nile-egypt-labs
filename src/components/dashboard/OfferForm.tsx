@@ -244,6 +244,11 @@ export function OfferForm({
           state={row === null ? null : row.publication_state === "published" ? "published" : "draft"}
           reasonKey="dashboard.catalog.draftReason"
         />
+        {row !== null && row.publication_state !== "published" ? (
+          <p className={site.status}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.offers.publishNext")} />
+          </p>
+        ) : null}
         {row !== null ? (
           <p className={site.status}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.unpublishHint")} />

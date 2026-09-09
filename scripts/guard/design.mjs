@@ -54,6 +54,13 @@
 //       aal2. Fields are a subject identifier only; approve, reject and
 //       reinstate merge app_metadata through Auth Admin and write nothing to
 //       public. One form file, no directory, no pattern.
+//       A nineteenth path, src/app/[locale]/partner-lab/sign-in/page.tsx,
+//       was granted at P08-T18. It is the PartnerLab sign-in form. It is
+//       exempted because BOUNDARY_MODEL.md §2 fixes its fields to an email
+//       address and a password and nothing else, the same authentication
+//       credential as the sixteenth path (sign-up). One page file, no
+//       directory, no pattern. It shares one Supabase session with the
+//       Operator sign-in (ADR-001); it is not a second Auth client.
 //       A path is exempt only when it
 //       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
 //       Adding a path is a boundary decision requiring a reviewer verdict,
@@ -98,7 +105,8 @@ const ALLOWED_HEX = /^#25D366$/i;
 // pattern; P05-T24A added ProgrammeForm.tsx and LabTestForm.tsx as two
 // exact paths, no directory, no pattern; P08-T10 added PartnerLabStatus.tsx
 // and PartnerLabReviewForm.tsx as two exact paths, no directory, no
-// pattern).
+// pattern; P08-T18 added partner-lab/sign-in/page.tsx as one exact path,
+// no directory, no pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
@@ -118,6 +126,7 @@ const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/partner-lab/sign-up/page.tsx",
   "src/components/partner-lab/PartnerLabStatus.tsx",
   "src/components/dashboard/PartnerLabReviewForm.tsx",
+  "src/app/[locale]/partner-lab/sign-in/page.tsx",
 ]);
 
 // Exact paths. Host strings may appear in these two files and nowhere

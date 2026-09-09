@@ -233,6 +233,12 @@ const ar = {
   "dashboard.siteSettings.heroMedia": "صورة المقدمة",
   "dashboard.siteSettings.faviconMedia": "أيقونة التبويب",
   "dashboard.siteSettings.appIconMedia": "أيقونة التطبيق",
+  "dashboard.siteSettings.heroMediaHelp":
+    "تظهر في مقدمة الصفحة الرئيسية. اختر صورة تمثّل المختبر للزائر.",
+  "dashboard.siteSettings.faviconMediaHelp":
+    "أيقونة صغيرة في تبويب المتصفح. مربعة، واضحة عند الحجم الصغير.",
+  "dashboard.siteSettings.appIconMediaHelp":
+    "أيقونة الشاشة الرئيسية على الجهاز عند حفظ الموقع. مربعة.",
   "dashboard.siteSettings.errorBilingualFields":
     "تعذّر النشر لأن هذه الحقول ناقصة بالعربية أو الإنجليزية:",
   "dashboard.siteSettings.errorBilingualNoRetry":
@@ -364,6 +370,8 @@ const ar = {
   "dashboard.offers.priceCurrencyHelp": "يُخزَّن لكل صف. لا قيمة مفترضة.",
   "dashboard.offers.programme": "Programme",
   "dashboard.offers.programmeHelp": "اختياري. معرّف صف حتى وجود وحدة البرامج.",
+  "dashboard.offers.publishNext":
+    "الحالة مسودة. لنشر هذا العرض للمعامل الشريكة المعتمدة استخدم زر النشر. قواعد النشر لم تتغيّر.",
   "dashboard.offers.mediaAsset": "MediaAsset",
   "dashboard.videos.heading": "الفيديوهات",
   "dashboard.videos.pending": "قيد الانتظار — بانتظار صفوف الفيديو",
@@ -405,6 +413,9 @@ const ar = {
   "dashboard.partnerLab.saved": "حُفظ التعديل. يسري على الحساب عند تحديث الجلسة التالية.",
   "dashboard.partnerLab.error": "تعذّر حفظ التعديل. حاول مرة أخرى.",
   "dashboard.partnerLab.missing": "لم يُعثر على الحساب.",
+  "dashboard.partnerLab.hideFromView": "إخفاء من هذه القائمة",
+  "dashboard.partnerLab.hideNote":
+    "الإخفاء هنا لهذه الشاشة فقط. لا يحذف الحساب ولا يغيّر حالة الرفض.",
   "dashboard.catalog.mediaAsset": "MediaAsset",
   "dashboard.media.heading": "مكتبة الوسائط",
   "dashboard.media.pending": "قيد الانتظار — بانتظار ملفات الوسائط",
@@ -429,6 +440,7 @@ const ar = {
   "dashboard.media.sectionAlt": "النص البديل",
   "dashboard.media.alt": "النص البديل",
   "dashboard.media.altHelp": "مطلوب باللغتين قبل ربط الملف بصف منشور.",
+  "dashboard.media.saveAlt": "حفظ النص البديل",
   "dashboard.media.search": "بحث في النص البديل",
   "dashboard.media.drop": "أسقط صورة هنا أو اختر ملفاً.",
   "dashboard.media.attach": "نقرة واحدة تربط الملف بالنموذج المفتوح.",
@@ -902,6 +914,12 @@ const en = {
   "dashboard.siteSettings.heroMedia": "Hero image",
   "dashboard.siteSettings.faviconMedia": "Tab icon",
   "dashboard.siteSettings.appIconMedia": "App icon",
+  "dashboard.siteSettings.heroMediaHelp":
+    "Shown as the home-page introduction image. Choose a photograph that represents the laboratory to a visitor.",
+  "dashboard.siteSettings.faviconMediaHelp":
+    "The small icon in the browser tab. Square, and legible at a small size.",
+  "dashboard.siteSettings.appIconMediaHelp":
+    "The home-screen icon when the site is saved on a device. Square.",
   "dashboard.siteSettings.errorBilingualFields":
     "Publishing was refused because these fields are missing in Arabic or English:",
   "dashboard.siteSettings.errorBilingualNoRetry":
@@ -1034,6 +1052,8 @@ const en = {
   "dashboard.offers.priceCurrencyHelp": "Stored per row. No value is assumed.",
   "dashboard.offers.programme": "Programme",
   "dashboard.offers.programmeHelp": "Optional. A row identifier until the Programmes module exists.",
+  "dashboard.offers.publishNext":
+    "State: draft. Use Publish to make this Offer visible to approved partner laboratories. The publish rules are unchanged.",
   "dashboard.offers.mediaAsset": "MediaAsset",
   "dashboard.videos.heading": "Videos",
   "dashboard.videos.pending": "Pending — awaiting Video rows",
@@ -1075,6 +1095,9 @@ const en = {
   "dashboard.partnerLab.saved": "Saved. The change takes effect on the next token refresh.",
   "dashboard.partnerLab.error": "Could not save the change. Try again.",
   "dashboard.partnerLab.missing": "That account was not found.",
+  "dashboard.partnerLab.hideFromView": "Hide from this list",
+  "dashboard.partnerLab.hideNote":
+    "Hiding is only for this view. It does not delete the account or change the declined state.",
   "dashboard.catalog.mediaAsset": "MediaAsset",
   "dashboard.media.heading": "Media Library",
   "dashboard.media.pending": "Pending — awaiting MediaAsset rows",
@@ -1099,6 +1122,7 @@ const en = {
   "dashboard.media.sectionAlt": "Alt text",
   "dashboard.media.alt": "Alt text",
   "dashboard.media.altHelp": "Required in both languages before the asset can attach to a published row.",
+  "dashboard.media.saveAlt": "Save alt text",
   "dashboard.media.search": "Search alt text",
   "dashboard.media.drop": "Drop an image here, or choose a file.",
   "dashboard.media.attach": "One click attaches the asset to the open form.",

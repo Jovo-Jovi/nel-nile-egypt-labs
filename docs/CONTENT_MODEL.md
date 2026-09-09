@@ -185,6 +185,8 @@ Path segments below are Visitor-facing strings, not identifiers. They are govern
 | 12 | static | `/{locale}/lab-to-lab` | `SiteSettings` | Lab-to-Lab copy (D-15) |
 | 13 | dynamic | `/{locale}/programmes/{slug}` | `Programme` | One detail page per `Programme` |
 | — | flag-gated | `/{locale}/partner-lab/sign-up` | `PartnerLab` | Signup. Flag-gated; not counted as a public page while the flag is off. |
+| — | auth | `/{locale}/partner-lab/sign-in` | `PartnerLab` | Partner sign-in. Authentication credential only. One Supabase session with the Operator sign-in (ADR-001). Always reachable; not counted among the twelve static public pages. |
+| — | auth | `/{locale}/partner-lab/sign-out` | `PartnerLab` | Partner sign-out. POST only; not a GET page. |
 
 `{slug}` is `Programme.slug`, which is now a public path segment and no longer data identity only. Slugs are Latin in both locales: the Arabic page at `/ar/programmes/kidney-profile` carries the same slug as the English one. A slug is not a translated string, so no Arabic slug set exists and none is authored.
 

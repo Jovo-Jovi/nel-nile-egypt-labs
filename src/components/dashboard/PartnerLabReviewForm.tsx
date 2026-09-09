@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { IsolatedCopy } from "@/components/ui/Isolate";
@@ -23,10 +26,21 @@ type PartnerLabReviewFormProps = {
 
 export function PartnerLabReviewForm({ locale, kind, rows, notice }: PartnerLabReviewFormProps) {
   const submitBase = localeHref(locale, "/dashboard/partner-lab/submit");
+  // View-only hide. Lives in this component's React state for the current
+  // mount. It is not a claim, a column, a cookie, or a row. Reload, a
+  // tab change, or leaving the view restores every rejected account.
+  // OD-18 §1: the Auth row and nel_partner_state = "rejected" are
+  // untouched.
+  const [hiddenIds, setHiddenIds] = useState<ReadonlySet<string>>(() => new Set());
+  const visible =
+    kind === "rejected" ? rows.filter((row) => !hiddenIds.has(row.id)) : rows;
 
   return (
     <div className={extra.groups}>
       <p className={styles.refresh}>{translate(locale, "dashboard.partnerLab.refreshNote")}</p>
+      {kind === "rejected" ? (
+        <p className={styles.refresh}>{translate(locale, "dashboard.partnerLab.hideNote")}</p>
+      ) : null}
       {notice === "saved" ? <p className={formStyles.lede}>{translate(locale, "dashboard.partnerLab.saved")}</p> : null}
       {notice === "write" ? (
         <p className={formStyles.error}>{translate(locale, "dashboard.partnerLab.error")}</p>
@@ -49,11 +63,11 @@ export function PartnerLabReviewForm({ locale, kind, rows, notice }: PartnerLabR
           );
         })}
       </nav>
-      {rows.length === 0 ? (
+      {visible.length === 0 ? (
         <p className={formStyles.lede}>{translate(locale, "dashboard.partnerLab.empty")}</p>
       ) : (
         <ul className={extra.list}>
-          {rows.map((row) => (
+          {visible.map((row) => (
             <li key={row.id}>
               <article className={extra.row}>
                 <div className={extra.rowMain}>
@@ -75,9 +89,20 @@ export function PartnerLabReviewForm({ locale, kind, rows, notice }: PartnerLabR
                           </Button>
                         </>
                       ) : (
-                        <Button type="submit" variant="primary" formAction={`${submitBase}/reinstate`}>
-                          {translate(locale, "dashboard.partnerLab.reinstate")}
-                        </Button>
+                        <>
+                          <Button type="submit" variant="primary" formAction={`${submitBase}/reinstate`}>
+                            {translate(locale, "dashboard.partnerLab.reinstate")}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="text"
+                            onClick={() => {
+                              setHiddenIds((current) => new Set(current).add(row.id));
+                            }}
+                          >
+                            {translate(locale, "dashboard.partnerLab.hideFromView")}
+                          </Button>
+                        </>
                       )}
                     </div>
                   </form>

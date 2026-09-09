@@ -30,6 +30,16 @@ function bodyKey(kind: PartnerLabStatusKind): CatalogKey {
   return "partnerLab.offers.inviteBody";
 }
 
+export function PartnerLabSignOut({ locale }: { locale: Locale }) {
+  return (
+    <form className={styles.signOut} method="post" action={localeHref(locale, "/partner-lab/sign-out")}>
+      <Button type="submit" variant="text">
+        {translate(locale, "dashboard.signOut")}
+      </Button>
+    </form>
+  );
+}
+
 export function PartnerLabStatus({
   locale,
   kind,
@@ -42,7 +52,7 @@ export function PartnerLabStatus({
       <p className={formStyles.lede}>{translate(locale, bodyKey(kind))}</p>
       <div className={styles.actions}>
         {kind === "invite" ? (
-          <Button variant="primary" href={localeHref(locale, "/dashboard/sign-in")}>
+          <Button variant="primary" href={localeHref(locale, "/partner-lab/sign-in")}>
             {translate(locale, "partnerLab.offers.signIn")}
           </Button>
         ) : null}
@@ -56,13 +66,7 @@ export function PartnerLabStatus({
             {translate(locale, "offers.viewAll")}
           </Button>
         ) : null}
-        {showSignOut && kind !== "invite" ? (
-          <form className={styles.signOut} method="post" action={localeHref(locale, "/dashboard/sign-out")}>
-            <Button type="submit" variant="text">
-              {translate(locale, "dashboard.signOut")}
-            </Button>
-          </form>
-        ) : null}
+        {showSignOut && kind !== "invite" ? <PartnerLabSignOut locale={locale} /> : null}
       </div>
     </div>
   );

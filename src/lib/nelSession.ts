@@ -51,6 +51,29 @@ export async function readNelSession(): Promise<NelSession> {
   return readNelSessionFrom(supabase);
 }
 
+// ADR-001: the PartnerLab claim lands on the next token refresh, not
+// the instant an Operator approves. A pending status screen calls this
+// once on load and re-evaluates. One refreshSession, never a loop, never
+// a polling interval. If the refreshed token still has no claim, the
+// pending copy stands. The same client is returned so Offer reads in
+// this request see the new JWT even when the Server Component cannot
+// persist cookies.
+export async function loadPartnerFacingSession(): Promise<{
+  session: NelSession;
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
+}> {
+  const supabase = await createSupabaseServerClient();
+  if (supabase === null) {
+    return { session: { signedIn: false }, supabase: null };
+  }
+  let session = await readNelSessionFrom(supabase);
+  if (partnerLabStatusKind(session) === "pending") {
+    await supabase.auth.refreshSession();
+    session = await readNelSessionFrom(supabase);
+  }
+  return { session, supabase };
+}
+
 export function canReadApprovedOffers(session: NelSession): boolean {
   return (
     session.signedIn && (session.principal === "PartnerLab" || session.principal === "Operator")

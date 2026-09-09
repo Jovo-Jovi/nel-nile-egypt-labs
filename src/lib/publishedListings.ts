@@ -13,6 +13,7 @@
 // membership, tier, preparation notes, or slug. The listing card is not
 // a link. Detail membership is resolved by public."programmeLabTests".
 
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { fetchAnonPublishedJson } from "./supabaseRest";
 import { offerIsExpired } from "./listingFormat";
 import { createSupabaseServerClient } from "./supabase/server";
@@ -411,13 +412,17 @@ function mapPublished<T>(payload: unknown, parse: (value: unknown) => T | null):
   return rows;
 }
 
-export async function listPublishedOffers(): Promise<PublishedOffer[]> {
+export async function listPublishedOffers(
+  client?: SupabaseClient | null,
+): Promise<PublishedOffer[]> {
   // Session-bound. After M10, Offer_published_read is gone, so the
   // anonymous REST helper cannot see a row. createSupabaseServerClient
   // forwards the request cookies; Postgres then sees the JWT and
   // Offer_partner_read can match nel_principal. The published filter is
-  // still appended here where a caller cannot omit it (PR-08).
-  const supabase = await createSupabaseServerClient();
+  // still appended here where a caller cannot omit it (PR-08). A caller
+  // that has just refreshed the pending token may pass that same client
+  // so this request's JWT is the refreshed one.
+  const supabase = client ?? (await createSupabaseServerClient());
   if (supabase === null) return [];
   const { data, error } = await supabase
     .from("Offer")
