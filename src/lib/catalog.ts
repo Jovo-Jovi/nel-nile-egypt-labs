@@ -58,8 +58,8 @@ const ar = {
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
-  // passwordTooShort restated at P08-T08 (four classes and eight-character
-  // minimum). weakPassword kept in both locales even though unreferenced.
+  // passwordTooShort restated at P08-T17 (four classes and twelve-character
+  // minimum, local ≥ hosted). weakPassword kept in both locales even though unreferenced.
   // confirmPassword / passwordMismatch: P08-T11. confirm_password is the
   // same credential typed twice, not a new field of personal data.
   "partnerLab.signUp.title": "تسجيل معمل شريك",
@@ -70,7 +70,7 @@ const ar = {
   "partnerLab.signUp.failed": "تعذّر إنشاء الحساب. حاول مرة أخرى.",
   "partnerLab.signUp.received": "تم استلام طلبك. سيراجعه أحد المشغّلين.",
   "partnerLab.signUp.passwordTooShort":
-    "يجب أن تتكون كلمة المرور من ثمانية أحرف على الأقل، وأن تحتوي على حرف صغير وحرف كبير ورقم ورمز.",
+    "يجب أن تتكون كلمة المرور من اثني عشر حرفًا على الأقل، وأن تحتوي على حرف صغير وحرف كبير ورقم ورمز.",
   "partnerLab.signUp.invalidEmail": "صيغة البريد الإلكتروني غير صالحة.",
   "partnerLab.signUp.passwordMismatch": "كلمتا المرور غير متطابقتين.",
   "partnerLab.signUp.weakPassword": "يجب أن تحتوي كلمة المرور على حرف صغير وحرف كبير ورقم ورمز.",
@@ -728,8 +728,8 @@ const en = {
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
-  // passwordTooShort restated at P08-T08 (four classes and eight-character
-  // minimum). weakPassword kept in both locales even though unreferenced.
+  // passwordTooShort restated at P08-T17 (four classes and twelve-character
+  // minimum, local ≥ hosted). weakPassword kept in both locales even though unreferenced.
   // confirmPassword / passwordMismatch: P08-T11. confirm_password is the
   // same credential typed twice, not a new field of personal data.
   "partnerLab.signUp.title": "Partner laboratory sign-up",
@@ -740,7 +740,7 @@ const en = {
   "partnerLab.signUp.failed": "Could not create the account. Try again.",
   "partnerLab.signUp.received": "We have received your request. An Operator will review it.",
   "partnerLab.signUp.passwordTooShort":
-    "The password must be at least eight characters and include a lowercase letter, an uppercase letter, a digit, and a symbol.",
+    "The password must be at least twelve characters and include a lowercase letter, an uppercase letter, a digit, and a symbol.",
   "partnerLab.signUp.invalidEmail": "The email address is not valid.",
   "partnerLab.signUp.passwordMismatch": "The two passwords do not match.",
   "partnerLab.signUp.weakPassword": "The password must include a lowercase letter, an uppercase letter, a number, and a symbol.",

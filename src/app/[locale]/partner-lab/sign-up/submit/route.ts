@@ -6,14 +6,26 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-// Authority: the hosted 422 body at P08-T06 STEP 1 (error_code
-// weak_password), NOT supabase/config.toml, which reads
+// Hosted password policy read from the Supabase dashboard
+// (Authentication → Policies) on 9 September 2026 by the human:
+// minimum length 12. Character classes as configured there.
+// Authoritative per CF-158; supabase/config.toml is not — it declares
 // password_requirements = "" and minimum_password_length = 6 and is
-// contradicted by the live project. STRICTER THAN HOSTED IS THE POINT:
-// anything that passes locally must pass hosted, so weak_password can
-// never be reached and a weak password can never silently produce no
-// account.
-const PASSWORD_MIN_LENGTH = 8;
+// contradicted by the live project.
+//
+// That attestation is recorded here verbatim. The hosted minimum was
+// neither inferred nor taken from config.toml.
+//
+// PASSWORD_MIN_LENGTH is 12. Comparison: local ≥ hosted (equal). The
+// four character-class checks stay regardless of the hosted class
+// setting — stricter is always safe, weaker fails silently.
+//
+// INVARIANT: weak_password is NEUTRAL under OD-18 §6, so any password
+// that passes the local check and fails hosted returns ?created=1 with
+// no account created. The local rule being at least as strict as hosted
+// is the only thing that makes NEUTRAL safe. If the two ever diverge
+// again, signup fails silently and nothing surfaces it.
+const PASSWORD_MIN_LENGTH = 12;
 const PASSWORD_CLASS_LOWER = "abcdefghijklmnopqrstuvwxyz";
 const PASSWORD_CLASS_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const PASSWORD_CLASS_DIGIT = "0123456789";
@@ -102,14 +114,19 @@ export async function POST(
   //
   //   1. malformed email, checked locally, so it costs no request
   //   2. password strength, checked locally: length at least
-  //      PASSWORD_MIN_LENGTH, then the four character classes taken
-  //      verbatim from the hosted 422 body at P08-T06 STEP 1
+  //      PASSWORD_MIN_LENGTH (12; local ≥ hosted as of the dashboard
+  //      read on 9 September 2026), then the four character classes
+  //      kept even if hosted is weaker — stricter is always safe
   //   3. confirm_password mismatch, checked locally by comparing the two
   //      copies of the same credential before signUp is called
   //
-  // weak_password is NEUTRAL. After the three local checks, every path
-  // shares ?created=1: success, already-registered, throttles,
-  // weak_password, unrecognised codes, and a thrown exception.
+  // weak_password is NEUTRAL under OD-18 §6. After the three local
+  // checks, every path shares ?created=1: success, already-registered,
+  // throttles, weak_password, unrecognised codes, and a thrown
+  // exception. A password that passes locally and fails hosted therefore
+  // returns ?created=1 with no account created. Local ≥ hosted is the
+  // only thing that makes that NEUTRAL path safe. If the two ever
+  // diverge again, signup fails silently and nothing surfaces it.
   //
   // Diagnosis in production comes from the platform's own auth logs,
   // server-side, outside this application. Do not add logging here.

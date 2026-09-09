@@ -254,7 +254,9 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [ ] **P08-T12-F** — G8 blockers: React #418, signup persistence, Operator review
 - [x] **P08-T13** — Reconcile the phase plan, then clear the three G8 blockers
 - [x] **P08-T14** — A repeatable PartnerLab smoke test
-- [ ] **P08-T15** — Fix the PartnerLab sign-in path and make signup findable
+- [x] **P08-T15** — Fix the PartnerLab sign-in path and make signup findable
+- [ ] **P08-T16** — Halted at STEP 0 on a dirty working tree
+- [ ] **P08-T17** — Align the local password rule to the hosted policy
 
 ### P06 — Content and Arabic · LONGEST POLE
 
