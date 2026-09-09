@@ -861,3 +861,26 @@ the SSG footer matches.
 
 Do not merge before the verdict.
 
+## 2026-09-09 — P08-T17: Align the local password rule to the hosted policy
+
+Parent is `main` at `d86c735`. Tree was clean. `stash@{0}` was not popped.
+
+STEP 0 recorded P08-T15 PASS at reviewer verdict — 8 September 2026, and
+P08-T16 halted at STEP 0 on a dirty working tree, named no cause, issued
+no request.
+
+Hosted password policy read from the Supabase dashboard
+(Authentication → Policies) on 9 September 2026 by the human:
+minimum length 12. Character classes as configured there.
+Authoritative per CF-158; supabase/config.toml is not — it declares
+password_requirements = "" and minimum_password_length = 6 and is
+contradicted by the live project.
+
+`PASSWORD_MIN_LENGTH` is 12: local ≥ hosted (equal). The four
+character-class checks are kept. `weak_password` stays NEUTRAL under
+OD-18 §6; local ≥ hosted is what makes that NEUTRAL path safe.
+
+CF-158 CLOSED at P08-T17. CF-166 OPEN, reviewer, G8. Open 95 − 1 + 1 = 95.
+
+Do not merge before the verdict.
+
