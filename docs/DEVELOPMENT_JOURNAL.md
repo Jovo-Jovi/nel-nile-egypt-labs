@@ -923,3 +923,24 @@ pressed against the live published Site Settings singleton.
 
 Do not merge before the verdict.
 
+## 2026-09-10 — G8-R: Boundary re-run
+
+Parent is `origin/main` at `6f511d2`. Evidence at
+`docs/research/g8r-evidence.md`. No source, no migration, no schema
+change. P08-T12's failed-run record was not edited.
+
+P08-T19 recorded PASS at reviewer verdict — 9 September 2026. CF-165
+CLOSED from the human's 9 September reject Location
+`?view=rejected&saved=1`.
+
+Source since G8 (`ef5671b`) is not identical: T15, T17, T18 and T19
+touched `src/`. Every leg was measured fresh.
+
+P1, P2, P6, P7, P9 and STEP 3 hold. P6 is anon PostgREST `[]` while a
+laboratory Offer is published. P4 was not executed (no Operator
+session). That Offer was not unpublished. G8-R FAIL. G8 remains FAIL.
+Open CF 96 − 1 = 95.
+
+Do not merge before the verdict. Do not start P06.
+
+
