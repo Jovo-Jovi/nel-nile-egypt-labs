@@ -259,7 +259,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P08-T17** — Align the local password rule to the hosted policy
 - [x] **P08-T18** — Functional UX fixes before G8
 - [ ] **P08-T18-F** — Named fix row for the P08-T18 FAIL. Issued work is P08-T19
-- [ ] **P08-T19** — Fix what the Operator cannot get past
+- [x] **P08-T19** — Fix what the Operator cannot get past
 
 ### P06 — Content and Arabic · LONGEST POLE
 
@@ -298,6 +298,7 @@ Follows G5. Precedes G7 (OD-19 §1, draft). Not in OD-12's delivery sequence; OD
 - [ ] Partner-read policy, `for select to authenticated`, gated on the approved claim
 - [ ] Account review as the eleventh dashboard module
 - [ ] No TOTP for a `PartnerLab`
+- [ ] **G8-R** — re-run in full
 - [ ] **G8** — Boundary
 
 ### P09 — Design · AFTER G7
@@ -419,27 +420,35 @@ Sent to the client today, that document understates the project badly.
 
 ## §7 What stops the project today
 
-G8 is FAIL. Three blockers, a credential rotation, and two documents that do not
-close G8 but sit on the ledger beside it.
+G8 is FAIL. G8-R on 10 September 2026 did not pass it. Evidence at
+`docs/research/g8r-evidence.md`. P08-T12's FAIL cell is unchanged.
 
-**React #418 (CF-164).** Reported on the live site; unnamed under `next dev`. G8
-does not pass while the mismatch is unnamed. Capture and fix at P08-T13.
+**P4 was not executed.** `NEL_OPERATOR_SESSION` was unset, so this run
+could not approve a throwaway or read a published Offer title behind an
+approved `PartnerLab` token. A laboratory Offer is already published
+(hashed id `7cc7436e57b8`, created 9 September 2026) and was not
+disturbed.
 
-~~**Signup persistence (CF-153, CF-154).** The public form returned `created=1` with
-no listable Auth row. D-49 records `mailer_autoconfirm` as the decision, not a
-workaround. Not proven until P1 on the live path.~~
-**UNRATIFIED residual repair, PR-19, P08-T14.** CF-153 and CF-154 CLOSED at
-P08-T14, discharged by D-49, not deferred. CF-153 asked for a ruling on
-confirmation email and D-49 is that ruling; CF-154 was the built-in mailer as a
-production path and with autoconfirm on there is no mail path. P08-T13 P2 listed
-the Auth row via `db query --linked`.
+**P5 is incomplete.** A dashboard reject returned
+`?view=rejected&saved=1` on 9 September 2026 (human attestation; CF-165
+CLOSED at G8-R). Reinstate and claim read-back were not measured.
 
-**Operator review (CF-165).** Approve, reject and reinstate POSTs returned
+**P10 cannot restore published Offer count to 0** without unpublishing
+that laboratory row.
+
+**React #418 (CF-164)** is recorded, not gating. Reviewer ruling
+9 September 2026: a symptom that has not reproduced on the named routes
+is a carry-forward. Closing condition: if it recurs, capture the
+unminified message and name the component before changing anything.
+
+~~**Operator review (CF-165).** Approve, reject and reinstate POSTs returned
 `error=write`. The walkthrough then wrote claims via a local Admin client, which
-is not the dashboard path.
+is not the dashboard path.~~
+**CLOSED at G8-R.** A real dashboard reject returned
+`?view=rejected&saved=1` on 9 September 2026, confirmed by the human.
 
-**Credential rotation.** Both the `service_role` and `anon` keys were printed by
-`api-keys --reveal`. Rotation is a human action at P08-T13 STEP 5.
+**CF-167.** An approved PartnerLab cannot be revoked. No control at
+P08-T19. OD-20 is DRAFT; P08-T20 implements it after a passing G8.
 
 **OD-09 is unsigned (CF-156).** Announcements and Clinical notices remain draft
 and unpriced. OD-19 does not decide this.
@@ -448,6 +457,5 @@ and unpriced. OD-19 does not decide this.
 signed. Remaining delivery order: P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 →
 P09 → G9.
 
-**The clinical work** remains the longest pole after G8. Seventy-two Arabic
-names, 121 judgements, five flagged records, and a signature from the lab's
-clinical staff. It is not the thing that fails G8.
+**The clinical work** remains the longest pole after G8. Content entry is
+still through the dashboard. It is not the thing that fails G8.
