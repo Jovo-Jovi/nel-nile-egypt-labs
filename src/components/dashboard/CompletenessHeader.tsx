@@ -9,6 +9,8 @@ import { formatWesternCount } from "@/lib/listingFormat";
 import type { CompletenessSlot, CompletenessTally } from "@/lib/dashboard/completeness";
 import { loadCompletenessTally } from "@/lib/dashboard/completeness";
 import { bilingualStemFromArField } from "@/lib/dashboard/siteSettings";
+import { localeHref } from "@/lib/locale";
+import Link from "next/link";
 import styles from "./CompletenessHeader.module.css";
 
 const PAGE_TITLE: Record<string, CatalogKey> = {
@@ -145,6 +147,40 @@ function slotLabel(locale: Locale, slot: CompletenessSlot): string {
   return key ? translate(locale, key) : slot.column;
 }
 
+function missingSlots(tally: CompletenessTally): CompletenessSlot[] {
+  const seen = new Set<string>();
+  const missing: CompletenessSlot[] = [];
+  for (const page of tally.pages) {
+    for (const slot of page.slots) {
+      if (slot.filled || seen.has(slot.id)) continue;
+      seen.add(slot.id);
+      missing.push(slot);
+    }
+  }
+  return missing;
+}
+
+function owningModuleHref(locale: Locale, slot: CompletenessSlot): string {
+  const id = slot.id;
+  if (id.startsWith("Branch:")) return localeHref(locale, "/dashboard/branches");
+  if (id.startsWith("LabUnit:")) return localeHref(locale, "/dashboard/lab-units");
+  if (id.startsWith("Offer:")) return localeHref(locale, "/dashboard/offers");
+  if (id.startsWith("Video:")) return localeHref(locale, "/dashboard/videos");
+  if (id.startsWith("Equipment:")) return localeHref(locale, "/dashboard/equipment");
+  if (id.startsWith("MediaAsset:")) return localeHref(locale, "/dashboard/media-assets");
+  if (id.startsWith("SiteSettings:")) {
+    return `${localeHref(locale, "/dashboard/site-settings")}#${slot.column}`;
+  }
+  const page = slot.pages[0] ?? "";
+  if (page === "media") return localeHref(locale, "/dashboard/media-assets");
+  if (page.includes("/locations")) return localeHref(locale, "/dashboard/branches");
+  if (page.includes("/departments")) return localeHref(locale, "/dashboard/lab-units");
+  if (page.includes("/offers")) return localeHref(locale, "/dashboard/offers");
+  if (page.includes("/videos")) return localeHref(locale, "/dashboard/videos");
+  if (page.includes("/equipment")) return localeHref(locale, "/dashboard/equipment");
+  return localeHref(locale, "/dashboard/site-settings");
+}
+
 function Summary({ locale, tally }: { locale: Locale; tally: CompletenessTally }) {
   const populated = formatWesternCount(locale, tally.populated);
   const required = formatWesternCount(locale, tally.required);
@@ -200,9 +236,27 @@ export async function CompletenessHeader({
   if (tally === null) return null;
 
   if (variant === "compact") {
+    const gaps = missingSlots(tally);
     return (
       <div className={styles.header} data-nel-completeness="header">
         <Summary locale={locale} tally={tally} />
+        {gaps.length > 0 ? (
+          <div className={styles.gaps} data-nel-completeness="gaps">
+            <h2 className={styles.sectionTitle}>
+              {translate(locale, "dashboard.completeness.gapsHeading")}
+            </h2>
+            <ul className={styles.fields}>
+              {gaps.map((slot) => (
+                <li key={slot.id} className={styles.field} data-nel-column={slot.column} data-nel-slot={slot.id}>
+                  <Link className={styles.fieldLink} href={owningModuleHref(locale, slot)}>
+                    <IsolatedCopy locale={locale} text={slotLabel(locale, slot)} />
+                  </Link>
+                  <FieldMark locale={locale} filled={false} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
     );
   }

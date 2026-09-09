@@ -560,6 +560,7 @@ export function CatalogPublishControls({
   unpublishHref,
   flight,
   createIdleKey = "dashboard.catalog.create",
+  allowUnpublish = true,
 }: {
   locale: Locale;
   isCreate: boolean;
@@ -567,6 +568,7 @@ export function CatalogPublishControls({
   unpublishHref: string;
   flight: Flight;
   createIdleKey?: CatalogKey;
+  allowUnpublish?: boolean;
 }) {
   if (isCreate) {
     return (
@@ -595,16 +597,18 @@ export function CatalogPublishControls({
           flight={flight}
         />
       </div>
-      <div className={site.actionsUnpublish}>
-        <ActionSlot
-          locale={locale}
-          slot="unpublish"
-          variant="text"
-          formAction={unpublishHref}
-          idleKey="dashboard.siteSettings.unpublish"
-          flight={flight}
-        />
-      </div>
+      {allowUnpublish ? (
+        <div className={site.actionsUnpublish}>
+          <ActionSlot
+            locale={locale}
+            slot="unpublish"
+            variant="text"
+            formAction={unpublishHref}
+            idleKey="dashboard.siteSettings.unpublish"
+            flight={flight}
+          />
+        </div>
+      ) : null}
     </>
   );
 }

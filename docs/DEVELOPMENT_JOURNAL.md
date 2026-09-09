@@ -905,3 +905,21 @@ picker, Offer, and hide proofs that need the dashboard were not run.
 
 Do not merge before the verdict.
 
+## 2026-09-09 — P08-T19: Fix what the Operator cannot get past
+
+Parent is `main` at `33e5a2d`. The Operator is told when unpublish has
+nothing to withdraw, and إلغاء النشر is not offered on a never-published
+row. Module pages name missing completeness slots and link to them.
+Public Offers and the Operator Offers module no longer share a heading.
+An approved PartnerLab still cannot be revoked; that is CF-167, and no
+control was built.
+
+CF-165 stays OPEN: the human confirmed the Offers sign-out and the
+`/ar/dashboard` landing on 9 September 2026, not an approve redirect of
+`saved=1`.
+
+Operator AAL2 was not signed into (sidecar absent). Unpublish was not
+pressed against the live published Site Settings singleton.
+
+Do not merge before the verdict.
+

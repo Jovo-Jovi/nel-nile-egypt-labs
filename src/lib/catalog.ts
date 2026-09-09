@@ -106,6 +106,7 @@ const ar = {
   "dashboard.completeness.headOffice": "مقر رئيسي واحد بالضبط",
   "dashboard.completeness.poster": "صورة الملصق",
   "dashboard.completeness.pagesHeading": "حسب الصفحة",
+  "dashboard.completeness.gapsHeading": "الحقول الناقصة",
   "dashboard.completeness.clientHeading": "مواد يملكها العميل",
   "dashboard.completeness.client.mark": "العلامة كملف قابل للتكبير (CF-74)",
   "dashboard.completeness.client.markUnblocks": "يفتح الأيقونة المصغّرة وأيقونة التطبيق",
@@ -140,7 +141,7 @@ const ar = {
   "dashboard.challenge.code": "رمز التحقق",
   "dashboard.challenge.submit": "تحقق",
   "dashboard.challenge.failed": "تعذّر التحقق. حاول مرة أخرى.",
-  "dashboard.offers.heading": "العروض",
+  "dashboard.offers.heading": "إدارة العروض",
   "dashboard.offers.pending": "قيد الانتظار — بانتظار صفوف العروض",
   "dashboard.nav.label": "أقسام لوحة التحكم",
   "dashboard.nav.offers": "العروض",
@@ -208,6 +209,8 @@ const ar = {
   "dashboard.validation.errorMapsUrl":
     "حقل رابط الخرائط لا يحتوي إحداثيات. الصق رابط خرائط Google موسَّعاً يحتوي إحداثيات.",
   "dashboard.siteSettings.errorMissing": "لا يوجد صف إعدادات. أنشئه أولاً.",
+  "dashboard.siteSettings.errorNotPublished":
+    "هذا الصف مسودة. لا يوجد منشور يُسحب.",
   "dashboard.siteSettings.errorWrite": "تعذّر الحفظ. حاول مرة أخرى.",
   "dashboard.siteSettings.errorCreate": "تعذّر إنشاء الصف. حاول مرة أخرى.",
   "dashboard.siteSettings.errorExists": "الصف موجود. أعد تحميل الصفحة.",
@@ -788,6 +791,7 @@ const en = {
   "dashboard.completeness.headOffice": "Exactly one head office",
   "dashboard.completeness.poster": "Poster image",
   "dashboard.completeness.pagesHeading": "By page",
+  "dashboard.completeness.gapsHeading": "Missing fields",
   "dashboard.completeness.clientHeading": "Client materials",
   "dashboard.completeness.client.mark": "The mark as a scalable file (CF-74)",
   "dashboard.completeness.client.markUnblocks": "Unblocks the favicon and app icon",
@@ -821,7 +825,7 @@ const en = {
   "dashboard.challenge.code": "Verification code",
   "dashboard.challenge.submit": "Verify",
   "dashboard.challenge.failed": "Verification failed. Try again.",
-  "dashboard.offers.heading": "Offers",
+  "dashboard.offers.heading": "Manage Offers",
   "dashboard.offers.pending": "Pending — awaiting Offer rows",
   "dashboard.nav.label": "Dashboard sections",
   "dashboard.nav.offers": "Offers",
@@ -889,6 +893,8 @@ const en = {
   "dashboard.validation.errorMapsUrl":
     "The Maps link field has no coordinate. Paste an expanded Google Maps URL that contains one.",
   "dashboard.siteSettings.errorMissing": "There is no settings row. Create it first.",
+  "dashboard.siteSettings.errorNotPublished":
+    "This row is a draft. There is nothing published to withdraw.",
   "dashboard.siteSettings.errorWrite": "Save failed. Try again.",
   "dashboard.siteSettings.errorCreate": "Could not create the row. Try again.",
   "dashboard.siteSettings.errorExists": "The row already exists. Reload the page.",
