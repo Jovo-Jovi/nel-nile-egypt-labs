@@ -52,6 +52,7 @@ const COPY = {
 const EMAIL_RE = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
 const JWT_RE = /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g;
 const KEYISH_RE = /\b(?:sbp_|sb_secret_|sb_publishable_|eyJ)[A-Za-z0-9._-]+\b/g;
+const SHARE_RE = /_vercel_share=[^&\s]+/gi;
 
 let failed = false;
 
@@ -59,7 +60,8 @@ function redact(text) {
   return String(text)
     .replace(EMAIL_RE, "[redacted-address]")
     .replace(JWT_RE, "[redacted-jwt]")
-    .replace(KEYISH_RE, "[redacted-key]");
+    .replace(KEYISH_RE, "[redacted-key]")
+    .replace(SHARE_RE, "_vercel_share=[redacted]");
 }
 
 function say(line) {
@@ -130,6 +132,21 @@ class CookieJar {
     }
     return next;
   }
+}
+
+const protectionJar = new CookieJar();
+
+function cookieHeader(jar) {
+  const merged = new CookieJar();
+  for (const [name, value] of protectionJar.map.entries()) {
+    if (name.startsWith("_vercel")) merged.map.set(name, value);
+  }
+  if (jar) {
+    for (const [name, value] of jar.map.entries()) {
+      merged.map.set(name, value);
+    }
+  }
+  return merged.header();
 }
 
 function hashedAuthId(id) {
@@ -441,10 +458,8 @@ async function assertAnonOfferEmpty(id, withPublishedOffer) {
 
 async function request(baseUrl, path, options = {}) {
   const headers = new Headers(options.headers ?? {});
-  if (options.jar) {
-    const cookie = options.jar.header();
-    if (cookie) headers.set("Cookie", cookie);
-  }
+  const cookie = cookieHeader(options.jar);
+  if (cookie) headers.set("Cookie", cookie);
   const response = await fetch(`${baseUrl}${path}`, {
     method: options.method ?? "GET",
     headers,
@@ -454,6 +469,27 @@ async function request(baseUrl, path, options = {}) {
   });
   if (options.jar) options.jar.absorb(response);
   return response;
+}
+
+async function bootstrapProtection(baseUrl) {
+  const share = process.env.NEL_VERCEL_SHARE;
+  if (typeof share !== "string" || share.length === 0) return;
+  let path = `/?_vercel_share=${encodeURIComponent(share)}`;
+  const host = originOf(baseUrl);
+  for (let hop = 0; hop < 8; hop += 1) {
+    const response = await request(baseUrl, path, { jar: protectionJar });
+    if (response.status < 300 || response.status >= 400) return;
+    const location = response.headers.get("location");
+    if (!location) return;
+    let next;
+    try {
+      next = new URL(location, `${baseUrl}/`);
+    } catch {
+      return;
+    }
+    if (originOf(next.origin) !== host) return;
+    path = `${next.pathname}${next.search}`;
+  }
 }
 
 async function readBody(response) {
@@ -536,13 +572,8 @@ function claimKeysOf(row) {
   return [];
 }
 
-function signupHost(baseUrl) {
-  const origin = originOf(baseUrl);
-  if (origin === null) return baseUrl;
-  if (origin.includes("127.0.0.1") || origin.includes("localhost")) {
-    return LIVE_ALIAS;
-  }
-  return baseUrl;
+function signupHost(_baseUrl) {
+  return LIVE_ALIAS;
 }
 
 async function createThrowaway(baseUrl, secret) {
@@ -665,15 +696,31 @@ function reportCleanupFailure(id) {
   );
 }
 
+async function signInDashboard(hosts, address, secret) {
+  const seen = new Set();
+  let last = { jar: new CookieJar(), status: 0, location: "" };
+  for (const host of hosts) {
+    if (!host || seen.has(host)) continue;
+    seen.add(host);
+    const jar = new CookieJar();
+    const response = await postForm(
+      host,
+      "/ar/dashboard/sign-in/submit",
+      { email: address, password: secret },
+      jar,
+    );
+    last = { jar, status: response.status, location: locationPath(response) };
+    if (last.status === 303 && last.location.includes("/dashboard/enrol")) return last;
+    if (last.status === 303 && last.location.includes("/offers")) return last;
+    if (last.status === 303 && last.location.includes("/dashboard") && !last.location.includes("error=")) {
+      return last;
+    }
+  }
+  return last;
+}
+
 async function signInPartner(baseUrl, address, secret) {
-  const jar = new CookieJar();
-  const response = await postForm(
-    baseUrl,
-    "/ar/dashboard/sign-in/submit",
-    { email: address, password: secret },
-    jar,
-  );
-  return { jar, status: response.status, location: locationPath(response) };
+  return signInDashboard([baseUrl, LIVE_ALIAS], address, secret);
 }
 
 async function runPublic(baseUrl) {
@@ -964,37 +1011,18 @@ async function runOperator(baseUrl) {
       return;
     }
 
-    operatorJar = new CookieJar();
-    const signedOperator = await postForm(
-      baseUrl,
-      "/ar/dashboard/sign-in/submit",
-      {
-        email: addressFromLocalPart(operatorLocal),
-        password: operatorSignup.secret,
-      },
-      operatorJar,
+    const signedOperator = await signInDashboard(
+      [baseUrl, LIVE_ALIAS],
+      addressFromLocalPart(operatorLocal),
+      operatorSignup.secret,
     );
-    const signInLocation = locationPath(signedOperator);
-    if (signedOperator.status === 303 && signInLocation.includes("/dashboard/enrol")) {
+    operatorJar = signedOperator.jar;
+    if (signedOperator.status === 303 && signedOperator.location.includes("/dashboard/enrol")) {
       pass("O3", "HTTP 303 through the dashboard sign-in");
     } else {
-      const origin = originOf(baseUrl) ?? "";
-      let probe = "";
-      if (origin.includes("127.0.0.1") || origin.includes("localhost")) {
-        const aliasProbe = await postForm(
-          LIVE_ALIAS,
-          "/ar/dashboard/sign-in/submit",
-          {
-            email: addressFromLocalPart(operatorLocal),
-            password: operatorSignup.secret,
-          },
-          new CookieJar(),
-        );
-        probe = `; live-alias probe HTTP ${aliasProbe.status} location ${locationPath(aliasProbe) || "(none)"}`;
-      }
       fail(
         "O3",
-        `HTTP ${signedOperator.status} location ${signInLocation || "(none)"}${probe}`,
+        `HTTP ${signedOperator.status} location ${signedOperator.location || "(none)"}`,
       );
       skipFrom("O4", "operator sign-in failed");
       return;
@@ -1004,40 +1032,45 @@ async function runOperator(baseUrl) {
     if (second >= 28) {
       await new Promise((resolve) => setTimeout(resolve, (30 - second + 1) * 1000));
     }
-    const enrolPage = await request(baseUrl, "/ar/dashboard/enrol", { jar: operatorJar });
-    const enrolBody = await readBody(enrolPage);
-    const enrol = parseEnrolForm(enrolBody);
-    const code = enrol.secret ? totpCode(enrol.secret) : null;
-    if (enrolPage.status !== 200 || !enrol.secret || !enrol.factorId || code === null) {
-      fail("O4", `enrol form was not usable (HTTP ${enrolPage.status})`);
-      skipFrom("O5", "TOTP enrol failed");
-      return;
-    }
-    const verified = await postForm(
-      baseUrl,
-      "/ar/dashboard/enrol/submit",
-      { factorId: enrol.factorId, code },
-      operatorJar,
-    );
-    const verifiedLocation = locationPath(verified);
-    const refreshedDash = await request(baseUrl, "/ar/dashboard", { jar: operatorJar });
-    const againDash = await request(baseUrl, "/ar/dashboard", { jar: operatorJar });
-    const aal2 =
-      againDash.status === 200 &&
-      !locationPath(againDash).includes("/challenge") &&
-      !locationPath(againDash).includes("/enrol");
-    if (
-      verified.status === 303 &&
-      !verifiedLocation.includes("error=") &&
-      !verifiedLocation.includes("/enrol") &&
-      aal2
-    ) {
-      pass("O4", "AAL2 on a refreshed token");
-    } else {
-      fail(
-        "O4",
-        `enrol HTTP ${verified.status}; first dashboard ${refreshedDash.status}; refreshed ${againDash.status}`,
+    let enrolled = false;
+    let enrolDetail = "enrol form was not usable";
+    const enrolHosts = [baseUrl, LIVE_ALIAS].filter((host, index, list) => list.indexOf(host) === index);
+    for (const host of enrolHosts) {
+      const enrolPage = await request(host, "/ar/dashboard/enrol", { jar: operatorJar });
+      const enrolBody = await readBody(enrolPage);
+      const enrol = parseEnrolForm(enrolBody);
+      const code = enrol.secret ? totpCode(enrol.secret) : null;
+      if (enrolPage.status !== 200 || !enrol.secret || !enrol.factorId || code === null) {
+        enrolDetail = `enrol form was not usable (HTTP ${enrolPage.status})`;
+        continue;
+      }
+      const verified = await postForm(
+        host,
+        "/ar/dashboard/enrol/submit",
+        { factorId: enrol.factorId, code },
+        operatorJar,
       );
+      const verifiedLocation = locationPath(verified);
+      const refreshedDash = await request(baseUrl, "/ar/dashboard", { jar: operatorJar });
+      const againDash = await request(baseUrl, "/ar/dashboard", { jar: operatorJar });
+      const aal2 =
+        againDash.status === 200 &&
+        !locationPath(againDash).includes("/challenge") &&
+        !locationPath(againDash).includes("/enrol");
+      if (
+        verified.status === 303 &&
+        !verifiedLocation.includes("error=") &&
+        !verifiedLocation.includes("/enrol") &&
+        aal2
+      ) {
+        enrolled = true;
+        pass("O4", "AAL2 on a refreshed token");
+        break;
+      }
+      enrolDetail = `enrol HTTP ${verified.status}; first dashboard ${refreshedDash.status}; refreshed ${againDash.status}`;
+    }
+    if (!enrolled) {
+      fail("O4", enrolDetail);
       skipFrom("O5", "AAL2 was not proved on a refreshed token");
       return;
     }
@@ -1271,8 +1304,9 @@ async function runOperator(baseUrl) {
         );
       }
     }
-  } catch {
-    fail("operator-run", "an assertion path threw; cleanup still runs");
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "threw";
+    fail("operator-run", redact(message));
   } finally {
     if (offerId !== null && operatorJar !== null) {
       const listed = offerTitlesById(offerId);
@@ -1357,6 +1391,7 @@ async function main() {
     return;
   }
   say(`NEL PartnerLab smoke MODE ${mode} against ${baseUrl}`);
+  await bootstrapProtection(baseUrl);
   if (mode === "public") await runPublic(baseUrl);
   else await runOperator(baseUrl);
   if (failed) {

@@ -70,9 +70,10 @@ not this run's to unpublish.
 
 Revoke routes must be on the host under test. Against a deployment
 that does not yet include them, point the argument at a local
-`npx next start` that uses the same Auth and database. Signup still
-posts to the live alias in that case: a local signup from this
-network has already returned `created=1` with no Auth row (P08-T18).
+`npx next start` that uses the same Auth and database. Signup always
+posts to the live alias: a local signup from this network has already
+returned `created=1` with no Auth row (P08-T18), and Preview may have
+the partner signup flag off.
 
 Never run this mode unattended. While the temporary Operator exists it
 holds write access to eleven tables and the clinical catalogue.
