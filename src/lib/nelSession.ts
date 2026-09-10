@@ -58,6 +58,12 @@ export async function readNelSession(): Promise<NelSession> {
 // pending copy stands. The same client is returned so Offer reads in
 // this request see the new JWT even when the Server Component cannot
 // persist cookies.
+//
+// OD-20 §2: an approved PartnerLab is also refreshed once, so a
+// revocation that signed the account out server-side is visible on this
+// request. Approval still waits for that refresh. A failed refresh is
+// treated as signed-out for this render — a revoked laboratory must not
+// read one more Offer.
 export async function loadPartnerFacingSession(): Promise<{
   session: NelSession;
   supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
@@ -67,8 +73,14 @@ export async function loadPartnerFacingSession(): Promise<{
     return { session: { signedIn: false }, supabase: null };
   }
   let session = await readNelSessionFrom(supabase);
-  if (partnerLabStatusKind(session) === "pending") {
-    await supabase.auth.refreshSession();
+  if (
+    partnerLabStatusKind(session) === "pending" ||
+    (session.signedIn && session.principal === "PartnerLab")
+  ) {
+    const refreshed = await supabase.auth.refreshSession();
+    if (refreshed.error) {
+      return { session: { signedIn: false }, supabase };
+    }
     session = await readNelSessionFrom(supabase);
   }
   return { session, supabase };

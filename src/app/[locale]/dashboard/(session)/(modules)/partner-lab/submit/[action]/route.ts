@@ -12,7 +12,13 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-const WRITE_ACTIONS = ["approve", "reject", "reinstate"] as const;
+const WRITE_ACTIONS = [
+  "approve",
+  "reject",
+  "reinstate",
+  "revoke-to-pending",
+  "revoke-to-rejected",
+] as const;
 
 function parseAction(value: string): PartnerLabReviewAction | null {
   for (const action of WRITE_ACTIONS) {
@@ -23,13 +29,20 @@ function parseAction(value: string): PartnerLabReviewAction | null {
 
 function viewFor(action: PartnerLabReviewAction): "pending" | "approved" | "rejected" {
   if (action === "approve") return "approved";
-  if (action === "reject") return "rejected";
+  if (action === "reject" || action === "revoke-to-rejected") return "rejected";
   return "pending";
+}
+
+function savedQuery(action: PartnerLabReviewAction): string {
+  if (action === "revoke-to-pending" || action === "revoke-to-rejected") {
+    return "saved=1&ended=1";
+  }
+  return "saved=1";
 }
 
 function back(locale: "ar" | "en", action: PartnerLabReviewAction, query?: string): never {
   const href = `${localeHref(locale, "/dashboard/partner-lab")}?view=${viewFor(action)}`;
-  redirect(query ? `${href}&${query}` : `${href}&saved=1`);
+  redirect(query ? `${href}&${query}` : `${href}&${savedQuery(action)}`);
 }
 
 export async function POST(

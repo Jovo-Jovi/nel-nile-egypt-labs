@@ -1,5 +1,6 @@
-// P08-T14 — PartnerLab smoke. MODE public is the regression suite.
-// MODE operator is the pre-release check and is not run by this task.
+// P08-T20 — PartnerLab smoke. MODE public is the regression suite.
+// MODE operator mints a temporary Operator against production, must never
+// run unattended, and treats a failed Operator cleanup as an incident.
 //
 // No credential is written to any file inside the repository. This file
 // holds no key, no session value, and no address. Stdout never prints a
@@ -10,7 +11,7 @@
 // commit; this path is the fence's named smoke runner.
 
 import { spawnSync } from "node:child_process";
-import { randomBytes } from "node:crypto";
+import { createHash, createHmac, randomBytes } from "node:crypto";
 import {
   mkdtempSync,
   readFileSync,
@@ -21,7 +22,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const LIVE_ALIAS = "https://nel-nile-egypt-labs.vercel.app";
-const SESSION_COOKIE = "nel-operator-session";
 const LOCAL_PART_PREFIX = "nel-smoke-";
 const PUBLIC_SUFFIXES = [
   "",
@@ -122,26 +122,67 @@ class CookieJar {
       .map(([name, value]) => `${name}=${value}`)
       .join("; ");
   }
+
+  clone() {
+    const next = new CookieJar();
+    for (const [name, value] of this.map.entries()) {
+      next.map.set(name, value);
+    }
+    return next;
+  }
 }
 
-function loadOperatorJar() {
-  const raw = process.env.NEL_OPERATOR_SESSION;
-  if (typeof raw !== "string" || raw.length === 0) return null;
-  const jar = new CookieJar();
-  if (raw.includes(";")) {
-    for (const part of raw.split(";")) {
-      const eq = part.indexOf("=");
-      if (eq <= 0) continue;
-      jar.setNamed(part.slice(0, eq).trim(), part.slice(eq + 1).trim());
-    }
-    return jar;
+function hashedAuthId(id) {
+  return createHash("md5").update(String(id)).digest("hex").slice(0, 12);
+}
+
+function decodeBase32(secret) {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  const cleaned = String(secret).toUpperCase().replace(/=+$/g, "").replace(/\s+/g, "");
+  let bits = "";
+  for (const character of cleaned) {
+    const index = alphabet.indexOf(character);
+    if (index < 0) return null;
+    bits += index.toString(2).padStart(5, "0");
   }
-  if (raw.startsWith(`${SESSION_COOKIE}=`)) {
-    jar.setNamed(SESSION_COOKIE, raw.slice(SESSION_COOKIE.length + 1));
-    return jar;
+  const bytes = [];
+  for (let i = 0; i + 8 <= bits.length; i += 8) {
+    bytes.push(Number.parseInt(bits.slice(i, i + 8), 2));
   }
-  jar.setNamed(SESSION_COOKIE, raw);
-  return jar;
+  return Buffer.from(bytes);
+}
+
+function totpCode(secret) {
+  const key = decodeBase32(secret);
+  if (key === null || key.length === 0) return null;
+  const counter = Math.floor(Date.now() / 1000 / 30);
+  const payload = Buffer.alloc(8);
+  payload.writeUInt32BE(Math.floor(counter / 0x100000000), 0);
+  payload.writeUInt32BE(counter >>> 0, 4);
+  const hmac = createHmac("sha1", key).update(payload).digest();
+  const offset = hmac[hmac.length - 1] & 0x0f;
+  const binary =
+    ((hmac[offset] & 0x7f) << 24) |
+    (hmac[offset + 1] << 16) |
+    (hmac[offset + 2] << 8) |
+    hmac[offset + 3];
+  return String(binary % 1_000_000).padStart(6, "0");
+}
+
+function stripTags(html) {
+  return String(html).replace(/<[^>]+>/g, "").trim();
+}
+
+function parseEnrolForm(body) {
+  const secretBlock = body.match(/id="dashboard-enrol-secret"[^>]*>([\s\S]*?)<\/p>/i);
+  const secret = secretBlock ? stripTags(secretBlock[1]).replace(/\s+/g, "") : "";
+  const factorBlock = body.match(/name="factorId"\s+value="([^"]+)"/i);
+  const factorId = factorBlock ? factorBlock[1] : "";
+  return { secret, factorId };
+}
+
+function isUuid(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value));
 }
 
 function freshSecret() {
@@ -379,7 +420,7 @@ async function assertAnonOfferEmpty(id, withPublishedOffer) {
         pass(
           id,
           withPublishedOffer
-            ? "anon PostgREST still [] with a published Offer (O2+O4)"
+            ? "anon PostgREST still [] with a published Offer (O7+O9)"
             : "anon PostgREST body is []",
         );
         return;
@@ -495,29 +536,79 @@ function claimKeysOf(row) {
   return [];
 }
 
-async function createThrowaway(baseUrl) {
+function signupHost(baseUrl) {
+  const origin = originOf(baseUrl);
+  if (origin === null) return baseUrl;
+  if (origin.includes("127.0.0.1") || origin.includes("localhost")) {
+    return LIVE_ALIAS;
+  }
+  return baseUrl;
+}
+
+async function createThrowaway(baseUrl, secret) {
   const localPart = freshLocalPart();
   const address = addressFromLocalPart(localPart);
-  const secret = freshSecret();
+  const usedSecret = secret ?? freshSecret();
   const response = await postForm(baseUrl, "/ar/partner-lab/sign-up/submit", {
     email: address,
-    password: secret,
-    confirm_password: secret,
+    password: usedSecret,
+    confirm_password: usedSecret,
   });
   const location = locationPath(response);
   const created =
     response.status === 303 && location.includes("created=1") && !location.includes("error=");
-  return { localPart, secret, created, status: response.status, location };
+  return { localPart, secret: usedSecret, created, status: response.status, location };
 }
 
-function readThrowawayRow(localPart) {
+function readClaims(localPart) {
   const sql = `select id::text as id,
     (coalesce(raw_app_meta_data, '{}'::jsonb) ? 'nel_principal') as has_nel_principal,
+    coalesce(raw_app_meta_data->>'nel_principal', '') as nel_principal,
     (coalesce(raw_app_meta_data, '{}'::jsonb) ? 'nel_partner_state') as has_nel_partner_state,
+    coalesce(raw_app_meta_data->>'nel_partner_state', '') as nel_partner_state,
     array(select jsonb_object_keys(coalesce(raw_app_meta_data, '{}'::jsonb))) as claim_keys
     from auth.users
     where split_part(email, '@', 1) = '${localPart}'`;
   return linkedQuery(sql);
+}
+
+async function readClaimsUntilPresent(localPart) {
+  let last = { ok: false, rows: [], reason: "not attempted" };
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    last = readClaims(localPart);
+    if (last.ok && last.rows.length === 1 && last.rows[0]?.id) return last;
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  }
+  return last;
+}
+
+function readThrowawayRow(localPart) {
+  return readClaims(localPart);
+}
+
+function promoteOperator(id) {
+  if (!isUuid(id)) return { ok: false, rows: [], reason: "id was not a uuid" };
+  const sql = `update auth.users
+    set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || jsonb_build_object('nel_principal', 'Operator')
+    where id = '${id}'::uuid
+    returning id::text as id,
+      (coalesce(raw_app_meta_data, '{}'::jsonb) ? 'provider') as has_provider,
+      (coalesce(raw_app_meta_data, '{}'::jsonb) ? 'providers') as has_providers,
+      coalesce(raw_app_meta_data->>'nel_principal', '') as principal`;
+  return linkedQuery(sql);
+}
+
+function offerTitlesById(id) {
+  if (!isUuid(id)) return { ok: false, rows: [] };
+  return linkedQuery(
+    `select title_ar, title_en, publication_state from "Offer" where id = '${id}'::uuid`,
+  );
+}
+
+function titlesCarryMarker(row, marker) {
+  const titleAr = typeof row?.title_ar === "string" ? row.title_ar : "";
+  const titleEn = typeof row?.title_en === "string" ? row.title_en : "";
+  return titleAr.includes(marker) || titleEn.includes(marker);
 }
 
 function truthyFlag(value) {
@@ -545,7 +636,7 @@ async function deleteThrowaway(id, localPart) {
   const byLocal = linkedQuery(
     `select id::text as id from auth.users where split_part(email, '@', 1) = '${localPart}'`,
   );
-  if (byLocal.ok && byLocal.rows.length === 0 && id) {
+  if (byLocal.ok && byLocal.rows.length === 0) {
     return { ok: true };
   }
   if (byLocal.ok && byLocal.rows.length === 1) {
@@ -755,61 +846,50 @@ function uuidFromOfferLocation(location) {
   return match ? match[1] : null;
 }
 
-async function runOperator(baseUrl) {
-  const operatorJar = loadOperatorJar();
-  if (operatorJar === null) {
-    const reason =
-      "NEL_OPERATOR_SESSION is unset. Obtain nel-operator-session from browser devtools after an Operator AAL2 sign-in; it expires; this is deliberately weaker than a stored password. Set it in the shell for one run only, never a file.";
-    for (const id of ["O1", "O2", "O3", "O4", "O5", "O6"]) skipped(id, reason);
-    return;
-  }
+const OPERATOR_LEGS = [
+  "O0",
+  "O1",
+  "O2",
+  "O3",
+  "O4",
+  "O5",
+  "O6",
+  "O7",
+  "O8",
+  "O9",
+  "O10",
+  "O11",
+  "O12",
+];
 
-  const throwaway = await createThrowaway(baseUrl);
-  if (!throwaway.created) {
-    skipped("O1", `throwaway signup was not created=1 (HTTP ${throwaway.status})`);
-    skipped("O2", "no throwaway");
-    skipped("O3", "no throwaway");
-    skipped("O4", "no throwaway");
-    skipped("O5", "no throwaway");
-    skipped("O6", "no throwaway");
-    return;
-  }
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  const rowQuery = readThrowawayRow(throwaway.localPart);
-  const throwawayId = rowQuery.ok && rowQuery.rows[0]?.id ? String(rowQuery.rows[0].id) : null;
-  if (throwawayId === null) {
-    skipped("O1", "throwaway row was not readable via linked query");
-    skipped("O2", "no throwaway id");
-    skipped("O3", "no throwaway id");
-    skipped("O4", "no throwaway id");
-    skipped("O5", "no throwaway id");
-    skipped("O6", "no throwaway id");
-    reportCleanupFailure(null);
-    return;
-  }
+function skipFrom(id, reason) {
+  const start = OPERATOR_LEGS.indexOf(id);
+  const rest = start < 0 ? [id] : OPERATOR_LEGS.slice(start);
+  for (const leg of rest) skipped(leg, reason);
+}
 
-  const approve = await postForm(
-    baseUrl,
-    "/ar/dashboard/partner-lab/submit/approve",
-    { subjectId: throwawayId },
-    operatorJar,
+function savedWithoutWrite(response, location) {
+  return (
+    response.status === 303 &&
+    location.includes("saved=1") &&
+    !location.includes("error=")
   );
-  const approveLocation = locationPath(approve);
-  if (
-    approve.status === 303 &&
-    approveLocation.includes("saved=1") &&
-    !approveLocation.includes("error=write")
-  ) {
-    pass("O1", "HTTP 303 saved=1");
-  } else {
-    fail("O1", `HTTP ${approve.status} location ${approveLocation || "(none)"}`);
-  }
+}
 
-  const token = randomBytes(4).toString("hex");
-  const titleAr = `تجربة-سموك-${token}`;
-  const titleEn = `NelSmokeEn-${token}`;
-  const descriptionAr = `وصف-سموك-${token}`;
-  const descriptionEn = `NelSmokeDesc-${token}`;
+function reportOperatorIncident(id) {
+  const hashed = id ? hashedAuthId(id) : "unknown";
+  fail(
+    "O13-operator",
+    `INCIDENT: a temporary Operator-privileged account is live against production. hashed id ${hashed}. Do not ignore. Delete that Auth row.`,
+  );
+}
+
+async function runOperator(baseUrl) {
+  const marker = `NEL-P08-T20-${randomBytes(4).toString("hex")}`;
+  const titleAr = `تجربة-سموك-${marker}`;
+  const titleEn = `${marker}-throwaway-offer`;
+  const descriptionAr = `وصف-سموك-${marker}`;
+  const descriptionEn = `NelSmokeDesc-${marker}`;
   const offerFields = {
     title_ar: titleAr,
     title_en: titleEn,
@@ -817,164 +897,451 @@ async function runOperator(baseUrl) {
     description_en: descriptionEn,
     display_order: "0",
   };
-  const createdOffer = await postForm(
-    baseUrl,
-    "/ar/dashboard/offers/submit/create",
-    offerFields,
-    operatorJar,
-  );
-  const createdLocation = locationPath(createdOffer);
-  const offerId = uuidFromOfferLocation(createdLocation);
-  if (
-    createdOffer.status === 303 &&
-    createdLocation.includes("saved=1") &&
-    offerId !== null
-  ) {
-    pass("O2-create", "HTTP 303 saved=1");
-  } else {
-    fail("O2-create", `HTTP ${createdOffer.status} location ${createdLocation || "(none)"}`);
-  }
 
-  let publishedOk = false;
-  if (offerId !== null) {
-    const published = await postForm(
+  let operatorLocal = null;
+  let operatorId = null;
+  let operatorJar = null;
+  let subjectLocal = null;
+  let subjectId = null;
+  let subjectSecret = null;
+  let liveSubjectJar = null;
+  let offerId = null;
+
+  try {
+    const operatorSecret = freshSecret();
+    if (
+      operatorSecret.length >= 12 &&
+      /[a-z]/.test(operatorSecret) &&
+      /[A-Z]/.test(operatorSecret) &&
+      /\d/.test(operatorSecret) &&
+      /[^A-Za-z0-9]/.test(operatorSecret)
+    ) {
+      pass("O0", "credentials generated at runtime, never written");
+    } else {
+      fail("O0", "generated secret failed the twelve-character four-class rule");
+      skipFrom("O1", "O0 failed");
+      return;
+    }
+
+    const operatorSignup = await createThrowaway(signupHost(baseUrl), operatorSecret);
+    operatorLocal = operatorSignup.localPart;
+    if (operatorSignup.created) {
+      pass("O1", "HTTP 303 created=1");
+    } else {
+      fail("O1", `HTTP ${operatorSignup.status} location ${operatorSignup.location || "(none)"}`);
+      skipFrom("O2", "operator signup was not created=1");
+      return;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const operatorRow = await readClaimsUntilPresent(operatorLocal);
+    operatorId =
+      operatorRow.ok && operatorRow.rows[0]?.id ? String(operatorRow.rows[0].id) : null;
+    if (operatorId === null || !isUuid(operatorId)) {
+      fail(
+        "O2",
+        `operator row was not readable via linked query (ok ${operatorRow.ok}; rows ${operatorRow.rows.length}; ${operatorRow.reason ?? "no-reason"})`,
+      );
+      skipFrom("O3", "no operator id");
+      return;
+    }
+
+    const promoted = promoteOperator(operatorId);
+    const promotedRow = promoted.ok && promoted.rows.length === 1 ? promoted.rows[0] : null;
+    if (
+      promotedRow &&
+      truthyFlag(promotedRow.has_provider) &&
+      truthyFlag(promotedRow.has_providers) &&
+      String(promotedRow.principal) === "Operator"
+    ) {
+      pass("O2", "one row updated; provider and providers survived");
+    } else {
+      fail(
+        "O2",
+        `expected one merged Operator row with provider and providers; rows ${promoted.rows.length}`,
+      );
+      skipFrom("O3", "promote did not leave a single Operator row");
+      return;
+    }
+
+    operatorJar = new CookieJar();
+    const signedOperator = await postForm(
       baseUrl,
-      "/ar/dashboard/offers/submit/publish",
-      { ...offerFields, row_id: offerId },
+      "/ar/dashboard/sign-in/submit",
+      {
+        email: addressFromLocalPart(operatorLocal),
+        password: operatorSignup.secret,
+      },
       operatorJar,
     );
-    const publishedLocation = locationPath(published);
-    publishedOk =
-      published.status === 303 &&
-      publishedLocation.includes("saved=1") &&
-      !publishedLocation.includes("error=");
-    if (publishedOk) pass("O2-publish", "HTTP 303 saved=1");
-    else fail("O2-publish", `HTTP ${published.status} location ${publishedLocation || "(none)"}`);
-  } else {
-    skipped("O2-publish", "no Offer id from create");
-  }
+    const signInLocation = locationPath(signedOperator);
+    if (signedOperator.status === 303 && signInLocation.includes("/dashboard/enrol")) {
+      pass("O3", "HTTP 303 through the dashboard sign-in");
+    } else {
+      const origin = originOf(baseUrl) ?? "";
+      let probe = "";
+      if (origin.includes("127.0.0.1") || origin.includes("localhost")) {
+        const aliasProbe = await postForm(
+          LIVE_ALIAS,
+          "/ar/dashboard/sign-in/submit",
+          {
+            email: addressFromLocalPart(operatorLocal),
+            password: operatorSignup.secret,
+          },
+          new CookieJar(),
+        );
+        probe = `; live-alias probe HTTP ${aliasProbe.status} location ${locationPath(aliasProbe) || "(none)"}`;
+      }
+      fail(
+        "O3",
+        `HTTP ${signedOperator.status} location ${signInLocation || "(none)"}${probe}`,
+      );
+      skipFrom("O4", "operator sign-in failed");
+      return;
+    }
 
-  const signed = await signInPartner(
-    baseUrl,
-    addressFromLocalPart(throwaway.localPart),
-    throwaway.secret,
-  );
-  if (signed.status !== 303) {
-    fail("O3-signin", `HTTP ${signed.status} location ${signed.location || "(none)"}`);
-  } else {
-    for (const locale of ["ar", "en"]) {
-      const page = await request(baseUrl, `/${locale}/offers`, { jar: signed.jar });
-      const body = await readBody(page);
-      const expected = locale === "ar" ? titleAr : titleEn;
-      if (page.status === 200 && htmlHas(body, expected)) {
-        pass(`O3-${locale}`, "positive control: title present");
-      } else {
-        fail(`O3-${locale}`, `HTTP ${page.status}; title ${htmlHas(body, expected) ? "present" : "absent"}`);
+    const second = Math.floor(Date.now() / 1000) % 30;
+    if (second >= 28) {
+      await new Promise((resolve) => setTimeout(resolve, (30 - second + 1) * 1000));
+    }
+    const enrolPage = await request(baseUrl, "/ar/dashboard/enrol", { jar: operatorJar });
+    const enrolBody = await readBody(enrolPage);
+    const enrol = parseEnrolForm(enrolBody);
+    const code = enrol.secret ? totpCode(enrol.secret) : null;
+    if (enrolPage.status !== 200 || !enrol.secret || !enrol.factorId || code === null) {
+      fail("O4", `enrol form was not usable (HTTP ${enrolPage.status})`);
+      skipFrom("O5", "TOTP enrol failed");
+      return;
+    }
+    const verified = await postForm(
+      baseUrl,
+      "/ar/dashboard/enrol/submit",
+      { factorId: enrol.factorId, code },
+      operatorJar,
+    );
+    const verifiedLocation = locationPath(verified);
+    const refreshedDash = await request(baseUrl, "/ar/dashboard", { jar: operatorJar });
+    const againDash = await request(baseUrl, "/ar/dashboard", { jar: operatorJar });
+    const aal2 =
+      againDash.status === 200 &&
+      !locationPath(againDash).includes("/challenge") &&
+      !locationPath(againDash).includes("/enrol");
+    if (
+      verified.status === 303 &&
+      !verifiedLocation.includes("error=") &&
+      !verifiedLocation.includes("/enrol") &&
+      aal2
+    ) {
+      pass("O4", "AAL2 on a refreshed token");
+    } else {
+      fail(
+        "O4",
+        `enrol HTTP ${verified.status}; first dashboard ${refreshedDash.status}; refreshed ${againDash.status}`,
+      );
+      skipFrom("O5", "AAL2 was not proved on a refreshed token");
+      return;
+    }
+
+    const subject = await createThrowaway(signupHost(baseUrl));
+    subjectLocal = subject.localPart;
+    subjectSecret = subject.secret;
+    if (subject.created) {
+      pass("O5", "HTTP 303 created=1");
+    } else {
+      fail("O5", `HTTP ${subject.status} location ${subject.location || "(none)"}`);
+      skipFrom("O6", "subject signup was not created=1");
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const subjectRow = await readClaimsUntilPresent(subjectLocal);
+    subjectId = subjectRow.ok && subjectRow.rows[0]?.id ? String(subjectRow.rows[0].id) : null;
+    if (subjectId === null || !isUuid(subjectId)) {
+      fail("O5", "subject row was not readable via linked query");
+      skipFrom("O6", "no subject id");
+      return;
+    }
+
+    const approve = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/approve",
+      { subjectId },
+      operatorJar,
+    );
+    const approveLocation = locationPath(approve);
+    if (savedWithoutWrite(approve, approveLocation)) pass("O6", "HTTP 303 saved=1");
+    else {
+      fail("O6", `HTTP ${approve.status} location ${approveLocation || "(none)"}`);
+      skipFrom("O7", "approve did not return saved=1");
+      return;
+    }
+
+    const createdOffer = await postForm(
+      baseUrl,
+      "/ar/dashboard/offers/submit/create",
+      offerFields,
+      operatorJar,
+    );
+    const createdLocation = locationPath(createdOffer);
+    offerId = uuidFromOfferLocation(createdLocation);
+    let publishedOk = false;
+    if (createdOffer.status === 303 && createdLocation.includes("saved=1") && offerId !== null) {
+      const published = await postForm(
+        baseUrl,
+        "/ar/dashboard/offers/submit/publish",
+        { ...offerFields, row_id: offerId },
+        operatorJar,
+      );
+      const publishedLocation = locationPath(published);
+      publishedOk = savedWithoutWrite(published, publishedLocation);
+      if (publishedOk) pass("O7", "throwaway Offer created and published");
+      else fail("O7", `publish HTTP ${published.status} location ${publishedLocation || "(none)"}`);
+    } else {
+      fail("O7", `create HTTP ${createdOffer.status} location ${createdLocation || "(none)"}`);
+    }
+    if (!publishedOk) {
+      skipFrom("O8", "throwaway Offer was not published");
+      return;
+    }
+
+    const signedSubject = await signInPartner(
+      baseUrl,
+      addressFromLocalPart(subjectLocal),
+      subjectSecret,
+    );
+    if (signedSubject.status !== 303) {
+      fail("O8", `subject sign-in HTTP ${signedSubject.status}`);
+    } else {
+      liveSubjectJar = signedSubject.jar.clone();
+      let present = true;
+      for (const locale of ["ar", "en"]) {
+        const page = await request(baseUrl, `/${locale}/offers`, { jar: signedSubject.jar });
+        const body = await readBody(page);
+        const expected = locale === "ar" ? titleAr : titleEn;
+        if (!(page.status === 200 && htmlHas(body, expected))) {
+          present = false;
+          fail(
+            `O8-${locale}`,
+            `HTTP ${page.status}; title ${htmlHas(body, expected) ? "present" : "absent"}`,
+          );
+        }
+      }
+      if (present) pass("O8", "throwaway title present on /ar/offers and /en/offers");
+    }
+
+    await assertAnonOfferEmpty("O9", true);
+
+    const beforeReject = readClaims(subjectLocal);
+    const principalBeforeReject =
+      beforeReject.ok && beforeReject.rows[0]
+        ? String(beforeReject.rows[0].nel_principal ?? "")
+        : "";
+    const reject = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/reject",
+      { subjectId },
+      operatorJar,
+    );
+    const rejectLocation = locationPath(reject);
+    if (savedWithoutWrite(reject, rejectLocation)) pass("O10-reject", "HTTP 303 saved=1");
+    else fail("O10-reject", `HTTP ${reject.status} location ${rejectLocation || "(none)"}`);
+    const afterReject = readClaims(subjectLocal);
+    if (!afterReject.ok || afterReject.rows.length !== 1) {
+      fail("O10-reject-claim", "could not read claims after reject");
+    } else if (
+      principalBeforeReject !== "PartnerLab" &&
+      String(afterReject.rows[0].nel_principal) === "PartnerLab"
+    ) {
+      fail("O10-reject-claim", "nel_principal was set by reject");
+    } else {
+      pass(
+        "O10-reject-claim",
+        `nel_principal never set by reject; keys ${claimKeysOf(afterReject.rows[0]).join(",") || "(none)"}`,
+      );
+    }
+
+    const reinstate = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/reinstate",
+      { subjectId },
+      operatorJar,
+    );
+    const reinstateLocation = locationPath(reinstate);
+    if (savedWithoutWrite(reinstate, reinstateLocation)) pass("O10-reinstate", "HTTP 303 saved=1");
+    else fail("O10-reinstate", `HTTP ${reinstate.status} location ${reinstateLocation || "(none)"}`);
+    const afterReinstate = readClaims(subjectLocal);
+    if (!afterReinstate.ok || afterReinstate.rows.length !== 1) {
+      fail("O10-reinstate-claim", "could not read claims after reinstate");
+    } else {
+      const row = afterReinstate.rows[0];
+      const pending =
+        String(row.nel_principal) !== "PartnerLab" && String(row.nel_partner_state) !== "rejected";
+      if (pending) pass("O10-reinstate-claim", "pending");
+      else {
+        fail(
+          "O10-reinstate-claim",
+          `expected pending; principal ${String(row.nel_principal) || "(empty)"}; state ${String(row.nel_partner_state) || "(empty)"}`,
+        );
       }
     }
-  }
 
-  await assertAnonOfferEmpty("O4", true);
-
-  const reject = await postForm(
-    baseUrl,
-    "/ar/dashboard/partner-lab/submit/reject",
-    { subjectId: throwawayId },
-    operatorJar,
-  );
-  const rejectLocation = locationPath(reject);
-  if (
-    reject.status === 303 &&
-    rejectLocation.includes("saved=1") &&
-    !rejectLocation.includes("error=write")
-  ) {
-    pass("O5-reject", "HTTP 303 saved=1");
-  } else {
-    fail("O5-reject", `HTTP ${reject.status} location ${rejectLocation || "(none)"}`);
-  }
-  const afterReject = readThrowawayRow(throwaway.localPart);
-  if (!afterReject.ok || afterReject.rows.length !== 1) {
-    fail("O5-reject-claim", "could not read claims after reject");
-  } else {
-    pass("O5-reject-claim", `keys ${claimKeysOf(afterReject.rows[0]).join(",") || "(none)"}`);
-  }
-
-  const reinstate = await postForm(
-    baseUrl,
-    "/ar/dashboard/partner-lab/submit/reinstate",
-    { subjectId: throwawayId },
-    operatorJar,
-  );
-  const reinstateLocation = locationPath(reinstate);
-  if (
-    reinstate.status === 303 &&
-    reinstateLocation.includes("saved=1") &&
-    !reinstateLocation.includes("error=write")
-  ) {
-    pass("O5-reinstate", "HTTP 303 saved=1");
-  } else {
-    fail("O5-reinstate", `HTTP ${reinstate.status} location ${reinstateLocation || "(none)"}`);
-  }
-  const afterReinstate = readThrowawayRow(throwaway.localPart);
-  if (!afterReinstate.ok || afterReinstate.rows.length !== 1) {
-    fail("O5-reinstate-claim", "could not read claims after reinstate");
-  } else {
-    pass(
-      "O5-reinstate-claim",
-      `keys ${claimKeysOf(afterReinstate.rows[0]).join(",") || "(none)"}`,
-    );
-  }
-
-  if (offerId !== null) {
-    const unpublished = await postForm(
+    const approveAgain = await postForm(
       baseUrl,
-      "/ar/dashboard/offers/submit/unpublish",
-      { ...offerFields, row_id: offerId },
+      "/ar/dashboard/partner-lab/submit/approve",
+      { subjectId },
       operatorJar,
     );
-    const unpublishedLocation = locationPath(unpublished);
-    if (unpublished.status === 303 && unpublishedLocation.includes("saved=1")) {
-      pass("O6-unpublish", "HTTP 303 saved=1");
-    } else {
-      fail("O6-unpublish", `HTTP ${unpublished.status} location ${unpublishedLocation || "(none)"}`);
-    }
-    const deletedOffer = await postForm(
+    const signedBeforeRevoke = await signInPartner(
       baseUrl,
-      "/ar/dashboard/offers/submit/delete",
-      { ...offerFields, row_id: offerId, confirm_name: titleAr },
+      addressFromLocalPart(subjectLocal),
+      subjectSecret,
+    );
+    if (signedBeforeRevoke.status === 303) {
+      liveSubjectJar = signedBeforeRevoke.jar.clone();
+    }
+    const revokePending = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/revoke-to-pending",
+      { subjectId },
       operatorJar,
     );
-    const deletedLocation = locationPath(deletedOffer);
-    if (deletedOffer.status === 303 && deletedLocation.includes("saved=1")) {
-      pass("O6-delete-offer", "HTTP 303 saved=1");
+    const revokePendingLocation = locationPath(revokePending);
+    if (
+      savedWithoutWrite(approveAgain, locationPath(approveAgain)) &&
+      savedWithoutWrite(revokePending, revokePendingLocation)
+    ) {
+      pass("O11", "HTTP 303 saved=1");
     } else {
-      fail("O6-delete-offer", `HTTP ${deletedOffer.status} location ${deletedLocation || "(none)"}`);
+      fail(
+        "O11",
+        `approve HTTP ${approveAgain.status}; revoke-to-pending HTTP ${revokePending.status} location ${revokePendingLocation || "(none)"}`,
+      );
     }
-  } else {
-    skipped("O6-unpublish", "no Offer id");
-    skipped("O6-delete-offer", "no Offer id");
-  }
+    if (liveSubjectJar === null) {
+      skipped("O11-token", "no previously valid subject token");
+    } else {
+      let stillReads = false;
+      for (const locale of ["ar", "en"]) {
+        const page = await request(baseUrl, `/${locale}/offers`, { jar: liveSubjectJar.clone() });
+        const body = await readBody(page);
+        const expected = locale === "ar" ? titleAr : titleEn;
+        if (htmlHas(body, expected)) stillReads = true;
+      }
+      if (stillReads) fail("O11-token", "previously valid token still read the throwaway Offer");
+      else pass("O11-token", "previously valid token no longer reads Offers");
+    }
 
-  const offerGone = offerId
-    ? linkedQuery(`select count(*)::int as remaining from "Offer" where id = '${offerId}'::uuid`)
-    : { ok: true, rows: [{ remaining: 0 }] };
-  const publishedCount = linkedQuery(
-    `select count(*)::int as published from "Offer" where publication_state = 'published'`,
-  );
-  if (offerGone.ok && asCount(offerGone.rows[0]?.remaining) === 0) pass("O6-offer-gone", "Offer row absent");
-  else fail("O6-offer-gone", "Offer row still present");
-  if (publishedCount.ok && asCount(publishedCount.rows[0]?.published) === 0) {
-    pass("O6-published-zero", "published Offer count 0");
-  } else {
-    fail(
-      "O6-published-zero",
-      `published Offer count ${publishedCount.ok ? publishedCount.rows[0]?.published : "unread"}`,
+    const approveForReject = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/approve",
+      { subjectId },
+      operatorJar,
     );
-  }
+    const revokeRejected = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/revoke-to-rejected",
+      { subjectId },
+      operatorJar,
+    );
+    const revokeRejectedLocation = locationPath(revokeRejected);
+    if (
+      savedWithoutWrite(approveForReject, locationPath(approveForReject)) &&
+      savedWithoutWrite(revokeRejected, revokeRejectedLocation)
+    ) {
+      pass("O12", "HTTP 303 saved=1");
+    } else {
+      fail(
+        "O12",
+        `approve HTTP ${approveForReject.status}; revoke-to-rejected HTTP ${revokeRejected.status} location ${revokeRejectedLocation || "(none)"}`,
+      );
+    }
+    const afterRevokeRejected = readClaims(subjectLocal);
+    if (!afterRevokeRejected.ok || afterRevokeRejected.rows.length !== 1) {
+      fail("O12-claim", "could not read claims after revoke-to-rejected");
+    } else {
+      const row = afterRevokeRejected.rows[0];
+      if (
+        String(row.nel_principal) !== "PartnerLab" &&
+        String(row.nel_partner_state) === "rejected"
+      ) {
+        pass("O12-claim", "principal cleared; nel_partner_state rejected");
+      } else {
+        fail(
+          "O12-claim",
+          `principal ${String(row.nel_principal) || "(empty)"}; state ${String(row.nel_partner_state) || "(empty)"}`,
+        );
+      }
+    }
+  } catch {
+    fail("operator-run", "an assertion path threw; cleanup still runs");
+  } finally {
+    if (offerId !== null && operatorJar !== null) {
+      const listed = offerTitlesById(offerId);
+      const row = listed.ok ? listed.rows[0] : null;
+      if (!row || !titlesCarryMarker(row, marker)) {
+        fail(
+          "O13-guard",
+          "refused to unpublish or delete an Offer whose title lacks this run's marker",
+        );
+      } else {
+        const unpublished = await postForm(
+          baseUrl,
+          "/ar/dashboard/offers/submit/unpublish",
+          { ...offerFields, row_id: offerId },
+          operatorJar,
+        );
+        const unpublishedLocation = locationPath(unpublished);
+        if (savedWithoutWrite(unpublished, unpublishedLocation)) {
+          pass("O13-unpublish", "HTTP 303 saved=1");
+        } else {
+          fail(
+            "O13-unpublish",
+            `HTTP ${unpublished.status} location ${unpublishedLocation || "(none)"}`,
+          );
+        }
+        const deletedOffer = await postForm(
+          baseUrl,
+          "/ar/dashboard/offers/submit/delete",
+          { ...offerFields, row_id: offerId, confirm_name: titleAr },
+          operatorJar,
+        );
+        const deletedLocation = locationPath(deletedOffer);
+        if (savedWithoutWrite(deletedOffer, deletedLocation)) {
+          pass("O13-delete-offer", "HTTP 303 saved=1");
+        } else {
+          fail(
+            "O13-delete-offer",
+            `HTTP ${deletedOffer.status} location ${deletedLocation || "(none)"}`,
+          );
+        }
+      }
+      const remaining = linkedQuery(
+        `select count(*)::int as remaining from "Offer" where id = '${offerId}'::uuid`,
+      );
+      if (remaining.ok && asCount(remaining.rows[0]?.remaining) === 0) {
+        pass("O13-offer-gone", "throwaway Offer absent");
+      } else {
+        fail("O13-offer-gone", "throwaway Offer still present");
+      }
+    } else {
+      pass("O13-offer-gone", "no throwaway Offer id to delete");
+    }
 
-  const cleanup = await deleteThrowaway(throwawayId, throwaway.localPart);
-  if (cleanup.ok) pass("O6-throwaway", "throwaway deleted");
-  else reportCleanupFailure(cleanup.id);
+    if (subjectLocal || subjectId) {
+      const subjectCleanup = await deleteThrowaway(subjectId, subjectLocal);
+      if (subjectCleanup.ok) pass("O13-subject", "subject account absent");
+      else reportCleanupFailure(subjectCleanup.id);
+    } else {
+      pass("O13-subject", "no subject account to delete");
+    }
+
+    if (operatorLocal || operatorId) {
+      const operatorCleanup = await deleteThrowaway(operatorId, operatorLocal);
+      if (operatorCleanup.ok) pass("O13-operator", "temporary Operator absent");
+      else reportOperatorIncident(operatorCleanup.id ?? operatorId);
+    } else {
+      pass("O13-operator", "no temporary Operator to delete");
+    }
+  }
 }
 
 async function main() {

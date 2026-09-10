@@ -21,7 +21,7 @@ type PartnerLabReviewFormProps = {
   locale: Locale;
   kind: PartnerLabReviewKind;
   rows: PartnerLabReviewRow[];
-  notice: "saved" | "write" | "missing" | null;
+  notice: "saved" | "ended" | "write" | "missing" | null;
 };
 
 export function PartnerLabReviewForm({ locale, kind, rows, notice }: PartnerLabReviewFormProps) {
@@ -41,7 +41,11 @@ export function PartnerLabReviewForm({ locale, kind, rows, notice }: PartnerLabR
       {kind === "rejected" ? (
         <p className={styles.refresh}>{translate(locale, "dashboard.partnerLab.hideNote")}</p>
       ) : null}
+      {kind === "approved" ? (
+        <p className={styles.refresh}>{translate(locale, "dashboard.partnerLab.revokeNote")}</p>
+      ) : null}
       {notice === "saved" ? <p className={formStyles.lede}>{translate(locale, "dashboard.partnerLab.saved")}</p> : null}
+      {notice === "ended" ? <p className={formStyles.lede}>{translate(locale, "dashboard.partnerLab.savedEnded")}</p> : null}
       {notice === "write" ? (
         <p className={formStyles.error}>{translate(locale, "dashboard.partnerLab.error")}</p>
       ) : null}
@@ -75,7 +79,19 @@ export function PartnerLabReviewForm({ locale, kind, rows, notice }: PartnerLabR
                     <IsolatedCopy locale={locale} text={row.email} />
                   </p>
                 </div>
-                {kind === "approved" ? null : (
+                {kind === "approved" ? (
+                  <form className={styles.rowForm} method="post">
+                    <input type="hidden" name="subjectId" value={row.id} />
+                    <div className={styles.actions}>
+                      <Button type="submit" variant="secondary" formAction={`${submitBase}/revoke-to-pending`}>
+                        {translate(locale, "dashboard.partnerLab.revokeToPending")}
+                      </Button>
+                      <Button type="submit" variant="secondary" formAction={`${submitBase}/revoke-to-rejected`}>
+                        {translate(locale, "dashboard.partnerLab.revokeToRejected")}
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
                   <form className={styles.rowForm} method="post">
                     <input type="hidden" name="subjectId" value={row.id} />
                     <div className={styles.actions}>

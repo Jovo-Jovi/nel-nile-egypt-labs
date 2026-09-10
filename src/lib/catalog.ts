@@ -419,6 +419,12 @@ const ar = {
   "dashboard.partnerLab.hideFromView": "إخفاء من هذه القائمة",
   "dashboard.partnerLab.hideNote":
     "الإخفاء هنا لهذه الشاشة فقط. لا يحذف الحساب ولا يغيّر حالة الرفض.",
+  "dashboard.partnerLab.revokeToPending": "سحب الاعتماد — إلى المراجعة",
+  "dashboard.partnerLab.revokeToRejected": "سحب الاعتماد — رفض",
+  "dashboard.partnerLab.revokeNote":
+    "سحب الاعتماد يُنهي الوصول فوراً. الحساب لا يقرأ عرضاً آخر بالجلسة الحالية، بخلاف الاعتماد الذي ينتظر التحديث التالي.",
+  "dashboard.partnerLab.savedEnded":
+    "حُفظ التعديل. انتهى الوصول فوراً — لا عند تحديث الجلسة التالية.",
   "dashboard.catalog.mediaAsset": "MediaAsset",
   "dashboard.media.heading": "مكتبة الوسائط",
   "dashboard.media.pending": "قيد الانتظار — بانتظار ملفات الوسائط",
@@ -1104,6 +1110,12 @@ const en = {
   "dashboard.partnerLab.hideFromView": "Hide from this list",
   "dashboard.partnerLab.hideNote":
     "Hiding is only for this view. It does not delete the account or change the declined state.",
+  "dashboard.partnerLab.revokeToPending": "Revoke — return to pending",
+  "dashboard.partnerLab.revokeToRejected": "Revoke — decline",
+  "dashboard.partnerLab.revokeNote":
+    "Revocation ends access immediately. The account cannot read another Offer with its current session, unlike approval, which waits for the next refresh.",
+  "dashboard.partnerLab.savedEnded":
+    "Saved. Access ended immediately — not on the next token refresh.",
   "dashboard.catalog.mediaAsset": "MediaAsset",
   "dashboard.media.heading": "Media Library",
   "dashboard.media.pending": "Pending — awaiting MediaAsset rows",

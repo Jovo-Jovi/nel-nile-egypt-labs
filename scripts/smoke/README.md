@@ -5,13 +5,16 @@ the live alias `https://nel-nile-egypt-labs.vercel.app`.
 
 MODE **public** is the regression suite. It uses no Operator session and
 no privileged credential. Anyone with the linked Supabase CLI can run it.
-CI-safe: it never reads a password from the environment and never writes a
+CI-safe: it never reads a secret from the environment and never writes a
 credential to a file.
 
-MODE **operator** is the pre-release check. It needs a live Operator
-session cookie. Do not treat a passing public run as a substitute.
+MODE **operator** is the pre-release check. It creates a temporary
+Operator against production Auth, enrols TOTP through the normal
+dashboard, and deletes that account in the same run. Never unattended: no
+scheduler, no CI trigger, no hook. A failed Operator cleanup is a
+security incident.
 
-Neither mode prints a key, a password, a JWT payload, or an email
+Neither mode prints a key, a secret, a JWT payload, or an email
 address. A leftover throwaway is a non-zero exit; the run never exits
 clean with an account still in Auth.
 
@@ -43,32 +46,41 @@ into the repository.
 
 ```
 npm run smoke:operator
+npm run smoke:operator -- http://127.0.0.1:PORT
 ```
 
-Not a password. After signing in as an Operator with AAL2 (enrol and
-challenge complete) on the same host the script will hit, copy the
-`nel-operator-session` cookie from browser devtools:
+Do not paste a session cookie. The run mints credentials at runtime,
+signs up through the public form, promotes that one Auth row through
+the linked CLI (`jsonb` merge, never assignment), signs in through
+`/dashboard/sign-in`, enrols TOTP through `/dashboard/enrol`, and
+asserts AAL2 on a second dashboard GET.
 
-1. Open Application → Cookies on that host, or a dashboard document
-   request in Network → Request Headers → Cookie.
-2. Copy the `nel-operator-session` value, or the whole Cookie header.
-3. Set it in the shell for this one run only:
+It then creates a second throwaway PartnerLab, approves it, publishes
+one Offer whose titles contain a run marker, proves that subject can
+read the title (positive control), proves anon PostgREST still returns
+`[]` while that Offer is published, rejects then reinstates, revokes
+to pending with a live token still in hand, and revokes to rejected.
 
-```
-$env:NEL_OPERATOR_SESSION = "<paste>"
-npm run smoke:operator
-```
+Cleanup unpublishes and deletes the Offer only when both titles carry
+this run's marker, then deletes both Auth rows. If the temporary
+Operator cannot be deleted, the mode reports an incident naming the
+hashed id and exits non-zero. It never asserts the published Offer
+count back to 0: a laboratory Offer that this run did not create is
+not this run's to unpublish.
 
-The cookie expires (idle bound is thirty minutes). That is deliberate:
-a captured session dies with the Operator's idle window. A stored
-password would not. Never put the value in a file, never commit it, never
-export it from a profile.
+Revoke routes must be on the host under test. Against a deployment
+that does not yet include them, point the argument at a local
+`npx next start` that uses the same Auth and database. Signup still
+posts to the live alias in that case: a local signup from this
+network has already returned `created=1` with no Auth row (P08-T18).
 
-Operator mode approves the throwaway through the real dashboard
-endpoint, publishes one synthetic Offer, proves the approved account
-can read the title (positive control), proves anon PostgREST still
-returns `[]` (O2+O4, M10), rejects then reinstates, then unpublishes
-and deletes the Offer and the throwaway.
+Never run this mode unattended. While the temporary Operator exists it
+holds write access to eleven tables and the clinical catalogue.
 
-Do not run MODE operator unless you are that Operator. P08-T14 does not
-run it.
+## Lesson W6 (P08-T17)
+
+`smoke:public` was green while production signup was broken. The suite
+generated its own 28-character secrets (`Aa1!` plus 18-byte base64url),
+which always satisfied a hosted minimum of 12. Every human-typed secret
+shorter than that minimum failed. A suite that generates its own inputs
+tests the code path, not the policy.

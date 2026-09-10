@@ -14,7 +14,7 @@ export const revalidate = 0;
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ view?: string; error?: string; saved?: string }>;
+  searchParams: Promise<{ view?: string; error?: string; saved?: string; ended?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -27,7 +27,8 @@ function parseKind(raw: string | undefined): PartnerLabReviewKind {
   return "pending";
 }
 
-function noticeFromQuery(query: { error?: string; saved?: string }): "saved" | "write" | "missing" | null {
+function noticeFromQuery(query: { view?: string; error?: string; saved?: string; ended?: string }): "saved" | "ended" | "write" | "missing" | null {
+  if (query.ended === "1" && query.saved === "1") return "ended";
   if (query.saved === "1") return "saved";
   if (query.error === "write") return "write";
   if (query.error === "missing") return "missing";

@@ -298,7 +298,9 @@ Follows G5. Precedes G7 (OD-19 §1, draft). Not in OD-12's delivery sequence; OD
 - [ ] Partner-read policy, `for select to authenticated`, gated on the approved claim
 - [ ] Account review as the eleventh dashboard module
 - [ ] No TOTP for a `PartnerLab`
-- [ ] **G8-R** — re-run in full
+- [x] **G8-R** — re-run in full
+- [ ] **P08-T20** — smoke:operator, OD-20, and the P10 correction
+- [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 
 ### P09 — Design · AFTER G7
@@ -447,8 +449,7 @@ is not the dashboard path.~~
 **CLOSED at G8-R.** A real dashboard reject returned
 `?view=rejected&saved=1` on 9 September 2026, confirmed by the human.
 
-**CF-167.** An approved PartnerLab cannot be revoked. No control at
-P08-T19. OD-20 is DRAFT; P08-T20 implements it after a passing G8.
+**CF-167.** CLOSED at P08-T20. Settled by OD-20 §1, signed at P08-T20.
 
 **OD-09 is unsigned (CF-156).** Announcements and Clinical notices remain draft
 and unpriced. OD-19 does not decide this.
