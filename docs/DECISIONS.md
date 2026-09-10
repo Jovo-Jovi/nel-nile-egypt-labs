@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Nineteen of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Twenty of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -682,6 +682,43 @@ discoverable. §2 and §3 deliver the outcome without the disclosure.
 
 **Does not decide:** the design envelope, which is its own OD authored at P09;
 the P09 gate criteria; whether OD-09 is signed (CF-156).
+
+---
+
+### OD-20 — Revoking an approved PartnerLab
+
+**Status:** SIGNED — 10 September 2026
+
+**Amends:** OD-18 §4, which defines approve, reject and reinstate and is silent
+on undoing an approval. Closes CF-167.
+
+**§1** An Operator may revoke an approved PartnerLab, to pending or to rejected.
+To pending: clear `nel_principal` and clear `nel_partner_state`; the account
+re-enters the queue and reads nothing. To rejected: clear `nel_principal`
+and set `nel_partner_state` = `"rejected"`; the account reads nothing and a
+re-application is silently inert under OD-18 §2. Both are Operator
+actions, behind AAL2, through Auth Admin, merging `app_metadata`.
+
+**§2** Revocation invalidates the account's sessions. Approval may wait for the
+next token refresh because the delay grants nothing. Revocation may not:
+a revoked laboratory holding a live token would keep reading private
+Offers until it expired. The revoking action signs the account out
+server-side, so access ends when the Operator acts and not later.
+
+**§3** No new claim, table or column. §1 uses the two claims ADR-001 already
+defines. Nothing in `public` gains anything (BOUNDARY_MODEL §2 item 10).
+
+**§4** Revocation is not deletion. The auth row survives, OD-18 §1 is untouched,
+and no account-removal path is created by this decision.
+
+**Because:** an approval that cannot be undone is a one-way door on a control
+that grants a competitor laboratory access to private pricing. The human
+also needs to re-run the review lifecycle without creating a fresh account
+each time. Both needs are the same transition, and §2 is what makes it a
+revocation rather than a request to please stop reading.
+
+**Does not decide:** account deletion; whether a revoked account is notified;
+the design of the controls, which is P09's.
 
 ---
 

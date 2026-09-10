@@ -1,8 +1,14 @@
 import type { User } from "@supabase/supabase-js";
+import { supabasePublicEnv } from "@/lib/supabase/env";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/serviceRole";
 
 export type PartnerLabReviewKind = "pending" | "approved" | "rejected";
-export type PartnerLabReviewAction = "approve" | "reject" | "reinstate";
+export type PartnerLabReviewAction =
+  | "approve"
+  | "reject"
+  | "reinstate"
+  | "revoke-to-pending"
+  | "revoke-to-rejected";
 
 export type PartnerLabReviewRow = {
   id: string;
@@ -91,6 +97,44 @@ async function mergeAppMetadata(
   return "ok";
 }
 
+// OD-20 §2. Auth Admin `signOut` in this SDK takes the subject's JWT, which
+// the Operator does not hold. The Admin logout-by-id endpoint is the Auth
+// Admin path that terminates every session for that one id. Service-role
+// key stays server-only (serviceRole.ts).
+async function invalidateSessions(id: string): Promise<boolean> {
+  const env = supabasePublicEnv();
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (env === null) return false;
+  if (typeof serviceRoleKey !== "string" || serviceRoleKey.length === 0) return false;
+  const response = await fetch(`${env.url}/auth/v1/admin/users/${id}/logout`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${serviceRoleKey}`,
+      apikey: serviceRoleKey,
+    },
+  });
+  return response.status === 204 || response.ok;
+}
+
+async function revokeApproved(
+  id: string,
+  mutate: (current: Record<string, unknown>) => void,
+): Promise<"ok" | "missing" | "write"> {
+  const admin = createSupabaseServiceRoleClient();
+  if (admin === null) return "write";
+  const existing = await admin.auth.admin.getUserById(id);
+  if (existing.error || existing.data.user === null) return "missing";
+  if (principalOf(existing.data.user) === "Operator") return "missing";
+  if (principalOf(existing.data.user) !== "PartnerLab") return "missing";
+  const next = metadataRecord(existing.data.user.app_metadata);
+  mutate(next);
+  const updated = await admin.auth.admin.updateUserById(id, { app_metadata: next });
+  if (updated.error) return "write";
+  const signedOut = await invalidateSessions(id);
+  if (!signedOut) return "write";
+  return "ok";
+}
+
 export async function applyPartnerLabReviewAction(
   id: string,
   action: PartnerLabReviewAction,
@@ -103,6 +147,18 @@ export async function applyPartnerLabReviewAction(
   }
   if (action === "reject") {
     return mergeAppMetadata(id, (current) => {
+      current.nel_partner_state = "rejected";
+    });
+  }
+  if (action === "revoke-to-pending") {
+    return revokeApproved(id, (current) => {
+      current.nel_principal = null;
+      current.nel_partner_state = null;
+    });
+  }
+  if (action === "revoke-to-rejected") {
+    return revokeApproved(id, (current) => {
+      current.nel_principal = null;
       current.nel_partner_state = "rejected";
     });
   }

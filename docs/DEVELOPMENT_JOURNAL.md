@@ -943,4 +943,22 @@ Open CF 96 − 1 = 95.
 
 Do not merge before the verdict. Do not start P06.
 
+## 2026-09-10 — P08-T20: revoke an approved PartnerLab
+
+Parent is `origin/main` at `35da1e4`. OD-20 signed. CF-167 closed. An
+Operator can revoke an approved PartnerLab to pending or to rejected,
+and the revoking action signs that account out through Auth Admin.
+
+`smoke:operator` now mints a throwaway Operator, enrols TOTP, and
+refuses to unpublish an Offer whose title lacks the run marker. P10 is
+restated in `docs/research/g8r2-evidence.md`. The laboratory Offer was
+not unpublished.
+
+Operator smoke did not complete the positive control: Preview approve
+returned `error=write`; local dashboard after a live-alias session was
+HTTP 307. Both throwaway Auth rows were deleted. `smoke:public` PASS.
+
+Do not merge before the verdict. Do not start G8-R2 or P06.
+
+
 

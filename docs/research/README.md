@@ -31,6 +31,8 @@ These justify decisions. When someone asks in month three why the hotline is
 | `clinical-signoff.md` | The publish-gate artefact. Status SIGNED, 6 September 2026. Attaches to `clinical-worklist.md` by SHA-256. | 6 Sep 2026 |
 | `clinical-signoff-addendum.md` | Correction to the sign-off's build-side requirements. UNCOUNTERSIGNED. | 7 Sep 2026 |
 | `g5-evidence.md` | The G5 gate run. Result FAIL, halted at criterion 7: the CF-128 publish test on the deployment succeeded. One section per §9 criterion with the command that measured it, then four secondary findings, unfixed. Precedence none — evidence, not a verdict | 6 Sep 2026 |
+| `g8r-evidence.md` | The G8-R gate re-run. Result FAIL: P4 not executed, P5 incomplete, P10 could not restore published Offer count to 0 without disturbing a laboratory row. Precedence none — evidence, not a verdict | 10 Sep 2026 |
+| `g8r2-evidence.md` | P08-T20 restatement of G8 P10. A run cleans only data it created, identified by its own marker. Not a G8-R2 execution. Precedence none — evidence, not a verdict | 10 Sep 2026 |
 
 ## Still to land here
 

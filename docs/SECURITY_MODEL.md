@@ -104,6 +104,14 @@ a grace period on a two-account system is permanent.
 factor.** An `Operator` account is created deliberately by a human and there is no route
 by which one appears on its own.
 
+**One bounded exception, added at P08-T20.** The `operator` smoke mode creates a
+temporary `Operator` by signing up through the public form and promoting the account
+through the authenticated Supabase CLI. It is still created deliberately by a human —
+the human invokes the run — and it deletes itself in the same run. It is not a standing
+account and it must never run unattended: no scheduler, no CI trigger, no hook. While it
+exists it holds write access to eleven tables and the clinical catalogue, so a failed
+cleanup is a security incident and the mode reports it as one.
+
 **`PartnerLab` signup is open; access is not (OD-15 §4).** Anyone may create an account.
 A new account is `pending`, may sign in, and reads nothing — no `Offer`, no title, no
 price, no image. An `Operator` approves or rejects it. A rejected account reads nothing
