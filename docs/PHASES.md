@@ -1,6 +1,6 @@
 # NEL — Phases to launch and handover
 
-**Status:** v2 — AUTHORED at P03 · 1 September 2026 · ~~reordered under OD-12~~ (P03-T03, `9dac44f`) reordered under OD-19 (draft)
+**Status:** v2 — AUTHORED at P03 · 1 September 2026 · ~~reordered under OD-12~~ (P03-T03, `9dac44f`) reordered under OD-19
 **Precedence:** navigational only. This document decides nothing. Where it disagrees with
 `PRODUCT_BRIEF.md`, `GLOSSARY.md`, `DECISIONS.md`, `SCOPE.md`, `CONTENT_MODEL.md`,
 `BOUNDARY_MODEL.md`, `SECURITY_MODEL.md`, `I18N_MODEL.md`, `DATA_MODEL.md`,
@@ -102,17 +102,17 @@ decommission and reverting the repository to private. Nothing in it hands anythi
 owner. See §5.
 
 **The order below is not the order the phases are numbered in.** `OD-12` reordered delivery to
-~~P03 → P05 → P06 → P04 → P07~~ (P03-T03, `9dac44f`). OD-19 (draft) orders remaining work
+~~P03 → P05 → P06 → P04 → P07~~ (P03-T03, `9dac44f`). OD-19 orders remaining work
 P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 → P09 → G9. Phases keep their identifiers and their gates — G4 is still P04's
 gate, it simply falls later — because renumbering would break every historical reference in
-`DECISIONS.md`, `CARRY_FORWARDS.md` and the done-steps table. P08 is delivered before G7 (OD-19 §1, draft)
+`DECISIONS.md`, `CARRY_FORWARDS.md` and the done-steps table. P08 is delivered before G7 (OD-19 §1)
 and is not in OD-12's sequence.
 
 ---
 
 ## §3 The phases, in delivery order
 
-Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T03, `9dac44f`). Under OD-19 (draft): **P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 → P09 → G9**. P08 is delivered before G7 (OD-19 §1, draft).
+Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T03, `9dac44f`). Under OD-19: **P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 → P09 → G9**. P08 is delivered before G7 (OD-19 §1).
 
 | Order | Phase | What it produces | Gate | Non-waivable | State |
 |---|---|---|---|---|---|
@@ -121,7 +121,7 @@ Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T
 | — | P02 Design system | Colour and type tokens, RTL primitives, executable lint rules | G2 | — | **Closed** — 1 Sep 2026 |
 | 1 | P03 Public site | The thirteen pages, both locales, 42 URLs | G3 | Boundary · Bilingual | **Active** |
 | 2 | P05 Admin dashboard | Eight modules, Operator accounts, login and MFA | G5 | Boundary · Bilingual | Next · spec unwritten |
-| ~~—~~ 3 | P08 PartnerLab accounts | `PartnerLab` signup and private Offers (OD-15) | G8 | Boundary | After G5 · before G7 (OD-19 §1, draft) · **Opening** |
+| ~~—~~ 3 | P08 PartnerLab accounts | `PartnerLab` signup and private Offers (OD-15) | G8 | Boundary | After G5 · before G7 (OD-19 §1) · **Opening** |
 | ~~3~~ 4 | P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | Longest pole |
 | ~~4~~ 5 | P04 Catalogue search | Bilingual search over Programmes and LabTests | G4 | Clinical · Data integrity · Bilingual | After P06, by necessity |
 | ~~5~~ 6 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | Runbook unwritten |
@@ -155,7 +155,7 @@ struck through, with its task and hash. OD-12 itself is unamended.
 ~~**P08 follows G5; its position relative to G7 is undecided.** OD-15 §9 makes the role split
 the precondition; private Offers and `PartnerLab` accounts cannot ship before M7.
 OD-12's sequence is unamended; this phase was signed later.~~
-**P08 follows G5 and precedes G7 (OD-19 §1, draft).** OD-15 §9 made the role split
+**P08 follows G5 and precedes G7 (OD-19 §1).** OD-15 §9 made the role split
 the precondition; private Offers and `PartnerLab` accounts could not ship before M7.
 That security ordering is discharged. OD-12's sequence is unamended; this phase was signed later.
 P09 Design follows G7 and does not delay it (OD-19 §2).
@@ -289,7 +289,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 ### P08 — PartnerLab accounts and private Offers · OPENING
 
 ~~Follows G5. Position relative to G7 undecided. Not in OD-12's delivery sequence; OD-12 predates OD-15.~~
-Follows G5. Precedes G7 (OD-19 §1, draft). Not in OD-12's delivery sequence; OD-12 predates OD-15.
+Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 predates OD-15.
 
 - [ ] Open signup; a new account is pending and can sign in, reaching only a status screen
 - [ ] An Operator approves or rejects; approved `PartnerLab` accounts read Offers; rejected and pending accounts read nothing
@@ -299,7 +299,8 @@ Follows G5. Precedes G7 (OD-19 §1, draft). Not in OD-12's delivery sequence; OD
 - [ ] Account review as the eleventh dashboard module
 - [ ] No TOTP for a `PartnerLab`
 - [x] **G8-R** — re-run in full
-- [ ] **P08-T20** — smoke:operator, OD-20, and the P10 correction
+- [x] **P08-T20** — smoke:operator, OD-20, and the P10 correction
+- [ ] **P08-T20-F** — Measure P3, P4, P5 against production
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 
@@ -454,8 +455,7 @@ is not the dashboard path.~~
 **OD-09 is unsigned (CF-156).** Announcements and Clinical notices remain draft
 and unpriced. OD-19 does not decide this.
 
-**CF-152** is settled by OD-19 §1 at P08-T13, DRAFT. It closes when OD-19 is
-signed. Remaining delivery order: P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 →
+**CF-152.** CLOSED at P08-T20-F; OD-19 signed. Remaining delivery order: P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 →
 P09 → G9.
 
 **The clinical work** remains the longest pole after G8. Content entry is

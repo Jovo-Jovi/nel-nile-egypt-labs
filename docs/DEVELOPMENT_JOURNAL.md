@@ -960,5 +960,28 @@ HTTP 307. Both throwaway Auth rows were deleted. `smoke:public` PASS.
 
 Do not merge before the verdict. Do not start G8-R2 or P06.
 
+## 2026-09-10 — P08-T20-F: measure P3–P6 and O11 against production
+
+Parent is `origin/main` at `76c06ae` (p08-t20 merge, PR #121). OD-19 signed
+on the human's authority. CF-152 closed. Open CF 94 − 1 = 93.
+
+`npm run smoke:operator` against the production alias, once, attended.
+O4 passed (AAL2 on a refreshed token). P3, P4 and P6 passed on that
+execution. P5 failed: after reject then reinstate the subject was still
+`nel_principal=PartnerLab` with empty partner state, not pending. O11
+failed: revoke-to-pending returned `error=write`. O11-token still passed
+(the previously valid subject token no longer read Offers). O12 Location
+was also `error=write`, while the claim read-back showed principal
+cleared and `nel_partner_state=rejected`. Approve, reject and reinstate
+Locations were `saved=1` on the same Operator session, so the
+service-role client is not null. Source was not changed.
+
+Both throwaway Auth rows were deleted. The throwaway Offer was
+unpublished and deleted. The laboratory Offer hashed `7cc7436e57b8`
+remains published.
+
+HALT: O11 failed. Do not start G8-R2 or P06. Do not copy the
+service-role key to Preview.
+
 
 

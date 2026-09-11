@@ -649,7 +649,7 @@ discoverable. §2 and §3 deliver the outcome without the disclosure.
 
 ### OD-19 — Delivery order after OD-15
 
-**Status:** DRAFT — awaiting signature
+**Status:** SIGNED — 2026-09-10
 
 **Amends:** OD-12's delivery order. Closes CF-152.
 
