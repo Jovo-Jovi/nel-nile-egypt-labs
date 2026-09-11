@@ -646,6 +646,10 @@ function truthyFlag(value) {
   return value === true || value === "t" || value === "true" || value === 1 || value === "1";
 }
 
+function claimKeyAbsent(row, flag) {
+  return !truthyFlag(row?.[flag]);
+}
+
 function asCount(value) {
   return Number(value);
 }
@@ -1094,6 +1098,55 @@ async function runOperator(baseUrl) {
       return;
     }
 
+    const pendingReject = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/reject",
+      { subjectId },
+      operatorJar,
+    );
+    const pendingRejectLocation = locationPath(pendingReject);
+    if (savedWithoutWrite(pendingReject, pendingRejectLocation)) {
+      pass("O5-reject", "HTTP 303 saved=1");
+    } else {
+      fail(
+        "O5-reject",
+        `HTTP ${pendingReject.status} location ${pendingRejectLocation || "(none)"}`,
+      );
+    }
+    const afterPendingReject = readClaims(subjectLocal);
+    if (!afterPendingReject.ok || afterPendingReject.rows.length !== 1) {
+      fail("O5-reject-claim", "could not read claims after pending reject");
+    } else {
+      const row = afterPendingReject.rows[0];
+      if (
+        claimKeyAbsent(row, "has_nel_principal") &&
+        String(row.nel_partner_state) === "rejected"
+      ) {
+        pass(
+          "O5-reject-claim",
+          `nel_principal absent; nel_partner_state rejected; keys ${claimKeysOf(row).join(",") || "(none)"}`,
+        );
+      } else {
+        fail(
+          "O5-reject-claim",
+          `principal key ${truthyFlag(row.has_nel_principal) ? "present" : "absent"}; state ${String(row.nel_partner_state) || "(empty)"}`,
+        );
+      }
+    }
+    const pendingReinstate = await postForm(
+      baseUrl,
+      "/ar/dashboard/partner-lab/submit/reinstate",
+      { subjectId },
+      operatorJar,
+    );
+    const pendingReinstateLocation = locationPath(pendingReinstate);
+    if (!savedWithoutWrite(pendingReinstate, pendingReinstateLocation)) {
+      fail(
+        "O5-reinstate",
+        `HTTP ${pendingReinstate.status} location ${pendingReinstateLocation || "(none)"}`,
+      );
+    }
+
     const approve = await postForm(
       baseUrl,
       "/ar/dashboard/partner-lab/submit/approve",
@@ -1163,11 +1216,6 @@ async function runOperator(baseUrl) {
 
     await assertAnonOfferEmpty("O9", true);
 
-    const beforeReject = readClaims(subjectLocal);
-    const principalBeforeReject =
-      beforeReject.ok && beforeReject.rows[0]
-        ? String(beforeReject.rows[0].nel_principal ?? "")
-        : "";
     const reject = await postForm(
       baseUrl,
       "/ar/dashboard/partner-lab/submit/reject",
@@ -1180,16 +1228,32 @@ async function runOperator(baseUrl) {
     const afterReject = readClaims(subjectLocal);
     if (!afterReject.ok || afterReject.rows.length !== 1) {
       fail("O10-reject-claim", "could not read claims after reject");
-    } else if (
-      principalBeforeReject !== "PartnerLab" &&
-      String(afterReject.rows[0].nel_principal) === "PartnerLab"
-    ) {
-      fail("O10-reject-claim", "nel_principal was set by reject");
     } else {
-      pass(
-        "O10-reject-claim",
-        `nel_principal never set by reject; keys ${claimKeysOf(afterReject.rows[0]).join(",") || "(none)"}`,
-      );
+      const row = afterReject.rows[0];
+      if (claimKeyAbsent(row, "has_nel_principal")) {
+        pass(
+          "O10-reject-claim",
+          `nel_principal key absent; keys ${claimKeysOf(row).join(",") || "(none)"}`,
+        );
+      } else {
+        fail(
+          "O10-reject-claim",
+          `nel_principal key still present; value ${String(row.nel_principal) || "(empty)"}; keys ${claimKeysOf(row).join(",") || "(none)"}`,
+        );
+      }
+    }
+    if (liveSubjectJar === null) {
+      skipped("O10-token", "no previously valid subject token");
+    } else {
+      let stillReads = false;
+      for (const locale of ["ar", "en"]) {
+        const page = await request(baseUrl, `/${locale}/offers`, { jar: liveSubjectJar.clone() });
+        const body = await readBody(page);
+        const expected = locale === "ar" ? titleAr : titleEn;
+        if (htmlHas(body, expected)) stillReads = true;
+      }
+      if (stillReads) fail("O10-token", "previously valid token still read the throwaway Offer");
+      else pass("O10-token", "previously valid token no longer reads Offers");
     }
 
     const reinstate = await postForm(
@@ -1207,12 +1271,17 @@ async function runOperator(baseUrl) {
     } else {
       const row = afterReinstate.rows[0];
       const pending =
-        String(row.nel_principal) !== "PartnerLab" && String(row.nel_partner_state) !== "rejected";
-      if (pending) pass("O10-reinstate-claim", "pending");
-      else {
+        claimKeyAbsent(row, "has_nel_principal") &&
+        claimKeyAbsent(row, "has_nel_partner_state");
+      if (pending) {
+        pass(
+          "O10-reinstate-claim",
+          "pending; nel_principal absent; nel_partner_state absent",
+        );
+      } else {
         fail(
           "O10-reinstate-claim",
-          `expected pending; principal ${String(row.nel_principal) || "(empty)"}; state ${String(row.nel_partner_state) || "(empty)"}`,
+          `expected both keys absent; principal ${truthyFlag(row.has_nel_principal) ? String(row.nel_principal) || "(present)" : "absent"}; state ${truthyFlag(row.has_nel_partner_state) ? String(row.nel_partner_state) || "(present)" : "absent"}`,
         );
       }
     }
