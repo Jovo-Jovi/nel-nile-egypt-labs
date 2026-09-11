@@ -302,7 +302,8 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **P08-T20** — smoke:operator, OD-20, and the P10 correction
 - [x] **P08-T20-F** — Measure P3, P4, P5 against production
 - [x] **P08-T21** — Reject must clear the principal
-- [ ] **P08-T21-F** — Measure B, C and D on the production SHA
+- [x] **P08-T21-F** — Measure B, C and D on the production SHA
+- [ ] **P08-T22** — Make session invalidation report the truth
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 

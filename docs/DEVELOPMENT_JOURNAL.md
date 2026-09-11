@@ -1030,5 +1030,25 @@ remains published.
 Do not start T22, G8-R2 or P06 from this window. Do not copy the
 service-role key to Preview.
 
+## 2026-09-12 — P08-T22: HALTED — session invalidation does not complete
+
+Parent is `origin/main` at `4dac7ef` (p08-t21-f merge, PR #124). STEP 0
+recorded the T21-F PASS verdict. STEP 1a quoted the current
+`invalidateSessions` / `revokeApproved` / reject / route mapping.
+STEP 1b extended operator smoke to count `auth.sessions` and unrevoked
+`auth.refresh_tokens` (varchar `user_id` is castable to uuid) around
+the four privilege-removing POSTs, then ran
+`npm run smoke:operator -- https://nel-nile-egypt-labs.vercel.app`
+once, attended.
+
+The session count was nonzero after every privilege-removing action,
+including both revokes. That trips the fence HALT: OD-20 §2 is not
+working. STEP 2 reporting was not written. STEP 1c did not run
+(`SUPABASE_SERVICE_ROLE_KEY` was absent). CF-169 allocated. Cleanup
+deleted both throwaways. The laboratory Offer hashed `7cc7436e57b8`
+was not unpublished.
+
+Do not start G8-R2 or P06. Do not copy the service-role key to Preview.
+
 
 
