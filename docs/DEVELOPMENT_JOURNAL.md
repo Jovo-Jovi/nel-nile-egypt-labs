@@ -1006,5 +1006,29 @@ CF-168 CLOSED at P08-T21. Open CF 93 + 1 − 1 = 93.
 HALT: B failed, C failed. Do not start T22, G8-R2 or P06. Do not copy
 the service-role key to Preview.
 
+## 2026-09-12 — P08-T21-F: measure B, C and D on the production SHA
+
+Parent is `origin/main` at `4b40d23` (p08-t21 merge, PR #123). Production
+alias `nel-nile-egypt-labs.vercel.app` serves `dpl_By6yvssp9sASdicS8XVxXprs1Sys`,
+`gitSource.sha` `4b40d234614d738d347c9cfdb820b07e21c48b41`, equal to
+origin/main. Command: `npx vercel api /v13/deployments/dpl_By6yvssp9sASdicS8XVxXprs1Sys`.
+
+`npm run smoke:operator` against the production alias, once, attended.
+RESULT FAIL. B, C and D passed on that execution: after reject from
+approved the `nel_principal` key is absent, the previously valid token
+no longer reads Offers, and reinstate yields pending with both keys
+absent. E and F passed. O5-reject and O10-reject Locations were
+`error=write` because reject now calls invalidateSessions on this SHA;
+the claim and token legs still passed. O11 and O12 Location `error=write`
+with token death and claim read-back as at T20-F, T22, not T21. Source
+was not changed.
+
+Both throwaway Auth rows were deleted. The throwaway Offer was
+unpublished and deleted. The laboratory Offer hashed `7cc7436e57b8`
+remains published.
+
+Do not start T22, G8-R2 or P06 from this window. Do not copy the
+service-role key to Preview.
+
 
 
