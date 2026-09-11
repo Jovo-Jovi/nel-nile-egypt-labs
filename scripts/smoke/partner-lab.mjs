@@ -715,6 +715,233 @@ function reportSessionLeg(id, before, after) {
   return { beforeSessions: before.sessions, afterSessions: after.sessions };
 }
 
+function decodeCookieValue(value) {
+  try {
+    return decodeURIComponent(String(value));
+  } catch {
+    return String(value);
+  }
+}
+
+function decodeBase64Url(value) {
+  const padded = value.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = "=".repeat((4 - (padded.length % 4)) % 4);
+  return Buffer.from(padded + pad, "base64").toString("utf8");
+}
+
+function tokenFromBlob(raw) {
+  let text = decodeCookieValue(raw);
+  if (text.startsWith("base64-")) {
+    try {
+      text = decodeBase64Url(text.slice("base64-".length));
+    } catch {
+      return null;
+    }
+  }
+  try {
+    const parsed = JSON.parse(text);
+    if (parsed && typeof parsed.access_token === "string") return parsed.access_token;
+    if (parsed && parsed.session && typeof parsed.session.access_token === "string") {
+      return parsed.session.access_token;
+    }
+  } catch {
+    // Cookie value is not a JSON session blob.
+  }
+  const match = text.match(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/);
+  return match ? match[0] : null;
+}
+
+function extractAccessToken(jar) {
+  if (!jar) return null;
+  const grouped = new Map();
+  for (const [name, value] of jar.map.entries()) {
+    const chunk = /^(.+)\.(\d+)$/.exec(name);
+    if (chunk) {
+      const base = chunk[1];
+      const index = Number(chunk[2]);
+      if (!grouped.has(base)) grouped.set(base, []);
+      grouped.get(base)[index] = decodeCookieValue(value);
+      continue;
+    }
+    const token = tokenFromBlob(value);
+    if (token) return token;
+  }
+  for (const parts of grouped.values()) {
+    const joined = parts.filter((part) => typeof part === "string").join("");
+    const token = tokenFromBlob(joined);
+    if (token) return token;
+  }
+  return null;
+}
+
+function jwtTtlSeconds(token) {
+  if (typeof token !== "string") return null;
+  const parts = token.split(".");
+  if (parts.length < 2) return null;
+  const padded = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+  const pad = "=".repeat((4 - (padded.length % 4)) % 4);
+  try {
+    const payload = JSON.parse(Buffer.from(padded + pad, "base64").toString("utf8"));
+    if (typeof payload.exp !== "number" || typeof payload.iat !== "number") return null;
+    return payload.exp - payload.iat;
+  } catch {
+    return null;
+  }
+}
+
+function firstRestCandidate() {
+  const loaded = loadRestCandidates();
+  if (loaded.candidates.length === 0) {
+    return { candidate: null, skips: loaded.skips };
+  }
+  return { candidate: loaded.candidates[0], skips: loaded.skips };
+}
+
+function summarizeOfferIds(parsed) {
+  if (!Array.isArray(parsed)) return `non-array ${typeof parsed}`;
+  const ids = parsed
+    .map((row) => (row && typeof row.id === "string" ? row.id : null))
+    .filter((id) => typeof id === "string");
+  return JSON.stringify(ids.map((id) => ({ id })));
+}
+
+async function partnerOfferSelect(accessToken) {
+  if (typeof accessToken !== "string" || accessToken.length === 0) {
+    return { ok: false, status: 0, parsed: null, reason: "no access token" };
+  }
+  const { candidate, skips } = firstRestCandidate();
+  if (candidate === null) {
+    return {
+      ok: false,
+      status: 0,
+      parsed: null,
+      reason: `publishable REST pair unavailable (${skips.join("; ") || "none"})`,
+    };
+  }
+  const response = await fetch(
+    `${candidate.url}/rest/v1/Offer?select=id&publication_state=eq.published`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        apikey: candidate.key,
+        Accept: "application/json",
+      },
+      signal: AbortSignal.timeout(30000),
+    },
+  );
+  const text = await response.text();
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    parsed = null;
+  }
+  return { ok: response.status === 200, status: response.status, parsed, reason: null };
+}
+
+function offerIdPresent(parsed, offerId) {
+  if (!Array.isArray(parsed) || typeof offerId !== "string") return false;
+  return parsed.some((row) => row && row.id === offerId);
+}
+
+async function postAuthLogout(accessToken, scope) {
+  const { candidate, skips } = firstRestCandidate();
+  if (candidate === null) {
+    return {
+      status: 0,
+      statusText: "",
+      contentType: "",
+      body: "",
+      reason: `publishable REST pair unavailable (${skips.join("; ") || "none"})`,
+    };
+  }
+  const response = await fetch(`${candidate.url}/auth/v1/logout?scope=${scope}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      apikey: candidate.key,
+    },
+    signal: AbortSignal.timeout(30000),
+  });
+  const text = await response.text();
+  return {
+    status: response.status,
+    statusText: response.statusText,
+    contentType: response.headers.get("content-type") ?? "",
+    body: redact(text),
+    reason: null,
+  };
+}
+
+async function postAdminUserDelete(userId) {
+  const { candidate, skips } = firstRestCandidate();
+  if (candidate === null) {
+    return {
+      status: 0,
+      statusText: "",
+      contentType: "",
+      body: "",
+      reason: `publishable REST pair unavailable (${skips.join("; ") || "none"})`,
+    };
+  }
+  const response = await fetch(`${candidate.url}/auth/v1/admin/users/${userId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${candidate.key}`,
+      apikey: candidate.key,
+    },
+    signal: AbortSignal.timeout(30000),
+  });
+  const text = await response.text();
+  return {
+    status: response.status,
+    statusText: response.statusText,
+    contentType: response.headers.get("content-type") ?? "",
+    body: redact(text),
+    reason: null,
+  };
+}
+
+function deleteSessionsViaLinkedSql(id) {
+  if (!isUuid(id)) return { ok: false, reason: "id was not a uuid" };
+  const sessions = linkedQuery(
+    `delete from auth.sessions where user_id = '${id}'::uuid returning id::text as id`,
+  );
+  let refresh = linkedQuery(
+    `delete from auth.refresh_tokens where user_id::uuid = '${id}'::uuid returning id::text as id`,
+  );
+  if (!refresh.ok) {
+    refresh = linkedQuery(
+      `delete from auth.refresh_tokens where user_id = '${id}' returning id::text as id`,
+    );
+  }
+  if (!sessions.ok) {
+    return { ok: false, reason: sessions.reason ?? "auth.sessions delete failed" };
+  }
+  return {
+    ok: true,
+    deletedSessions: sessions.rows.length,
+    deletedRefresh: refresh.ok ? refresh.rows.length : null,
+    refreshReason: refresh.ok ? null : (refresh.reason ?? "auth.refresh_tokens delete failed"),
+  };
+}
+
+function auditMeasure(id, before, after, detail) {
+  const beforeSessions = before?.ok ? before.sessions : null;
+  const afterSessions = after?.ok ? after.sessions : null;
+  const refreshPart =
+    !before?.ok ||
+    !after?.ok ||
+    before.liveRefreshTokens === null ||
+    after.liveRefreshTokens === null
+      ? "live_refresh_tokens omitted"
+      : `live_refresh_tokens ${before.liveRefreshTokens} → ${after.liveRefreshTokens}`;
+  say(
+    `AUDIT ${id} — sessions ${beforeSessions} → ${afterSessions}; ${refreshPart}; ${detail}`,
+  );
+  return { beforeSessions, afterSessions };
+}
+
 async function deleteThrowaway(id, localPart) {
   if (id) {
     const deleted = linkedQuery(
@@ -1368,8 +1595,37 @@ async function runOperator(baseUrl) {
       addressFromLocalPart(subjectLocal),
       subjectSecret,
     );
+    let capturedAccessToken = null;
     if (signedBeforeRevoke.status === 303) {
       liveSubjectJar = signedBeforeRevoke.jar.clone();
+      capturedAccessToken = extractAccessToken(signedBeforeRevoke.jar);
+    }
+    const restTtl = jwtTtlSeconds(capturedAccessToken);
+    if (restTtl === null) {
+      say("O11-rest-ttl access-token TTL unreadable (token missing or payload lacked exp/iat)");
+    } else {
+      say(`O11-rest-ttl access-token TTL ${restTtl} seconds`);
+    }
+    const restBefore = await partnerOfferSelect(capturedAccessToken);
+    let restBeforeVoid = true;
+    if (!restBefore.ok) {
+      fail(
+        "O11-rest-before",
+        `HTTP ${restBefore.status}; ${restBefore.reason ?? summarizeOfferIds(restBefore.parsed)}`,
+      );
+    } else if (!Array.isArray(restBefore.parsed) || restBefore.parsed.length === 0) {
+      fail("O11-rest-before", "VOID positive control returned []");
+    } else if (!offerIdPresent(restBefore.parsed, offerId)) {
+      fail(
+        "O11-rest-before",
+        `published rows ${summarizeOfferIds(restBefore.parsed)}; throwaway id absent`,
+      );
+    } else {
+      restBeforeVoid = false;
+      pass(
+        "O11-rest-before",
+        `HTTP ${restBefore.status}; body ${summarizeOfferIds(restBefore.parsed)}; throwaway id present`,
+      );
     }
     const beforeRevokePendingSessions = readLiveSessions(subjectId);
     const revokePending = await postForm(
@@ -1384,6 +1640,21 @@ async function runOperator(baseUrl) {
       beforeRevokePendingSessions,
       afterRevokePendingSessions,
     );
+    const restAfter = await partnerOfferSelect(capturedAccessToken);
+    if (restBeforeVoid) {
+      skipped("O11-rest-after", "positive control VOID; after-result not evidence");
+    } else if (!restAfter.ok) {
+      fail(
+        "O11-rest-after",
+        `HTTP ${restAfter.status}; ${restAfter.reason ?? summarizeOfferIds(restAfter.parsed)}`,
+      );
+    } else {
+      const stillHolds = offerIdPresent(restAfter.parsed, offerId);
+      pass(
+        "O11-rest-after",
+        `HTTP ${restAfter.status}; body ${summarizeOfferIds(restAfter.parsed)}; throwaway id ${stillHolds ? "present" : "absent"}`,
+      );
+    }
     const revokePendingLocation = locationPath(revokePending);
     if (
       savedWithoutWrite(approveAgain, locationPath(approveAgain)) &&
@@ -1458,6 +1729,100 @@ async function runOperator(baseUrl) {
         );
       }
     }
+
+    auditMeasure(
+      "M-i-admin-logout-by-id",
+      beforeRevokePendingSessions,
+      afterRevokePendingSessions,
+      "current call: dashboard revoke-to-pending → POST /auth/v1/admin/users/{id}/logout (Auth log status named at STEP 1 Route B)",
+    );
+
+    const signedForJwtLogout = await signInPartner(
+      baseUrl,
+      addressFromLocalPart(subjectLocal),
+      subjectSecret,
+    );
+    const jwtForLogout =
+      signedForJwtLogout.status === 303 ? extractAccessToken(signedForJwtLogout.jar) : null;
+    const beforeJwtLogout = readLiveSessions(subjectId);
+    let jwtLogout = {
+      status: 0,
+      statusText: "",
+      contentType: "",
+      body: "",
+      reason: "no subject access token",
+    };
+    if (jwtForLogout) {
+      jwtLogout = await postAuthLogout(jwtForLogout, "global");
+    }
+    const afterJwtLogout = readLiveSessions(subjectId);
+    auditMeasure(
+      "M-ii-admin-signOut-jwt-global",
+      beforeJwtLogout,
+      afterJwtLogout,
+      `POST /auth/v1/logout?scope=global with subject JWT; HTTP ${jwtLogout.status} ${jwtLogout.statusText}; content-type ${jwtLogout.contentType || "(none)"}; body ${jwtLogout.body || jwtLogout.reason || "(empty)"}`,
+    );
+
+    const signedForAppSignOut = await signInPartner(
+      baseUrl,
+      addressFromLocalPart(subjectLocal),
+      subjectSecret,
+    );
+    const beforeAppSignOut = readLiveSessions(subjectId);
+    let appSignOutStatus = 0;
+    let appSignOutLocation = "";
+    if (signedForAppSignOut.status === 303) {
+      const appSignOut = await postForm(
+        baseUrl,
+        "/ar/partner-lab/sign-out",
+        {},
+        signedForAppSignOut.jar,
+      );
+      appSignOutStatus = appSignOut.status;
+      appSignOutLocation = locationPath(appSignOut);
+    }
+    const afterAppSignOut = readLiveSessions(subjectId);
+    auditMeasure(
+      "M-v-partner-sign-out-route",
+      beforeAppSignOut,
+      afterAppSignOut,
+      `POST /ar/partner-lab/sign-out (supabase.auth.signOut scope=global on the subject's cookies); HTTP ${appSignOutStatus} location ${appSignOutLocation || "(none)"}`,
+    );
+
+    const signedBeforeSql = await signInPartner(
+      baseUrl,
+      addressFromLocalPart(subjectLocal),
+      subjectSecret,
+    );
+    if (signedBeforeSql.status !== 303) {
+      say(`AUDIT M-iv-sql-sessions — subject sign-in HTTP ${signedBeforeSql.status} before SQL delete`);
+    }
+    const beforeSql = readLiveSessions(subjectId);
+    const sqlDeleted = deleteSessionsViaLinkedSql(subjectId);
+    const afterSql = readLiveSessions(subjectId);
+    auditMeasure(
+      "M-iv-sql-sessions",
+      beforeSql,
+      afterSql,
+      sqlDeleted.ok
+        ? `npx supabase db query --linked delete auth.sessions (${sqlDeleted.deletedSessions} rows) and auth.refresh_tokens (${sqlDeleted.deletedRefresh ?? "unreadable"} rows); ${sqlDeleted.refreshReason ?? "refresh delete ok"}`
+        : `SQL delete failed: ${sqlDeleted.reason}`,
+    );
+
+    const beforeAdminDelete = readLiveSessions(subjectId);
+    const adminDelete = await postAdminUserDelete(subjectId);
+    const afterAdminDelete = readLiveSessions(subjectId);
+    const stillPresent = linkedQuery(
+      `select count(*)::int as remaining from auth.users where id = '${subjectId}'::uuid`,
+    );
+    const remainingUsers =
+      stillPresent.ok ? asCount(stillPresent.rows[0]?.remaining) : null;
+    auditMeasure(
+      "M-iii-admin-delete-user",
+      beforeAdminDelete,
+      afterAdminDelete,
+      `DELETE /auth/v1/admin/users/{id} with publishable apikey (service-role key absent from the shell); HTTP ${adminDelete.status} ${adminDelete.statusText}; content-type ${adminDelete.contentType || "(none)"}; body ${adminDelete.body || adminDelete.reason || "(empty)"}; auth.users remaining ${remainingUsers}`,
+    );
   } catch (error) {
     const message = error instanceof Error ? error.message : "threw";
     fail("operator-run", redact(message));
