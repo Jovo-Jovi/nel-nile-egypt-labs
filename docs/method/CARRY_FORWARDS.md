@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-168**
+**Next free id: CF-169**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -173,6 +173,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-165 | Operator PartnerLab review POSTs on the live deployment returned `error=write` for approve, reject and reinstate (`303` to `/ar/dashboard/partner-lab?view=…&error=write`). `applyPartnerLabReviewAction` returns `write` when the service-role client is null or Auth Admin update fails. The walkthrough then applied `app_metadata` via a local Admin client; pending, approved and declined copy was quoted only after that fallback. That is not the Operator dashboard write path. Form signup also returned `303` `created=1` with no listable Auth row (CF-153, CF-154). Closed at G8-R. A real dashboard reject returned `?view=rejected&saved=1` on 9 September 2026, confirmed by the human. `applyPartnerLabReviewAction` returns "write" only when the service-role client is null; one `saved=1` from any of the three actions proves it is non-null. The cause was a missing `SUPABASE_SERVICE_ROLE_KEY` in the production runtime, added at P08-T13 STEP 5. | human | CLOSED at G8-R | G8 |
 | CF-166 | The hosted password policy is changeable from the Supabase dashboard with no signal to the codebase, and divergence fails silently under OD-18 §6. Either a pre-release check compares the local rule against the hosted policy, or the local rule is set well above any plausible hosted value. Not decided here. | reviewer | OPEN | G8 |
 | CF-167 | An approved PartnerLab cannot be revoked. `PartnerLabReviewForm` renders no controls for `kind === "approved"`. OD-18 §1 and §4 define reject, approve and reinstate and are silent on revocation. If Androw approves the wrong laboratory or a partnership ends, there is no path. OD-18 §4 needs a clause; whether revocation returns the account to pending or to rejected is the decision. No control built at P08-T19. Settled by OD-20 §1, signed at P08-T20. | reviewer | CLOSED at P08-T20 | P08 |
+| CF-168 | Reject from an approved PartnerLab left nel_principal as PartnerLab, so M9's Offer_partner_read still matched. Invisible while reject only ran against pending accounts. P08-T20-F P5. P08-T21 reject clears the principal and invalidates sessions (OD-20 §2), merging app_metadata. | builder | CLOSED at P08-T21 | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -983,5 +983,28 @@ remains published.
 HALT: O11 failed. Do not start G8-R2 or P06. Do not copy the
 service-role key to Preview.
 
+## 2026-09-11 — P08-T21: reject must clear the principal
+
+Parent is `origin/main` at `9b64b16` (p08-t20-f merge, PR #122). Reject
+now clears `nel_principal` and sets `nel_partner_state` to rejected, then
+invalidates sessions in the same request (OD-20 §2: reject from approved
+is privilege removal). Merge, never replace. revoke-to-rejected already
+cleared the principal and was not changed.
+
+Production `smoke:operator` against the live alias, once, attended.
+RESULT FAIL. A PASS (pending reject). B FAIL: after reject from approved
+the `nel_principal` key was still present as PartnerLab. C FAIL: the
+previously valid token still read Offers. The alias still serves the
+parent SHA; this branch's handler was not on that host. D FAIL as the
+consequence of B. E and F PASS. G: O11 and O12 Location `error=write`
+with token death and claim read-back as at T20-F, T22. H: both
+throwaways absent; laboratory Offer hashed `7cc7436e57b8` still
+published.
+
+CF-168 CLOSED at P08-T21. Open CF 93 + 1 − 1 = 93.
+
+HALT: B failed, C failed. Do not start T22, G8-R2 or P06. Do not copy
+the service-role key to Preview.
+
 
 

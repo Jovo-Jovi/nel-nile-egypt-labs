@@ -146,9 +146,21 @@ export async function applyPartnerLabReviewAction(
     });
   }
   if (action === "reject") {
-    return mergeAppMetadata(id, (current) => {
+    const merged = await mergeAppMetadata(id, (current) => {
+      current.nel_principal = null;
       current.nel_partner_state = "rejected";
     });
+    if (merged !== "ok") return merged;
+    // Reject from approved is privilege removal: M9's policy tests
+    // nel_principal = "PartnerLab", so leaving that claim set keeps a
+    // rejected laboratory reading private Offers. OD-20 §2: a
+    // privilege-removing action must invalidate sessions in the same
+    // request; a live token would keep reading until it expired. The
+    // same call revokeApproved makes. Merge, never replace, so
+    // provider and providers survive.
+    const signedOut = await invalidateSessions(id);
+    if (!signedOut) return "write";
+    return "ok";
   }
   if (action === "revoke-to-pending") {
     return revokeApproved(id, (current) => {
