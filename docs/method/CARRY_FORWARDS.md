@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-169**
+**Next free id: CF-170**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -174,6 +174,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-166 | The hosted password policy is changeable from the Supabase dashboard with no signal to the codebase, and divergence fails silently under OD-18 §6. Either a pre-release check compares the local rule against the hosted policy, or the local rule is set well above any plausible hosted value. Not decided here. | reviewer | OPEN | G8 |
 | CF-167 | An approved PartnerLab cannot be revoked. `PartnerLabReviewForm` renders no controls for `kind === "approved"`. OD-18 §1 and §4 define reject, approve and reinstate and are silent on revocation. If Androw approves the wrong laboratory or a partnership ends, there is no path. OD-18 §4 needs a clause; whether revocation returns the account to pending or to rejected is the decision. No control built at P08-T19. Settled by OD-20 §1, signed at P08-T20. | reviewer | CLOSED at P08-T20 | P08 |
 | CF-168 | Reject from an approved PartnerLab left nel_principal as PartnerLab, so M9's Offer_partner_read still matched. Invisible while reject only ran against pending accounts. P08-T20-F P5. P08-T21 reject clears the principal and invalidates sessions (OD-20 §2), merging app_metadata. | builder | CLOSED at P08-T21 | P08 |
+| CF-169 | Privilege-removing Operator actions leave the subject's auth.sessions rows and unrevoked auth.refresh_tokens in place. Measured at P08-T22 STEP 1b against the deployed app with a local driver: O5-reject-sessions 1 to 1, O10-reject-sessions 2 to 2, O11-sessions 3 to 3, O12-sessions 3 to 3. O11-token can still PASS because nel_principal is cleared, which is not OD-20 §2 session invalidation. A revoked PartnerLab keeps a live session. Do not treat error=write as a reporting-only defect, and do not land the T22 reporting change until sessions go to zero. STEP 1c was HALTED (service-role key absent from the shell), so the Auth Admin logout status is still unnamed. | reviewer | OPEN | P08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

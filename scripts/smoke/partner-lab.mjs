@@ -654,6 +654,67 @@ function asCount(value) {
   return Number(value);
 }
 
+let sessionCountSqlIncludesRefresh = true;
+
+function sessionCountSql(id) {
+  if (sessionCountSqlIncludesRefresh) {
+    return `select
+      (select count(*) from auth.sessions where user_id = '${id}'::uuid) as sessions,
+      (select count(*) from auth.refresh_tokens where user_id::uuid = '${id}'::uuid and revoked = false) as live_refresh_tokens`;
+  }
+  return `select (select count(*) from auth.sessions where user_id = '${id}'::uuid) as sessions`;
+}
+
+function readLiveSessions(id) {
+  if (!isUuid(id)) {
+    return { ok: false, sessions: null, liveRefreshTokens: null, reason: "id was not a uuid" };
+  }
+  let result = linkedQuery(sessionCountSql(id));
+  if (!result.ok && sessionCountSqlIncludesRefresh) {
+    sessionCountSqlIncludesRefresh = false;
+    result = linkedQuery(sessionCountSql(id));
+  }
+  if (!result.ok || result.rows.length !== 1) {
+    return {
+      ok: false,
+      sessions: null,
+      liveRefreshTokens: null,
+      reason: result.reason ?? "session count query failed",
+    };
+  }
+  const row = result.rows[0];
+  return {
+    ok: true,
+    sessions: asCount(row.sessions),
+    liveRefreshTokens: sessionCountSqlIncludesRefresh
+      ? asCount(row.live_refresh_tokens)
+      : null,
+    reason: null,
+  };
+}
+
+function reportSessionLeg(id, before, after) {
+  if (!before.ok || !after.ok) {
+    fail(
+      id,
+      `linked session query failed (before ${before.reason ?? "ok"}; after ${after.reason ?? "ok"})`,
+    );
+    return { beforeSessions: null, afterSessions: null };
+  }
+  const refreshPart =
+    before.liveRefreshTokens === null || after.liveRefreshTokens === null
+      ? "refresh_tokens column omitted; user_id not castable to uuid"
+      : `live_refresh_tokens ${before.liveRefreshTokens} → ${after.liveRefreshTokens}`;
+  const afterRefreshGone =
+    after.liveRefreshTokens === null || after.liveRefreshTokens === 0;
+  if (before.sessions > 0 && after.sessions === 0 && afterRefreshGone) {
+    pass(id, `sessions ${before.sessions} → ${after.sessions}; ${refreshPart}`);
+  } else {
+    fail(id, `sessions ${before.sessions} → ${after.sessions}; ${refreshPart}`);
+  }
+  return { beforeSessions: before.sessions, afterSessions: after.sessions };
+}
+
 async function deleteThrowaway(id, localPart) {
   if (id) {
     const deleted = linkedQuery(
@@ -1098,11 +1159,18 @@ async function runOperator(baseUrl) {
       return;
     }
 
+    const beforePendingRejectSessions = readLiveSessions(subjectId);
     const pendingReject = await postForm(
       baseUrl,
       "/ar/dashboard/partner-lab/submit/reject",
       { subjectId },
       operatorJar,
+    );
+    const afterPendingRejectSessions = readLiveSessions(subjectId);
+    reportSessionLeg(
+      "O5-reject-sessions",
+      beforePendingRejectSessions,
+      afterPendingRejectSessions,
     );
     const pendingRejectLocation = locationPath(pendingReject);
     if (savedWithoutWrite(pendingReject, pendingRejectLocation)) {
@@ -1216,12 +1284,15 @@ async function runOperator(baseUrl) {
 
     await assertAnonOfferEmpty("O9", true);
 
+    const beforeRejectSessions = readLiveSessions(subjectId);
     const reject = await postForm(
       baseUrl,
       "/ar/dashboard/partner-lab/submit/reject",
       { subjectId },
       operatorJar,
     );
+    const afterRejectSessions = readLiveSessions(subjectId);
+    reportSessionLeg("O10-reject-sessions", beforeRejectSessions, afterRejectSessions);
     const rejectLocation = locationPath(reject);
     if (savedWithoutWrite(reject, rejectLocation)) pass("O10-reject", "HTTP 303 saved=1");
     else fail("O10-reject", `HTTP ${reject.status} location ${rejectLocation || "(none)"}`);
@@ -1300,11 +1371,18 @@ async function runOperator(baseUrl) {
     if (signedBeforeRevoke.status === 303) {
       liveSubjectJar = signedBeforeRevoke.jar.clone();
     }
+    const beforeRevokePendingSessions = readLiveSessions(subjectId);
     const revokePending = await postForm(
       baseUrl,
       "/ar/dashboard/partner-lab/submit/revoke-to-pending",
       { subjectId },
       operatorJar,
+    );
+    const afterRevokePendingSessions = readLiveSessions(subjectId);
+    reportSessionLeg(
+      "O11-sessions",
+      beforeRevokePendingSessions,
+      afterRevokePendingSessions,
     );
     const revokePendingLocation = locationPath(revokePending);
     if (
@@ -1338,11 +1416,18 @@ async function runOperator(baseUrl) {
       { subjectId },
       operatorJar,
     );
+    const beforeRevokeRejectedSessions = readLiveSessions(subjectId);
     const revokeRejected = await postForm(
       baseUrl,
       "/ar/dashboard/partner-lab/submit/revoke-to-rejected",
       { subjectId },
       operatorJar,
+    );
+    const afterRevokeRejectedSessions = readLiveSessions(subjectId);
+    reportSessionLeg(
+      "O12-sessions",
+      beforeRevokeRejectedSessions,
+      afterRevokeRejectedSessions,
     );
     const revokeRejectedLocation = locationPath(revokeRejected);
     if (
