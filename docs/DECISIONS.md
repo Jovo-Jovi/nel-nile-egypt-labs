@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Twenty-one of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Twenty-three of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -813,6 +813,62 @@ residual — and answered "make what is recommended", selecting server state
 with the TTL reduction applied immediately. Merging the pull request that
 lands this OD is the confirming act. If the human intends something narrower,
 he says so before merge and the status reverts to DRAFT.
+
+---
+
+### OD-22 — The §12 Programme surfaces are wired to published rows
+
+**Status:** SIGNED
+**Signed:** 13 September 2026
+**Amends:** the standing confirmation of 10 September 2026 that the homepage
+stays §12 with Videos, Programme cards and map pins as pending shells. That
+confirmation was given while the clinical catalogue was entirely unpublished
+and is superseded.
+**Decides:** the Videos band, the Programme card band and the Greater Cairo
+map on /{locale} read published rows and compute their DESIGN_SYSTEM.md
+§12 approval state from the presence of that data, in the form
+SiteHome.tsx:184 already uses for the hero poster. ProgrammeCard on
+/{locale}/programmes links to /{locale}/programmes/{slug}, so the
+eighteen detail routes are reachable from the listing. The head-office
+Branch renders as a visually distinct pin from the other Branches, using
+the existing locations.map.headOfficePinLabel catalogue entry and the
+existing head-office flag; this is a pin variant, not a new map. This is the
+wiring phase OD-08 §5 provides for.
+**Scope:** those three homepage regions, the head-office pin variant, and the
+listing card link. No redesign, no new homepage section, no change to the
+Offers region, the hero, the header, the footer, or any region not named
+here. No dashboard change.
+**Consequence:** CF-174, CF-175, CF-176 and CF-180 close when this task
+lands. A region whose data is incomplete computes pending and releases
+itself when the data arrives; that is the §12 mechanism working, not a
+permanent shell and not a second decision.
+**Does not decide:** the Equipment band, which has no homepage section and is
+not created here. Homepage visual design, which is P09. Whether
+NEL_LABTEST_CONTENT is enabled, which is the clinical gate and is not read
+by any region named here. How a Google Maps link is parsed in the dashboard,
+which is a separate task and does not change fieldRules.ts's standing rule
+that the server never fetches, never follows a redirect and never resolves a
+short link.
+
+---
+
+### OD-23 — The results-portal URL stays deployment configuration
+
+**Status:** SIGNED
+**Signed:** 13 September 2026
+**Decides:** the visitor results-portal href remains sourced from the
+RESULTS_PORTAL_VISITOR_URL environment variable. It is technical
+deployment configuration owned by the technical/deployment owner, not
+owner-editable content. No "SiteSettings" column, no dashboard field and no
+admin module is created for it in this cutover.
+**Obligation:** CUTOVER_RUNBOOK.md documents, before G7, where the variable
+is configured, which environments hold it, who may change it, how to change
+it safely, and how to verify after a change that the rendered href is
+https:// with no query string and no fragment — BOUNDARY_MODEL.md §4
+item 6. G7 does not pass without that section.
+**Does not decide:** the lab-to-lab portal href, which follows the same
+pattern and is documented alongside it. Whether a future phase makes either
+owner-editable.
 
 ---
 

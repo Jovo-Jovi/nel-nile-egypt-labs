@@ -252,7 +252,9 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P06-T05** — Confirm the unbind in production, and close the ledger
 - [x] **P06-T06** — Restore the unpublished-row invariant on the detail route
 - [x] **P06-T07** — Prove the unpublished-row invariant end to end
-- [ ] **P06-T08** — Correct PHASES.md structure without touching the ledger
+- [x] **P06-T08** — Correct PHASES.md structure without touching the ledger
+- [x] **P06-T09** — Wire the approved Programme surfaces
+- [ ] **P06-T09-F** — Revert the empty-catch and build honestly
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06

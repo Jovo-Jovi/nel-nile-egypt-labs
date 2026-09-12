@@ -480,6 +480,7 @@ const ar = {
   "approval.pending.videoAsset": "قيد الانتظار — بانتظار ملفات الفيديو من العميل",
   "approval.pending.legalFact": "قيد الانتظار — بانتظار سياسة خصوصية موقّعة والوقائع القانونية من العميل",
   "approval.pending.signedCopy": "قيد الانتظار — بانتظار النص المعتمد من العميل",
+  "approval.pending.publishedProgramme": "قيد الانتظار — بانتظار نشر برنامج",
   "offer.validity.current": "ساري",
   "offer.validity.expired": "منتهٍ",
 
@@ -1170,6 +1171,7 @@ const en = {
   "approval.pending.videoAsset": "Pending — awaiting client-supplied video assets",
   "approval.pending.legalFact": "Pending — awaiting a signed privacy policy and legal facts from the client",
   "approval.pending.signedCopy": "Pending — awaiting approved copy from the client",
+  "approval.pending.publishedProgramme": "Pending — awaiting a published Programme",
   "offer.validity.current": "Current",
   "offer.validity.expired": "Expired",
 
