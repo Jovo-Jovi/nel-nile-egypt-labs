@@ -37,4 +37,6 @@
   inline-size: 48px;
   block-size: 48px;
   color: var(--nel-color-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px currentColor;
 }

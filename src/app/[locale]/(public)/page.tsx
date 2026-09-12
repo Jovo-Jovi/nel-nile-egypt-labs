@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import { localizedText } from "@/lib/listingFormat";
+import { localeHref } from "@/lib/locale";
 import { pageMetadata } from "@/lib/pageMetadata";
 import {
+  branchMapPins,
   listPublishedBranches,
   listPublishedLabUnits,
   listPublishedProgrammes,
+  listPublishedVideos,
   posterAlt,
   posterSrc,
+  publishedBranchesHaveMapCoordinates,
   publishedMediaPoster,
   publishedSiteSettings,
+  videoWatchHref,
   type PublishedSiteSettings,
 } from "@/lib/publishedListings";
 import { chromeFromPublishedSettings } from "@/lib/publicChrome";
@@ -63,16 +68,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
-  const [settings, labUnits, branches, programmes, partnerFacing] = await Promise.all([
+  const [settings, labUnits, branches, programmes, videos, partnerFacing] = await Promise.all([
     publishedSiteSettings(),
     listPublishedLabUnits(),
     listPublishedBranches(),
     listPublishedProgrammes(),
+    listPublishedVideos(),
     loadPartnerFacingSession(),
   ]);
   const heroPoster = await publishedMediaPoster(settings?.heroMediaId ?? null);
   const chrome = chromeFromPublishedSettings(settings, locale);
   const offersKind = partnerLabStatusKind(partnerFacing.session);
+  const mapApproved = publishedBranchesHaveMapCoordinates(branches);
   return (
     <SiteHome
       locale={locale}
@@ -88,6 +95,21 @@ export default async function Page({ params }: Props) {
       heroPosterSrc={posterSrc(heroPoster)}
       heroPosterAlt={posterAlt(locale, heroPoster)}
       offersAudience={<PartnerLabStatus locale={locale} kind={offersKind} embedded showSignOut={false} />}
+      programmes={programmes.map((row) => ({
+        id: row.id,
+        name: localizedText(locale, row.nameAr, row.nameEn),
+        description: localizedText(locale, row.descriptionAr, row.descriptionEn),
+        href: localeHref(locale, `/programmes/${row.slug}`),
+      }))}
+      videos={videos.map((row) => ({
+        id: row.id,
+        title: localizedText(locale, row.titleAr, row.titleEn),
+        posterSrc: posterSrc(row.poster),
+        posterAlt: posterAlt(locale, row.poster),
+        watchHref: videoWatchHref(row.youtubeId),
+      }))}
+      mapApproved={mapApproved}
+      mapPins={mapApproved ? branchMapPins(branches, locale) : []}
     />
   );
 }

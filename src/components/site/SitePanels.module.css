@@ -104,6 +104,15 @@
   font-size: var(--nel-size-sm);
 }
 
+.cardList {
+  margin-block: 0;
+  padding-inline-start: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tab {
     transition: none;

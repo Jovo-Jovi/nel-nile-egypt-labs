@@ -3,11 +3,20 @@
 import { useState } from "react";
 import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
+import { ProgrammeCard } from "@/components/ui/ProgrammeCard";
 import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import styles from "./SitePanels.module.css";
 
+export type HomeProgrammeCard = {
+  id: string;
+  name: string;
+  description: string;
+  href: string;
+};
+
 interface SitePanelsProps {
   locale: Locale;
+  programmes: HomeProgrammeCard[];
 }
 
 const PANELS = [
@@ -35,15 +44,16 @@ const PANELS = [
 ] as const;
 
 function panelGateKey(id: (typeof PANELS)[number]["id"]): CatalogKey {
-  if (id === "programmes") return "approval.pending.clinical";
+  if (id === "programmes") return "approval.pending.publishedProgramme";
   if (id === "branches") return "approval.pending.businessData";
   return "approval.pending.newsModule";
 }
 
-export function SitePanels({ locale }: SitePanelsProps) {
+export function SitePanels({ locale, programmes }: SitePanelsProps) {
   const [active, setActive] = useState<(typeof PANELS)[number]["id"]>("programmes");
   const panel = PANELS.find((item) => item.id === active) ?? PANELS[0];
   const slots = Array.from({ length: panel.itemCount }, (_, index) => index);
+  const programmesApproved = panel.id === "programmes" && programmes.length > 0;
 
   return (
     <div className={styles.wrap}>
@@ -64,15 +74,34 @@ export function SitePanels({ locale }: SitePanelsProps) {
       <div className={styles.panel} role="tabpanel">
         <h3 className={styles.title}>{translate(locale, panel.title)}</h3>
         <p className={styles.body}>{translate(locale, panel.body)}</p>
-        <ApprovalGate locale={locale} state="pending" pendingLabelKey={panelGateKey(panel.id)}>
-          <ul className={styles.list}>
-            {slots.map((index) => (
-              <li key={`${panel.id}-${index}`}>
-                <SkeletonBar size="base" widthPercent={72} />
-                <SkeletonBar size="sm" widthPercent={88} />
-              </li>
-            ))}
-          </ul>
+        <ApprovalGate
+          locale={locale}
+          state={programmesApproved ? "approved" : "pending"}
+          pendingLabelKey={panelGateKey(panel.id)}
+        >
+          {programmesApproved ? (
+            <ul className={styles.cardList}>
+              {programmes.map((row) => (
+                <li key={row.id}>
+                  <ProgrammeCard
+                    locale={locale}
+                    name={row.name}
+                    description={row.description}
+                    href={row.href}
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul className={styles.list}>
+              {slots.map((index) => (
+                <li key={`${panel.id}-${index}`}>
+                  <SkeletonBar size="base" widthPercent={72} />
+                  <SkeletonBar size="sm" widthPercent={88} />
+                </li>
+              ))}
+            </ul>
+          )}
         </ApprovalGate>
       </div>
     </div>

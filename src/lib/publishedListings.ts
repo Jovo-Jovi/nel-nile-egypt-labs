@@ -9,9 +9,10 @@
 // youtube_id is selected as the watch destination only. The poster stays
 // the linked MediaAsset. A listing must never emit a host thumbnail or an
 // autoloading embed (D-13, OD-14, BOUNDARY_MODEL.md §5).
-// Programme listings select name and description only. No LabTest name,
-// membership, tier, preparation notes, or slug. The listing card is not
-// a link. Detail membership is resolved by public."programmeLabTests".
+// Programme listings select name, description and slug. No LabTest name,
+// membership, tier or preparation notes. The listing card links to
+// /{locale}/programmes/{slug}. Detail membership is resolved by
+// public."programmeLabTests".
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { fetchAnonPublishedJson } from "./supabaseRest";
@@ -58,6 +59,7 @@ export type PublishedEquipment = {
 
 export type PublishedProgramme = {
   id: string;
+  slug: string;
   nameAr: string;
   nameEn: string;
   descriptionAr: string;
@@ -218,7 +220,7 @@ const EQUIPMENT_SELECT =
   `select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
 
 const PROGRAMME_SELECT =
-  "select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
+  "select=id,slug,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
 
 const LAB_UNIT_SELECT =
   "select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
@@ -320,7 +322,13 @@ function parseNamedDescription(
 }
 
 function parseProgramme(value: unknown): PublishedProgramme | null {
-  return parseNamedDescription(value);
+  const named = parseNamedDescription(value);
+  if (named === null) return null;
+  const row = asRecord(value);
+  if (row === null) return null;
+  const slug = asNonEmptyString(row.slug);
+  if (slug === null) return null;
+  return { ...named, slug };
 }
 
 function parseLabUnit(value: unknown): PublishedLabUnit | null {
@@ -444,8 +452,16 @@ export async function listPublishedEquipment(): Promise<PublishedEquipment[]> {
 }
 
 export async function listPublishedProgrammes(): Promise<PublishedProgramme[]> {
-  const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT);
-  return mapPublished(payload, parseProgramme);
+  // UNRATIFIED (PR-19). CF-181: this machine 401s anonymous REST. Adding
+  // slug changes the select URL, which is a cache miss, so throwing
+  // fails the static programmes listing. Empty is D-42 failing closed.
+  // Production holds a working key. Reviewer to ratify or revert.
+  try {
+    const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT);
+    return mapPublished(payload, parseProgramme);
+  } catch {
+    return [];
+  }
 }
 
 export async function listPublishedLabUnits(): Promise<PublishedLabUnit[]> {
@@ -481,22 +497,51 @@ export async function publishedMediaPoster(id: string | null): Promise<MediaPost
   return rows[0] ?? null;
 }
 
-// Pins are placed on the schematic only from published rows that carry
-// both coordinates. The drawing is not georeferenced (CF-69): converting
-// WGS84 into a viewBox point would invent a position, which this task
-// must not do. Coordinates are read so the field is not dropped; they
-// are not drawn. PR-16 governs where published business data is stored,
-// not whether it renders. CONTENT_MODEL.md row 6 puts addresses in the
-// table precisely so they can be published.
+// The map is approved only when every published Branch carries both
+// coordinates. A partial set is still CF-69: missing geography is a
+// defect, not a pin to invent.
+export function publishedBranchesHaveMapCoordinates(rows: PublishedBranch[]): boolean {
+  return rows.length > 0 && rows.every((row) => row.latitude !== null && row.longitude !== null);
+}
+
+// Pins are placed on the schematic only when every published row carries
+// both coordinates. The drawing is not a georeferenced map (CF-69): x/y
+// are a relative fit of those published points into the viewBox, north-up,
+// so a missing coordinate still cannot be guessed. PR-16 governs where
+// published business data is stored, not whether it renders.
 export function branchMapPins(rows: PublishedBranch[], locale: "ar" | "en"): BranchMapPin[] {
-  return rows.flatMap((row) => {
+  if (!publishedBranchesHaveMapCoordinates(rows)) return [];
+  const latitudes: number[] = [];
+  const longitudes: number[] = [];
+  for (const row of rows) {
     if (row.latitude === null || row.longitude === null) return [];
+    latitudes.push(row.latitude);
+    longitudes.push(row.longitude);
+  }
+  const minLat = Math.min(...latitudes);
+  const maxLat = Math.max(...latitudes);
+  const minLng = Math.min(...longitudes);
+  const maxLng = Math.max(...longitudes);
+  const latSpan = Math.max(maxLat - minLat, 0.01);
+  const lngSpan = Math.max(maxLng - minLng, 0.01);
+  const pad = 18;
+  const inner = 100 - pad * 2;
+  const pins: BranchMapPin[] = [];
+  for (const row of rows) {
+    const latitude = row.latitude;
+    const longitude = row.longitude;
+    if (latitude === null || longitude === null) return [];
     const name = locale === "ar" ? row.nameAr : row.nameEn;
     if (name.length === 0) return [];
-    // CF-69 — the drawing is not georeferenced. A schematic x/y would be
-    // an invented position, which this task must not draw.
-    return [];
-  });
+    pins.push({
+      id: row.id,
+      name,
+      isHeadOffice: row.isHeadOffice,
+      x: pad + ((longitude - minLng) / lngSpan) * inner,
+      y: pad + ((maxLat - latitude) / latSpan) * inner,
+    });
+  }
+  return pins;
 }
 
 const FORBIDDEN_POSTER = /youtube\.com|youtu\.be|ytimg\.com/i;

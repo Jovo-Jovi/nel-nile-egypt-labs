@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { localizedText } from "@/lib/listingFormat";
+import { localeHref } from "@/lib/locale";
 import { listPublishedProgrammes } from "@/lib/publishedListings";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { PublishedListingPage } from "@/components/site/PublishedListingPage";
@@ -21,7 +22,7 @@ export default async function Page({ params }: Props) {
     <PublishedListingPage
       locale={locale}
       titleKey="page.programmes.title"
-      pendingLabelKey="approval.pending.clinical"
+      pendingLabelKey="approval.pending.publishedProgramme"
       isEmpty={rows.length === 0}
     >
       {rows.map((row) => (
@@ -30,6 +31,7 @@ export default async function Page({ params }: Props) {
             locale={locale}
             name={localizedText(locale, row.nameAr, row.nameEn)}
             description={localizedText(locale, row.descriptionAr, row.descriptionEn)}
+            href={localeHref(locale, `/programmes/${row.slug}`)}
           />
         </li>
       ))}

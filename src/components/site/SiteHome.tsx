@@ -5,18 +5,26 @@ import { Isolate, IsolatedCopy } from "@/components/ui/Isolate";
 import { ImageFrame } from "@/components/ui/ImageFrame";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { SkeletonBar } from "@/components/ui/SkeletonBar";
-import { GreaterCairoMap } from "@/components/ui/GreaterCairoMap";
+import { GreaterCairoMap, type MapPin } from "@/components/ui/GreaterCairoMap";
 import { resultsPortalVisitorHref } from "@/lib/resultsPortalLink";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
 import { ScrollDownIcon, PlayIcon } from "@/components/ui/icons";
-import { SitePanels } from "./SitePanels";
+import { SitePanels, type HomeProgrammeCard } from "./SitePanels";
 import { HeroPhoto } from "./HeroPhoto";
 import styles from "./SiteHome.module.css";
 
 export type HomeLabUnit = {
   id: string;
   name: string;
+};
+
+export type HomeVideo = {
+  id: string;
+  title: string;
+  posterSrc: string | null;
+  posterAlt: string | null;
+  watchHref: string | null;
 };
 
 // View model for the M6 hero and reason-card columns selected by
@@ -55,6 +63,10 @@ interface SiteHomeProps {
   heroPosterSrc: string | null;
   heroPosterAlt: string | null;
   offersAudience: ReactNode;
+  programmes: HomeProgrammeCard[];
+  videos: HomeVideo[];
+  mapApproved: boolean;
+  mapPins: MapPin[];
 }
 
 const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
@@ -162,6 +174,10 @@ export function SiteHome({
   heroPosterSrc,
   heroPosterAlt,
   offersAudience,
+  programmes,
+  videos,
+  mapApproved,
+  mapPins,
 }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
@@ -307,7 +323,7 @@ export function SiteHome({
             />
           </div>
           <div id="programmes">
-            <SitePanels locale={locale} />
+            <SitePanels locale={locale} programmes={programmes} />
           </div>
         </div>
         <div className={styles.storyMedia}>
@@ -396,7 +412,12 @@ export function SiteHome({
           </ApprovalGate>
         </div>
         <div className={styles.map}>
-          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData" fill>
+          <ApprovalGate
+            locale={locale}
+            state={mapApproved ? "approved" : "pending"}
+            pendingLabelKey="approval.pending.businessData"
+            fill
+          >
             <GreaterCairoMap
               ariaLabel={translate(locale, "locations.map.ariaLabel")}
               pinLabel={translate(locale, "locations.map.pinLabel")}
@@ -407,6 +428,7 @@ export function SiteHome({
                 y,
                 label: translate(locale, key),
               }))}
+              pins={mapPins}
             />
           </ApprovalGate>
         </div>
@@ -453,21 +475,64 @@ export function SiteHome({
 
       <section className={styles.band} id="videos">
         <p className={styles.kicker}>{translate(locale, "video.heading")}</p>
-        <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.videoAsset">
+        <ApprovalGate
+          locale={locale}
+          state={videos.length > 0 ? "approved" : "pending"}
+          pendingLabelKey="approval.pending.videoAsset"
+        >
           <div className={styles.film}>
-            {OCCUPANCY.map((slot) => (
-              <article key={slot} className={styles.filmTile}>
-                <div className={styles.filmPoster}>
-                  <ImageFrame label={posterLabel} />
-                  <span className={styles.playMark} aria-hidden="true">
-                    <PlayIcon size={20} />
-                  </span>
-                </div>
-                <div className={styles.pendingCopy}>
-                  <SkeletonBar size="base" widthPercent={70} />
-                </div>
-              </article>
-            ))}
+            {videos.length > 0
+              ? videos.map((video) => (
+                  <article key={video.id} className={styles.filmTile}>
+                    <div className={styles.filmPoster}>
+                      {video.posterSrc ? (
+                        // Native img: next/image would need a remote host allowlist.
+                        // Poster is a self-hosted MediaAsset path from posterSrc.
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          className={styles.filmPhoto}
+                          src={video.posterSrc}
+                          alt={video.posterAlt ?? posterLabel}
+                        />
+                      ) : (
+                        <ImageFrame label={posterLabel} />
+                      )}
+                      {video.watchHref !== null ? (
+                        <a
+                          className={styles.filmPlay}
+                          href={video.watchHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={translate(locale, "video.playLabel")}
+                        >
+                          <span className={styles.playMark} aria-hidden="true">
+                            <PlayIcon size={20} />
+                          </span>
+                        </a>
+                      ) : (
+                        <span className={styles.playMark} aria-hidden="true">
+                          <PlayIcon size={20} />
+                        </span>
+                      )}
+                    </div>
+                    <h3>
+                      <IsolatedCopy locale={locale} text={video.title} />
+                    </h3>
+                  </article>
+                ))
+              : OCCUPANCY.map((slot) => (
+                  <article key={slot} className={styles.filmTile}>
+                    <div className={styles.filmPoster}>
+                      <ImageFrame label={posterLabel} />
+                      <span className={styles.playMark} aria-hidden="true">
+                        <PlayIcon size={20} />
+                      </span>
+                    </div>
+                    <div className={styles.pendingCopy}>
+                      <SkeletonBar size="base" widthPercent={70} />
+                    </div>
+                  </article>
+                ))}
           </div>
         </ApprovalGate>
       </section>

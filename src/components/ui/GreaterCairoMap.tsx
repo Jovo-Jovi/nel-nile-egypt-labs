@@ -54,11 +54,19 @@ export function GreaterCairoMap({
   districtLabels,
   pins = [],
 }: GreaterCairoMapProps) {
-  const described =
-    pins.length === 0 ? ariaLabel : `${ariaLabel}. ${headOfficePinLabel}. ${pinLabel}`;
+  const headOfficePin = pins.find((pin) => pin.isHeadOffice);
+  const describedParts = [ariaLabel];
+  if (headOfficePin) {
+    describedParts.push(`${headOfficePinLabel}: ${headOfficePin.name}`);
+  }
+  if (pins.length > 0) {
+    describedParts.push(pinLabel);
+  }
+  const described = describedParts.join(". ");
+  const labelledBy = pins.length === 0 ? "img" : "group";
 
   return (
-    <div className={styles.map} role="img" aria-label={described} dir="ltr">
+    <div className={styles.map} role={labelledBy} aria-label={described} dir="ltr">
       <svg
         className={styles.svg}
         viewBox="0 0 100 62.5"
@@ -114,9 +122,11 @@ export function GreaterCairoMap({
         <span
           key={pin.id}
           data-map-pin={pin.id}
+          data-head-office={pin.isHeadOffice ? "true" : undefined}
           className={pin.isHeadOffice ? styles.pinMarkHeadOffice : styles.pinMark}
           style={{ insetInlineStart: `${pin.x}%`, insetBlockStart: `${pin.y}%` }}
-          aria-hidden="true"
+          role="img"
+          aria-label={pin.isHeadOffice ? `${headOfficePinLabel}: ${pin.name}` : pin.name}
         >
           <LocationPinIcon size={pin.isHeadOffice ? 28 : 24} />
         </span>
