@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Standing counts for P06-T01 Done-when. No database."""
+"""Standing counts for P06 Done-when. No database.
+
+Research count prints the raw `git ls-files docs/research/` total and the
+established basis that excludes README.md and `assets/` (reviewer
+correction at the P06-T01 / P08-T26 verdict).
+"""
 from __future__ import annotations
 
 import re
@@ -43,7 +48,27 @@ def main() -> None:
         text=True,
     )
     research = [line for line in ls.splitlines() if line.strip()]
+    readme = [
+        path
+        for path in research
+        if path.replace("\\", "/") == "docs/research/README.md"
+    ]
+    assets = [
+        path
+        for path in research
+        if "/assets/" in path.replace("\\", "/")
+    ]
     print("research_tracked", len(research))
+    print("research_readme", len(readme))
+    print("research_assets", len(assets))
+    print(
+        "research_excluding_readme_assets",
+        len(research) - len(readme) - len(assets),
+    )
+    print(
+        "research_basis",
+        "git ls-files docs/research/ minus README.md and assets/",
+    )
 
 
 if __name__ == "__main__":

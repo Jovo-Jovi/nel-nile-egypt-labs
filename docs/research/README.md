@@ -36,6 +36,7 @@ These justify decisions. When someone asks in month three why the hotline is
 | `p08-session-invalidation-audit.md` | Read-first audit: can an Operator end a PartnerLab session? Auth Admin logout-by-id is HTTP 404. PostgREST Offer-read after revoke is VOID. Authors nothing | 12 Sep 2026 |
 | `p06-content-entry-audit.md` | Read-first audit: live public rows against the signed seed. Eleven tables, 33 bilingual pairs, 27 regions, LabTest three-set comparison, `124 -> 71`. Authors nothing under `src/`, `supabase/` or `data/seed/` | 12 Sep 2026 |
 | `p08-live-principal-policy-rehearsal.md` | Rolled-back rehearsal: `security definer` live principal instead of `auth.jwt()` on `Offer_partner_read`. Positive 1, negative 0, anon 0, rollback proved. Authors no forward migration | 12 Sep 2026 |
+| `p06-homepage-state-audit.md` | Read-first audit: live homepage `/ar` and `/en` against re-read publication state. Ten block classifications, cache headers, results-portal §4 items 6 and 8, WhatsApp grep. Authors nothing under `src/`, `supabase/` or `data/seed/` | 12 Sep 2026 |
 
 ## Still to land here
 

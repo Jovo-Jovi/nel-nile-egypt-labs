@@ -269,6 +269,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [ ] ~~Written clinical sign-off — not waivable by anyone, including the client~~ SIGNED 6 September 2026, hash aa0469ee…aef7
 - [ ] Content entry — through the dashboard, not through SQL
 - [x] **P06-T01** — Measure what was entered, against the signed seed
+- [ ] **P06-T02** — Measure the live homepage against the publication state
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · AFTER P06
@@ -308,7 +309,7 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **P08-T23** — Read-first audit: can an Operator actually end a PartnerLab session?
 - [x] **P08-T24** — Measure what T23 left void, and reconcile two ledger defects
 - [x] **P08-T25** — Sign the OD-20 §2 amendment and close the ledger
-- [ ] **P08-T26** — Rehearse the live-principal policy before any decision is written
+- [x] **P08-T26** — Rehearse the live-principal policy before any decision is written
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 
