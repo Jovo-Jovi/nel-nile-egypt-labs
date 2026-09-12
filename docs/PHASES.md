@@ -305,7 +305,8 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **P08-T21-F** — Measure B, C and D on the production SHA
 - [ ] **P08-T22** — Make session invalidation report the truth
 - [x] **P08-T23** — Read-first audit: can an Operator actually end a PartnerLab session?
-- [ ] **P08-T24** — Measure what T23 left void, and reconcile two ledger defects
+- [x] **P08-T24** — Measure what T23 left void, and reconcile two ledger defects
+- [ ] **P08-T25** — Sign the OD-20 §2 amendment and close the ledger
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 

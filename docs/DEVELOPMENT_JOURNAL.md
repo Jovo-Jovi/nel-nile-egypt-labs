@@ -1050,5 +1050,49 @@ was not unpublished.
 
 Do not start G8-R2 or P06. Do not copy the service-role key to Preview.
 
+## 2026-09-12 — P08-T25: sign the OD-20 §2 amendment and close the ledger
+
+Parent is `origin/main` at `a6ba4dc` (p08-t24 merge, PR #127). Documents
+and ledgers only. No file under `src/`, `supabase/`, `data/seed/` or
+`scripts/` was touched.
+
+P08-T23 measured that Auth Admin `POST /auth/v1/admin/users/{id}/logout`
+returns HTTP 404 on this project's hosted Auth, and that no session-
+termination mechanism is reachable from the deployed Operator dashboard.
+The subject's own sign-out took sessions 5 → 0, so global sign-out works
+when the caller holds the session; the Operator never does.
+
+P08-T24 measured the void T23 left: after revoke, on the identical bearer
+with no refresh and no cookie-jar touch, `O11-rest-before` and
+`O11-rest-after` both returned HTTP 200 with the same throwaway Offer id.
+Access-token TTL 3600 seconds. A revoked PartnerLab retains database-layer
+read access to private Offers for the remaining life of the access token.
+`Offer_partner_read` matches on the JWT claim; PostgREST does not consult
+`auth.sessions`. Session termination would not have been sufficient.
+
+OD-20 §2 is superseded by OD-21. OD-20 stands as signed; its text was not
+edited. Revocation takes effect against server state, not against a token
+claim. `invalidateSessions` is retired rather than fixed: it reports the
+failure of a control this OD retires, and it is removed once the
+`Offer_partner_read` swap lands, not before. A companion ADR is required
+before the migration; it does not supersede ADR-001's two claims.
+
+P08 does not close until OD-21 §3.6's three steps land — table, RLS and
+backfill first; application writes on signup, approve, reject, reinstate
+and revoke second; `Offer_partner_read` swap third — and G8-R2 measures
+them. Swapping the policy before the application writes the row would
+deny every approved PartnerLab.
+
+ATTESTATION: not yet changed. The access-token TTL is still 3600 seconds
+until the human reduces it in the Supabase dashboard. The next operator
+smoke measures the value at `O11-rest-ttl`.
+
+CF-172 CLOSED at P08-T25 on the owner's confirmation. CF-173 OPEN, owner
+builder, lands at P08. Open CF 97 + 1 − 1 = 97. Next free CF-174.
+
+Do not start G8-R2, P06, P04, or any G6 or G4 work from this window. Do
+not author `PartnerLabAccount`. Do not remove `invalidateSessions`. Do
+not copy the service-role key to Preview.
+
 
 

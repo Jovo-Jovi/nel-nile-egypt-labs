@@ -4,7 +4,9 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Twenty of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Twenty-one of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21). A decision is in force when it appears here. Conversation does not amend this file.
+
+**UNRATIFIED residual repair, PR-19, P08-T25.** The heading-count sentence was updated from Twenty / OD-20 to Twenty-one / OD-21. The fence did not name that sentence; leaving Twenty against 21 `### OD-` headings would contradict the file.
 
 ---
 
@@ -719,6 +721,91 @@ revocation rather than a request to please stop reading.
 
 **Does not decide:** account deletion; whether a revoked account is notified;
 the design of the controls, which is P09's.
+
+---
+
+### OD-21 — PartnerLab revocation takes effect against server state
+
+Status: SIGNED — 12 September 2026
+Amends: OD-20 §2. OD-20 §1, §3 and §4 stand unchanged.
+Raised by: reviewer, 12 September 2026, on measurements at P08-T23 and P08-T24.
+
+1. What is being amended. OD-20 §2 states that revocation invalidates that
+account's sessions in the same request.
+
+2. Why. Three measurements, none of them inferred.
+
+(a) POST /auth/v1/admin/users/{id}/logout returns HTTP 404 on this project's
+hosted Auth, while GET user and PUT claim-merge return 200 on the same id
+in the same window (P08-T23 STEP 1, platform Auth logs).
+
+(b) Five mechanisms were tested against a throwaway with session counts either
+side; none is reachable from the deployed Operator dashboard (P08-T23 STEP 3).
+The subject's own sign-out took sessions 5 → 0, so global sign-out works on
+this project when the caller holds the session. The Operator never does.
+
+(c) Session termination would not have been sufficient in any case.
+Offer_partner_read is
+using ((auth.jwt() -> 'app_metadata' ->> 'nel_principal') = 'PartnerLab').
+PostgREST validates a JWT by signature and exp; it does not consult
+auth.sessions. Measured at P08-T24: after revoke, on the identical bearer
+with no refresh and no cookie-jar touch, O11-rest-before and
+O11-rest-after both returned HTTP 200 with the same Offer id. Access-token
+TTL 3600 seconds.
+
+3. What is decided. Revocation takes effect against server state, not
+against a token claim.
+
+3.1 A PartnerLabAccount row, keyed on the Auth principal id and carrying an
+approval state an Operator can update, becomes the authority for private
+Offer reads.
+
+3.2 Offer_partner_read tests that row in addition to the claim. Revocation
+is an UPDATE and is effective on the next request, with no token involved.
+
+3.3 app_metadata.nel_principal is retained for fail-closed routing under
+ADR-001 claim 1, and is no longer sufficient on its own for a private Offer
+read. ADR-001 claim 2 is untouched: nel_partner_state is still never tested
+in SQL.
+
+3.4 Terminating an existing Auth session is unavailable on this platform and
+is out of scope. invalidateSessions() and the if (!signedOut) return "write" guards in src/lib/dashboard/partnerAccountAdmin.ts are removed once
+3.2 lands, because they report the failure of a control this OD retires. A
+revoked account's session may continue until it expires or the subject signs
+out; it reads nothing privileged.
+
+3.5 The migration is authored and rehearsed BEGIN; … ROLLBACK;, and the
+human runs db push himself (OD-17 §3.3).
+
+3.6 Ordering is not optional. The table, its RLS and the backfill land first;
+the application writes the row on signup, approve, reject, reinstate and
+revoke second; the Offer_partner_read swap lands third. Swapping the policy
+before the application writes the row would deny every approved PartnerLab.
+
+4. Interim, until 3.1–3.3 land. The access-token TTL is the exposure
+window. It is reduced from 3600 seconds and the value is recorded; the next
+operator smoke measures it at O11-rest-ttl. This is a project setting, not
+code. It bounds the gap and does not close it.
+
+5. What this does not change. OD-20 §1 — an Operator may revoke an
+approved PartnerLab to pending or rejected — stands. OD-18 §6 neutrality
+stands. Option A stands: PartnerLab vetting is out-of-band, and
+PartnerLabAccount carries an approval state and nothing else about the
+laboratory — no lab name, lab number, contact person or phone field, ever.
+The boundary gate is unaffected: no personal or medical data enters this
+table.
+
+6. Companion required. ADR-001 records claims as the authorization
+mechanism. §3.3 changes how claim 1 is used for Offer. A companion ADR is
+authored before the migration lands. It does not supersede ADR-001's two
+claims.
+
+7. Basis of signature. The human was given two options on 12 September
+2026 — server state, or bounding the exposure by TTL and accepting the
+residual — and answered "make what is recommended", selecting server state
+with the TTL reduction applied immediately. Merging the pull request that
+lands this OD is the confirming act. If the human intends something narrower,
+he says so before merge and the status reverts to DRAFT.
 
 ---
 
