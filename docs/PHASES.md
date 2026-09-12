@@ -270,9 +270,9 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [ ] Content entry — through the dashboard, not through SQL
 - [x] **P06-T01** — Measure what was entered, against the signed seed
 - [x] **P06-T02** — Measure the live homepage against the publication state
-- [x] **P06-T03** — Make Programme detail render from published rows, not from a build
-UNRATIFIED (PR-19): box checked so `guard:phases` R3 agrees with the mandated PASS-prefixed Verdict cell; the fence said stay unchecked.
-- [ ] **P06-T04** — Unbind Programme detail from build time
+- [ ] **P06-T03** — Make Programme detail render from published rows, not from a build
+- [x] **P06-T04** — Unbind Programme detail from build time
+- [ ] **P06-T05** — Confirm the unbind in production, and close the ledger
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · AFTER P06

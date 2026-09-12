@@ -1094,5 +1094,37 @@ Do not start G8-R2, P06, P04, or any G6 or G4 work from this window. Do
 not author `PartnerLabAccount`. Do not remove `invalidateSessions`. Do
 not copy the service-role key to Preview.
 
+## 2026-09-12 — P06-T05: confirm the unbind in production
+
+Parent is `origin/main` at `60ce62f` (p06-t04 merge, PR #133). Documents
+and ledgers only. No file under `src/`, `supabase/`, `data/seed/` or
+`docs/adr/` was touched.
+
+P06-T04's architectural unbind is on the production SHA. Unauthenticated
+GET of all 18 Programme detail URLs returned HTTP 200, `x-matched-path`
+`/[locale]/programmes/[slug]`, no `x-nextjs-prerender`, `x-vercel-cache`
+MISS on both a first and a second fetch per sampled slug. The 18
+prerendered artefacts that predated T04 are gone. `NEL_LABTEST_CONTENT`
+is unset in Vercel Production; both sampled detail pages rendered
+catalogue chrome only (Programme name, description, axis chips), not a
+LabTest list. Listing cards on `/{locale}/programmes` are not links
+(`ProgrammeCard.tsx`); nine articles, zero detail hrefs.
+
+The fetch `publishedProgrammeBySlug` uses is still
+`cache: "force-cache"` with no `next` option. Next 16.3.3
+`patch-fetch.js` (lines 393-405) does not re-issue an explicit
+`force-cache` fetch when the route is `force-dynamic` with
+`revalidate = 0`. `SECURITY_MODEL.md` §3's unpublish-withdraws invariant
+is not yet restored. CF-99 stays OPEN. CF-178 lands that finding. CF-179
+lands the `aria-hidden` sidebar defect, unrepaired. PR-36 records that a
+halted task's Verdict cell uses the `halted` class even when the halt
+was correct.
+
+Open CF 101 + 2 − 0 = 103. Next free CF-180.
+
+Do not start G8-R2, G6, P04, or P06-T06 from this window. Do not add a
+CSP header. Do not change `supabaseRest.ts`. Do not publish or unpublish
+any row.
+
 
 
