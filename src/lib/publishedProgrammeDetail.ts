@@ -53,6 +53,7 @@ async function listPublishedSlots(programmeId: string): Promise<AxisSelection[]>
   const payload = await fetchAnonPublishedJson(
     "ProgrammeTier",
     `select=tier_axis,audience_axis,display_order,publication_state&Programme=eq.${encodedId}&order=display_order.asc`,
+    "no-store",
   );
   if (!Array.isArray(payload)) return [];
   const slots: AxisSelection[] = [];
@@ -71,6 +72,7 @@ export async function publishedProgrammeBySlug(
   const payload = await fetchAnonPublishedJson(
     "Programme",
     `select=id,slug,name_ar,name_en,description_ar,description_en,publication_state,display_order&slug=eq.${encodedSlug}`,
+    "no-store",
   );
   if (!Array.isArray(payload) || payload.length === 0) return null;
   const row = parseProgrammeRow(payload[0]);
