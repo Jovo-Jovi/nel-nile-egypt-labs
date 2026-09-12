@@ -1152,5 +1152,33 @@ Do not start G8-R2, G6 or P04. Do not make ProgrammeCard a link. Do not
 add a CSP header. Do not fix the aria-hidden defect. Do not publish or
 unpublish any row.
 
+## 2026-09-13 — P06-T07: prove the unpublished-row invariant end to end
+
+Parent is `origin/main` at `4843907` (p06-t06 merge, PR #135). No file
+under `src/`, `supabase/`, `data/seed/` or `docs/adr/` was touched. The
+human unpublished and republished; this window measured.
+
+Subject is `pre-marital` (display_order 8, last in the listing). Production
+SHA `484390793b7a4bf0840d71e46971f7aeec7da6ba` READY / PROMOTED. STEP 2
+both detail URLs HTTP 200 with locale name markers; listings `<article>` 9.
+STEP 3 both detail URLs HTTP 404, `x-matched-path`
+`/[locale]/programmes/[slug]`; listings `<article>` 8; row `draft`. STEP 4
+both detail URLs HTTP 200; listings `<article>` 9; all nine `published`;
+eight non-subject `updated_at` identical to STEP 1. STEP 5 eighteen detail
+URLs HTTP 200, `x-nextjs-prerender` absent, `x-vercel-cache` MISS.
+
+`SECURITY_MODEL.md` §3's invariant — an unpublished row never leaves the
+database — is restored on production. Evidence pair: STEP 2 200 / STEP 3
+404 on the same two URLs.
+
+CF-181 OPEN, owner builder, lands at P06: this machine returns 401 on
+request-time Supabase reads despite nonempty `NEXT_PUBLIC_SUPABASE_URL`
+and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`. Not repaired. Open CF
+102 + 1 − 0 = 103. Next free CF-182.
+
+Do not start G8-R2, G6 or P04. Do not make ProgrammeCard a link. Do not
+add a CSP header. Do not fix the aria-hidden defect. Do not publish or
+unpublish any further row.
+
 
 
