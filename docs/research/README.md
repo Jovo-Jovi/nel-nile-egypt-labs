@@ -35,6 +35,7 @@ These justify decisions. When someone asks in month three why the hotline is
 | `g8r2-evidence.md` | P08-T20 restatement of G8 P10. A run cleans only data it created, identified by its own marker. Not a G8-R2 execution. Precedence none — evidence, not a verdict | 10 Sep 2026 |
 | `p08-session-invalidation-audit.md` | Read-first audit: can an Operator end a PartnerLab session? Auth Admin logout-by-id is HTTP 404. PostgREST Offer-read after revoke is VOID. Authors nothing | 12 Sep 2026 |
 | `p06-content-entry-audit.md` | Read-first audit: live public rows against the signed seed. Eleven tables, 33 bilingual pairs, 27 regions, LabTest three-set comparison, `124 -> 71`. Authors nothing under `src/`, `supabase/` or `data/seed/` | 12 Sep 2026 |
+| `p08-live-principal-policy-rehearsal.md` | Rolled-back rehearsal: `security definer` live principal instead of `auth.jwt()` on `Offer_partner_read`. Positive 1, negative 0, anon 0, rollback proved. Authors no forward migration | 12 Sep 2026 |
 
 ## Still to land here
 
