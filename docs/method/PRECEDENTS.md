@@ -4,7 +4,7 @@ Binding procedural rulings. Consult before re-deriving an established pattern.
 A precedent binds every prompt issued and every verdict returned. To change one,
 supersede it explicitly and name what it replaces. Never deviate silently.
 
-**Next free id: PR-36**
+**Next free id: PR-37**
 
 | Id | Ruling |
 |---|---|
@@ -43,3 +43,4 @@ supersede it explicitly and name what it replaces. Never deviate silently.
 | **PR-33** | A guard's stdin proof certifies its PATTERN, never its FILE-MODE SCOPE. `design.mjs --stdin` applies every rule as if the input were both .tsx and .css and is deliberately broader than the file walker, so a stdin PASS can coexist with a file-mode blind spot — R4 passed an SVG presentation attribute in file mode while flagging it on stdin. Every guard proof states which mode it exercises, and file-mode coverage is proved against files in a scratch tree outside the repository. Established at P02-T19/T20, where the narrow scope was the reviewer's fence and not the builder's implementation. |
 | **PR-34** | A build task that leaves a previously-rendered surface unimported has REMOVED it, whatever the file tree shows. File existence is not evidence of survival and no lint, typecheck or guard detects it — reachability from `src/app/**` is the test. Every task that moves, replaces or re-roots a route reports its reachable and unreachable file sets by name. Relatedly, a fence that instructs "nothing else" is a blanket ban of the class PR-30 forbids: name the regions in scope and state what certifies an omission. Established at P03-T01, where "Nothing else" applied to route 1 unrendered the baseline OD-08 promoted, and the builder correctly implemented the fence as written. |
 | **PR-35** | A Windows checkout without `.gitattributes` converts LF to CRLF, so any hash taken from the working file diverges from the committed bytes. The canonical method for every frozen-artefact check on this project is `git show <ref>:<path>` piped to `sha256sum`. A hash computed any other way — `hashlib` over the working file, a PowerShell pipe that transcodes, CRLF-normalised bytes — is not evidence. Established at P08-T24, where the signed addendum was byte-identical to `main` (blob `612d7491…`) and the reported digest `20b07ec8…24545` was the sha256 of the CRLF working file, not of the committed bytes `2b63422e…340d`. |
+| **PR-36** | A halted task's Verdict cell uses the `halted` class even when the reviewer judges the halt correct; the correctness belongs in the prose. A PASS-prefixed verdict on an unchecked box fails `guard:phases` R3, and checking the box to satisfy the guard records a task as complete when it stopped early. Established at P06-T03/T05. |
