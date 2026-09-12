@@ -273,7 +273,8 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [ ] **P06-T03** — Make Programme detail render from published rows, not from a build
 - [x] **P06-T04** — Unbind Programme detail from build time
 - [x] **P06-T05** — Confirm the unbind in production, and close the ledger
-- [ ] **P06-T06** — Restore the unpublished-row invariant on the detail route
+- [x] **P06-T06** — Restore the unpublished-row invariant on the detail route
+- [ ] **P06-T07** — Prove the unpublished-row invariant end to end
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · AFTER P06
