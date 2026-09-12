@@ -23,6 +23,7 @@ import { join } from "node:path";
 
 const LIVE_ALIAS = "https://nel-nile-egypt-labs.vercel.app";
 const LOCAL_PART_PREFIX = "nel-smoke-";
+const LABORATORY_OFFER_ID_MD5_12 = "7cc7436e57b8";
 const PUBLIC_SUFFIXES = [
   "",
   "/about",
@@ -636,6 +637,81 @@ function offerTitlesById(id) {
   );
 }
 
+function readLaboratoryOfferSnapshot() {
+  const result = linkedQuery(
+    `select left(md5(id::text), 12) as id_md5_12, publication_state::text as publication_state from "Offer" where left(md5(id::text), 12) = '${LABORATORY_OFFER_ID_MD5_12}'`,
+  );
+  if (!result.ok) {
+    return {
+      ok: false,
+      count: null,
+      publicationState: null,
+      reason: result.reason ?? "linked query failed",
+    };
+  }
+  const publicationState =
+    result.rows.length === 1 && typeof result.rows[0]?.publication_state === "string"
+      ? result.rows[0].publication_state
+      : null;
+  return {
+    ok: true,
+    count: result.rows.length,
+    publicationState,
+    reason: null,
+  };
+}
+
+function reportLaboratoryOfferStart(snapshot) {
+  if (!snapshot.ok) {
+    fail("H-start", `linked query failed (${snapshot.reason ?? "no-reason"})`);
+    return;
+  }
+  if (snapshot.count !== 1) {
+    fail(
+      "H-start",
+      `row count ${snapshot.count}, expected 1; publication_state not compared`,
+    );
+    return;
+  }
+  pass(
+    "H-start",
+    `row count 1; publication_state ${snapshot.publicationState ?? "(unreadable)"}`,
+  );
+}
+
+function reportLaboratoryOfferEnd(start, end) {
+  if (!start.ok || !end.ok) {
+    fail(
+      "H-end",
+      `linked query failed (start ${start.reason ?? "ok"}; end ${end.reason ?? "ok"})`,
+    );
+    return;
+  }
+  if (end.count !== 1) {
+    fail("H-end", `row count ${end.count}, expected 1`);
+    return;
+  }
+  if (start.count !== 1) {
+    fail("H-end", `start row count ${start.count}, expected 1; end not compared`);
+    return;
+  }
+  if (start.publicationState === null || end.publicationState === null) {
+    fail("H-end", "publication_state unreadable; unchanged invariant not evidenced");
+    return;
+  }
+  if (end.publicationState !== start.publicationState) {
+    fail(
+      "H-end",
+      `publication_state changed ${start.publicationState} → ${end.publicationState}`,
+    );
+    return;
+  }
+  pass(
+    "H-end",
+    `row count 1; publication_state unchanged (${end.publicationState})`,
+  );
+}
+
 function titlesCarryMarker(row, marker) {
   const titleAr = typeof row?.title_ar === "string" ? row.title_ar : "";
   const titleEn = typeof row?.title_en === "string" ? row.title_en : "";
@@ -729,6 +805,10 @@ function decodeBase64Url(value) {
   return Buffer.from(padded + pad, "base64").toString("utf8");
 }
 
+function encodeBase64Url(value) {
+  return Buffer.from(String(value), "utf8").toString("base64url");
+}
+
 function tokenFromBlob(raw) {
   let text = decodeCookieValue(raw);
   if (text.startsWith("base64-")) {
@@ -772,6 +852,38 @@ function extractAccessToken(jar) {
     if (token) return token;
   }
   return null;
+}
+
+function assertExtractorSelfCheck() {
+  const header = encodeBase64Url(JSON.stringify({ alg: "none", typ: "JWT" }));
+  const now = 1_700_000_000;
+  const payload = encodeBase64Url(
+    JSON.stringify({ iat: now, exp: now + 3600, sub: "extractor-self-check" }),
+  );
+  const accessToken = `${header}.${payload}.synthetic`;
+  const blob = JSON.stringify({
+    access_token: accessToken,
+    token_type: "bearer",
+    expires_in: 3600,
+    expires_at: now + 3600,
+    refresh_token: "synthetic",
+  });
+  const cookieValue = `base64-${encodeBase64Url(blob)}`;
+  const jar = new CookieJar();
+  jar.setNamed("sb-extractor-self-check-auth-token", cookieValue);
+  const extracted = extractAccessToken(jar);
+  if (extracted !== accessToken) {
+    fail(
+      "extractor-self-check",
+      "synthetic base64- session cookie did not yield the access token",
+    );
+    return false;
+  }
+  pass(
+    "extractor-self-check",
+    "synthetic base64- session cookie yielded the access token",
+  );
+  return true;
 }
 
 function jwtTtlSeconds(token) {
@@ -1245,8 +1357,17 @@ async function runOperator(baseUrl) {
   let subjectSecret = null;
   let liveSubjectJar = null;
   let offerId = null;
+  let laboratoryOfferStart = {
+    ok: false,
+    count: null,
+    publicationState: null,
+    reason: "not captured",
+  };
 
   try {
+    laboratoryOfferStart = readLaboratoryOfferSnapshot();
+    reportLaboratoryOfferStart(laboratoryOfferStart);
+
     const operatorSecret = freshSecret();
     if (
       operatorSecret.length >= 12 &&
@@ -1894,11 +2015,24 @@ async function runOperator(baseUrl) {
     } else {
       pass("O13-operator", "no temporary Operator to delete");
     }
+
+    const laboratoryOfferEnd = readLaboratoryOfferSnapshot();
+    reportLaboratoryOfferEnd(laboratoryOfferStart, laboratoryOfferEnd);
   }
 }
 
 async function main() {
   const { mode, baseUrl } = parseArgs(process.argv);
+  if (mode === "extractor-self-check") {
+    const ok = assertExtractorSelfCheck();
+    if (!ok || failed) {
+      say("RESULT FAIL");
+      process.exitCode = 1;
+      return;
+    }
+    say("RESULT PASS");
+    return;
+  }
   if (originOf(baseUrl) === null) {
     fail("args", "base URL is not a URL");
     process.exitCode = 1;
@@ -1912,7 +2046,14 @@ async function main() {
   say(`NEL PartnerLab smoke MODE ${mode} against ${baseUrl}`);
   await bootstrapProtection(baseUrl);
   if (mode === "public") await runPublic(baseUrl);
-  else await runOperator(baseUrl);
+  else {
+    if (!assertExtractorSelfCheck()) {
+      say("RESULT FAIL");
+      process.exitCode = 1;
+      return;
+    }
+    await runOperator(baseUrl);
+  }
   if (failed) {
     say("RESULT FAIL");
     process.exitCode = 1;
