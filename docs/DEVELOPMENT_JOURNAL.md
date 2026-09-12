@@ -1180,5 +1180,25 @@ Do not start G8-R2, G6 or P04. Do not make ProgrammeCard a link. Do not
 add a CSP header. Do not fix the aria-hidden defect. Do not publish or
 unpublish any further row.
 
+## 2026-09-13 — P06-T08: correct PHASES.md structure without touching the ledger
+
+Parent is `origin/main` at `e7b79a2` (p06-t07 merge, PR #136). No file
+under `src/`, `supabase/`, `data/seed/` or `docs/adr/` was touched.
+
+Twenty-three P08-T00 through P08-T19 boxes moved from the P05 section
+into P08, in id order, ahead of the boxes already there. Check state, id
+and item text carried byte-for-byte. Inventories before and after the
+move: 138 / 115 / 23 / 105 / 33, identical. Heading suffixes refreshed
+to current state. §7 rewritten from verified blockers; the
+quotation-signature item is left out because CF-50 is CLOSED. §1a, §1b
+and §5 reported only.
+
+CF live maximum 181 before allocate; none allocated. Open CF
+103 + 0 − 0 = 103. Next free CF-182.
+
+Do not start G8-R2, G6 or P04. Do not make ProgrammeCard a link. Do not
+add a CSP header. Do not fix the aria-hidden defect. Do not publish or
+unpublish any row.
+
 
 

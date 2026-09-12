@@ -237,6 +237,45 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **M7B-2** — Tighten the twelve write policies to the Operator claim
 - [x] **M7B-2-F** — Supply the missing review gate and record the lockout check
 - [x] **M7C** — The application gate reads the Operator claim
+
+### P06 — Content and Arabic · IN FLIGHT
+
+- [ ] ~~72 Arabic `LabTest` names — written and reviewed~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 71
+- [ ] ~~121 membership judgements — which tests belong to which programme and tier~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 124
+- [ ] ~~5 QA-flagged records — two high severity, resolved with the lab~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 0
+- [ ] ~~Written clinical sign-off — not waivable by anyone, including the client~~ SIGNED 6 September 2026, hash aa0469ee…aef7
+- [ ] Content entry — through the dashboard, not through SQL
+- [x] **P06-T01** — Measure what was entered, against the signed seed
+- [x] **P06-T02** — Measure the live homepage against the publication state
+- [ ] **P06-T03** — Make Programme detail render from published rows, not from a build
+- [x] **P06-T04** — Unbind Programme detail from build time
+- [x] **P06-T05** — Confirm the unbind in production, and close the ledger
+- [x] **P06-T06** — Restore the unpublished-row invariant on the detail route
+- [x] **P06-T07** — Prove the unpublished-row invariant end to end
+- [ ] **P06-T08** — Correct PHASES.md structure without touching the ledger
+- [ ] **G6** — clinical and bilingual gates
+
+### P04 — Catalogue search · UNSTARTED · AFTER P06
+
+- [ ] static bilingual index over Programmes and LabTests
+- [ ] search on the البرامج page, both locales
+- [ ] **G4** — clinical, data integrity and bilingual gates
+
+### P07 — Hardening and cutover · UNSTARTED
+
+- [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
+- [ ] security headers
+- [ ] DNS move and redirects from the 2018 URLs
+- [ ] decommission the old site
+- [ ] revert the repository to private (OD-04)
+- [ ] Owner handover — unscoped, see §5
+- [ ] **G7** launch — all four standards
+
+### P08 — PartnerLab accounts and private Offers · OPEN · G8 FAIL
+
+~~Follows G5. Position relative to G7 undecided. Not in OD-12's delivery sequence; OD-12 predates OD-15.~~
+Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 predates OD-15.
+
 - [x] **P08-T00** — Land OD-17
 - [x] **P08-T01** — Land OD-15's document amendments and open P08
 - [x] **P08-T02** — Close the amendment residue before anything is built
@@ -260,44 +299,6 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P08-T18** — Functional UX fixes before G8
 - [ ] **P08-T18-F** — Named fix row for the P08-T18 FAIL. Issued work is P08-T19
 - [x] **P08-T19** — Fix what the Operator cannot get past
-
-### P06 — Content and Arabic · LONGEST POLE
-
-- [ ] ~~72 Arabic `LabTest` names — written and reviewed~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 71
-- [ ] ~~121 membership judgements — which tests belong to which programme and tier~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 124
-- [ ] ~~5 QA-flagged records — two high severity, resolved with the lab~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 0
-- [ ] ~~Written clinical sign-off — not waivable by anyone, including the client~~ SIGNED 6 September 2026, hash aa0469ee…aef7
-- [ ] Content entry — through the dashboard, not through SQL
-- [x] **P06-T01** — Measure what was entered, against the signed seed
-- [x] **P06-T02** — Measure the live homepage against the publication state
-- [ ] **P06-T03** — Make Programme detail render from published rows, not from a build
-- [x] **P06-T04** — Unbind Programme detail from build time
-- [x] **P06-T05** — Confirm the unbind in production, and close the ledger
-- [x] **P06-T06** — Restore the unpublished-row invariant on the detail route
-- [ ] **P06-T07** — Prove the unpublished-row invariant end to end
-- [ ] **G6** — clinical and bilingual gates
-
-### P04 — Catalogue search · AFTER P06
-
-- [ ] static bilingual index over Programmes and LabTests
-- [ ] search on the البرامج page, both locales
-- [ ] **G4** — clinical, data integrity and bilingual gates
-
-### P07 — Hardening and cutover · LAUNCH
-
-- [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
-- [ ] security headers
-- [ ] DNS move and redirects from the 2018 URLs
-- [ ] decommission the old site
-- [ ] revert the repository to private (OD-04)
-- [ ] Owner handover — unscoped, see §5
-- [ ] **G7** launch — all four standards
-
-### P08 — PartnerLab accounts and private Offers · OPENING
-
-~~Follows G5. Position relative to G7 undecided. Not in OD-12's delivery sequence; OD-12 predates OD-15.~~
-Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 predates OD-15.
-
 - [ ] Open signup; a new account is pending and can sign in, reaching only a status screen
 - [ ] An Operator approves or rejects; approved `PartnerLab` accounts read Offers; rejected and pending accounts read nothing
 - [ ] `/{locale}/offers` and the home Offers band become an authentication-required state
@@ -318,7 +319,7 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 
-### P09 — Design · AFTER G7
+### P09 — Design · UNSTARTED · AFTER G7
 
 Follows G7. Does not delay launch (OD-19 §2). Short-lived branches from `main`,
 reviewed and merged one at a time (OD-19 §3). The design envelope is its own OD,
@@ -437,40 +438,9 @@ Sent to the client today, that document understates the project badly.
 
 ## §7 What stops the project today
 
-G8 is FAIL. G8-R on 10 September 2026 did not pass it. Evidence at
-`docs/research/g8r-evidence.md`. P08-T12's FAIL cell is unchanged.
+G8 is FAIL. G8-R of 10 September 2026 did not pass it. G8-R2 has no done-step row and has not run. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks; what remains is the revocation control. P08-T22 halted (CF-169). CF-170 is OPEN. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it. `currentNelPrincipal` exists only as a rolled-back rehearsal at P08-T26; `git grep currentNelPrincipal supabase/` is empty.
 
-**P4 was not executed.** `NEL_OPERATOR_SESSION` was unset, so this run
-could not approve a throwaway or read a published Offer title behind an
-approved `PartnerLab` token. A laboratory Offer is already published
-(hashed id `7cc7436e57b8`, created 9 September 2026) and was not
-disturbed.
+OD-09 is unsigned (CF-156). Announcements and Clinical notices remain draft and unpriced.
 
-**P5 is incomplete.** A dashboard reject returned
-`?view=rejected&saved=1` on 9 September 2026 (human attestation; CF-165
-CLOSED at G8-R). Reinstate and claim read-back were not measured.
+P06 is in flight. P06-T07 restored `SECURITY_MODEL.md` §3 on production. G6 has not started. CF-180 and CF-181 are OPEN. The id-less content-entry box is still unchecked.
 
-**P10 cannot restore published Offer count to 0** without unpublishing
-that laboratory row.
-
-**React #418 (CF-164)** is recorded, not gating. Reviewer ruling
-9 September 2026: a symptom that has not reproduced on the named routes
-is a carry-forward. Closing condition: if it recurs, capture the
-unminified message and name the component before changing anything.
-
-~~**Operator review (CF-165).** Approve, reject and reinstate POSTs returned
-`error=write`. The walkthrough then wrote claims via a local Admin client, which
-is not the dashboard path.~~
-**CLOSED at G8-R.** A real dashboard reject returned
-`?view=rejected&saved=1` on 9 September 2026, confirmed by the human.
-
-**CF-167.** CLOSED at P08-T20. Settled by OD-20 §1, signed at P08-T20.
-
-**OD-09 is unsigned (CF-156).** Announcements and Clinical notices remain draft
-and unpriced. OD-19 does not decide this.
-
-**CF-152.** CLOSED at P08-T20-F; OD-19 signed. Remaining delivery order: P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 →
-P09 → G9.
-
-**The clinical work** remains the longest pole after G8. Content entry is
-still through the dashboard. It is not the thing that fails G8.
