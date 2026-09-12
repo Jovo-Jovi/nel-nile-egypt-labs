@@ -5,18 +5,19 @@ import { localizedText } from "@/lib/listingFormat";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { resolveEachPublishedSlot } from "@/lib/programmeLabTests";
 import { publishedProgrammeBySlug } from "@/lib/publishedProgrammeDetail";
-import { listPublishedProgrammeSlugs } from "@/lib/publishedProgrammeSlugs";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { ProgrammeDetail } from "@/components/site/ProgrammeDetail";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
-export const dynamicParams = false;
-
-export async function generateStaticParams() {
-  const slugs = await listPublishedProgrammeSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+// Slug availability was bound to build time (`generateStaticParams` plus
+// `dynamicParams = false`). Publishing reached the listing via
+// `revalidatePublishedProgrammes` but not the detail route until a
+// deploy. An unpublished Programme would have kept serving from a
+// prerendered artefact against SECURITY_MODEL.md §3. `notFound()` on a
+// null `publishedProgrammeBySlug` lookup is now the guard.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

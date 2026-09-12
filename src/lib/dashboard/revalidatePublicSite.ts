@@ -36,6 +36,9 @@ export function revalidatePublicSite(): void {
     for (const suffix of PUBLIC_PAGE_SUFFIXES) {
       revalidatePath(`/${locale}${suffix}`);
     }
+    // `/{locale}/programmes/[slug]` is `force-dynamic` as of P06-T04, so
+    // this revalidatePath is a no-op until that page is static again.
+    // Do not treat this as a cache bust of a static shell.
     revalidatePath(`/${locale}/programmes/[slug]`, "page");
   }
 }
