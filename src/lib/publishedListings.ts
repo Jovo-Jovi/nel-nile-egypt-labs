@@ -452,16 +452,12 @@ export async function listPublishedEquipment(): Promise<PublishedEquipment[]> {
 }
 
 export async function listPublishedProgrammes(): Promise<PublishedProgramme[]> {
-  // UNRATIFIED (PR-19). CF-181: this machine 401s anonymous REST. Adding
-  // slug changes the select URL, which is a cache miss, so throwing
-  // fails the static programmes listing. Empty is D-42 failing closed.
-  // Production holds a working key. Reviewer to ratify or revert.
-  try {
-    const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT);
-    return mapPublished(payload, parseProgramme);
-  } catch {
-    return [];
-  }
+  // A caught transport failure returning [] is indistinguishable from an
+  // empty published set, which is CF-99's defect class. A build that dies
+  // loudly is recoverable by redeploy; a build that ships an empty
+  // catalogue is not visible at all. Do not catch-to-empty.
+  const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT);
+  return mapPublished(payload, parseProgramme);
 }
 
 export async function listPublishedLabUnits(): Promise<PublishedLabUnit[]> {

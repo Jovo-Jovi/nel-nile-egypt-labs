@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-183**
+**Next free id: CF-185**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -186,8 +186,10 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-178 | `src/lib/supabaseRest.ts:46` sets `cache: "force-cache"` on the fetch `publishedProgrammeBySlug` performs, with no `next` option. A `force-dynamic` route with `revalidate = 0` does not override that option on Next 16.3.3: `node_modules/next/dist/server/lib/patch-fetch.js` lines 393-405 set infinite revalidate when `force-cache` is explicit and a fetch-level revalidate is absent; the `force-dynamic` no-store default applies only when the fetch has no explicit cache config. Route-level `revalidate = 0` leaves `force-cache` fetches as-is (`caching-without-cache-components.md`). Unpublish-withdraws is not achieved. Do not change `supabaseRest.ts` here; the reviewer issues the fix. Closed at P06-T06: optional per-call override landed; default remains force-cache; only publishedProgrammeDetail.ts passes no-store. STEP 3 blast radius held. STEP 4 citation as for CF-99. Unpublish-withdraws is not claimed here. | builder | CLOSED at P06-T06 | P06 |
 | CF-179 | `aria-hidden` on `aside#site-sidebar` while `button.sidebarClose` inside it retains focus. The browser blocks the attribute. WAI-ARIA forbids hiding a focused element from assistive technology. The remedy is `inert` plus moving focus out before close. `src/components/site/SiteHeader.tsx`. Recorded at P06-T05; not repaired. | builder | OPEN | P07 |
 | CF-180 | `/{locale}/programmes` renders nine ProgrammeCard articles with zero detail hrefs, so the 18 detail URLs are reachable only by typing them. `src/components/ui/ProgrammeCard.tsx` contains no Link or href. Recorded at P06-T06; not repaired. CLOSED at P06-T09: the whole card is a link to `/{locale}/programmes/{slug}`, keyboard reachable with a visible focus ring. | builder | CLOSED at P06-T09 | P06 |
-| CF-181 | This machine returns 401 on request-time Supabase reads despite nonempty `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`, so local render measurement failed at both P06-T04 and P06-T06. The publishable key is most likely stale or rotated. Recorded at P06-T07; not repaired. | builder | OPEN | P06 |
+| CF-181 | This machine returns 401 on request-time Supabase reads despite nonempty `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`, so local render measurement failed at both P06-T04 and P06-T06. The publishable key is most likely stale or rotated. Recorded at P06-T07; not repaired. Closed at P06-T09-F: `npx vercel env pull` retrieved a nonempty publishable key; unauthenticated GET `Programme?select=id&limit=1` returned 200. | builder | CLOSED at P06-T09-F | P06 |
 | CF-182 | `PHASES.md` §1b names ten dashboard modules including Announcement and ClinicalNotice, which are not built because OD-09 is DRAFT, and omits `lab-tests` and `partner-lab`, which are; the counts match at ten and the sets do not. Do not repair it. | reviewer | OPEN | P07 |
+| CF-183 | `/{locale}/programmes` and `/{locale}/videos` are static, so a transient Supabase failure during a production build still fails the deploy — the 12 September failure mode, which P06-T04 fixed only for the detail route. The remedy is a bounded retry on transient statuses in `supabaseRest.ts` that still throws after exhaustion, never a catch to empty. Do not implement the retry here. | builder | OPEN | P06 |
+| CF-184 | `src/lib/brandHead.spec.ts` does not run under `node --test` because `next/headers` will not resolve. The spec imports `brandHead`, which imports `publishedListings`, which imports `src/lib/supabase/server.ts`, which imports `next/headers`. A tracked spec is exercised by no runner. Pre-existing. | builder | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

@@ -1200,5 +1200,35 @@ Do not start G8-R2, G6 or P04. Do not make ProgrammeCard a link. Do not
 add a CSP header. Do not fix the aria-hidden defect. Do not publish or
 unpublish any row.
 
+## 2026-09-13 — P06-T09-F: revert the empty-catch and build honestly
+
+Parent is `origin/p06-t09` at `83fd2cc`, not main. The UNRATIFIED
+catch-to-empty on `listPublishedProgrammes` is gone; the throw is
+restored. `PROGRAMME_SELECT` still includes `slug`. A comment at the
+site records why: a caught transport failure returning `[]` is
+indistinguishable from an empty published set (CF-99's class). A build
+that dies loudly is recoverable by redeploy; a build that ships an empty
+catalogue is not visible at all.
+
+`.env.local` is git-ignored (`.gitignore` `.env.*`) before write.
+`npx vercel env pull` retrieved a nonempty publishable key. Unauthenticated
+GET `Programme?select=id&limit=1` returned 200. CF-181 CLOSED.
+
+`npm run build` prerendered `/ar/programmes` and `/en/programmes` as SSG
+with nine Programme cards and nine slug hrefs. `.html` count 22. Local
+`next start` on port 58723: homepage both locales 200, listings both
+locales 200 with nine cards, two detail URLs 200. Programme cards and
+Videos approved; map pending (CF-69).
+
+CF live maximum 182 before allocating CF-183, then 183 before CF-184.
+CF-183 OPEN: static programmes and videos listings still fail a deploy
+on a transient Supabase error; bounded retry is P06-T10, not here.
+CF-184 OPEN: `brandHead.spec.ts` is exercised by no runner. Open CF
+99 + 2 − 1 = 100. Next free CF-185.
+
+Do not implement the retry. Do not start G8-R2, G6 or P04. Do not add a
+CSP header. Do not fill Branch coordinates. Do not publish or unpublish
+any row.
+
 
 
