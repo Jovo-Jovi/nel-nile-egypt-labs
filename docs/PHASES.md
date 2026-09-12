@@ -269,7 +269,8 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [ ] ~~Written clinical sign-off — not waivable by anyone, including the client~~ SIGNED 6 September 2026, hash aa0469ee…aef7
 - [ ] Content entry — through the dashboard, not through SQL
 - [x] **P06-T01** — Measure what was entered, against the signed seed
-- [ ] **P06-T02** — Measure the live homepage against the publication state
+- [x] **P06-T02** — Measure the live homepage against the publication state
+- [ ] **P06-T03** — Make Programme detail render from published rows, not from a build
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · AFTER P06
