@@ -272,7 +272,8 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P06-T02** — Measure the live homepage against the publication state
 - [ ] **P06-T03** — Make Programme detail render from published rows, not from a build
 - [x] **P06-T04** — Unbind Programme detail from build time
-- [ ] **P06-T05** — Confirm the unbind in production, and close the ledger
+- [x] **P06-T05** — Confirm the unbind in production, and close the ledger
+- [ ] **P06-T06** — Restore the unpublished-row invariant on the detail route
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · AFTER P06

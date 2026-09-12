@@ -1126,5 +1126,31 @@ Do not start G8-R2, G6, P04, or P06-T06 from this window. Do not add a
 CSP header. Do not change `supabaseRest.ts`. Do not publish or unpublish
 any row.
 
+## 2026-09-12 — P06-T06: restore the unpublished-row invariant on the detail route
+
+Parent is `origin/main` at `376d491` (p06-t05 merge, PR #134). The helper
+default stays `force-cache`. Only the two detail-route reads in
+`publishedProgrammeDetail.ts` pass `no-store`. The existing comment in
+`supabaseRest.ts` is extended, not replaced.
+
+STEP 3 held the blast radius: `.html` count under `.next/server/app/` is
+22 before and after; every public SSG route stayed SSG;
+`/[locale]/programmes/[slug]` stayed dynamic; pathlib greps of the nine
+slugs and sample LabTest names were 0. STEP 4 cited Next 16.3.3
+`patch-fetch.js` lines 389-405 and the shipped
+`caching-without-cache-components.md`; `cacheComponents` is unset in
+`next.config.ts`. Local `next start` on port 58722 returned HTTP 500 on
+all four GETs (body lengths 18475, 18475, 17517, 17517) with
+`published Programme query failed: 401` — the same local credential
+class as P06-T04. Unpublish-withdraws is not claimed here.
+
+CF-99 CLOSED at P06-T06. CF-178 CLOSED at P06-T06. CF-180 OPEN, owner
+builder, lands at P06: listing cards have no detail href. Open CF
+103 + 1 − 2 = 102. Next free CF-181.
+
+Do not start G8-R2, G6 or P04. Do not make ProgrammeCard a link. Do not
+add a CSP header. Do not fix the aria-hidden defect. Do not publish or
+unpublish any row.
+
 
 
