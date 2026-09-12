@@ -345,3 +345,18 @@ All exit 0:
 
 Do not start G8-R2 or P06 from this window. Do not edit OD-20. Do not
 make `invalidateSessions` return true.
+
+---
+
+## Correction — 12 September 2026 · P08-T24
+
+The addendum hashes at lines 35 and 315 of this file recorded
+`20b07ec87b8e19531d67f563c00d8081806118b0b595e9005221991393224545`.
+That digest is the sha256 of the CRLF-converted working file on a
+Windows checkout without `.gitattributes`. The sha256 of the committed
+bytes, by `git show HEAD:docs/research/clinical-signoff-addendum.md | sha256sum`,
+is `2b63422efa63f256aef7fcac6f3a3ec3178148a60a3a85199810c75468b5340d`.
+The file did not change. Blob
+`612d7491119e03fb594026199f9ac3edc8cf1dd8` is identical on `origin/main`
+and on `HEAD`. Body text above is unedited (PR-32). Precedent **PR-35**;
+carry-forward **CF-171**.
