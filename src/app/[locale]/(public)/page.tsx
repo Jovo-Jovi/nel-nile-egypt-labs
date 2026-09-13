@@ -16,11 +16,12 @@ import {
   videoWatchHref,
   type PublishedSiteSettings,
 } from "@/lib/publishedListings";
-import { chromeFromPublishedSettings } from "@/lib/publicChrome";
+import { chromeFromPublishedSettings, headOfficeHoursFromBranches } from "@/lib/publicChrome";
 import { PartnerLabStatus } from "@/components/partner-lab/PartnerLabStatus";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { SiteHome, type HomeM6Copy } from "@/components/site/SiteHome";
 import { loadPartnerFacingSession, partnerLabStatusKind } from "@/lib/nelSession";
+import { hasClinicalCatalogueSignOff } from "@/lib/dashboard/clinicalSignOff";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -77,7 +78,7 @@ export default async function Page({ params }: Props) {
     loadPartnerFacingSession(),
   ]);
   const heroPoster = await publishedMediaPoster(settings?.heroMediaId ?? null);
-  const chrome = chromeFromPublishedSettings(settings, locale);
+  const chrome = chromeFromPublishedSettings(settings, locale, branches);
   const offersKind = partnerLabStatusKind(partnerFacing.session);
   const mapApproved = publishedBranchesHaveMapCoordinates(branches);
   return (
@@ -101,6 +102,10 @@ export default async function Page({ params }: Props) {
         description: localizedText(locale, row.descriptionAr, row.descriptionEn),
         href: localeHref(locale, `/programmes/${row.slug}`),
       }))}
+      branches={branches.map((row) => ({
+        id: row.id,
+        name: localizedText(locale, row.nameAr, row.nameEn),
+      }))}
       videos={videos.map((row) => ({
         id: row.id,
         title: localizedText(locale, row.titleAr, row.titleEn),
@@ -110,6 +115,9 @@ export default async function Page({ params }: Props) {
       }))}
       mapApproved={mapApproved}
       mapPins={mapApproved ? branchMapPins(branches, locale) : []}
+      headOfficeAddress={chrome.headOfficeAddress}
+      headOfficeHours={headOfficeHoursFromBranches(branches, locale)}
+      clinicalCatalogueSignedOff={hasClinicalCatalogueSignOff()}
     />
   );
 }

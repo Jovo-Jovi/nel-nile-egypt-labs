@@ -7,6 +7,7 @@ import { resolveEachPublishedSlot } from "@/lib/programmeLabTests";
 import { publishedProgrammeBySlug } from "@/lib/publishedProgrammeDetail";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { ProgrammeDetail } from "@/components/site/ProgrammeDetail";
+import { hasClinicalCatalogueSignOff } from "@/lib/dashboard/clinicalSignOff";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -40,5 +41,12 @@ export default async function Page({ params }: Props) {
     ? await resolveEachPublishedSlot(detail.id, detail.slots)
     : null;
 
-  return <ProgrammeDetail locale={locale} detail={detail} resolutions={resolutions} />;
+  return (
+    <ProgrammeDetail
+      locale={locale}
+      detail={detail}
+      resolutions={resolutions}
+      clinicalCatalogueSignedOff={hasClinicalCatalogueSignOff()}
+    />
+  );
 }

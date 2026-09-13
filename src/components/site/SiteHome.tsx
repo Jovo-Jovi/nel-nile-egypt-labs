@@ -19,6 +19,11 @@ export type HomeLabUnit = {
   name: string;
 };
 
+export type HomeBranch = {
+  id: string;
+  name: string;
+};
+
 export type HomeVideo = {
   id: string;
   title: string;
@@ -64,9 +69,15 @@ interface SiteHomeProps {
   heroPosterAlt: string | null;
   offersAudience: ReactNode;
   programmes: HomeProgrammeCard[];
+  branches: HomeBranch[];
   videos: HomeVideo[];
   mapApproved: boolean;
   mapPins: MapPin[];
+  // Head-office Branch.address_ar / address_en and hours_ar / hours_en.
+  headOfficeAddress: string | null;
+  headOfficeHours: string | null;
+  // hasClinicalCatalogueSignOff() — the render state only.
+  clinicalCatalogueSignedOff: boolean;
 }
 
 const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
@@ -175,9 +186,13 @@ export function SiteHome({
   heroPosterAlt,
   offersAudience,
   programmes,
+  branches,
   videos,
   mapApproved,
   mapPins,
+  headOfficeAddress,
+  headOfficeHours,
+  clinicalCatalogueSignedOff,
 }: SiteHomeProps) {
   const photographyLabel = translate(locale, "hero.imageFrameLabel");
   const posterLabel = translate(locale, "video.posterLabel");
@@ -323,7 +338,7 @@ export function SiteHome({
             />
           </div>
           <div id="programmes">
-            <SitePanels locale={locale} programmes={programmes} />
+            <SitePanels locale={locale} programmes={programmes} branches={branches} />
           </div>
         </div>
         <div className={styles.storyMedia}>
@@ -404,11 +419,30 @@ export function SiteHome({
         <div>
           <p className={styles.kicker}>{translate(locale, "branches.heading")}</p>
           <h2 className={styles.sectionTitle}>{translate(locale, "branches.find")}</h2>
-          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
-            <div className={styles.pendingCopy}>
-              <SkeletonBar size="base" widthPercent={86} />
-              <SkeletonBar size="base" widthPercent={64} />
-            </div>
+          <ApprovalGate
+            locale={locale}
+            state={headOfficeAddress !== null || headOfficeHours !== null ? "approved" : "pending"}
+            pendingLabelKey="approval.pending.businessData"
+          >
+            {headOfficeAddress !== null || headOfficeHours !== null ? (
+              <div>
+                {headOfficeAddress !== null ? (
+                  <p className={styles.prose}>
+                    <IsolatedCopy locale={locale} text={headOfficeAddress} />
+                  </p>
+                ) : null}
+                {headOfficeHours !== null ? (
+                  <p className={styles.prose}>
+                    <IsolatedCopy locale={locale} text={headOfficeHours} />
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <div className={styles.pendingCopy}>
+                <SkeletonBar size="base" widthPercent={86} />
+                <SkeletonBar size="base" widthPercent={64} />
+              </div>
+            )}
           </ApprovalGate>
         </div>
         <div className={styles.map}>
@@ -467,8 +501,12 @@ export function SiteHome({
           </ol>
         </div>
         <aside className={styles.caution}>
-          <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.clinical">
-            <PendingCopyBlock />
+          <ApprovalGate
+            locale={locale}
+            state={clinicalCatalogueSignedOff ? "approved" : "pending"}
+            pendingLabelKey="approval.pending.clinical"
+          >
+            {clinicalCatalogueSignedOff ? null : <PendingCopyBlock />}
           </ApprovalGate>
         </aside>
       </section>

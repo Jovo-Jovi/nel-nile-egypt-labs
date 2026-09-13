@@ -476,7 +476,6 @@ const ar = {
   // Named to the class, reused everywhere that class of material appears.
   "approval.pending.clinical": "قيد الانتظار — بانتظار توقيع الفريق الطبي بالمعمل كتابيًا",
   "approval.pending.businessData": "قيد الانتظار — بانتظار بيانات الاتصال الرسمية من العميل",
-  "approval.pending.mark": "قيد الانتظار — بانتظار ملف الشعار من العميل",
   "approval.pending.photography": "قيد الانتظار — بانتظار صور المعمل من العميل",
   "approval.pending.newsModule": "قيد الانتظار — بانتظار اعتماد وحدة تحكم تاسعة",
   "approval.pending.videoAsset": "قيد الانتظار — بانتظار ملفات الفيديو من العميل",
@@ -1169,7 +1168,6 @@ const en = {
   // §12 approval-state markers — one label per pending material class.
   "approval.pending.clinical": "Pending — awaiting the lab's written clinical sign-off",
   "approval.pending.businessData": "Pending — awaiting the client's official contact data",
-  "approval.pending.mark": "Pending — awaiting the client-supplied mark file",
   "approval.pending.photography": "Pending — awaiting client-supplied photography",
   "approval.pending.newsModule": "Pending — awaiting a signed ninth dashboard module",
   "approval.pending.videoAsset": "Pending — awaiting client-supplied video assets",
