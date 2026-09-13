@@ -184,21 +184,22 @@ Path segments below are Visitor-facing strings, not identifiers. They are govern
 | 11 | static | `/{locale}/privacy-policy` | `SiteSettings` | Privacy Policy (D-13) |
 | 12 | static | `/{locale}/lab-to-lab` | `SiteSettings` | Lab-to-Lab copy (D-15) |
 | 13 | dynamic | `/{locale}/programmes/{slug}` | `Programme` | One detail page per `Programme` |
+| 14 | static | `/{locale}/announcements` | `Announcement` | `Announcement` listing |
 | — | flag-gated | `/{locale}/partner-lab/sign-up` | `PartnerLab` | Signup. Flag-gated; not counted as a public page while the flag is off. |
-| — | auth | `/{locale}/partner-lab/sign-in` | `PartnerLab` | Partner sign-in. Authentication credential only. One Supabase session with the Operator sign-in (ADR-001). Always reachable; not counted among the twelve static public pages. |
+| — | auth | `/{locale}/partner-lab/sign-in` | `PartnerLab` | Partner sign-in. Authentication credential only. One Supabase session with the Operator sign-in (ADR-001). Always reachable; not counted among the thirteen static public pages. |
 | — | auth | `/{locale}/partner-lab/sign-out` | `PartnerLab` | Partner sign-out. POST only; not a GET page. |
 
 `{slug}` is `Programme.slug`, which is now a public path segment and no longer data identity only. Slugs are Latin in both locales: the Arabic page at `/ar/programmes/kidney-profile` carries the same slug as the English one. A slug is not a translated string, so no Arabic slug set exists and none is authored.
 
-**Static pattern count:** 12.
+**Static pattern count:** 13.
 **Dynamic pattern count:** 1.
 **Locales:** 2 (`ar`, `en`).
 **Programmes:** 9, computed from `data/seed/catalogue.json`.
-**Rendered URL count:** static 12 × 2 = 24 · dynamic 9 × 2 = 18 · **total 42.**
+**Rendered URL count:** static 13 × 2 = 26 · dynamic 9 × 2 = 18 · **total 44.**
 
-The `/` redirect is locale-agnostic, exists once, and renders no content, so it is not among the 42.
+The `/` redirect is locale-agnostic, exists once, and renders no content, so it is not among the 44.
 
-This differs from the phase-map claim of 13, and from the 24 this document stated at 3bf5dd2. The 13 was never enumerated. The 24 omitted the `Programme` detail route entirely. `SESSION_CONTEXT.md` is amended to 42.
+This differs from the phase-map claim of 13, and from the 24 this document stated at 3bf5dd2. The 13 was never enumerated. The 24 omitted the `Programme` detail route entirely. P06-T15 added `/{locale}/announcements`. `SESSION_CONTEXT.md` is amended to 44.
 
 ---
 

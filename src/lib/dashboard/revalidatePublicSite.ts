@@ -8,7 +8,7 @@ import { LOCALES } from "@/lib/locale";
 //
 // Layout revalidation of `/{locale}` is the sufficiency proof: it
 // invalidates the locale layout, the public layout beneath it, and every
-// nested page. The explicit page list documents the twelve static
+// nested page. The explicit page list documents the thirteen static
 // patterns in both locales. The slug pattern covers Programme detail
 // URLs if any are ever emitted.
 const PUBLIC_PAGE_SUFFIXES = [
@@ -18,6 +18,7 @@ const PUBLIC_PAGE_SUFFIXES = [
   "/programmes",
   "/offers",
   "/videos",
+  "/announcements",
   "/equipment",
   "/locations",
   "/contact",
@@ -89,7 +90,7 @@ export function revalidatePublishedEquipment(): void {
   }
 }
 
-const ANNOUNCEMENT_PUBLIC_PATHS = ["/ar", "/en"] as const;
+const ANNOUNCEMENT_PUBLIC_PATHS = ["/ar", "/en", "/ar/announcements", "/en/announcements"] as const;
 
 export function revalidatePublishedAnnouncements(): void {
   for (const path of ANNOUNCEMENT_PUBLIC_PATHS) {
