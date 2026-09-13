@@ -17,6 +17,8 @@ import styles from "./SiteHome.module.css";
 export type HomeLabUnit = {
   id: string;
   name: string;
+  posterSrc: string | null;
+  posterAlt: string | null;
 };
 
 export type HomeBranch = {
@@ -67,6 +69,12 @@ interface SiteHomeProps {
   homeM6Copy: HomeM6Copy | null;
   heroPosterSrc: string | null;
   heroPosterAlt: string | null;
+  storyMainPosterSrc: string | null;
+  storyMainPosterAlt: string | null;
+  storyFloatPosterSrc: string | null;
+  storyFloatPosterAlt: string | null;
+  storyFloatAltPosterSrc: string | null;
+  storyFloatAltPosterAlt: string | null;
   offersAudience: ReactNode;
   programmes: HomeProgrammeCard[];
   branches: HomeBranch[];
@@ -184,6 +192,12 @@ export function SiteHome({
   homeM6Copy,
   heroPosterSrc,
   heroPosterAlt,
+  storyMainPosterSrc,
+  storyMainPosterAlt,
+  storyFloatPosterSrc,
+  storyFloatPosterAlt,
+  storyFloatAltPosterSrc,
+  storyFloatAltPosterAlt,
   offersAudience,
   programmes,
   branches,
@@ -302,8 +316,17 @@ export function SiteHome({
                   <IsolatedCopy locale={locale} text={tile.name} />
                 </p>
                 <div className={styles.offerPhoto}>
-                  <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
-                    <ImageFrame label={photographyLabel} />
+                  <ApprovalGate
+                    locale={locale}
+                    state={tile.posterSrc ? "approved" : "pending"}
+                    pendingLabelKey="approval.pending.photography"
+                    fill
+                  >
+                    <HeroPhoto
+                      src={tile.posterSrc}
+                      alt={tile.posterAlt ?? photographyLabel}
+                      fallbackLabel={photographyLabel}
+                    />
                   </ApprovalGate>
                 </div>
               </li>
@@ -343,18 +366,45 @@ export function SiteHome({
         </div>
         <div className={styles.storyMedia}>
           <div className={styles.storyMain}>
-            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
-              <ImageFrame label={photographyLabel} />
+            <ApprovalGate
+              locale={locale}
+              state={storyMainPosterSrc ? "approved" : "pending"}
+              pendingLabelKey="approval.pending.photography"
+              fill
+            >
+              <HeroPhoto
+                src={storyMainPosterSrc}
+                alt={storyMainPosterAlt ?? photographyLabel}
+                fallbackLabel={photographyLabel}
+              />
             </ApprovalGate>
           </div>
           <div className={styles.storyFloat}>
-            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
-              <ImageFrame label={photographyLabel} />
+            <ApprovalGate
+              locale={locale}
+              state={storyFloatPosterSrc ? "approved" : "pending"}
+              pendingLabelKey="approval.pending.photography"
+              fill
+            >
+              <HeroPhoto
+                src={storyFloatPosterSrc}
+                alt={storyFloatPosterAlt ?? photographyLabel}
+                fallbackLabel={photographyLabel}
+              />
             </ApprovalGate>
           </div>
           <div className={styles.storyFloatAlt}>
-            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
-              <ImageFrame label={photographyLabel} />
+            <ApprovalGate
+              locale={locale}
+              state={storyFloatAltPosterSrc ? "approved" : "pending"}
+              pendingLabelKey="approval.pending.photography"
+              fill
+            >
+              <HeroPhoto
+                src={storyFloatAltPosterSrc}
+                alt={storyFloatAltPosterAlt ?? photographyLabel}
+                fallbackLabel={photographyLabel}
+              />
             </ApprovalGate>
           </div>
         </div>

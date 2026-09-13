@@ -173,6 +173,8 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (entity === "LabUnit") {
         const parsed = parseLabUnitWrite(form, false);
         if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
+        const attach = await checkMediaAssetAttach(supabase, parsed.columns.photography_media, false);
+        if (attach !== null) toList(locale, errorQuery(attach));
         const created = await createLabUnitRow(supabase, parsed.columns);
         if (!created.ok) toList(locale, errorQuery(created.reason));
         revalidate();
@@ -283,8 +285,17 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       if (params.action === "unpublish") nextState = "draft";
       const parsed = parseLabUnitWrite(form, nextState === "published");
       if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason, parsed.groups));
+      const attach = await checkMediaAssetAttach(
+        supabase,
+        parsed.columns.photography_media,
+        nextState === "published",
+      );
+      if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
       const written = await writeLabUnitRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
+      if (nextState === "published" && parsed.columns.photography_media !== null) {
+        await setMediaAssetPublication(supabase, parsed.columns.photography_media, "published");
+      }
       revalidate();
       toEdit(locale, rowId, "saved=1");
     }

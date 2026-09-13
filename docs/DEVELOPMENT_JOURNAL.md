@@ -1282,5 +1282,28 @@ in the same task. Open CF 100 + 2 − 3 = 99.
 Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
 implement photography binding or News.
 
+ATTESTATION — 13 September 2026, the human. End-to-end freshness confirmed
+on production after P06-T12: a published text value changed through the
+dashboard appeared on /ar without a new deployment, and a published Video
+changed and changed back was reflected both times. Not a reviewer or
+builder measurement.
+
+## 2026-09-13 — P06-T13: bind photography slots to MediaAsset
+
+Parent is `origin/main` at `2e6a4f5` (p06-t12 merge, PR #143).
+`npx supabase db push` was not run. Four nullable `"MediaAsset"` keys
+are authored on `"LabUnit"` (`photography_media`) and `"SiteSettings"`
+(`story_main_media`, `story_float_media`, `story_float_alt_media`),
+rehearsed inside `BEGIN; … ROLLBACK;`, and not applied. The LabUnits
+module and Site Settings reuse the existing media picker. Home computes
+each photography region from `publishedMediaPoster` with `no-store`.
+News at `SiteHome.tsx:532` is unchanged (T14). Catalogue 600/600.
+html 22. CF-187 OPEN, owner human, P06: seven slots have no mappable
+supplied image. Open CF 99 + 1 − 0 = 100.
+
+Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
+bind the news feature photo. The human runs `npx supabase db push`.
+
+
 
 

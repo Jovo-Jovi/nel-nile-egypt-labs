@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-187**
+**Next free id: CF-188**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -192,6 +192,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-184 | `src/lib/brandHead.spec.ts` does not run under `node --test` because `next/headers` will not resolve. The spec imports `brandHead`, which imports `publishedListings`, which imports `src/lib/supabase/server.ts`, which imports `next/headers`. A tracked spec is exercised by no runner. Pre-existing. | builder | OPEN | P07 |
 | CF-185 | The Main Page is `force-dynamic` with `revalidate = 0`, but its published listing reads used `fetchAnonPublishedJson`'s default `force-cache`. Next 16.3.3 `patch-fetch.js` does not override an explicit `force-cache` fetch when the route is `force-dynamic`, so dashboard edits never reached the Main Page. Same class as CF-178. Closed at P06-T12: listing functions used by the home route gained a cache parameter defaulting to `force-cache`; only those home call sites pass `no-store`. The helper default is unchanged. SSG callers keep the default. html count 22. | builder | CLOSED at P06-T12 | P06 |
 | CF-186 | PR-35's canonical command is unavailable in this project's default shell. A PowerShell substitute transcodes, so a frozen-artefact digest taken that way is not evidence. Closed at P06-T12: PR-37 names the byte-exact method (`subprocess.run(["git", "show", "<ref>:<path>"], capture_output=True).stdout` hashed with `hashlib.sha256`, no shell pipe) and a mismatch against a known value halts. The three known clinical digests reproduced. | reviewer | CLOSED at P06-T12 | P06 |
+| CF-187 | Seven photography slots have no supplied image that maps onto them. `"LabUnit".photography_media` is unset on all four published LabUnits (Clinical Chemistry `8feb6ae1-d68b-4a58-b24c-91d22f8fd6df`, Haematology `6ea947f9-82df-4fee-9af1-034e8063c068`, Immunology `a944421a-39f9-4373-9008-66be1eb88204`, Molecular Biology `5a7cdd74-bfca-4893-bb61-1e4b401774a4`). `"SiteSettings"` `story_main_media`, `story_float_media` and `story_float_alt_media` are unset. Four draft `"MediaAsset"` rows (`9c686839-d5a9-47f7-96aa-8f949b03e9e6`, `a31e0ae0-9f73-4dfc-93e8-2c988ce67cd7`, `a95f6951-4098-44b4-944e-c793d8095850`, `c7d726c7-f84f-4538-a63f-8ffe4c2a4d73`) carry null alt and cannot be mapped to a named slot. The three published assets are already bound (hero, Video poster, mark). Do not invent, upload, or bind stock. An unset slot renders pending — that is §12 working, not a defect. | human | OPEN | P06 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

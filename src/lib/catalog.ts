@@ -244,6 +244,16 @@ const ar = {
     "أيقونة صغيرة في تبويب المتصفح. مربعة، واضحة عند الحجم الصغير.",
   "dashboard.siteSettings.appIconMediaHelp":
     "أيقونة الشاشة الرئيسية على الجهاز عند حفظ الموقع. مربعة.",
+  "dashboard.siteSettings.sectionStoryPhotography": "صور القصة",
+  "dashboard.siteSettings.storyMainMedia": "الصورة الرئيسية للقصة",
+  "dashboard.siteSettings.storyMainMediaHelp":
+    "اختياري. الإطار الكبير بجانب نص «من نحن» على الصفحة الرئيسية.",
+  "dashboard.siteSettings.storyFloatMedia": "الصورة العائمة للقصة",
+  "dashboard.siteSettings.storyFloatMediaHelp":
+    "اختياري. الإطار العائم على الشاشات العريضة. إن لم تُختر صورة يبقى معلّماً بانتظار التصوير.",
+  "dashboard.siteSettings.storyFloatAltMedia": "الصورة العائمة الثانية للقصة",
+  "dashboard.siteSettings.storyFloatAltMediaHelp":
+    "اختياري. الإطار العائم الثاني على الشاشات العريضة.",
   "dashboard.siteSettings.errorBilingualFields":
     "تعذّر النشر لأن هذه الحقول ناقصة بالعربية أو الإنجليزية:",
   "dashboard.siteSettings.errorBilingualNoRetry":
@@ -270,6 +280,9 @@ const ar = {
   "dashboard.labUnits.description": "الوصف",
   "dashboard.labUnits.slug": "المعرّف اللاتيني",
   "dashboard.labUnits.slugHelp": "جزء ثابت من العنوان، بحروف لاتينية صغيرة. ليس اسماً معروضاً للزائر.",
+  "dashboard.labUnits.photography": "صورة القسم",
+  "dashboard.labUnits.photographyHelp":
+    "اختياري. تظهر في شبكة الأقسام على الصفحة الرئيسية. إن لم تُختر صورة يبقى الإطار معلّماً بانتظار التصوير.",
   "dashboard.programmes.heading": "البرامج",
   "dashboard.programmes.pending": "قيد الانتظار — بانتظار صفوف البرامج",
   "dashboard.programmes.name": "اسم البرنامج",
@@ -936,6 +949,16 @@ const en = {
     "The small icon in the browser tab. Square, and legible at a small size.",
   "dashboard.siteSettings.appIconMediaHelp":
     "The home-screen icon when the site is saved on a device. Square.",
+  "dashboard.siteSettings.sectionStoryPhotography": "Story photographs",
+  "dashboard.siteSettings.storyMainMedia": "Main story photograph",
+  "dashboard.siteSettings.storyMainMediaHelp":
+    "Optional. The large frame beside the About copy on the home page.",
+  "dashboard.siteSettings.storyFloatMedia": "Floating story photograph",
+  "dashboard.siteSettings.storyFloatMediaHelp":
+    "Optional. The floating frame on wide viewports. An unset slot keeps the labelled frame.",
+  "dashboard.siteSettings.storyFloatAltMedia": "Second floating story photograph",
+  "dashboard.siteSettings.storyFloatAltMediaHelp":
+    "Optional. The second floating frame on wide viewports.",
   "dashboard.siteSettings.errorBilingualFields":
     "Publishing was refused because these fields are missing in Arabic or English:",
   "dashboard.siteSettings.errorBilingualNoRetry":
@@ -962,6 +985,9 @@ const en = {
   "dashboard.labUnits.description": "Description",
   "dashboard.labUnits.slug": "Latin identifier",
   "dashboard.labUnits.slugHelp": "A stable address fragment in lowercase Latin. It is not the Visitor-facing name.",
+  "dashboard.labUnits.photography": "Department photograph",
+  "dashboard.labUnits.photographyHelp":
+    "Optional. Shown on the home-page department tiles. An unset slot keeps the labelled frame.",
   "dashboard.programmes.heading": "Programmes",
   "dashboard.programmes.pending": "Pending — awaiting Programme rows",
   "dashboard.programmes.name": "Programme name",

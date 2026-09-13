@@ -6,6 +6,7 @@ import extra from "@/components/dashboard/CatalogEntityForm.module.css";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { listLabUnitRows } from "@/lib/dashboard/catalogEntities";
+import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
@@ -35,13 +36,14 @@ export default async function LabUnitsPage({ params, searchParams }: Props) {
   }
 
   const rows = await listLabUnitRows(supabase);
+  const assets = await listMediaAssetOptions(supabase);
 
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.labUnits.heading" />
       <div className={extra.groups}>
         <CatalogRowList locale={locale} rows={rows} editPrefix="/dashboard/lab-units" />
-        <LabUnitForm locale={locale} row={null} notice={notice} />
+        <LabUnitForm locale={locale} row={null} notice={notice} assets={assets} />
       </div>
     </>
   );
