@@ -55,6 +55,7 @@ const ar = {
   "page.portal.title": "بوابة النتائج",
   "page.privacyPolicy.title": "سياسة الخصوصية",
   "page.labToLab.title": "معامل للمعامل",
+  "page.announcements.title": "الإعلانات",
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.
@@ -774,6 +775,7 @@ const en = {
   "page.portal.title": "Results portal",
   "page.privacyPolicy.title": "Privacy policy",
   "page.labToLab.title": "Lab-to-Lab",
+  "page.announcements.title": "Announcements",
 
   // PartnerLab signup — P08-T03. Flag-gated; not a counted public page.
   // received / passwordTooShort / invalidEmail / weakPassword: P08-T06.

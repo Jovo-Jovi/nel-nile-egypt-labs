@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
+import { localeHref } from "@/lib/locale";
 import { formatWesternCount, publishedCountLabel } from "@/lib/listingFormat";
 import { Isolate, IsolatedCopy } from "@/components/ui/Isolate";
 import { ImageFrame } from "@/components/ui/ImageFrame";
@@ -9,6 +10,7 @@ import { GreaterCairoMap, type MapPin } from "@/components/ui/GreaterCairoMap";
 import { resultsPortalVisitorHref } from "@/lib/resultsPortalLink";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
+import { Button } from "@/components/ui/Button";
 import { ScrollDownIcon, PlayIcon } from "@/components/ui/icons";
 import { SitePanels, type HomeProgrammeCard } from "./SitePanels";
 import { HeroPhoto } from "./HeroPhoto";
@@ -564,6 +566,11 @@ export function SiteHome({
       <section className={`${styles.band} ${styles.inset}`} id="insights">
         <p className={styles.kicker}>{translate(locale, "newsShowcase.heading")}</p>
         <h2 className={styles.sectionTitle}>{translate(locale, "newsShowcase.standfirst")}</h2>
+        <div className={styles.actions}>
+          <Button variant="text" href={localeHref(locale, "/announcements")}>
+            {translate(locale, "news.viewAll")}
+          </Button>
+        </div>
         <div className={styles.magazine}>
           <article className={styles.feature}>
             <div className={styles.featurePhoto}>
@@ -622,15 +629,20 @@ export function SiteHome({
             </li>
           </ol>
         </div>
-        <aside className={styles.caution}>
-          <ApprovalGate
-            locale={locale}
-            state={clinicalCatalogueSignedOff ? "approved" : "pending"}
-            pendingLabelKey="approval.pending.clinical"
-          >
-            {clinicalCatalogueSignedOff ? null : <PendingCopyBlock />}
-          </ApprovalGate>
-        </aside>
+        {!clinicalCatalogueSignedOff ? (
+          <aside className={styles.caution}>
+            {/* Reserved for A4 ClinicalNotice. Until that module ships, the
+                approved branch has nothing to render; do not keep an empty
+                caution box. */}
+            <ApprovalGate
+              locale={locale}
+              state="pending"
+              pendingLabelKey="approval.pending.clinical"
+            >
+              <PendingCopyBlock />
+            </ApprovalGate>
+          </aside>
+        ) : null}
       </section>
 
       <section className={styles.band} id="videos">
