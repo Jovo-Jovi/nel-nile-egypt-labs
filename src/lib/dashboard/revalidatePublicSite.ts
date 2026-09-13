@@ -88,3 +88,11 @@ export function revalidatePublishedEquipment(): void {
     revalidatePath(path);
   }
 }
+
+const ANNOUNCEMENT_PUBLIC_PATHS = ["/ar", "/en"] as const;
+
+export function revalidatePublishedAnnouncements(): void {
+  for (const path of ANNOUNCEMENT_PUBLIC_PATHS) {
+    revalidatePath(path);
+  }
+}

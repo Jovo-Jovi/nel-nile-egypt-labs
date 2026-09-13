@@ -1,5 +1,5 @@
 // Published-only listings for Programme, LabUnit, Offer, Video,
-// Equipment, Branch and SiteSettings. Ordered by display_order.
+// Equipment, Branch, SiteSettings and Announcement. Ordered by display_order.
 // Unpublished rows are never selected. Offers are read through the
 // session client (listPublishedOffers) so M9's partner-read policy can
 // match the JWT; the published filter is appended in that function where
@@ -54,6 +54,16 @@ export type PublishedEquipment = {
   nameEn: string;
   descriptionAr: string;
   descriptionEn: string;
+  poster: MediaPoster | null;
+};
+
+export type PublishedAnnouncement = {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  bodyAr: string;
+  bodyEn: string;
+  publishedAt: string | null;
   poster: MediaPoster | null;
 };
 
@@ -219,6 +229,9 @@ const VIDEO_SELECT =
 const EQUIPMENT_SELECT =
   `select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
 
+const ANNOUNCEMENT_SELECT =
+  `select=id,title_ar,title_en,body_ar,body_en,published_at,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
 const PROGRAMME_SELECT =
   "select=id,slug,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
 
@@ -301,6 +314,30 @@ function parseEquipment(value: unknown): PublishedEquipment | null {
     nameEn,
     descriptionAr,
     descriptionEn,
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function parseAnnouncement(value: unknown): PublishedAnnouncement | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const titleAr = asNonEmptyString(row.title_ar);
+  const titleEn = asNonEmptyString(row.title_en);
+  const bodyAr = asNonEmptyString(row.body_ar);
+  const bodyEn = asNonEmptyString(row.body_en);
+  const publishedAtRaw = asNonEmptyString(row.published_at);
+  const publishedAt = publishedAtRaw === null ? null : publishedAtRaw.slice(0, 10);
+  if (id === null || titleAr === null || titleEn === null) return null;
+  if (bodyAr === null || bodyEn === null || publishedAt === null) return null;
+  return {
+    id,
+    titleAr,
+    titleEn,
+    bodyAr,
+    bodyEn,
+    publishedAt,
     poster: parsePoster(row.MediaAsset),
   };
 }
@@ -453,6 +490,13 @@ export async function listPublishedEquipment(): Promise<PublishedEquipment[]> {
   return mapPublished(payload, parseEquipment);
 }
 
+export async function listPublishedAnnouncements(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedAnnouncement[]> {
+  const payload = await fetchAnonPublishedJson("Announcement", ANNOUNCEMENT_SELECT, cache);
+  return mapPublished(payload, parseAnnouncement);
+}
+
 export async function listPublishedProgrammes(
   cache: PublishedFetchCache = "force-cache",
 ): Promise<PublishedProgramme[]> {
@@ -488,24 +532,16 @@ export async function publishedSiteSettings(
   return rows[0] ?? null;
 }
 
-// Additive columns from 20260913140000_photography_slot_media.sql. This
-// task authors and rehearses that file and does not apply it (OD-17 §3.3).
+// Additive columns from 20260913140000_photography_slot_media.sql.
 // Shared SiteSettings and LabUnit selects stay on columns that already
 // exist so SSG pages keep building. The home route is force-dynamic and
-// reads these columns here.
+// reads these columns here. A query failure throws; it is not converted
+// into an empty overlay.
 const SITE_SETTINGS_STORY_SELECT =
   "select=id,story_main_media,story_float_media,story_float_alt_media,publication_state";
 
 const LAB_UNIT_PHOTOGRAPHY_SELECT =
   "select=id,photography_media,publication_state,display_order&order=display_order.asc";
-
-// UNRATIFIED (PR-19). Until db push, PostgREST 400s on the overlay
-// selects. A throw would 500 the home route; a null column and a missing
-// column are the same Visitor-visible state (pending). Catch 400 only.
-// Any other status still throws. After apply this branch is unused.
-function isUnappliedColumnQuery(error: unknown): boolean {
-  return error instanceof Error && /query failed: 400$/.test(error.message);
-}
 
 export type PublishedStoryMediaIds = {
   storyMainMediaId: string | null;
@@ -533,35 +569,25 @@ function parseStoryMediaIds(value: unknown): PublishedStoryMediaIds | null {
 export async function publishedStoryMediaIds(
   cache: PublishedFetchCache = "force-cache",
 ): Promise<PublishedStoryMediaIds> {
-  try {
-    const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_STORY_SELECT, cache);
-    const rows = mapPublished(payload, parseStoryMediaIds);
-    return rows[0] ?? EMPTY_STORY_MEDIA;
-  } catch (error) {
-    if (isUnappliedColumnQuery(error)) return EMPTY_STORY_MEDIA;
-    throw error;
-  }
+  const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_STORY_SELECT, cache);
+  const rows = mapPublished(payload, parseStoryMediaIds);
+  return rows[0] ?? EMPTY_STORY_MEDIA;
 }
 
 export async function publishedLabUnitPhotographyMedia(
   cache: PublishedFetchCache = "force-cache",
 ): Promise<ReadonlyMap<string, string | null>> {
-  try {
-    const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_PHOTOGRAPHY_SELECT, cache);
-    const map = new Map<string, string | null>();
-    if (!Array.isArray(payload)) return map;
-    for (const item of payload) {
-      const row = asRecord(item);
-      if (row === null || row.publication_state !== "published") continue;
-      const id = asNonEmptyString(row.id);
-      if (id === null) continue;
-      map.set(id, asNonEmptyString(row.photography_media));
-    }
-    return map;
-  } catch (error) {
-    if (isUnappliedColumnQuery(error)) return new Map();
-    throw error;
+  const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_PHOTOGRAPHY_SELECT, cache);
+  const map = new Map<string, string | null>();
+  if (!Array.isArray(payload)) return map;
+  for (const item of payload) {
+    const row = asRecord(item);
+    if (row === null || row.publication_state !== "published") continue;
+    const id = asNonEmptyString(row.id);
+    if (id === null) continue;
+    map.set(id, asNonEmptyString(row.photography_media));
   }
+  return map;
 }
 
 const MEDIA_ROW_ID =

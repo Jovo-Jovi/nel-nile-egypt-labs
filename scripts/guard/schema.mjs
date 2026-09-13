@@ -28,6 +28,7 @@ const TABLES = [
   "LabTest",
   "Programme",
   "Equipment",
+  "Announcement",
   "Branch",
   "Offer",
   "Video",
@@ -44,6 +45,7 @@ const INVENTORY_ORDER = [
   "Programme",
   "ProgrammeLabTest",
   "MediaAsset",
+  "Announcement",
 ];
 
 const CONSTRAINT_RE = new RegExp(
@@ -67,6 +69,7 @@ const PREFIX_TO_TABLE = {
   BRANCH: "Branch",
   OFFER: "Offer",
   VIDEO: "Video",
+  ANNOUNCEMENT: "Announcement",
 };
 
 function posixLabel(path) {

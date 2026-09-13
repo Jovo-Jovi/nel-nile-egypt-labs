@@ -20,10 +20,16 @@ export type HomePanelBranch = {
   name: string;
 };
 
+export type HomePanelAnnouncement = {
+  id: string;
+  title: string;
+};
+
 interface SitePanelsProps {
   locale: Locale;
   programmes: HomeProgrammeCard[];
   branches: HomePanelBranch[];
+  announcements: HomePanelAnnouncement[];
 }
 
 const PANELS = [
@@ -60,17 +66,18 @@ function panelApprovalState(
   id: (typeof PANELS)[number]["id"],
   programmes: HomeProgrammeCard[],
   branches: HomePanelBranch[],
+  announcements: HomePanelAnnouncement[],
 ): ApprovalState {
   if (id === "programmes") return programmes.length > 0 ? "approved" : "pending";
   if (id === "branches") return branches.length > 0 ? "approved" : "pending";
-  return "pending";
+  return announcements.length > 0 ? "approved" : "pending";
 }
 
-export function SitePanels({ locale, programmes, branches }: SitePanelsProps) {
+export function SitePanels({ locale, programmes, branches, announcements }: SitePanelsProps) {
   const [active, setActive] = useState<(typeof PANELS)[number]["id"]>("programmes");
   const panel = PANELS.find((item) => item.id === active) ?? PANELS[0];
   const slots = Array.from({ length: panel.itemCount }, (_, index) => index);
-  const gateState = panelApprovalState(panel.id, programmes, branches);
+  const gateState = panelApprovalState(panel.id, programmes, branches, announcements);
 
   return (
     <div className={styles.wrap}>
@@ -111,6 +118,16 @@ export function SitePanels({ locale, programmes, branches }: SitePanelsProps) {
                 <li key={row.id}>
                   <strong>
                     <IsolatedCopy locale={locale} text={row.name} />
+                  </strong>
+                </li>
+              ))}
+            </ul>
+          ) : panel.id === "insights" && announcements.length > 0 ? (
+            <ul className={styles.list}>
+              {announcements.map((row) => (
+                <li key={row.id}>
+                  <strong>
+                    <IsolatedCopy locale={locale} text={row.title} />
                   </strong>
                 </li>
               ))}

@@ -62,6 +62,7 @@ void MEDIA_ASSET_FILE_SIZE_LIMIT_BYTES;
 function holderNavKey(entity: MediaAssetHolder["entity"]): CatalogKey {
   if (entity === "Offer") return "dashboard.nav.offers";
   if (entity === "Video") return "dashboard.nav.videos";
+  if (entity === "Announcement") return "dashboard.nav.announcements";
   return "dashboard.nav.equipment";
 }
 

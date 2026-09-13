@@ -34,6 +34,15 @@ export type HomeVideo = {
   watchHref: string | null;
 };
 
+export type HomeAnnouncement = {
+  id: string;
+  title: string;
+  body: string;
+  publishedAt: string | null;
+  posterSrc: string | null;
+  posterAlt: string | null;
+};
+
 // View model for the M6 hero and reason-card columns selected by
 // publishedSiteSettings. Names match public."SiteSettings". Hero
 // photography is passed separately as heroPosterSrc so a null column
@@ -79,6 +88,7 @@ interface SiteHomeProps {
   programmes: HomeProgrammeCard[];
   branches: HomeBranch[];
   videos: HomeVideo[];
+  announcements: HomeAnnouncement[];
   mapApproved: boolean;
   mapPins: MapPin[];
   // Head-office Branch.address_ar / address_en and hours_ar / hours_en.
@@ -133,6 +143,33 @@ function publishedReasonCards(
     cards.push({ title, body });
   }
   return cards;
+}
+
+function AnnouncementCopy({
+  locale,
+  row,
+  prose,
+}: {
+  locale: Locale;
+  row: HomeAnnouncement;
+  prose: boolean;
+}) {
+  const bodyClass = prose ? styles.prose : undefined;
+  return (
+    <>
+      {row.publishedAt ? (
+        <p className={styles.kicker}>
+          <Isolate>{row.publishedAt}</Isolate>
+        </p>
+      ) : null}
+      <h3>
+        <IsolatedCopy locale={locale} text={row.title} />
+      </h3>
+      <p className={bodyClass}>
+        <IsolatedCopy locale={locale} text={row.body} />
+      </p>
+    </>
+  );
 }
 
 function PendingCopyBlock() {
@@ -202,6 +239,7 @@ export function SiteHome({
   programmes,
   branches,
   videos,
+  announcements,
   mapApproved,
   mapPins,
   headOfficeAddress,
@@ -361,7 +399,7 @@ export function SiteHome({
             />
           </div>
           <div id="programmes">
-            <SitePanels locale={locale} programmes={programmes} branches={branches} />
+            <SitePanels locale={locale} programmes={programmes} branches={branches} announcements={announcements} />
           </div>
         </div>
         <div className={styles.storyMedia}>
@@ -529,23 +567,57 @@ export function SiteHome({
         <div className={styles.magazine}>
           <article className={styles.feature}>
             <div className={styles.featurePhoto}>
-              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
-                <ImageFrame label={photographyLabel} />
-              </ApprovalGate>
+              {announcements[0]?.posterSrc ? (
+                <ApprovalGate locale={locale} state="approved" pendingLabelKey="approval.pending.photography" fill>
+                  <HeroPhoto
+                    src={announcements[0].posterSrc}
+                    alt={announcements[0].posterAlt ?? photographyLabel}
+                    fallbackLabel={photographyLabel}
+                  />
+                </ApprovalGate>
+              ) : (
+                <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.photography" fill>
+                  <ImageFrame label={photographyLabel} />
+                </ApprovalGate>
+              )}
             </div>
-            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
-              <PendingCopyBlock />
+            <ApprovalGate
+              locale={locale}
+              state={announcements[0] ? "approved" : "pending"}
+              pendingLabelKey="approval.pending.newsModule"
+            >
+              {announcements[0] ? (
+                <AnnouncementCopy locale={locale} row={announcements[0]} prose />
+              ) : (
+                <PendingCopyBlock />
+              )}
             </ApprovalGate>
           </article>
           <ol className={styles.indexStack}>
             <li>
-              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
-                <PendingCopyBlock />
+              <ApprovalGate
+                locale={locale}
+                state={announcements[1] ? "approved" : "pending"}
+                pendingLabelKey="approval.pending.newsModule"
+              >
+                {announcements[1] ? (
+                  <AnnouncementCopy locale={locale} row={announcements[1]} prose={false} />
+                ) : (
+                  <PendingCopyBlock />
+                )}
               </ApprovalGate>
             </li>
             <li>
-              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.newsModule">
-                <PendingCopyBlock />
+              <ApprovalGate
+                locale={locale}
+                state={announcements[2] ? "approved" : "pending"}
+                pendingLabelKey="approval.pending.newsModule"
+              >
+                {announcements[2] ? (
+                  <AnnouncementCopy locale={locale} row={announcements[2]} prose={false} />
+                ) : (
+                  <PendingCopyBlock />
+                )}
               </ApprovalGate>
             </li>
           </ol>

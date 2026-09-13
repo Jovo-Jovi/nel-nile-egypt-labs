@@ -45,7 +45,7 @@ export type MediaAssetOption = {
 };
 
 export type MediaAssetHolder = {
-  entity: "Offer" | "Video" | "Equipment";
+  entity: "Offer" | "Video" | "Equipment" | "Announcement";
   id: string;
   label: string;
 };
@@ -418,6 +418,20 @@ export async function listMediaAssetHolders(
         entity: "Equipment",
         id,
         label: holderLabel(locale, asOptionalText(record?.name_ar), asOptionalText(record?.name_en), id),
+      });
+    }
+  }
+
+  const announcements = await supabase.from("Announcement").select("id,title_ar,title_en").eq("MediaAsset", rowId);
+  if (Array.isArray(announcements.data)) {
+    for (const item of announcements.data) {
+      const record = asRecord(item);
+      const id = asId(record?.id);
+      if (id === null) continue;
+      holders.push({
+        entity: "Announcement",
+        id,
+        label: holderLabel(locale, asOptionalText(record?.title_ar), asOptionalText(record?.title_en), id),
       });
     }
   }

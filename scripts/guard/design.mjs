@@ -106,7 +106,8 @@ const ALLOWED_HEX = /^#25D366$/i;
 // exact paths, no directory, no pattern; P08-T10 added PartnerLabStatus.tsx
 // and PartnerLabReviewForm.tsx as two exact paths, no directory, no
 // pattern; P08-T18 added partner-lab/sign-in/page.tsx as one exact path,
-// no directory, no pattern).
+// no directory, no pattern; P06-T14 added AnnouncementForm.tsx as one
+// exact path, no directory, no pattern).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
@@ -123,6 +124,7 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/dashboard/LabTestForm.tsx",
   "src/components/dashboard/ProgrammeTierForm.tsx",
   "src/components/dashboard/ProgrammeLabTestForm.tsx",
+  "src/components/dashboard/AnnouncementForm.tsx",
   "src/app/[locale]/partner-lab/sign-up/page.tsx",
   "src/components/partner-lab/PartnerLabStatus.tsx",
   "src/components/dashboard/PartnerLabReviewForm.tsx",

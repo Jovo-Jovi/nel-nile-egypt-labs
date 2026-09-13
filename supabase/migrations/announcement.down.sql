@@ -1,0 +1,39 @@
+-- Reverse — drop public."Announcement".
+--
+-- OD-10 control 1: every migration ships with a reverse authored in the same
+-- task as its forward. This file is NOT applied. It exists so that the reverse
+-- is written while the forward is fresh rather than reconstructed under pressure.
+--
+-- It carries no leading timestamp, so the Supabase CLI does not treat it as a
+-- migration and db push does not pick it up — the CLI prints a Skipping
+-- migration line for it on every invocation. Running it is a deliberate,
+-- separate act by a human. That Skipping line is by design and is not a defect.
+--
+-- Reverse of 20260913180000_announcement.sql.
+-- cascade is deliberately absent, per M1's, M2's, M5's and M6's precedent: a
+-- bare drop table fails the moment any object outside this file depends on
+-- the table, and that refusal is the control. cascade would convert a loud
+-- failure into the silent removal of somebody else's object.
+--
+-- Dropping the table takes its indexes, constraints, RLS state, policies and
+-- privilege grants with it, so no separate drop index, drop policy or revoke
+-- is written. The "PublicationState" column depends on M1's type, which this
+-- file does not touch. The outbound key to "MediaAsset" is removed with the
+-- table and leaves "MediaAsset" untouched.
+--
+-- Why this drop is safe today, stated per OD-10 control 1:
+--
+--   "Announcement" — nothing references it. No later table carries an inbound
+--   foreign key to it. This reverse was authored in the same task as the
+--   forward, and the forward is not applied, so the table holds no rows.
+--   Safe today because destroying it destroys nothing that re-running the
+--   forward restores exactly. Expires when a later migration adds an inbound
+--   key, or when an Operator writes a row.
+--
+-- So this file reverses this forward only while no later migration depends
+-- on this table. Nothing here enforces that; a human reading this comment
+-- is the only control there is. After an Operator has saved a row, running
+-- this file destroys that row, and OD-10 control 4 puts destructive change
+-- behind its own OD.
+
+drop table public."Announcement";

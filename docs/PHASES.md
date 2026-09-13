@@ -259,7 +259,8 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [ ] **P06-T11** — Record three decisions, then make the Main Page state-driven
 - [x] **P06-T11-F** — Record three decisions, then make the Main Page state-driven
 - [x] **P06-T12** — Let the Main Page see content changes
-- [ ] **P06-T13** — Bind the photography slots to MediaAsset
+- [x] **P06-T13** — Bind the photography slots to MediaAsset
+- [ ] **P06-T14** — The Announcements module, and the last homepage gates
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06
@@ -447,7 +448,7 @@ Sent to the client today, that document understates the project badly.
 
 G8 is FAIL. G8-R of 10 September 2026 did not pass it. G8-R2 has no done-step row and has not run. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks; what remains is the revocation control. P08-T22 halted (CF-169). CF-170 is OPEN. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it. `currentNelPrincipal` exists only as a rolled-back rehearsal at P08-T26; `git grep currentNelPrincipal supabase/` is empty.
 
-OD-09 is SIGNED and priced at 1000 EGP (OD-24). Announcement and ClinicalNotice tables are not yet built.
+OD-09 is SIGNED and priced at 1000 EGP (OD-24). `"Announcement"` was authored at P06-T14 and applied by the human. ClinicalNotice is not built.
 
 P06 is in flight. P06-T07 restored `SECURITY_MODEL.md` §3 on production. G6 has not started. CF-180 and CF-181 are OPEN. The id-less content-entry box is still unchecked.
 

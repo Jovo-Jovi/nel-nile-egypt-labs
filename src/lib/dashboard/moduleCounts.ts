@@ -9,6 +9,7 @@ import {
   listLabTestRows,
   listLabUnitRows,
   listOfferRows,
+  listAnnouncementRows,
   listProgrammeRows,
   listVideoRows,
   type PublicationState,
@@ -38,7 +39,8 @@ type CountTable =
   | "LabTest"
   | "LabUnit"
   | "SiteSettings"
-  | "MediaAsset";
+  | "MediaAsset"
+  | "Announcement";
 
 function fromStates(states: PublicationState[]): PublicationCounts {
   let published = 0;
@@ -88,7 +90,7 @@ export async function countClinicalProgress(
 export async function countDashboardModules(
   supabase: SupabaseClient,
 ): Promise<Record<CountTable, PublicationCounts>> {
-  const [offers, videos, equipment, branches, programmes, labTests, labUnits, siteSettings, media] =
+  const [offers, videos, equipment, branches, programmes, labTests, labUnits, siteSettings, media, announcements] =
     await Promise.all([
       listOfferRows(supabase),
       listVideoRows(supabase),
@@ -99,6 +101,7 @@ export async function countDashboardModules(
       listLabUnitRows(supabase),
       readSiteSettingsRow(supabase),
       listMediaAssetRows(supabase),
+      listAnnouncementRows(supabase),
     ]);
 
   return {
@@ -114,5 +117,6 @@ export async function countDashboardModules(
         ? { published: 0, draft: 0 }
         : fromStates([siteSettings.publication_state]),
     MediaAsset: fromStates(media.map((row) => row.publication_state)),
+    Announcement: fromStates(announcements.map((row) => row.publication_state)),
   };
 }
