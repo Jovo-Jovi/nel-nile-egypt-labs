@@ -255,7 +255,8 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P06-T08** — Correct PHASES.md structure without touching the ledger
 - [x] **P06-T09** — Wire the approved Programme surfaces
 - [x] **P06-T09-F** — Revert the empty-catch and build honestly
-- [ ] **P06-T10** — Make a Google Maps paste actually work
+- [x] **P06-T10** — Make a Google Maps paste actually work
+- [ ] **P06-T11** — Record three decisions, then make the Main Page state-driven
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06
