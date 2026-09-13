@@ -21,7 +21,7 @@ type PublishedTable =
   | "SiteSettings"
   | "MediaAsset";
 
-type PublishedFetchCache = "force-cache" | "no-store";
+export type PublishedFetchCache = "force-cache" | "no-store";
 
 // Published-only. The publication_state filter is appended here so a
 // caller cannot omit it. Unpublished rows are never selected (PR-08).
@@ -48,9 +48,14 @@ export async function fetchAnonPublishedJson(
     // The Programme detail route is force-dynamic with no revalidatePath
     // reaching its slug path, so an infinitely-cached fetch entry there
     // would keep serving a Programme after it was unpublished. That is
-    // SECURITY_MODEL.md §3's invariant, not a freshness preference. Every
-    // other caller is still static and still withdrawn by revalidatePath.
-    // Those callers keep the default. The detail route passes no-store.
+    // SECURITY_MODEL.md §3's invariant, not a freshness preference.
+    //
+    // A force-dynamic route with an infinitely-cached fetch beneath it
+    // serves a frozen payload, so the lab's edits never reach the Main
+    // Page. The static floor the default protects is still real and still
+    // applies to SSG (●) routes. Those callers keep the default.
+    // Force-dynamic listing callers pass no-store. The detail route
+    // already does.
     cache,
   });
 

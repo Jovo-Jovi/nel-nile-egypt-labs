@@ -15,7 +15,7 @@
 // public."programmeLabTests".
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { fetchAnonPublishedJson } from "./supabaseRest";
+import { fetchAnonPublishedJson, type PublishedFetchCache } from "./supabaseRest";
 import { offerIsExpired } from "./listingFormat";
 import { createSupabaseServerClient } from "./supabase/server";
 
@@ -441,8 +441,10 @@ export async function listPublishedOffers(
   return mapPublished(data, parseOffer);
 }
 
-export async function listPublishedVideos(): Promise<PublishedVideo[]> {
-  const payload = await fetchAnonPublishedJson("Video", VIDEO_SELECT);
+export async function listPublishedVideos(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedVideo[]> {
+  const payload = await fetchAnonPublishedJson("Video", VIDEO_SELECT, cache);
   return mapPublished(payload, parseVideo);
 }
 
@@ -451,29 +453,37 @@ export async function listPublishedEquipment(): Promise<PublishedEquipment[]> {
   return mapPublished(payload, parseEquipment);
 }
 
-export async function listPublishedProgrammes(): Promise<PublishedProgramme[]> {
+export async function listPublishedProgrammes(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedProgramme[]> {
   // A caught transport failure returning [] is indistinguishable from an
   // empty published set, which is CF-99's defect class. A build that dies
   // loudly is recoverable by redeploy; a build that ships an empty
   // catalogue is not visible at all. Do not catch-to-empty.
-  const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT);
+  const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT, cache);
   return mapPublished(payload, parseProgramme);
 }
 
-export async function listPublishedLabUnits(): Promise<PublishedLabUnit[]> {
-  const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_SELECT);
+export async function listPublishedLabUnits(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedLabUnit[]> {
+  const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_SELECT, cache);
   return mapPublished(payload, parseLabUnit);
 }
 
-export async function listPublishedBranches(): Promise<PublishedBranch[]> {
-  const payload = await fetchAnonPublishedJson("Branch", BRANCH_SELECT);
+export async function listPublishedBranches(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedBranch[]> {
+  const payload = await fetchAnonPublishedJson("Branch", BRANCH_SELECT, cache);
   return mapPublished(payload, parseBranch);
 }
 
 // Singleton. The published-only filter is the same as every other table
 // in this module. Zero published rows returns null — D-42 fail-closed.
-export async function publishedSiteSettings(): Promise<PublishedSiteSettings | null> {
-  const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_SELECT);
+export async function publishedSiteSettings(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedSiteSettings | null> {
+  const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_SELECT, cache);
   const rows = mapPublished(payload, parseSiteSettings);
   return rows[0] ?? null;
 }
@@ -483,11 +493,15 @@ const MEDIA_ROW_ID =
 
 const MEDIA_POSTER_SELECT = "select=id,storage_path,alt_ar,alt_en,publication_state";
 
-export async function publishedMediaPoster(id: string | null): Promise<MediaPoster | null> {
+export async function publishedMediaPoster(
+  id: string | null,
+  cache: PublishedFetchCache = "force-cache",
+): Promise<MediaPoster | null> {
   if (id === null || !MEDIA_ROW_ID.test(id)) return null;
   const payload = await fetchAnonPublishedJson(
     "MediaAsset",
     `${MEDIA_POSTER_SELECT}&id=eq.${id}`,
+    cache,
   );
   const rows = mapPublished(payload, parsePoster);
   return rows[0] ?? null;

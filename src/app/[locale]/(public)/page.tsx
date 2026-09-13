@@ -55,7 +55,7 @@ function homeM6CopyFromSettings(settings: PublishedSiteSettings | null): HomeM6C
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await requireLocale(params);
   const base = pageMetadata(locale, "page.home.title", "");
-  const settings = await publishedSiteSettings();
+  const settings = await publishedSiteSettings("no-store");
   if (!settings?.seoTitleAr || !settings.seoTitleEn) return base;
   return {
     ...base,
@@ -70,14 +70,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
   const [settings, labUnits, branches, programmes, videos, partnerFacing] = await Promise.all([
-    publishedSiteSettings(),
-    listPublishedLabUnits(),
-    listPublishedBranches(),
-    listPublishedProgrammes(),
-    listPublishedVideos(),
+    publishedSiteSettings("no-store"),
+    listPublishedLabUnits("no-store"),
+    listPublishedBranches("no-store"),
+    listPublishedProgrammes("no-store"),
+    listPublishedVideos("no-store"),
     loadPartnerFacingSession(),
   ]);
-  const heroPoster = await publishedMediaPoster(settings?.heroMediaId ?? null);
+  const heroPoster = await publishedMediaPoster(settings?.heroMediaId ?? null, "no-store");
   const chrome = chromeFromPublishedSettings(settings, locale, branches);
   const offersKind = partnerLabStatusKind(partnerFacing.session);
   const mapApproved = publishedBranchesHaveMapCoordinates(branches);
