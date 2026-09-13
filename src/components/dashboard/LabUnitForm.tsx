@@ -9,7 +9,9 @@ import {
   type CatalogNotice,
   type LabUnitRow,
 } from "@/lib/dashboard/catalogEntities";
+import type { MediaAssetOption } from "@/lib/dashboard/mediaAsset";
 import { localeHref } from "@/lib/locale";
+import { MediaAssetPicker } from "./MediaAssetForm";
 import {
   ActionStatus,
   CatalogDeleteBlock,
@@ -32,13 +34,15 @@ import site from "./SiteSettingsForm.module.css";
 // name_en → name_en
 // description_ar → description_ar
 // description_en → description_en
+// photography_media → photography_media (picker over existing rows)
 // display_order → display_order
 // Publish / unpublish write publication_state.
 // row_id identifies `"LabUnit".id` and is not assigned on create.
 // confirm_name is not a column: typed confirmation per ADMIN_SPEC.md §4d,
 // compared then discarded.
-// No MediaAsset field: the table has no such column (a field with no column
-// is a halt). No field accepts a Visitor or patient name, phone, email,
+// photography_media is optional. An unset slot renders pending on the
+// public home page — that is the §12 mechanism working, not a defect.
+// No field accepts a Visitor or patient name, phone, email,
 // address, date of birth or identifier.
 void LAB_UNIT_FORM_COLUMNS;
 
@@ -128,10 +132,12 @@ export function LabUnitForm({
   locale,
   row,
   notice,
+  assets,
 }: {
   locale: Locale;
   row: LabUnitRow | null;
   notice: CatalogNotice;
+  assets: MediaAssetOption[];
 }) {
   const { flight, setFlight, clientNotice, showQueryNotice, onSubmit } = useCatalogFormFlight();
   const isCreate = row === null;
@@ -185,6 +191,18 @@ export function LabUnitForm({
             defaultAr={row?.description_ar ?? null}
             defaultEn={row?.description_en ?? null}
             multiline
+          />
+        </CatalogSection>
+
+        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
+          <MediaAssetPicker
+            locale={locale}
+            assets={assets}
+            selectedId={row?.photography_media ?? null}
+            fieldName="photography_media"
+            searchId="photography_media-search"
+            legendKey="dashboard.labUnits.photography"
+            helpKey="dashboard.labUnits.photographyHelp"
           />
         </CatalogSection>
       </div>

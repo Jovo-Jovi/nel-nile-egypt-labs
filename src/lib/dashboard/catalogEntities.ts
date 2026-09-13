@@ -50,6 +50,7 @@ export type LabUnitRow = {
   name_en: string | null;
   description_ar: string | null;
   description_en: string | null;
+  photography_media: string | null;
   publication_state: PublicationState;
   display_order: number;
 };
@@ -155,6 +156,7 @@ export const LAB_UNIT_FORM_COLUMNS = {
   name_en: "name_en",
   description_ar: "description_ar",
   description_en: "description_en",
+  photography_media: "photography_media",
   display_order: "display_order",
 } as const;
 
@@ -216,6 +218,7 @@ const LAB_UNIT_SELECT = [
   "name_en",
   "description_ar",
   "description_en",
+  "photography_media",
   "publication_state",
   "display_order",
 ].join(",");
@@ -328,6 +331,7 @@ export function parseLabUnitRow(value: unknown): LabUnitRow | null {
     name_en: asOptionalText(row.name_en),
     description_ar: asOptionalText(row.description_ar),
     description_en: asOptionalText(row.description_en),
+    photography_media: asId(row.photography_media),
     publication_state,
     display_order: asDisplayOrder(row.display_order),
   };
@@ -401,6 +405,7 @@ export type LabUnitWriteColumns = {
   name_en: string | null;
   description_ar: string | null;
   description_en: string | null;
+  photography_media: string | null;
   display_order: number;
 };
 
@@ -484,12 +489,16 @@ export function parseLabUnitWrite(form: FormData, requireBilingual: boolean): Pa
     return { ok: false, reason: "slug" };
   }
 
+  const photography_media = parseOptionalRowId(emptyToNull(form.get("photography_media")));
+  if (photography_media === "invalid") return { ok: false, reason: "reference" };
+
   const columns: LabUnitWriteColumns = {
     slug: slugRaw,
     name_ar: emptyToNull(form.get("name_ar")),
     name_en: emptyToNull(form.get("name_en")),
     description_ar: emptyToNull(form.get("description_ar")),
     description_en: emptyToNull(form.get("description_en")),
+    photography_media,
     display_order,
   };
 

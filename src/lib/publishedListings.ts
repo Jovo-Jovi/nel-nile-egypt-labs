@@ -488,6 +488,82 @@ export async function publishedSiteSettings(
   return rows[0] ?? null;
 }
 
+// Additive columns from 20260913140000_photography_slot_media.sql. This
+// task authors and rehearses that file and does not apply it (OD-17 §3.3).
+// Shared SiteSettings and LabUnit selects stay on columns that already
+// exist so SSG pages keep building. The home route is force-dynamic and
+// reads these columns here.
+const SITE_SETTINGS_STORY_SELECT =
+  "select=id,story_main_media,story_float_media,story_float_alt_media,publication_state";
+
+const LAB_UNIT_PHOTOGRAPHY_SELECT =
+  "select=id,photography_media,publication_state,display_order&order=display_order.asc";
+
+// UNRATIFIED (PR-19). Until db push, PostgREST 400s on the overlay
+// selects. A throw would 500 the home route; a null column and a missing
+// column are the same Visitor-visible state (pending). Catch 400 only.
+// Any other status still throws. After apply this branch is unused.
+function isUnappliedColumnQuery(error: unknown): boolean {
+  return error instanceof Error && /query failed: 400$/.test(error.message);
+}
+
+export type PublishedStoryMediaIds = {
+  storyMainMediaId: string | null;
+  storyFloatMediaId: string | null;
+  storyFloatAltMediaId: string | null;
+};
+
+const EMPTY_STORY_MEDIA: PublishedStoryMediaIds = {
+  storyMainMediaId: null,
+  storyFloatMediaId: null,
+  storyFloatAltMediaId: null,
+};
+
+function parseStoryMediaIds(value: unknown): PublishedStoryMediaIds | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  return {
+    storyMainMediaId: asNonEmptyString(row.story_main_media),
+    storyFloatMediaId: asNonEmptyString(row.story_float_media),
+    storyFloatAltMediaId: asNonEmptyString(row.story_float_alt_media),
+  };
+}
+
+export async function publishedStoryMediaIds(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedStoryMediaIds> {
+  try {
+    const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_STORY_SELECT, cache);
+    const rows = mapPublished(payload, parseStoryMediaIds);
+    return rows[0] ?? EMPTY_STORY_MEDIA;
+  } catch (error) {
+    if (isUnappliedColumnQuery(error)) return EMPTY_STORY_MEDIA;
+    throw error;
+  }
+}
+
+export async function publishedLabUnitPhotographyMedia(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<ReadonlyMap<string, string | null>> {
+  try {
+    const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_PHOTOGRAPHY_SELECT, cache);
+    const map = new Map<string, string | null>();
+    if (!Array.isArray(payload)) return map;
+    for (const item of payload) {
+      const row = asRecord(item);
+      if (row === null || row.publication_state !== "published") continue;
+      const id = asNonEmptyString(row.id);
+      if (id === null) continue;
+      map.set(id, asNonEmptyString(row.photography_media));
+    }
+    return map;
+  } catch (error) {
+    if (isUnappliedColumnQuery(error)) return new Map();
+    throw error;
+  }
+}
+
 const MEDIA_ROW_ID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

@@ -5,6 +5,7 @@ import { LabUnitForm } from "@/components/dashboard/LabUnitForm";
 import { noticeFromQuery } from "@/lib/dashboard/catalogEntities";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { isRowId, readLabUnitRow } from "@/lib/dashboard/catalogEntities";
+import { listMediaAssetOptions } from "@/lib/dashboard/mediaAsset";
 import { pageMetadata } from "@/lib/pageMetadata";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { translate } from "@/lib/catalog";
@@ -38,11 +39,12 @@ export default async function LabUnitEditPage({ params, searchParams }: Props) {
 
   const row = await readLabUnitRow(supabase, resolved.id);
   if (row === null) notFound();
+  const assets = await listMediaAssetOptions(supabase);
 
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.labUnits.heading" />
-      <LabUnitForm locale={locale} row={row} notice={notice} />
+      <LabUnitForm locale={locale} row={row} notice={notice} assets={assets} />
     </>
   );
 }

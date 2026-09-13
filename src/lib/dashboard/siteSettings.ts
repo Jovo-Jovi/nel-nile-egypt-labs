@@ -56,6 +56,9 @@ export type SiteSettingsRow = {
   hero_media: string | null;
   favicon_media: string | null;
   app_icon_media: string | null;
+  story_main_media: string | null;
+  story_float_media: string | null;
+  story_float_alt_media: string | null;
   publication_state: PublicationState;
 };
 
@@ -103,11 +106,21 @@ export const SITE_SETTINGS_FORM_COLUMNS = {
   hero_media: "hero_media",
   favicon_media: "favicon_media",
   app_icon_media: "app_icon_media",
+  story_main_media: "story_main_media",
+  story_float_media: "story_float_media",
+  story_float_alt_media: "story_float_alt_media",
 } as const;
 
 export type SiteSettingsFormField = keyof typeof SITE_SETTINGS_FORM_COLUMNS;
 
-export const MEDIA_ROLE_FIELDS = ["hero_media", "favicon_media", "app_icon_media"] as const;
+export const MEDIA_ROLE_FIELDS = [
+  "hero_media",
+  "favicon_media",
+  "app_icon_media",
+  "story_main_media",
+  "story_float_media",
+  "story_float_alt_media",
+] as const;
 
 const ROW_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -199,6 +212,9 @@ const OPERATOR_SELECT = [
   "hero_media",
   "favicon_media",
   "app_icon_media",
+  "story_main_media",
+  "story_float_media",
+  "story_float_alt_media",
   "publication_state",
 ].join(",");
 
@@ -271,6 +287,9 @@ export function parseSiteSettingsRow(value: unknown): SiteSettingsRow | null {
     hero_media: asId(row.hero_media),
     favicon_media: asId(row.favicon_media),
     app_icon_media: asId(row.app_icon_media),
+    story_main_media: asId(row.story_main_media),
+    story_float_media: asId(row.story_float_media),
+    story_float_alt_media: asId(row.story_float_alt_media),
     publication_state,
   };
 }

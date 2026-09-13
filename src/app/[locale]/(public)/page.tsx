@@ -13,6 +13,8 @@ import {
   publishedBranchesHaveMapCoordinates,
   publishedMediaPoster,
   publishedSiteSettings,
+  publishedStoryMediaIds,
+  publishedLabUnitPhotographyMedia,
   videoWatchHref,
   type PublishedSiteSettings,
 } from "@/lib/publishedListings";
@@ -69,15 +71,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
-  const [settings, labUnits, branches, programmes, videos, partnerFacing] = await Promise.all([
-    publishedSiteSettings("no-store"),
-    listPublishedLabUnits("no-store"),
-    listPublishedBranches("no-store"),
-    listPublishedProgrammes("no-store"),
-    listPublishedVideos("no-store"),
-    loadPartnerFacingSession(),
-  ]);
-  const heroPoster = await publishedMediaPoster(settings?.heroMediaId ?? null, "no-store");
+  const [settings, labUnits, branches, programmes, videos, partnerFacing, storyMedia, labUnitMedia] =
+    await Promise.all([
+      publishedSiteSettings("no-store"),
+      listPublishedLabUnits("no-store"),
+      listPublishedBranches("no-store"),
+      listPublishedProgrammes("no-store"),
+      listPublishedVideos("no-store"),
+      loadPartnerFacingSession(),
+      publishedStoryMediaIds("no-store"),
+      publishedLabUnitPhotographyMedia("no-store"),
+    ]);
+  const [heroPoster, storyMainPoster, storyFloatPoster, storyFloatAltPoster, ...labUnitPosters] =
+    await Promise.all([
+      publishedMediaPoster(settings?.heroMediaId ?? null, "no-store"),
+      publishedMediaPoster(storyMedia.storyMainMediaId, "no-store"),
+      publishedMediaPoster(storyMedia.storyFloatMediaId, "no-store"),
+      publishedMediaPoster(storyMedia.storyFloatAltMediaId, "no-store"),
+      ...labUnits.map((row) => publishedMediaPoster(labUnitMedia.get(row.id) ?? null, "no-store")),
+    ]);
   const chrome = chromeFromPublishedSettings(settings, locale, branches);
   const offersKind = partnerLabStatusKind(partnerFacing.session);
   const mapApproved = publishedBranchesHaveMapCoordinates(branches);
@@ -86,15 +98,23 @@ export default async function Page({ params }: Props) {
       locale={locale}
       whatsappHref={chrome.whatsappHref}
       aboutBody={chrome.aboutBody}
-      labUnits={labUnits.map((row) => ({
+      labUnits={labUnits.map((row, index) => ({
         id: row.id,
         name: localizedText(locale, row.nameAr, row.nameEn),
+        posterSrc: posterSrc(labUnitPosters[index] ?? null),
+        posterAlt: posterAlt(locale, labUnitPosters[index] ?? null),
       }))}
       branchCount={branches.length}
       programmeCount={programmes.length}
       homeM6Copy={homeM6CopyFromSettings(settings)}
       heroPosterSrc={posterSrc(heroPoster)}
       heroPosterAlt={posterAlt(locale, heroPoster)}
+      storyMainPosterSrc={posterSrc(storyMainPoster)}
+      storyMainPosterAlt={posterAlt(locale, storyMainPoster)}
+      storyFloatPosterSrc={posterSrc(storyFloatPoster)}
+      storyFloatPosterAlt={posterAlt(locale, storyFloatPoster)}
+      storyFloatAltPosterSrc={posterSrc(storyFloatAltPoster)}
+      storyFloatAltPosterAlt={posterAlt(locale, storyFloatAltPoster)}
       offersAudience={<PartnerLabStatus locale={locale} kind={offersKind} embedded showSignOut={false} />}
       programmes={programmes.map((row) => ({
         id: row.id,

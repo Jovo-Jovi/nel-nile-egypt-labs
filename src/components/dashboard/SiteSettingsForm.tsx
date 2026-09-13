@@ -83,6 +83,9 @@ import styles from "./SiteSettingsForm.module.css";
 // hero_media → hero_media
 // favicon_media → favicon_media
 // app_icon_media → app_icon_media
+// story_main_media → story_main_media
+// story_float_media → story_float_media
+// story_float_alt_media → story_float_alt_media
 // Publish / unpublish write publication_state. No map field (no column).
 // No ResultsPortalLink field (D-07).
 //
@@ -1041,6 +1044,35 @@ export function SiteSettingsForm({
             searchId="app_icon_media-search"
             legendKey="dashboard.siteSettings.appIconMedia"
             helpKey="dashboard.siteSettings.appIconMediaHelp"
+          />
+        </SettingsSection>
+        <SettingsSection locale={locale} titleKey="dashboard.siteSettings.sectionStoryPhotography">
+          <MediaAssetPicker
+            locale={locale}
+            assets={assets}
+            selectedId={row.story_main_media}
+            fieldName="story_main_media"
+            searchId="story_main_media-search"
+            legendKey="dashboard.siteSettings.storyMainMedia"
+            helpKey="dashboard.siteSettings.storyMainMediaHelp"
+          />
+          <MediaAssetPicker
+            locale={locale}
+            assets={assets}
+            selectedId={row.story_float_media}
+            fieldName="story_float_media"
+            searchId="story_float_media-search"
+            legendKey="dashboard.siteSettings.storyFloatMedia"
+            helpKey="dashboard.siteSettings.storyFloatMediaHelp"
+          />
+          <MediaAssetPicker
+            locale={locale}
+            assets={assets}
+            selectedId={row.story_float_alt_media}
+            fieldName="story_float_alt_media"
+            searchId="story_float_alt_media-search"
+            legendKey="dashboard.siteSettings.storyFloatAltMedia"
+            helpKey="dashboard.siteSettings.storyFloatAltMediaHelp"
           />
         </SettingsSection>
       </div>
