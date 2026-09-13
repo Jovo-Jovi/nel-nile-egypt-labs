@@ -54,9 +54,16 @@ interface ProgrammeDetailProps {
   // null — PR-08 flag off: the LabTest list is withheld.
   // array — flag on: one SlotResolution per published slot, never merged.
   resolutions: readonly SlotResolution[] | null;
+  // hasClinicalCatalogueSignOff() — the render state only.
+  clinicalCatalogueSignedOff: boolean;
 }
 
-export function ProgrammeDetail({ locale, detail, resolutions }: ProgrammeDetailProps) {
+export function ProgrammeDetail({
+  locale,
+  detail,
+  resolutions,
+  clinicalCatalogueSignedOff,
+}: ProgrammeDetailProps) {
   const name = localizedText(locale, detail.nameAr, detail.nameEn);
   const description = localizedText(locale, detail.descriptionAr, detail.descriptionEn);
   const axisLinksToLists =
@@ -99,7 +106,11 @@ export function ProgrammeDetail({ locale, detail, resolutions }: ProgrammeDetail
         </nav>
       ) : null}
 
-      <LabTestRegion locale={locale} resolutions={resolutions} />
+      <LabTestRegion
+        locale={locale}
+        resolutions={resolutions}
+        clinicalCatalogueSignedOff={clinicalCatalogueSignedOff}
+      />
     </div>
   );
 }
@@ -107,15 +118,21 @@ export function ProgrammeDetail({ locale, detail, resolutions }: ProgrammeDetail
 function LabTestRegion({
   locale,
   resolutions,
+  clinicalCatalogueSignedOff,
 }: {
   locale: Locale;
   resolutions: readonly SlotResolution[] | null;
+  clinicalCatalogueSignedOff: boolean;
 }) {
   if (resolutions === null) return null;
 
   if (slotRowsAreEmpty(resolutions)) {
     return (
-      <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.clinical">
+      <ApprovalGate
+        locale={locale}
+        state={clinicalCatalogueSignedOff ? "approved" : "pending"}
+        pendingLabelKey="approval.pending.clinical"
+      >
         <div className={styles.empty}>
           <h2 className={styles.emptyTitle}>
             <IsolatedCopy locale={locale} text={translate(locale, "programme.detail.emptyTitle")} />

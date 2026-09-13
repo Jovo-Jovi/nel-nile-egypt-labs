@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Twenty-three of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Twenty-six of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -206,7 +206,7 @@ needs the lab's written approval before launch. Both are carried forward.
 
 ### OD-09 — Announcements and Clinical notices
 
-**Status:** DRAFT — awaiting the human's signature and a price
+**Status:** SIGNED — 13 September 2026 · priced at 1000 EGP
 **Drafted:** 29 August 2026
 **Amends:** `D-15`, which states there is "no ninth dashboard module", and `D-16`, which enumerates eight. Both are superseded to the extent stated here and in no other respect.
 **Requested by:** the client, 29 August 2026, alongside four other dashboard capabilities. The other four — video links and descriptions, the hero image, other page images, and Operator login — are already in scope and are **not** part of this OD.
@@ -869,6 +869,106 @@ item 6. G7 does not pass without that section.
 **Does not decide:** the lab-to-lab portal href, which follows the same
 pattern and is documented alongside it. Whether a future phase makes either
 owner-editable.
+
+---
+
+### OD-24 — OD-09 takes effect on the human's approval
+
+**Status:** SIGNED
+**Signed:** 13 September 2026
+**Amends:** OD-09's Commercial position clause, which states that the OD does
+not take effect until the quotation carrying A3 and A4 is signed. OD-09's
+text is not edited and that clause stands as the August record.
+**Decides:** OD-09 is approved and priced at 1000 EGP, and the human's
+approval on 13 September 2026 is the authorization for it to take effect. The
+quotation condition is struck. No separate signed quotation carrying A3 and A4
+is required before the Announcements and Clinical notices modules are built.
+**Why this is recorded separately:** the August clause and this approval would
+otherwise contradict each other in the same file, and a reader reaching OD-09
+first would conclude the work is blocked. This amendment is the disambiguation.
+**Does not decide:** the clinical gate on ClinicalNotice, which is
+non-waivable and applies to that module exactly as OD-09 states. Nothing in
+this amendment lets medical copy reach production without the lab's written
+sign-off.
+
+---
+
+### OD-25 — Design review precedes cutover
+
+**Status:** SIGNED
+**Signed:** 13 September 2026
+**Amends:** OD-19 §2, which delivered P09 Design after G7. OD-19 §1 and its
+remaining sections stand unchanged and its text is not edited.
+
+**What OD-19 §2 decided and why.** P09 was placed after G7 because the 2018
+site is live today with eight-year-old placeholder copy and known clinical
+errors, so every day before cutover is a day that site is the one patients
+see. That reason is not withdrawn and is not diminished here.
+
+**What is decided now.** The implementation is handed to the UI designer
+before DNS cutover, so design findings are corrections rather than
+post-cutover rework. The revised sequence is:
+
+  P08 → G8 → P06 → G6 → P04 → G4 → P09 → G9 → P07 → G7
+
+P09 and G9 move ahead of P07 and G7. No phase is added, removed or renamed.
+
+**The trade being accepted.** This lengthens the period in which the 2018 site
+remains the public site. The human accepted that on 13 September 2026, having
+been shown the original rationale, in exchange for a handover that does not
+require rework after cutover. The cost is real and is recorded so it is not
+rediscovered later as a surprise.
+
+**The design boundary.** P09 is UI, UX and design review only. It does not
+change approved product scope, introduce a feature, alter backend or security
+architecture, modify signed clinical data, or reopen a completed approval
+decision. A design finding that is an implementation defect or a necessary UI
+correction becomes a numbered, bounded follow-up task under the existing
+evidence process. A finding outside the boundary becomes a carry-forward or a
+new OD; it never becomes a P09 task.
+
+**The bound.** P09 does not become an indefinite blocker. The review produces
+one written findings set. Each finding is dispositioned as a bounded fix task,
+a carry-forward, or out of scope, before G9 is attempted. G9 gates on every
+finding having a disposition, not on every finding being fixed. Cutover
+follows G9 and the agreed bounded fixes, and nothing else.
+
+**Does not decide:** the design direction itself, or anything in P07's scope.
+
+---
+
+### OD-26 — The Main Page is state-driven, not a set of shells
+
+**Status:** SIGNED
+**Signed:** 13 September 2026
+**Amends:** OD-22, which scoped wiring to three homepage regions and the
+listing card link. That scope was correct for what was then known. A reading
+of SiteHome.tsx at P06-T10 found seventeen regions carrying a literal
+state="pending" against three computed from data, so the wiring phase
+OD-08 §5 provides for was only ever partly done.
+**Decides:** every §12 region on the Main Page and the public pages derives
+its approval state from the data it actually requires. Required published data
+present → approved; required data genuinely absent → pending; approval
+required and not granted → pending; approval granted → approved. A literal
+state="pending" on a region whose data already exists is a defect, not a
+design choice.
+**Scope of this OD:** the businessData regions on the Main Page and on about,
+contact, departments, equipment, lab-to-lab, locations and online-results; the
+two clinical regions; the signedCopy and privacy-policy regions where a
+publication source already exists; the dead mark catalogue key. The
+photography binding and the OD-09 News module are decided here in principle
+and delivered in their own tasks, because each requires a schema change and
+therefore boundary-gate evidence of its own.
+**Constraint:** no redesign. No visual language change, no layout change, no
+component replacement, no typography change, no new design system, no refactor
+of unrelated code. The approved UI is preserved exactly; only the state that
+governs each region changes.
+**Does not decide:** anything about Programmes, Videos, Offers, PartnerLab
+authorization or the clinical catalogue's content. Whether
+NEL_LABTEST_CONTENT is enabled.
+**Consequence:** a region left hardcoded after this OD is named in the task
+report with the reason and the task that will carry it. Silence is not an
+acceptable disposition for a region that did not get wired.
 
 ---
 

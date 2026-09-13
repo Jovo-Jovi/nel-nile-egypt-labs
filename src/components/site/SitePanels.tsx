@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
-import { ApprovalGate } from "@/components/ui/ApprovalGate";
+import { ApprovalGate, type ApprovalState } from "@/components/ui/ApprovalGate";
+import { IsolatedCopy } from "@/components/ui/Isolate";
 import { ProgrammeCard } from "@/components/ui/ProgrammeCard";
 import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import styles from "./SitePanels.module.css";
@@ -14,9 +15,15 @@ export type HomeProgrammeCard = {
   href: string;
 };
 
+export type HomePanelBranch = {
+  id: string;
+  name: string;
+};
+
 interface SitePanelsProps {
   locale: Locale;
   programmes: HomeProgrammeCard[];
+  branches: HomePanelBranch[];
 }
 
 const PANELS = [
@@ -49,11 +56,21 @@ function panelGateKey(id: (typeof PANELS)[number]["id"]): CatalogKey {
   return "approval.pending.newsModule";
 }
 
-export function SitePanels({ locale, programmes }: SitePanelsProps) {
+function panelApprovalState(
+  id: (typeof PANELS)[number]["id"],
+  programmes: HomeProgrammeCard[],
+  branches: HomePanelBranch[],
+): ApprovalState {
+  if (id === "programmes") return programmes.length > 0 ? "approved" : "pending";
+  if (id === "branches") return branches.length > 0 ? "approved" : "pending";
+  return "pending";
+}
+
+export function SitePanels({ locale, programmes, branches }: SitePanelsProps) {
   const [active, setActive] = useState<(typeof PANELS)[number]["id"]>("programmes");
   const panel = PANELS.find((item) => item.id === active) ?? PANELS[0];
   const slots = Array.from({ length: panel.itemCount }, (_, index) => index);
-  const programmesApproved = panel.id === "programmes" && programmes.length > 0;
+  const gateState = panelApprovalState(panel.id, programmes, branches);
 
   return (
     <div className={styles.wrap}>
@@ -74,12 +91,8 @@ export function SitePanels({ locale, programmes }: SitePanelsProps) {
       <div className={styles.panel} role="tabpanel">
         <h3 className={styles.title}>{translate(locale, panel.title)}</h3>
         <p className={styles.body}>{translate(locale, panel.body)}</p>
-        <ApprovalGate
-          locale={locale}
-          state={programmesApproved ? "approved" : "pending"}
-          pendingLabelKey={panelGateKey(panel.id)}
-        >
-          {programmesApproved ? (
+        <ApprovalGate locale={locale} state={gateState} pendingLabelKey={panelGateKey(panel.id)}>
+          {panel.id === "programmes" && programmes.length > 0 ? (
             <ul className={styles.cardList}>
               {programmes.map((row) => (
                 <li key={row.id}>
@@ -89,6 +102,16 @@ export function SitePanels({ locale, programmes }: SitePanelsProps) {
                     description={row.description}
                     href={row.href}
                   />
+                </li>
+              ))}
+            </ul>
+          ) : panel.id === "branches" && branches.length > 0 ? (
+            <ul className={styles.list}>
+              {branches.map((row) => (
+                <li key={row.id}>
+                  <strong>
+                    <IsolatedCopy locale={locale} text={row.name} />
+                  </strong>
                 </li>
               ))}
             </ul>

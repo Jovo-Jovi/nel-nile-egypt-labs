@@ -30,28 +30,32 @@ export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
   const rows = await listPublishedBranches();
   const pins = branchMapPins(rows, locale);
+  const mapApproved = pins.length > 0;
 
-  const map =
-    pins.length === 0 ? (
-      <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
-        <div className={listing.mapFrame} />
-      </ApprovalGate>
-    ) : (
+  const map = (
+    <ApprovalGate
+      locale={locale}
+      state={mapApproved ? "approved" : "pending"}
+      pendingLabelKey="approval.pending.businessData"
+    >
       <div className={listing.mapFrame}>
-        <GreaterCairoMap
-          ariaLabel={translate(locale, "locations.map.ariaLabel")}
-          pinLabel={translate(locale, "locations.map.pinLabel")}
-          headOfficePinLabel={translate(locale, "locations.map.headOfficePinLabel")}
-          districtLabels={DISTRICT_LABEL_KEYS.map(({ id, x, y, key }) => ({
-            id,
-            x,
-            y,
-            label: translate(locale, key),
-          }))}
-          pins={pins}
-        />
+        {mapApproved ? (
+          <GreaterCairoMap
+            ariaLabel={translate(locale, "locations.map.ariaLabel")}
+            pinLabel={translate(locale, "locations.map.pinLabel")}
+            headOfficePinLabel={translate(locale, "locations.map.headOfficePinLabel")}
+            districtLabels={DISTRICT_LABEL_KEYS.map(({ id, x, y, key }) => ({
+              id,
+              x,
+              y,
+              label: translate(locale, key),
+            }))}
+            pins={pins}
+          />
+        ) : null}
       </div>
-    );
+    </ApprovalGate>
+  );
 
   return (
     <PublishedListingPage

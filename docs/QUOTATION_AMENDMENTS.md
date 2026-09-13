@@ -79,6 +79,8 @@ A6 is the only entry the client has not confirmed wanting. It is included so it 
 priced or dropped deliberately rather than absorbed. A7 is wanted and signed; it
 is unpriced (OD-15 §10).
 
+The currency for this engagement's amendment prices is EGP, established by the human on 13 September 2026.
+
 ---
 
 ## §4 What is already in scope and needs no price

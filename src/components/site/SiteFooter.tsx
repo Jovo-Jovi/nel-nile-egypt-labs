@@ -117,12 +117,19 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
                 </span>
               </ApprovalGate>
             )}
-            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+            {chrome.headOfficeAddress ? (
               <span className={styles.meta}>
                 <span>{translate(locale, "footer.addressLabel")}</span>
-                <SkeletonBar size="sm" widthPercent={78} />
+                <IsolatedCopy locale={locale} text={chrome.headOfficeAddress} />
               </span>
-            </ApprovalGate>
+            ) : (
+              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+                <span className={styles.meta}>
+                  <span>{translate(locale, "footer.addressLabel")}</span>
+                  <SkeletonBar size="sm" widthPercent={78} />
+                </span>
+              </ApprovalGate>
+            )}
             {chrome.social.length > 0 ? (
               chrome.social.map((item) => (
                 <a

@@ -102,8 +102,8 @@ decommission and reverting the repository to private. Nothing in it hands anythi
 owner. See §5.
 
 **The order below is not the order the phases are numbered in.** `OD-12` reordered delivery to
-~~P03 → P05 → P06 → P04 → P07~~ (P03-T03, `9dac44f`). OD-19 orders remaining work
-P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 → P09 → G9. Phases keep their identifiers and their gates — G4 is still P04's
+~~P03 → P05 → P06 → P04 → P07~~ (P03-T03, `9dac44f`). OD-19 as amended by OD-25 orders remaining work
+P08 → G8 → P06 → G6 → P04 → G4 → P09 → G9 → P07 → G7. Phases keep their identifiers and their gates — G4 is still P04's
 gate, it simply falls later — because renumbering would break every historical reference in
 `DECISIONS.md`, `CARRY_FORWARDS.md` and the done-steps table. P08 is delivered before G7 (OD-19 §1)
 and is not in OD-12's sequence.
@@ -112,7 +112,7 @@ and is not in OD-12's sequence.
 
 ## §3 The phases, in delivery order
 
-Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T03, `9dac44f`). Under OD-19: **P08 → G8 → P06 → G6 → P04 → G4 → P07 → G7 → P09 → G9**. P08 is delivered before G7 (OD-19 §1).
+Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T03, `9dac44f`). Under OD-19 as amended by OD-25: **P08 → G8 → P06 → G6 → P04 → G4 → P09 → G9 → P07 → G7**. P08 is delivered before G7 (OD-19 §1).
 
 | Order | Phase | What it produces | Gate | Non-waivable | State |
 |---|---|---|---|---|---|
@@ -124,8 +124,8 @@ Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T
 | ~~—~~ 3 | P08 PartnerLab accounts | `PartnerLab` signup and private Offers (OD-15) | G8 | Boundary | After G5 · before G7 (OD-19 §1) · **Opening** |
 | ~~3~~ 4 | P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | Longest pole |
 | ~~4~~ 5 | P04 Catalogue search | Bilingual search over Programmes and LabTests | G4 | Clinical · Data integrity · Bilingual | After P06, by necessity |
-| ~~5~~ 6 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | Runbook unwritten |
-| 7 | P09 Design | Visual iteration against production after G7 (OD-19 §2) | G9 | — | After G7 · does not delay launch |
+| 6 | P09 Design | Visual iteration before cutover (OD-25) | G9 | — | After G4 · before P07 |
+| ~~5~~ 7 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | After G9 (OD-25) · runbook unwritten |
 
 ### Why this order
 
@@ -158,7 +158,7 @@ OD-12's sequence is unamended; this phase was signed later.~~
 **P08 follows G5 and precedes G7 (OD-19 §1).** OD-15 §9 made the role split
 the precondition; private Offers and `PartnerLab` accounts could not ship before M7.
 That security ordering is discharged. OD-12's sequence is unamended; this phase was signed later.
-P09 Design follows G7 and does not delay it (OD-19 §2).
+P09 Design follows G4 and precedes P07 (OD-25).
 
 ---
 
@@ -257,6 +257,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [x] **P06-T09-F** — Revert the empty-catch and build honestly
 - [x] **P06-T10** — Make a Google Maps paste actually work
 - [ ] **P06-T11** — Record three decisions, then make the Main Page state-driven
+- [ ] **P06-T11-F** — Record three decisions, then make the Main Page state-driven
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06
@@ -265,7 +266,7 @@ P09 Design follows G7 and does not delay it (OD-19 §2).
 - [ ] search on the البرامج page, both locales
 - [ ] **G4** — clinical, data integrity and bilingual gates
 
-### P07 — Hardening and cutover · UNSTARTED
+### P07 — Hardening and cutover · UNSTARTED · AFTER G9
 
 - [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
 - [ ] security headers
@@ -323,9 +324,9 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 
-### P09 — Design · UNSTARTED · AFTER G7
+### P09 — Design · UNSTARTED · AFTER G4
 
-Follows G7. Does not delay launch (OD-19 §2). Short-lived branches from `main`,
+Follows G4. Precedes P07 (OD-25). Short-lived branches from `main`,
 reviewed and merged one at a time (OD-19 §3). The design envelope is its own OD,
 authored at P09; gate criteria are not decided here.
 
@@ -444,7 +445,7 @@ Sent to the client today, that document understates the project badly.
 
 G8 is FAIL. G8-R of 10 September 2026 did not pass it. G8-R2 has no done-step row and has not run. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks; what remains is the revocation control. P08-T22 halted (CF-169). CF-170 is OPEN. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it. `currentNelPrincipal` exists only as a rolled-back rehearsal at P08-T26; `git grep currentNelPrincipal supabase/` is empty.
 
-OD-09 is unsigned (CF-156). Announcements and Clinical notices remain draft and unpriced.
+OD-09 is SIGNED and priced at 1000 EGP (OD-24). Announcement and ClinicalNotice tables are not yet built.
 
 P06 is in flight. P06-T07 restored `SECURITY_MODEL.md` §3 on production. G6 has not started. CF-180 and CF-181 are OPEN. The id-less content-entry box is still unchecked.
 

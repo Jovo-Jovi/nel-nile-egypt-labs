@@ -1247,5 +1247,21 @@ Do not implement the CF-183 retry. Do not start G8-R2, G6 or P04. Do
 not add a CSP header. Do not fill Branch coordinates. Do not publish
 or unpublish any row.
 
+## 2026-09-13 — P06-T11-F: sign OD-09, resequence P09, compute Main Page state
+
+Parent is `origin/p06-t11` at `ba5274a`. Currency unit EGP supplied by
+the human. OD-09 Status is SIGNED at 1000 EGP; its Commercial position
+clause is unedited and superseded by OD-24. OD-25 moves P09 and G9
+ahead of P07 and G7. OD-26 requires every §12 region to compute from
+the data it renders. Photography stays pending for T12. News stays
+pending for T13. The two clinical gates read `hasClinicalCatalogueSignOff`.
+The dead `approval.pending.mark` pair is removed; catalogue 591/591.
+Published `"Branch"` rows with both coordinates: 4 of 4 at REST. The
+map still pending locally, pins=0, so CF-69 stays OPEN. No coordinate
+was written.
+
+Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
+fill Branch coordinates. Do not implement photography binding or News.
+
 
 
