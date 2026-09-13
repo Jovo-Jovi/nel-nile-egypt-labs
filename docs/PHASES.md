@@ -257,7 +257,8 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [x] **P06-T09-F** — Revert the empty-catch and build honestly
 - [x] **P06-T10** — Make a Google Maps paste actually work
 - [ ] **P06-T11** — Record three decisions, then make the Main Page state-driven
-- [ ] **P06-T11-F** — Record three decisions, then make the Main Page state-driven
+- [x] **P06-T11-F** — Record three decisions, then make the Main Page state-driven
+- [ ] **P06-T12** — Let the Main Page see content changes
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06

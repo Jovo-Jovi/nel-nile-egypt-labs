@@ -1263,5 +1263,24 @@ was written.
 Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
 fill Branch coordinates. Do not implement photography binding or News.
 
+## 2026-09-13 — P06-T12: let the Main Page see content changes
+
+Parent is `origin/main` at `9cc4c70` (p06-t11-f merge, PR #142). The
+helper default stays `force-cache`. Listing functions the Main Page
+uses gained a cache-mode parameter; only those home call sites pass
+`no-store`. SSG callers keep the default. html count 22.
+
+PR-37 amends PR-35: the byte-exact digest is `git show` via
+`subprocess.run(..., capture_output=True).stdout` hashed with
+`hashlib.sha256`. A mismatch against a known frozen digest halts.
+
+Local `npx next start` GET `/ar` and `/en` twice each returned four
+map pins. The hero headline matched the linked `"SiteSettings"` row
+in both locales. CF-69 CLOSED. CF-185 and CF-186 allocated and CLOSED
+in the same task. Open CF 100 + 2 − 3 = 99.
+
+Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
+implement photography binding or News.
+
 
 
