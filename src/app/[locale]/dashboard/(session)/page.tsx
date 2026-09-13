@@ -32,7 +32,8 @@ const MODULE_CARDS: {
     | "LabTest"
     | "LabUnit"
     | "SiteSettings"
-    | "MediaAsset";
+    | "MediaAsset"
+    | "Announcement";
 }[] = [
   { suffix: "/dashboard/offers", labelKey: "dashboard.nav.offers", table: "Offer" },
   { suffix: "/dashboard/videos", labelKey: "dashboard.nav.videos", table: "Video" },
@@ -43,6 +44,7 @@ const MODULE_CARDS: {
   { suffix: "/dashboard/lab-units", labelKey: "dashboard.nav.labUnits", table: "LabUnit" },
   { suffix: "/dashboard/site-settings", labelKey: "dashboard.nav.siteSettings", table: "SiteSettings" },
   { suffix: "/dashboard/media-assets", labelKey: "dashboard.nav.mediaAssets", table: "MediaAsset" },
+  { suffix: "/dashboard/announcements", labelKey: "dashboard.nav.announcements", table: "Announcement" },
 ];
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

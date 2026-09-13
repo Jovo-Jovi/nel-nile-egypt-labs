@@ -1304,6 +1304,20 @@ supplied image. Open CF 99 + 1 − 0 = 100.
 Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
 bind the news feature photo. The human runs `npx supabase db push`.
 
+## 2026-09-13 — P06-T14: Announcements module and homepage gates
+
+Parent is `origin/main` at `0544ef5` (p06-t13 merge, PR #144).
+The builder did not run `npx supabase db push`. The human applied the
+forward after the BEGIN/ROLLBACK rehearsal. `isUnappliedColumnQuery` is
+removed and throws are restored. `public."Announcement"` is the ninth
+dashboard module (OD-09 A3 only). Homepage `#insights` magazine and the
+§9 card-band tab compute from published rows; zero published rows render
+pending. Catalogue 610/610. html 22. CF-187 CLOSED. Open CF 100 + 0 − 1
+= 99.
+
+Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
+build A4. Do not invent or publish an Announcement row.
+
 
 
 

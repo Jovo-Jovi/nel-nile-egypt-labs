@@ -19,7 +19,8 @@ type PublishedTable =
   | "Equipment"
   | "Branch"
   | "SiteSettings"
-  | "MediaAsset";
+  | "MediaAsset"
+  | "Announcement";
 
 export type PublishedFetchCache = "force-cache" | "no-store";
 

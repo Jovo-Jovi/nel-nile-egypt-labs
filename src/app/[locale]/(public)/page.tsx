@@ -4,6 +4,7 @@ import { localeHref } from "@/lib/locale";
 import { pageMetadata } from "@/lib/pageMetadata";
 import {
   branchMapPins,
+  listPublishedAnnouncements,
   listPublishedBranches,
   listPublishedLabUnits,
   listPublishedProgrammes,
@@ -71,13 +72,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const locale = await requireLocale(params);
-  const [settings, labUnits, branches, programmes, videos, partnerFacing, storyMedia, labUnitMedia] =
+  const [settings, labUnits, branches, programmes, videos, announcements, partnerFacing, storyMedia, labUnitMedia] =
     await Promise.all([
       publishedSiteSettings("no-store"),
       listPublishedLabUnits("no-store"),
       listPublishedBranches("no-store"),
       listPublishedProgrammes("no-store"),
       listPublishedVideos("no-store"),
+      listPublishedAnnouncements("no-store"),
       loadPartnerFacingSession(),
       publishedStoryMediaIds("no-store"),
       publishedLabUnitPhotographyMedia("no-store"),
@@ -132,6 +134,14 @@ export default async function Page({ params }: Props) {
         posterSrc: posterSrc(row.poster),
         posterAlt: posterAlt(locale, row.poster),
         watchHref: videoWatchHref(row.youtubeId),
+      }))}
+      announcements={announcements.map((row) => ({
+        id: row.id,
+        title: localizedText(locale, row.titleAr, row.titleEn),
+        body: localizedText(locale, row.bodyAr, row.bodyEn),
+        publishedAt: row.publishedAt,
+        posterSrc: posterSrc(row.poster),
+        posterAlt: posterAlt(locale, row.poster),
       }))}
       mapApproved={mapApproved}
       mapPins={mapApproved ? branchMapPins(branches, locale) : []}

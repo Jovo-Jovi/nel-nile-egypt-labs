@@ -116,6 +116,7 @@ function slotFromActionUrl(url: string): FlightSlot {
 function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "bilingual") return "dashboard.siteSettings.errorBilingual";
   if (notice === "signOff") return "dashboard.catalog.errorSignOff";
+  if (notice === "affirmation") return "dashboard.announcements.errorAffirmation";
   if (notice === "axesTaken") return "dashboard.programmes.errorAxesTaken";
   if (notice === "membershipTaken") return "dashboard.programmes.errorMembershipTaken";
   if (notice === "eligibility") return "dashboard.programmes.errorEligibility";

@@ -1,5 +1,5 @@
-// Operator read/write for `"Branch"`, `"LabUnit"`, `"Offer"`, `"Video"`
-// and `"Equipment"`. Not a second REST helper: public pages keep using
+// Operator read/write for `"Branch"`, `"LabUnit"`, `"Offer"`, `"Video"`,
+// `"Equipment"` and `"Announcement"`. Not a second REST helper: public pages keep using
 // fetchAnonPublishedJson, which still appends publication_state=eq.published
 // where a caller cannot omit it (PR-08). This module uses the existing SSR
 // client so an Operator can see draft rows. It is imported only from
@@ -96,6 +96,19 @@ export type EquipmentRow = {
   display_order: number;
 };
 
+export type AnnouncementRow = {
+  id: string;
+  title_ar: string | null;
+  title_en: string | null;
+  body_ar: string | null;
+  body_en: string | null;
+  published_at: string | null;
+  MediaAsset: string | null;
+  no_medical_instruction_affirmed: boolean;
+  publication_state: PublicationState;
+  display_order: number;
+};
+
 export type CatalogWriteReason =
   | "bilingual"
   | "slug"
@@ -122,6 +135,7 @@ export type CatalogWriteReason =
   | "alt"
   | "file"
   | "signOff"
+  | "affirmation"
   | "axesTaken"
   | "membershipTaken"
   | "eligibility"
@@ -192,6 +206,17 @@ export const EQUIPMENT_FORM_COLUMNS = {
   description_en: "description_en",
   MediaAsset: "MediaAsset",
   Video: "Video",
+  display_order: "display_order",
+} as const;
+
+export const ANNOUNCEMENT_FORM_COLUMNS = {
+  title_ar: "title_ar",
+  title_en: "title_en",
+  body_ar: "body_ar",
+  body_en: "body_en",
+  published_at: "published_at",
+  MediaAsset: "MediaAsset",
+  no_medical_instruction_affirmed: "no_medical_instruction_affirmed",
   display_order: "display_order",
 } as const;
 
@@ -522,6 +547,7 @@ type CatalogEntityName =
   | "Offer"
   | "Video"
   | "Equipment"
+  | "Announcement"
   | "Programme"
   | "LabTest";
 
@@ -721,6 +747,7 @@ export function noticeFromQuery(query: { error?: string; saved?: string; poster?
     error === "alt" ||
     error === "file" ||
     error === "signOff" ||
+    error === "affirmation" ||
     error === "axesTaken" ||
     error === "membershipTaken" ||
     error === "eligibility" ||
@@ -775,6 +802,19 @@ const EQUIPMENT_SELECT = [
   "display_order",
 ].join(",");
 
+const ANNOUNCEMENT_SELECT = [
+  "id",
+  "title_ar",
+  "title_en",
+  "body_ar",
+  "body_en",
+  "published_at",
+  "MediaAsset",
+  "no_medical_instruction_affirmed",
+  "publication_state",
+  "display_order",
+].join(",");
+
 const OFFER_BILINGUAL_PAIRS = [
   ["title_ar", "title_en"],
   ["description_ar", "description_en"],
@@ -788,6 +828,11 @@ const VIDEO_BILINGUAL_PAIRS = [
 const EQUIPMENT_BILINGUAL_PAIRS = [
   ["name_ar", "name_en"],
   ["description_ar", "description_en"],
+] as const;
+
+const ANNOUNCEMENT_BILINGUAL_PAIRS = [
+  ["title_ar", "title_en"],
+  ["body_ar", "body_en"],
 ] as const;
 
 function asDateText(value: unknown): string | null {
@@ -958,6 +1003,51 @@ export async function readEquipmentRow(
   return parseEquipmentRow(data);
 }
 
+export function parseAnnouncementRow(value: unknown): AnnouncementRow | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  const id = asId(row.id);
+  const publication_state = asPublicationState(row.publication_state);
+  if (id === null || publication_state === null) return null;
+  const media = row.MediaAsset === null || row.MediaAsset === undefined ? null : asId(row.MediaAsset);
+  if (row.MediaAsset !== null && row.MediaAsset !== undefined && media === null) return null;
+  return {
+    id,
+    title_ar: asOptionalText(row.title_ar),
+    title_en: asOptionalText(row.title_en),
+    body_ar: asOptionalText(row.body_ar),
+    body_en: asOptionalText(row.body_en),
+    published_at: asDateText(row.published_at),
+    MediaAsset: media,
+    no_medical_instruction_affirmed: asBoolean(row.no_medical_instruction_affirmed),
+    publication_state,
+    display_order: asDisplayOrder(row.display_order),
+  };
+}
+
+export async function listAnnouncementRows(supabase: SupabaseClient): Promise<AnnouncementRow[]> {
+  const { data, error } = await supabase
+    .from("Announcement")
+    .select(ANNOUNCEMENT_SELECT)
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapRows(data, parseAnnouncementRow);
+}
+
+export async function readAnnouncementRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<AnnouncementRow | null> {
+  if (!isRowId(rowId)) return null;
+  const { data, error } = await supabase
+    .from("Announcement")
+    .select(ANNOUNCEMENT_SELECT)
+    .eq("id", rowId)
+    .maybeSingle();
+  if (error || data === null) return null;
+  return parseAnnouncementRow(data);
+}
+
 export type OfferWriteColumns = {
   title_ar: string | null;
   title_en: string | null;
@@ -1099,6 +1189,55 @@ export function parseEquipmentWrite(
   return { ok: true, columns };
 }
 
+export type AnnouncementWriteColumns = {
+  title_ar: string | null;
+  title_en: string | null;
+  body_ar: string | null;
+  body_en: string | null;
+  published_at: string | null;
+  MediaAsset: string | null;
+  no_medical_instruction_affirmed: boolean;
+  display_order: number;
+};
+
+export function parseAnnouncementWrite(
+  form: FormData,
+  requirePublish: boolean,
+): ParseResult<AnnouncementWriteColumns> {
+  const display_order = parseDisplayOrder(emptyToNull(form.get("display_order")));
+  if (display_order === "invalid") return { ok: false, reason: "order" };
+
+  const published_at = parseIsoDate(emptyToNull(form.get("published_at")));
+  if (published_at === "invalid") return { ok: false, reason: "dates" };
+
+  const MediaAsset = parseOptionalRowId(emptyToNull(form.get("MediaAsset")));
+  if (MediaAsset === "invalid") return { ok: false, reason: "reference" };
+
+  const columns: AnnouncementWriteColumns = {
+    title_ar: emptyToNull(form.get("title_ar")),
+    title_en: emptyToNull(form.get("title_en")),
+    body_ar: emptyToNull(form.get("body_ar")),
+    body_en: emptyToNull(form.get("body_en")),
+    published_at,
+    MediaAsset,
+    no_medical_instruction_affirmed: form.get("no_medical_instruction_affirmed") === "true",
+    display_order,
+  };
+
+  if (requirePublish) {
+    for (const [arField, enField] of ANNOUNCEMENT_BILINGUAL_PAIRS) {
+      if (columns[arField] === null || columns[enField] === null) {
+        return { ok: false, reason: "bilingual" };
+      }
+    }
+    if (columns.published_at === null) return { ok: false, reason: "dates" };
+    if (!columns.no_medical_instruction_affirmed) return { ok: false, reason: "affirmation" };
+  } else {
+    columns.no_medical_instruction_affirmed = false;
+  }
+  return { ok: true, columns };
+}
+
 export async function createOfferRow(
   supabase: SupabaseClient,
   columns: OfferWriteColumns,
@@ -1151,6 +1290,25 @@ export async function createEquipmentRow(
     .select("id")
     .single();
   if (error) return { ok: false, reason: writeReason(error.code, error.message, "Equipment") };
+  const id = asId(asRecord(data)?.id);
+  if (id === null) return { ok: false, reason: "create" };
+  return { ok: true, id };
+}
+
+export async function createAnnouncementRow(
+  supabase: SupabaseClient,
+  columns: AnnouncementWriteColumns,
+): Promise<{ ok: true; id: string } | { ok: false; reason: CatalogWriteReason }> {
+  const { data, error } = await supabase
+    .from("Announcement")
+    .insert({
+      ...columns,
+      publication_state: "draft",
+      updated_at: nowIso(),
+    })
+    .select("id")
+    .single();
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Announcement") };
   const id = asId(asRecord(data)?.id);
   if (id === null) return { ok: false, reason: "create" };
   return { ok: true, id };
@@ -1210,6 +1368,24 @@ export async function writeEquipmentRow(
   return { ok: true };
 }
 
+export async function writeAnnouncementRow(
+  supabase: SupabaseClient,
+  rowId: string,
+  columns: AnnouncementWriteColumns,
+  publicationState: PublicationState,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase
+    .from("Announcement")
+    .update({
+      ...columns,
+      publication_state: publicationState,
+      updated_at: nowIso(),
+    })
+    .eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Announcement") };
+  return { ok: true };
+}
+
 export async function deleteOfferRow(
   supabase: SupabaseClient,
   rowId: string,
@@ -1242,6 +1418,17 @@ export async function deleteEquipmentRow(
   const { error } = await supabase.from("Equipment").delete().eq("id", rowId);
   if (error) return { ok: false, reason: writeReason(error.code, error.message, "Equipment") };
   const remaining = await readEquipmentRow(supabase, rowId);
+  if (remaining !== null) return { ok: false, reason: "write" };
+  return { ok: true };
+}
+
+export async function deleteAnnouncementRow(
+  supabase: SupabaseClient,
+  rowId: string,
+): Promise<{ ok: true } | { ok: false; reason: CatalogWriteReason }> {
+  const { error } = await supabase.from("Announcement").delete().eq("id", rowId);
+  if (error) return { ok: false, reason: writeReason(error.code, error.message, "Announcement") };
+  const remaining = await readAnnouncementRow(supabase, rowId);
   if (remaining !== null) return { ok: false, reason: "write" };
   return { ok: true };
 }

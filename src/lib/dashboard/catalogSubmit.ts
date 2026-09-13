@@ -6,6 +6,7 @@ import {
   branchStoredCoordinates,
   confirmFromForm,
   confirmToken,
+  createAnnouncementRow,
   createBranchRow,
   createEquipmentRow,
   createLabTestRow,
@@ -15,6 +16,7 @@ import {
   createProgrammeRow,
   createProgrammeTierRow,
   createVideoRow,
+  deleteAnnouncementRow,
   deleteBranchRow,
   deleteEquipmentRow,
   deleteLabTestRow,
@@ -25,6 +27,7 @@ import {
   deleteProgrammeTierRow,
   deleteVideoRow,
   LAB_TEST_PAIR_STEMS,
+  parseAnnouncementWrite,
   parseBranchWrite,
   parseEquipmentWrite,
   parseLabTestWrite,
@@ -38,6 +41,7 @@ import {
   PROGRAMME_PAIR_STEMS,
   programmeLabTestConfirmToken,
   programmeTierConfirmToken,
+  readAnnouncementRow,
   readBranchRow,
   readEquipmentRow,
   readLabTestRow,
@@ -48,6 +52,7 @@ import {
   readProgrammeTierRow,
   readVideoRow,
   rowIdFromForm,
+  writeAnnouncementRow,
   writeBranchRow,
   writeEquipmentRow,
   writeLabTestRow,
@@ -66,6 +71,7 @@ import { checkMediaAssetAttach, setMediaAssetPublication } from "@/lib/dashboard
 import { ensureVideoPoster, posterFileFromForm } from "@/lib/dashboard/youtubePoster";
 import { gateModuleRoute } from "@/lib/dashboard/gates";
 import {
+  revalidatePublishedAnnouncements,
   revalidatePublishedBranches,
   revalidatePublishedEquipment,
   revalidatePublishedLabUnits,
@@ -78,7 +84,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const WRITE_ACTIONS = new Set(["create", "save", "publish", "unpublish", "delete"]);
 
-type CatalogEntity = "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment" | "Programme" | "LabTest";
+type CatalogEntity = "Branch" | "LabUnit" | "Offer" | "Video" | "Equipment" | "Announcement" | "Programme" | "LabTest";
 
 function listSuffix(entity: CatalogEntity): string {
   if (entity === "Branch") return "/dashboard/branches";
@@ -87,6 +93,7 @@ function listSuffix(entity: CatalogEntity): string {
   if (entity === "Video") return "/dashboard/videos";
   if (entity === "Programme") return "/dashboard/programmes";
   if (entity === "LabTest") return "/dashboard/lab-tests";
+  if (entity === "Announcement") return "/dashboard/announcements";
   return "/dashboard/equipment";
 }
 
@@ -127,6 +134,7 @@ function revalidateFor(entity: CatalogEntity): () => void {
   if (entity === "Offer") return revalidatePublishedOffers;
   if (entity === "Video") return revalidatePublishedVideos;
   if (entity === "Programme" || entity === "LabTest") return revalidatePublishedProgrammes;
+  if (entity === "Announcement") return revalidatePublishedAnnouncements;
   return revalidatePublishedEquipment;
 }
 
@@ -236,6 +244,16 @@ function catalogWriteHandlers(entity: CatalogEntity) {
         const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
         if (attach !== null) toList(locale, errorQuery(attach));
         const created = await createEquipmentRow(supabase, parsed.columns);
+        if (!created.ok) toList(locale, errorQuery(created.reason));
+        revalidate();
+        toEdit(locale, created.id, "saved=1");
+      }
+      if (entity === "Announcement") {
+        const parsed = parseAnnouncementWrite(form, false);
+        if (!parsed.ok) toList(locale, errorQuery(parsed.reason, parsed.groups));
+        const attach = await checkMediaAssetAttach(supabase, parsed.columns.MediaAsset, false);
+        if (attach !== null) toList(locale, errorQuery(attach));
+        const created = await createAnnouncementRow(supabase, parsed.columns);
         if (!created.ok) toList(locale, errorQuery(created.reason));
         revalidate();
         toEdit(locale, created.id, "saved=1");
@@ -457,6 +475,37 @@ function catalogWriteHandlers(entity: CatalogEntity) {
       revalidate();
       toEdit(locale, rowId, "saved=1");
     }
+
+    if (entity === "Announcement") {
+      const row = await readAnnouncementRow(supabase, rowId);
+      if (row === null) toList(locale, "error=missing");
+      if (params.action === "delete") {
+        const expected = confirmToken(locale, row);
+        if (confirmFromForm(form) !== expected) toEdit(locale, rowId, "error=confirm");
+        const deleted = await deleteAnnouncementRow(supabase, rowId);
+        if (!deleted.ok) toEdit(locale, rowId, errorQuery(deleted.reason));
+        revalidate();
+        toList(locale, "saved=1");
+      }
+      let nextState: PublicationState = row.publication_state;
+      if (params.action === "publish") nextState = "published";
+      if (params.action === "unpublish") nextState = "draft";
+      const parsed = parseAnnouncementWrite(form, nextState === "published");
+      if (!parsed.ok) toEdit(locale, rowId, errorQuery(parsed.reason, parsed.groups));
+      const attach = await checkMediaAssetAttach(
+        supabase,
+        parsed.columns.MediaAsset,
+        nextState === "published",
+      );
+      if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
+      const written = await writeAnnouncementRow(supabase, rowId, parsed.columns, nextState);
+      if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
+      if (nextState === "published" && parsed.columns.MediaAsset !== null) {
+        await setMediaAssetPublication(supabase, parsed.columns.MediaAsset, "published");
+      }
+      revalidate();
+      toEdit(locale, rowId, "saved=1");
+    }
   }
 
   function GET() {
@@ -471,6 +520,7 @@ export const labUnitWriteHandlers = catalogWriteHandlers("LabUnit");
 export const offerWriteHandlers = catalogWriteHandlers("Offer");
 export const videoWriteHandlers = catalogWriteHandlers("Video");
 export const equipmentWriteHandlers = catalogWriteHandlers("Equipment");
+export const announcementWriteHandlers = catalogWriteHandlers("Announcement");
 export const programmeWriteHandlers = catalogWriteHandlers("Programme");
 export const labTestWriteHandlers = catalogWriteHandlers("LabTest");
 
