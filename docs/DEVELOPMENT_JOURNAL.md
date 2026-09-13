@@ -1230,5 +1230,22 @@ Do not implement the retry. Do not start G8-R2, G6 or P04. Do not add a
 CSP header. Do not fill Branch coordinates. Do not publish or unpublish
 any row.
 
+## 2026-09-13 — P06-T10: make a Google Maps paste actually work
+
+Parent is `origin/main` at `25c08e4` (p06-t09-f merge, PR #139).
+`parseMapsUrl` now accepts a bare coordinate pair and the remaining
+Google Maps query shapes (`query`, `sll`, `daddr`), still by string
+parse only. On a URL, `!3d!4d` wins over `@` when they disagree. A
+short link still fails with `mapsShort`; a Maps URL with no pair still
+fails with `mapsUrl`. The Branch form shows the extracted pair in the
+latitude and longitude fields, names the bare pair in the help text,
+and adds one line on a short-link refusal: open the link, right-click
+the pin, copy the coordinates. Catalogue 592/592, one pair added.
+CF-69 stays OPEN; no coordinate was written to a Branch row.
+
+Do not implement the CF-183 retry. Do not start G8-R2, G6 or P04. Do
+not add a CSP header. Do not fill Branch coordinates. Do not publish
+or unpublish any row.
+
 
 

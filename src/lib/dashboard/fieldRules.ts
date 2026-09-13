@@ -110,12 +110,16 @@ export function parseCoordinatePair(latRaw: string | null, lngRaw: string | null
   return { ok: true, latitude, longitude };
 }
 
-// Maps URL → coordinate pair. String parse only. Never fetch, never
+// Maps paste → coordinate pair. String parse only. Never fetch, never
 // follow redirects, never resolve a short link. A maps.app.goo.gl URL
 // cannot be parsed without a request to Google, so it is refused.
+// A bare pair typed or copied from Maps is accepted as text; it is not
+// a URL and is not fetched.
 const AT_PAIR = /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/;
 const BANG_PAIR = /!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/;
-const QUERY_PAIR = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/;
+const QUERY_PAIR = /^(-?\d+(?:\.\d+)?)(?:\s*,\s*|\s+)(-?\d+(?:\.\d+)?)/;
+const BARE_PAIR = /^(-?\d+(?:\.\d+)?)(?:\s*,\s*|\s+)(-?\d+(?:\.\d+)?)$/;
+const QUERY_PARAM_NAMES = ["q", "query", "ll", "sll", "daddr"] as const;
 
 export type MapsParse =
   | { ok: true; latitude: number; longitude: number }
@@ -135,44 +139,53 @@ function pairFromStrings(latRaw: string, lngRaw: string): { latitude: number; lo
   return { latitude: parsed.latitude, longitude: parsed.longitude };
 }
 
+function decodeForParse(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function pairFromMatch(match: RegExpExecArray | null): { latitude: number; longitude: number } | null {
+  if (match?.[1] === undefined || match[2] === undefined) return null;
+  return pairFromStrings(match[1], match[2]);
+}
+
+function parseBarePair(raw: string): MapsParse {
+  const pair = pairFromMatch(BARE_PAIR.exec(raw));
+  if (pair === null) return { ok: false, reason: "mapsUrl" };
+  return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
+}
+
 export function parseMapsUrl(raw: string): MapsParse {
+  const trimmed = raw.trim();
   let parsed: URL;
   try {
-    parsed = new URL(raw);
+    parsed = new URL(trimmed);
   } catch {
-    return { ok: false, reason: "mapsUrl" };
+    return parseBarePair(trimmed);
   }
   if (parsed.protocol !== "https:") return { ok: false, reason: "mapsUrl" };
   if (isShortMapsHost(parsed.hostname)) return { ok: false, reason: "mapsShort" };
 
-  const at = AT_PAIR.exec(parsed.href);
-  if (at?.[1] !== undefined && at[2] !== undefined) {
-    const pair = pairFromStrings(at[1], at[2]);
+  const haystack = decodeForParse(parsed.href);
+
+  // URL precedence, most specific first. When !3d!4d and @ disagree,
+  // the place marker wins over the viewport centre.
+  const bang = pairFromMatch(BANG_PAIR.exec(haystack));
+  if (bang !== null) return { ok: true, latitude: bang.latitude, longitude: bang.longitude };
+
+  const at = pairFromMatch(AT_PAIR.exec(haystack));
+  if (at !== null) return { ok: true, latitude: at.latitude, longitude: at.longitude };
+
+  const search = parsed.search.startsWith("?") ? parsed.search.slice(1) : parsed.search;
+  const params = new URLSearchParams(decodeForParse(search));
+  for (const name of QUERY_PARAM_NAMES) {
+    const value = params.get(name);
+    if (value === null) continue;
+    const pair = pairFromMatch(QUERY_PAIR.exec(value));
     if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
-  }
-
-  const q = parsed.searchParams.get("q");
-  if (q !== null) {
-    const match = QUERY_PAIR.exec(q);
-    if (match?.[1] !== undefined && match[2] !== undefined) {
-      const pair = pairFromStrings(match[1], match[2]);
-      if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
-    }
-  }
-
-  const bang = BANG_PAIR.exec(parsed.href);
-  if (bang?.[1] !== undefined && bang[2] !== undefined) {
-    const pair = pairFromStrings(bang[1], bang[2]);
-    if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
-  }
-
-  const ll = parsed.searchParams.get("ll");
-  if (ll !== null) {
-    const match = QUERY_PAIR.exec(ll);
-    if (match?.[1] !== undefined && match[2] !== undefined) {
-      const pair = pairFromStrings(match[1], match[2]);
-      if (pair !== null) return { ok: true, latitude: pair.latitude, longitude: pair.longitude };
-    }
   }
 
   return { ok: false, reason: "mapsUrl" };
