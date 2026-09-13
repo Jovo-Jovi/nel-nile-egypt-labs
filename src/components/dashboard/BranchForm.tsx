@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ClipboardEvent } from "react";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
@@ -47,9 +47,9 @@ import site from "./SiteSettingsForm.module.css";
 // handler assembles `"Branch".whatsapp_e164` as E.164. No calling code is
 // selected until the Operator chooses one.
 // maps_url is not a column: the route handler extracts latitude and
-// longitude from the pasted Google Maps URL and stores only that pair.
-// The URL itself is discarded. A maps.app.goo.gl short link is refused
-// without a network request.
+// longitude from the pasted Google Maps URL or bare coordinate pair
+// and stores only that pair. The URL itself is discarded. A
+// maps.app.goo.gl short link is refused without a network request.
 // is_head_office → is_head_office
 // display_order → display_order
 // Publish / unpublish write publication_state.
@@ -69,6 +69,7 @@ function TextField({
   inputMode,
   error,
   onBlur,
+  onPaste,
 }: {
   locale: Locale;
   name: string;
@@ -77,6 +78,7 @@ function TextField({
   inputMode?: "tel" | "decimal" | "numeric";
   error: string | null;
   onBlur?: () => void;
+  onPaste?: (event: ClipboardEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className={site.field}>
@@ -92,6 +94,7 @@ function TextField({
         aria-invalid={error !== null || undefined}
         aria-describedby={error !== null ? `${name}-error` : undefined}
         onBlur={onBlur}
+        onPaste={onPaste}
       />
       <FieldMessage locale={locale} fieldId={name} message={error} />
     </div>
@@ -228,7 +231,8 @@ export function BranchForm({
   const editSave = localeHref(locale, "/dashboard/branches/submit/save");
   const expectedConfirm = row === null ? "" : confirmToken(locale, row);
   const [issues, setIssues] = useState<Record<string, string>>({});
-  const [mapsEcho, setMapsEcho] = useState<string | null>(null);
+  const [mapsEcho, setMapsEcho] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [mapsFailReason, setMapsFailReason] = useState<"mapsShort" | "mapsUrl" | null>(null);
   const activeNotice = clientNotice !== null ? clientNotice : showQueryNotice ? notice : null;
 
   function setIssue(id: string, message: string | null) {
@@ -249,13 +253,29 @@ export function BranchForm({
     return parseWhatsAppParts(emptyToNull(data.get("whatsapp_calling")), emptyToNull(data.get("whatsapp_subscriber")));
   }
 
-  function readMaps(form: HTMLFormElement) {
-    const data = new FormData(form);
-    const raw = emptyToNull(data.get("maps_url"));
-    if (raw === null) return { ok: true as const, pair: null };
-    const parsed = parseMapsUrl(raw);
-    if (!parsed.ok) return parsed;
-    return { ok: true as const, pair: `${parsed.latitude}, ${parsed.longitude}` };
+  function applyMapsRaw(raw: string) {
+    const trimmed = raw.trim();
+    if (trimmed.length === 0) {
+      setMapsEcho(null);
+      setMapsFailReason(null);
+      setIssue("maps_url", null);
+      return;
+    }
+    const parsed = parseMapsUrl(trimmed);
+    if (!parsed.ok) {
+      setMapsEcho(null);
+      setMapsFailReason(parsed.reason);
+      setIssue(
+        "maps_url",
+        parsed.reason === "mapsShort"
+          ? translate(locale, "dashboard.validation.errorMapsShort")
+          : translate(locale, "dashboard.validation.errorMapsUrl"),
+      );
+      return;
+    }
+    setMapsFailReason(null);
+    setIssue("maps_url", null);
+    setMapsEcho({ latitude: parsed.latitude, longitude: parsed.longitude });
   }
 
   const storedPair =
@@ -273,6 +293,8 @@ export function BranchForm({
       : activeNotice === "mapsUrl"
         ? translate(locale, "dashboard.validation.errorMapsUrl")
         : null);
+  const showMapsShortHint =
+    mapsFailReason === "mapsShort" || (mapsFailReason === null && activeNotice === "mapsShort");
 
   const summaryIssues = [
     phoneError !== null ? { id: "whatsapp_subscriber", message: phoneError } : null,
@@ -375,30 +397,57 @@ export function BranchForm({
             labelKey="dashboard.branches.mapsUrl"
             defaultValue={null}
             error={mapsError}
+            onPaste={(event) => {
+              applyMapsRaw(event.clipboardData.getData("text"));
+            }}
             onBlur={() => {
-              const form = document.getElementById("maps_url")?.closest("form");
-              if (!(form instanceof HTMLFormElement)) return;
-              const parsed = readMaps(form);
-              if (!parsed.ok) {
-                setMapsEcho(null);
-                setIssue(
-                  "maps_url",
-                  parsed.reason === "mapsShort"
-                    ? translate(locale, "dashboard.validation.errorMapsShort")
-                    : translate(locale, "dashboard.validation.errorMapsUrl"),
-                );
-                return;
-              }
-              setIssue("maps_url", null);
-              setMapsEcho(parsed.pair);
+              const field = document.getElementById("maps_url");
+              if (!(field instanceof HTMLInputElement)) return;
+              applyMapsRaw(field.value);
             }}
           />
-          {mapsEcho !== null ? (
+          {showMapsShortHint ? (
             <p className={extra.help}>
-              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.mapsEcho")} />
-              {" "}
-              <IsolatedCopy locale={locale} text={mapsEcho} />
+              <IsolatedCopy
+                locale={locale}
+                text={translate(locale, "dashboard.validation.errorMapsShortHint")}
+              />
             </p>
+          ) : null}
+          {mapsEcho !== null ? (
+            <>
+              <p className={extra.help}>
+                <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.mapsEcho")} />
+              </p>
+              <div className={site.pair}>
+                <div className={site.field}>
+                  <label className={site.pairLocale} htmlFor="maps_latitude_echo">
+                    <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.latitude")} />
+                  </label>
+                  <input
+                    id="maps_latitude_echo"
+                    className={site.control}
+                    type="text"
+                    value={String(mapsEcho.latitude)}
+                    readOnly
+                    tabIndex={-1}
+                  />
+                </div>
+                <div className={site.field}>
+                  <label className={site.pairLocale} htmlFor="maps_longitude_echo">
+                    <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.longitude")} />
+                  </label>
+                  <input
+                    id="maps_longitude_echo"
+                    className={site.control}
+                    type="text"
+                    value={String(mapsEcho.longitude)}
+                    readOnly
+                    tabIndex={-1}
+                  />
+                </div>
+              </div>
+            </>
           ) : storedPair !== null ? (
             <p className={extra.help}>
               <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.mapsStored")} />

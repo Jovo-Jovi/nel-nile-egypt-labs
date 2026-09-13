@@ -206,8 +206,10 @@ const ar = {
   "dashboard.validation.hoursHelp": "نص حر. مثال: السبت–الخميس 8ص–8م. ليست جدولاً.",
   "dashboard.validation.errorMapsShort":
     "هذا رابط خرائط مختصر. الصق الرابط الموسَّع. الروابط المختصرة لا تُحَل.",
+  "dashboard.validation.errorMapsShortHint":
+    "افتح الرابط، ثم انقر بالزر الأيمن على الدبوس وانسخ الإحداثيات.",
   "dashboard.validation.errorMapsUrl":
-    "حقل رابط الخرائط لا يحتوي إحداثيات. الصق رابط خرائط Google موسَّعاً يحتوي إحداثيات.",
+    "حقل رابط الخرائط لا يحتوي إحداثيات. الصق رابط خرائط Google موسَّعاً يحتوي إحداثيات، أو زوج الإحداثيات.",
   "dashboard.siteSettings.errorMissing": "لا يوجد صف إعدادات. أنشئه أولاً.",
   "dashboard.siteSettings.errorNotPublished":
     "هذا الصف مسودة. لا يوجد منشور يُسحب.",
@@ -258,9 +260,9 @@ const ar = {
   "dashboard.branches.headOfficeHelp":
     "صف واحد فقط يحمل هذه العلامة. تعليم هذا الصف يزيلها عن أي صف آخر. قاعدة البيانات تمنع صفين معاً.",
   "dashboard.branches.coordinatesHelp":
-    "الصق رابط خرائط Google الموسَّع. الخادم يقرأ الإحداثيات ولا يخزّن الرابط. لا تقدير ولا اختراع.",
-  "dashboard.branches.mapsUrl": "رابط خرائط Google",
-  "dashboard.branches.mapsEcho": "ما فُهم من الرابط",
+    "يُقبل زوج إحداثيات مثل \u206630.0444, 31.2357\u2069، أو رابط خرائط Google الموسَّع الذي يحتوي إحداثيات. الخادم يقرأ الإحداثيات ولا يخزّن الرابط. لا تقدير ولا اختراع.",
+  "dashboard.branches.mapsUrl": "رابط خرائط Google أو الإحداثيات",
+  "dashboard.branches.mapsEcho": "تم التعرف على الإحداثيات",
   "dashboard.branches.mapsStored": "المخزَّن",
   "dashboard.labUnits.heading": "الأقسام",
   "dashboard.labUnits.pending": "قيد الانتظار — بانتظار صفوف الأقسام",
@@ -897,8 +899,10 @@ const en = {
   "dashboard.validation.hoursHelp": "Free text. Example: Sat–Thu 8am–8pm. Not a schedule.",
   "dashboard.validation.errorMapsShort":
     "This is a shortened Maps link. Paste the expanded link. Short links are not resolved.",
+  "dashboard.validation.errorMapsShortHint":
+    "Open the link, then right-click the pin and copy the coordinates.",
   "dashboard.validation.errorMapsUrl":
-    "The Maps link field has no coordinate. Paste an expanded Google Maps URL that contains one.",
+    "The Maps link field has no coordinate. Paste an expanded Google Maps URL that contains one, or a coordinate pair.",
   "dashboard.siteSettings.errorMissing": "There is no settings row. Create it first.",
   "dashboard.siteSettings.errorNotPublished":
     "This row is a draft. There is nothing published to withdraw.",
@@ -949,9 +953,9 @@ const en = {
   "dashboard.branches.headOfficeHelp":
     "Exactly one row may hold this flag. Checking it here clears it on any other row. The database also refuses a second head-office row.",
   "dashboard.branches.coordinatesHelp":
-    "Paste an expanded Google Maps URL. The server reads the coordinates and does not store the link. Do not estimate or invent them.",
-  "dashboard.branches.mapsUrl": "Google Maps link",
-  "dashboard.branches.mapsEcho": "Understood from the link",
+    "A coordinate pair such as 30.0444, 31.2357 is accepted, or an expanded Google Maps URL that contains one. The server reads the coordinates and does not store the link. Do not estimate or invent them.",
+  "dashboard.branches.mapsUrl": "Google Maps link or coordinates",
+  "dashboard.branches.mapsEcho": "Coordinates recognised",
   "dashboard.branches.mapsStored": "Stored pair",
   "dashboard.labUnits.heading": "LabUnits",
   "dashboard.labUnits.pending": "Pending — awaiting LabUnit rows",
