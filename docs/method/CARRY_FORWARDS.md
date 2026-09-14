@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-192**
+**Next free id: CF-195**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -109,7 +109,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-101 | `DESIGN_SYSTEM.md` line 704 says §6 enumerates 24 components; the tree carries 23 component files, including `StatusStateBadge` and the shared `EntityCard.module.css`, which §6 does not name. Reconcile the inventory against the tree before G3 asserts either figure. | reviewer | OPEN | P03 |
 | CF-102 | `PHASES.md` v2 pre-assigned task ids to unissued work. P03-T03's item described listing pages and was checked by an unrelated task, so the plan asserted work was complete that had not started, and the Programmes and Departments listings disappeared from it for two tasks. Repaired at P03-T05 STEP 1; the row records the failure mode so the guard's blind spot — it checks ids and verdicts, never descriptions — is on the record. | reviewer | CLOSED at P03-T05 | P03-T05 |
 | CF-103 | Every Arabic string rendering at G3 is chrome. P06 introduces 72 LabTest names and all content entry, none read by anyone. CF-60's clause that the lab's staff judgement outranks the metrics stays live and applies to that Arabic. | client | OPEN | P06 |
-| CF-104 | Eighteen of `CONTENT_MODEL.md` §3c's 42 URLs do not render because every Programme is draft. G3 certified 24. The eighteen render when P06 publishes. | reviewer | OPEN | G6 |
+| CF-104 | Eighteen of `CONTENT_MODEL.md` §3c's 42 URLs do not render because every Programme is draft. G3 certified 24. The eighteen render when P06 publishes. CLOSED at G6: P06-T18 measured those 18 Programme detail URLs at HTTP 200; they are reachable. | reviewer | CLOSED at G6 | G6 |
 | CF-105 | The laboratory's own PDPL obligations as controller — licensing, processing records, DPO where required — sit with the client and are not a build output. The Executive Regulations' grace period ends in late October or early November 2026, which may fall near G7 launch. Tracked so the date stays visible after CF-39's closure; this project's contribution is the Operator email addresses alone, and the client's existing patient results portal is a materially larger exposure. | client | OPEN | P07 |
 | CF-106 | `anon` holds table-level INSERT, UPDATE and DELETE on `storage.objects`, granted by `supabase_storage_admin`. RLS denies it — there is no anon write policy — but the project's own posture elsewhere is to revoke what is not needed (M3 revoked all, then granted select). We do not own that table and revoking could break Storage, so this is recorded, not fixed. | reviewer | OPEN | G5 |
 | CF-107 | P05-T10C Y4 tested the app route and got the guard's redirect. It did not test a direct Storage API upload with the publishable anon key, which ships in the client bundle by design. Closed at P05-T11: a direct upload to `media-asset` with that key was refused by RLS. | reviewer | CLOSED at P05-T11 | P05-T11 |
@@ -197,6 +197,9 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-189 | The Announcement listing renders through `EquipmentCard`, so a component named for one entity presents another. Presentational only and not a defect today, but it will mislead the next reader and the designer at P09. Do not repair it here. | builder | OPEN | P07 |
 | CF-190 | P06-T16 rehearsal case 6 could not overlap two CLI sessions against `pg_advisory_xact_lock`. The lock key is derived; serialization under concurrent publishes is unproven because per-session login latency prevented the interleaving. Do not prove or repair it here. | builder | OPEN | P07 |
 | CF-191 | The publication-maximum Operator message renders the raw `module_key` `Announcement` as an isolated Latin run inside Arabic. An Operator should see a localized module label, not an identifier. Recorded at P06-T16; do not repair it here. | builder | OPEN | P07 |
+| CF-192 | `contact.linkedin` renders the Latin string "LinkedIn" inside Arabic chrome without isolation, unlike فيسبوك, إنستغرام and يوتيوب which are translated. The bilingual standard requires Latin runs inside Arabic to be explicitly isolated. Recorded at G6; do not repair it here. | builder | OPEN | P09 |
+| CF-193 | The open-CF count is not reproducible across hosts. PR-28's arithmetic needs a byte-exact method as PR-37 gave digests. Recorded at G6; do not repair it here. | reviewer | OPEN | P07 |
+| CF-194 | `NEL_LABTEST_CONTENT` is unset in Vercel Production, so the 71 signed LabTest names reach no visitor. Recorded at G6; do not repair it here. | human | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

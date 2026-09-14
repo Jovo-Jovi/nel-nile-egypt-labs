@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Twenty-seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Twenty-eight of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27, OD-28). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -997,6 +997,67 @@ slots and is P09's to review under OD-25.
 Boundary: the configuration table carries a module name and an integer. It
 holds no personal or medical data and no column identifying an account holder
 (BOUNDARY_MODEL.md §2 item 10).
+
+---
+
+### OD-28 — Revocation is enforced by a live-principal policy
+
+Status: SIGNED
+Signed: 13 September 2026
+Supersedes: OD-21 §3, which is SUSPENDED. OD-21 §1, §2, §4, §5, §6 and §7
+stand. OD-21's text is not edited.
+
+Why §3 was suspended. OD-21 §3.1 and §3.2 named a PartnerLabAccount
+table in public. OD-20 §3 forbids a new claim, table or column, and
+BOUNDARY_MODEL.md §2 item 10 forbids a table in public gaining a column
+identifying an account holder — an item inside the non-waivable boundary gate.
+The mechanism was therefore not implementable as written. The reviewer
+authored that §3 from reasoning rather than measurement, which is recorded
+here because it is the reason this amendment exists.
+
+What is decided. A security definer function returns the live principal
+for auth.uid() by reading auth.users, and Offer_partner_read calls it
+instead of reading auth.jwt(). Revocation already clears the claim in
+auth.users in the same request, so pointing the policy at the live row makes
+revocation effective on the next request with no token involved.
+
+Measured at P08-T26, inside a rolled-back transaction: the authenticated
+role can execute such a function on this project; auth.uid() resolves in the
+policy's execution context; the cost was 0.173 ms actual for one row; and
+BOUNDARY_MODEL.md §4 walked item by item returned no FAIL, with §2 item 10
+PASS. The rehearsal's rollback was proved by re-reading pg_policies and
+pg_proc.
+
+What this costs, and what it does not. No new table. No new column. No new
+claim. OD-20 §3 is satisfied as written and needs no amendment. Boundary gate
+item 10 and D-40 are untouched.
+
+Ordering is not optional. The function and its grants land first; the
+Offer_partner_read swap lands second, in the same migration or a later one
+but never before the function exists. Swapping the policy before the function
+is present denies every approved PartnerLab.
+
+Grants. CREATE FUNCTION grants EXECUTE to PUBLIC by default, and
+P08-T26 measured that schema default privileges still name anon and
+service_role after revoke all from public. The migration revokes both by
+name and grants EXECUTE to authenticated alone. For anon, auth.uid()
+is null and the function returns null; that is fail-closed, not access.
+
+A definer function reads past RLS, so it returns only the calling
+identity's principal string and nothing else from auth.users. That is the
+whole design and the reason the return type is a single text value.
+
+Session termination stays out of scope. POST /auth/v1/admin/users/{id}/logout
+returns HTTP 404 on this project and no mechanism reachable from the dashboard
+ends a session (P08-T23). A revoked account's session may continue until it
+expires; under this OD it reads nothing privileged, which is what OD-20 §2
+was trying to achieve. invalidateSessions is retired at G8-R2, after the
+swap is live and measured, and not before.
+
+ADR-001 is untouched. Claim 1 remains the fail-closed routing gate and is
+no longer sufficient on its own for a private Offer read. Claim 2 stands:
+nel_partner_state is still never tested in SQL. A companion ADR is authored
+before G8-R2.
 
 ---
 
