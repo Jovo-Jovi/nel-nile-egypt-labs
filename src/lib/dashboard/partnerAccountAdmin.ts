@@ -1,4 +1,8 @@
 import type { User } from "@supabase/supabase-js";
+import {
+  classifyPartnerLabNumericIdentifier,
+  partnerLabAuthAddressFromNumericIdentifier,
+} from "@/lib/partnerLabNumericIdentifier";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/serviceRole";
 
 export type PartnerLabReviewKind = "pending" | "approved" | "rejected";
@@ -156,4 +160,88 @@ export async function applyPartnerLabReviewAction(
   return mergeAppMetadata(id, (current) => {
     current.nel_partner_state = null;
   });
+}
+
+export type PartnerLabProvisionReason =
+  | "empty"
+  | "too_long"
+  | "eastern_arabic"
+  | "non_digit"
+  | "password"
+  | "password_refused"
+  | "duplicate"
+  | "config"
+  | "write";
+
+export type PartnerLabProvisionResult =
+  | { readonly outcome: "created"; readonly id: string }
+  | { readonly outcome: "failed"; readonly reason: PartnerLabProvisionReason };
+
+type ProvisionCreateUserAttributes = {
+  email: string;
+  password: string;
+  email_confirm: boolean;
+};
+
+export type PartnerLabProvisionAdmin = {
+  auth: {
+    admin: {
+      createUser: (attributes: ProvisionCreateUserAttributes) => Promise<{
+        data: { user: { id: string } | null };
+        error: { code?: string; message?: string } | null;
+      }>;
+    };
+  };
+};
+
+function isDuplicateAuthError(error: { code?: string; message?: string }): boolean {
+  return (
+    error.code === "email_exists" ||
+    error.code === "user_already_exists" ||
+    error.code === "identity_already_exists"
+  );
+}
+
+export async function provisionPartnerLabAccount(
+  identifier: unknown,
+  password: unknown,
+  admin: PartnerLabProvisionAdmin | null,
+): Promise<PartnerLabProvisionResult> {
+  const identifierValue = typeof identifier === "string" ? identifier : "";
+  const classified = classifyPartnerLabNumericIdentifier(identifierValue);
+  if (classified !== "ok") {
+    return { outcome: "failed", reason: classified };
+  }
+  if (typeof password !== "string" || password.length === 0) {
+    return { outcome: "failed", reason: "password" };
+  }
+  if (admin === null) {
+    return { outcome: "failed", reason: "config" };
+  }
+
+  const address = partnerLabAuthAddressFromNumericIdentifier(identifierValue);
+  // Pending under ADR-001: signup writes no claim. createUser is called
+  // with email, password, and email_confirm only. No app_metadata, so
+  // nel_principal and nel_partner_state are not set. email_confirm is
+  // true because D-49's mailer_autoconfirm means the account must be
+  // able to sign in without mail; createUser does not send mail.
+  const created = await admin.auth.admin.createUser({
+    email: address,
+    password,
+    email_confirm: true,
+  });
+  if (created.error) {
+    if (isDuplicateAuthError(created.error)) {
+      return { outcome: "failed", reason: "duplicate" };
+    }
+    if (created.error.code === "weak_password") {
+      return { outcome: "failed", reason: "password_refused" };
+    }
+    return { outcome: "failed", reason: "write" };
+  }
+  const id = created.data.user?.id;
+  if (typeof id !== "string" || id.length === 0) {
+    return { outcome: "failed", reason: "write" };
+  }
+  return { outcome: "created", id };
 }

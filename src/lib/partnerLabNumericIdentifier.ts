@@ -12,18 +12,32 @@
 // octets. The identifier is the entire local part, ASCII digits, one octet
 // each, so 64 is the longest string this mapping can carry.
 //
-// No lookup, no database, no import that touches one. Nothing in the
-// application tree calls these functions yet; the spec is the only consumer.
-// No parseInt, Number, unary plus, or other numeric coercion of an identifier.
+// No lookup, no database, no import that touches one. No parseInt, Number,
+// unary plus, or other numeric coercion of an identifier.
+//
+// isAsciiDigitString is the only validator. Classification names which of
+// its rules failed so an Operator surface can report the rule; it does
+// not accept anything the mapping would reject.
 
 export const PARTNER_LAB_AUTH_ADDRESS_DOMAIN = "nel.invalid";
 export const NUMERIC_IDENTIFIER_MAX_LENGTH = 64;
 
+export type PartnerLabNumericIdentifierClass =
+  | "ok"
+  | "empty"
+  | "too_long"
+  | "eastern_arabic"
+  | "non_digit";
+
 const DOMAIN_SUFFIX = `@${PARTNER_LAB_AUTH_ADDRESS_DOMAIN}`;
 const DIGIT_ZERO = 48;
 const DIGIT_NINE = 57;
+const EASTERN_INDIC_START = 0x0660;
+const EASTERN_INDIC_END = 0x0669;
+const EXTENDED_ARABIC_START = 0x06f0;
+const EXTENDED_ARABIC_END = 0x06f9;
 
-function isAsciiDigitString(value: string): boolean {
+export function isAsciiDigitString(value: string): boolean {
   if (value.length === 0) return false;
   if (value.length > NUMERIC_IDENTIFIER_MAX_LENGTH) return false;
   for (let i = 0; i < value.length; i += 1) {
@@ -31,6 +45,25 @@ function isAsciiDigitString(value: string): boolean {
     if (code < DIGIT_ZERO || code > DIGIT_NINE) return false;
   }
   return true;
+}
+
+function containsEasternArabicDigit(value: string): boolean {
+  for (let i = 0; i < value.length; i += 1) {
+    const code = value.charCodeAt(i);
+    if (code >= EASTERN_INDIC_START && code <= EASTERN_INDIC_END) return true;
+    if (code >= EXTENDED_ARABIC_START && code <= EXTENDED_ARABIC_END) return true;
+  }
+  return false;
+}
+
+export function classifyPartnerLabNumericIdentifier(
+  value: string,
+): PartnerLabNumericIdentifierClass {
+  if (typeof value !== "string" || value.length === 0) return "empty";
+  if (value.length > NUMERIC_IDENTIFIER_MAX_LENGTH) return "too_long";
+  if (isAsciiDigitString(value)) return "ok";
+  if (containsEasternArabicDigit(value)) return "eastern_arabic";
+  return "non_digit";
 }
 
 export function partnerLabAuthAddressFromNumericIdentifier(

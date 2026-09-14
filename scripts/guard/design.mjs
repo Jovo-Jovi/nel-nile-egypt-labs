@@ -67,6 +67,15 @@
 //       POST, no field of personal data. The query never leaves the page.
 //       This exemption is labelled UNRATIFIED until the reviewer ratifies
 //       or reverts it.
+//       UNRATIFIED residual repair, PR-19, P10-T03. A twenty-first path,
+//       src/components/dashboard/PartnerLabProvisionForm.tsx, is added so
+//       an Operator can enter a numeric identifier and a password. It is
+//       not a collection field: OD-30 §3 and Option A forbid a lab name,
+//       contact person, phone, organisation, or note. The two fields are
+//       authentication credentials. The control is behind aal2, writes
+//       nothing to public, and calls Auth Admin createUser only. One form
+//       file, no directory, no pattern. This exemption is labelled
+//       UNRATIFIED until the reviewer ratifies or reverts it.
 //       A path is exempt only when it
 //       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
 //       Adding a path is a boundary decision requiring a reviewer verdict,
@@ -113,7 +122,8 @@ const ALLOWED_HEX = /^#25D366$/i;
 // and PartnerLabReviewForm.tsx as two exact paths, no directory, no
 // pattern; P08-T18 added partner-lab/sign-in/page.tsx as one exact path,
 // no directory, no pattern; P06-T14 added AnnouncementForm.tsx as one
-// exact path, no directory, no pattern).
+// exact path, no directory, no pattern; P10-T03 added
+// PartnerLabProvisionForm.tsx as one exact path, UNRATIFIED under PR-19).
 const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/dashboard/sign-in/page.tsx",
   "src/app/[locale]/dashboard/(session)/challenge/page.tsx",
@@ -137,6 +147,10 @@ const R3_EXEMPT_PATHS = new Set([
   "src/app/[locale]/partner-lab/sign-in/page.tsx",
   // UNRATIFIED residual repair, PR-19, P04-T02. Reviewer to ratify or revert.
   "src/components/site/ProgrammeSearch.tsx",
+  // UNRATIFIED residual repair, PR-19, P10-T03. Reviewer to ratify or revert.
+  // Not a collection field: numeric identifier and password only, behind
+  // aal2, nothing written to public.
+  "src/components/dashboard/PartnerLabProvisionForm.tsx",
 ]);
 
 // Exact paths. Host strings may appear in these two files and nowhere

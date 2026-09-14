@@ -3,6 +3,8 @@ import test from "node:test";
 import {
   NUMERIC_IDENTIFIER_MAX_LENGTH,
   PARTNER_LAB_AUTH_ADDRESS_DOMAIN,
+  classifyPartnerLabNumericIdentifier,
+  isAsciiDigitString,
   numericIdentifierFromPartnerLabAuthAddress,
   partnerLabAuthAddressFromNumericIdentifier,
 } from "./partnerLabNumericIdentifier";
@@ -119,4 +121,21 @@ test("inverse rejects an address the function did not produce", () => {
     numericIdentifierFromPartnerLabAuthAddress("12a3@nel.invalid"),
   );
   assert.throws(() => numericIdentifierFromPartnerLabAuthAddress(""));
+});
+
+test("classify names the mapping rule that failed, using isAsciiDigitString", () => {
+  assert.equal(classifyPartnerLabNumericIdentifier(""), "empty");
+  assert.equal(isAsciiDigitString(""), false);
+  assert.equal(
+    classifyPartnerLabNumericIdentifier("0".repeat(NUMERIC_IDENTIFIER_MAX_LENGTH + 1)),
+    "too_long",
+  );
+  assert.equal(isAsciiDigitString("0".repeat(NUMERIC_IDENTIFIER_MAX_LENGTH + 1)), false);
+  assert.equal(classifyPartnerLabNumericIdentifier("12a3"), "non_digit");
+  assert.equal(isAsciiDigitString("12a3"), false);
+  const easternArabic = "\u0660\u0661\u0662\u0663";
+  assert.equal(classifyPartnerLabNumericIdentifier(easternArabic), "eastern_arabic");
+  assert.equal(isAsciiDigitString(easternArabic), false);
+  assert.equal(classifyPartnerLabNumericIdentifier("0123"), "ok");
+  assert.equal(isAsciiDigitString("0123"), true);
 });
