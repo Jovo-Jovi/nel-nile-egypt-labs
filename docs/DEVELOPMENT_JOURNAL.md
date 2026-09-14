@@ -1466,6 +1466,18 @@ G4 not recorded as PASSED.
 Do not start P10, P09 or P07. Do not merge before the verdict.
 The human opens the PR.
 
+## 2026-09-15 — P10-T01: The numeric identifier mapping
+
+Cut from `origin/main` at `50e48e1` (merge of `p04-t03`, PR #156).
+OD-30 SIGNED. Mapping `src/lib/partnerLabNumericIdentifier.ts` and
+its inverse, domain `nel.invalid`, bound 64. Nothing calls it yet.
+Generated set 1111110; spec 11 pass; runner 66 pass 0 fail.
+G4 PASSED recorded. CF-25 re-scoped to P07. Open CF 102 + 0 − 0 = 102.
+Catalogue 617/617. html 24. Migrations 36. Research 32.
+
+Do not start P10-T02, P09 or P07. Do not merge before the verdict.
+The human opens the PR.
+
 
 
 
