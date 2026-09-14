@@ -1452,6 +1452,21 @@ a `guard:boundary` skip of `programmes.html` `type=search` with no name.
 Do not start G4, P10, P09 or P07. Do not merge before the verdict.
 The human opens the PR.
 
+## 2026-09-15 — P04-T03: Assemble G4 evidence on production
+
+Cut from `origin/main` at `83b1473` (merge of `p04-t02`, PR #155).
+Read-only. Evidence at `docs/research/g4-evidence.md`. Production SHA
+equals `origin/main`. Live membership `124 → 71`. 178 recorded
+separately (`general-checkup` 103). Unsigned 0 on detail and search.
+Nine queries measured per locale. Item 8 CSP deferred as CF-177 (P07,
+G7). CF-197 OPEN. Open CF 101 + 1 − 0 = 102. Catalogue 617/617.
+html 24. Migrations 36. Research excluding README and `assets/` 32.
+G4 not recorded as PASSED.
+
+Do not start P10, P09 or P07. Do not merge before the verdict.
+The human opens the PR.
+
+
 
 
 
