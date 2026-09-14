@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-197**
+**Next free id: CF-198**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -202,6 +202,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-194 | `NEL_LABTEST_CONTENT` is unset in Vercel Production, so the 71 signed LabTest names reach no visitor. Recorded at G6; do not repair it here. Closed at P04-T01: the key is present on the production deployment env list (Secret, Hidden). Unauthenticated LabTest lists render, and `isLabTestContentEnabled` accepts only the value `"on"`, so the deployed value is `"on"`. Not read-and-then-set. | human | CLOSED at P04-T01 | P04-T01 |
 | CF-195 | The four privilege-removing PartnerLab review Locations were measured in `ar` only at G8-R2 because the smoke runner hardcodes the locale, so the Operator review flow has no rendered evidence in `en`. Recorded at P04-T01-F from the G8-R2 evidence note; do not repair it. | builder | OPEN | P07 |
 | CF-196 | `CONTENT_MODEL.md` §3b states Platinum Male at 26 LabTests where the live signed RPC resolves 27, so a document states a total its own contents enumerate and the total is wrong; clinical data is unaffected — `verify_seed` is `124 -> 71` and the signed worklist matches. Do not repair it. | reviewer | OPEN | P07 |
+| CF-197 | The catalogue search control's keyboard order, focus order and `aria-live` announcement were asserted from source at P04-T02 and never exercised in a browser or with assistive technology. Recorded at P04-T03; do not repair it. | builder | OPEN | P09 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
