@@ -1391,6 +1391,21 @@ Catalogue 612/612. html 24. CF-169 and CF-170 stay OPEN. Open CF
 
 Do not start G8-R2, P04 or P09. Do not merge before the verdict.
 
+## 2026-09-14 — P08-T29: G8-R2
+
+Parent is `origin/main` at `bbb1312` (p08-t28 merge, PR #151). Production
+SHA equals that commit. `invalidateSessions` absent at the deployed SHA
+(comments only). One attended `smoke:operator` against the production
+alias. PASS O8 both locales. PASS O9 `[]`. `O11-rest-after` HTTP 200 body
+`[]` on the identical bearer. Four privilege-removing Locations
+`HTTP 303 saved=1`, none `error=` (T28 all four `error=write`). Session
+legs FAIL unchanged counts: OD-28 residual. CF-169 and CF-170 CLOSED.
+Evidence at `docs/research/g8r2-evidence.md`. Catalogue 612/612. html 24.
+Open CF 103 + 0 − 2 = 101. G8 is not recorded as PASSED. The reviewer
+issues it.
+
+Do not start P04 or P09. Do not merge before the verdict.
+
 
 
 
