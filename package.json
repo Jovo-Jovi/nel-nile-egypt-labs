@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node --import ./scripts/spec/register.mjs ./scripts/emit-catalogue-index.ts",
     "build": "next build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

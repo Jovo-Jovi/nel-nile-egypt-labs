@@ -3,6 +3,9 @@ node_modules/
 
 # Next.js build output
 .next/
+
+# PR-08 gated catalogue index. Build artefact, not a public route.
+src/generated/catalogue-index.json
 out/
 dist/
 build/

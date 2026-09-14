@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Twenty-eight of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27, OD-28). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Twenty-nine of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27, OD-28, OD-29). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -1058,6 +1058,45 @@ ADR-001 is untouched. Claim 1 remains the fail-closed routing gate and is
 no longer sufficient on its own for a private Offer read. Claim 2 stands:
 nel_partner_state is still never tested in SQL. A companion ADR is authored
 before G8-R2.
+
+---
+
+### OD-29 — Delivery sequence with the numeric-identifier phase
+
+**Status:** SIGNED
+**Signed:** 14 September 2026
+**Amends:** OD-19 §1 and the amendment that moved P09 ahead of P07. Neither
+text is edited; this supersedes the order both state.
+
+The sequence is: P04 → G4 → P10 → G10 → P09 → G9 → P07 → G7.
+P00–P03, P05, P06 and P08 are closed at G3, G5-R, G6 and G8 respectively.
+
+P10 is new. It delivers the Operator-provisioned PartnerLab account with
+a numeric authentication identifier, as its own OD decides. Three tasks: the
+identifier mapping and its injectivity specification; sign-in accepting a
+numeric identifier with enumeration neutrality measured; and the Operator
+provisioning form, production-only.
+
+Why a new phase rather than reopening P08. G8 passed on the evidence that
+existed at bbb1312. Operator provisioning adds a second account-creation
+path, and BOUNDARY_MODEL.md §2 item 9 requires the signup route handler to
+be read and proved to accept no field that is not an authentication
+credential. That proof was made against one handler; a second handler needs
+its own proof, and a gate is where proofs are made. Reopening a passed gate to
+admit work it never measured would empty the gate of meaning.
+
+G10 gates: §2 item 9 re-proved against both account-creation paths; item
+10 and D-40 untouched; OD-18 §6 neutrality measured for numeric identifiers;
+the identifier's injectivity proved for 123, 0123 and 00123; and
+existing self-signup accounts and the existing sign-in flow measured as still
+working.
+
+P09 does not begin until G10 passes. The bounded design review, its
+disposition rule and its boundary stand as the OD-19 amendment set them.
+
+Does not decide: anything in P04's, P10's or P09's own scope, or the
+numeric identifier's design, which its own OD decides and which lands at
+P10-T01.
 
 ---
 
