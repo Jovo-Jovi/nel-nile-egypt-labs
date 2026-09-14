@@ -269,7 +269,8 @@ P09 Design follows G4 and precedes P07 (OD-25).
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06
 
-- [ ] **P04-T01** — Confirm the flag, then build the bilingual catalogue index
+- [x] **P04-T01** — Confirm the flag, then build the bilingual catalogue index
+- [ ] **P04-T01-F** — Produce the artefact and explain the card count
 - [ ] static bilingual index over Programmes and LabTests
 - [ ] search on the البرامج page, both locales
 - [ ] **G4** — clinical, data integrity and bilingual gates
