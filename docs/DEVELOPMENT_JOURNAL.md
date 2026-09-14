@@ -1349,6 +1349,19 @@ and CF-191 OPEN. Open CF 100 + 2 − 1 = 101.
 Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
 build A4. Do not merge before the verdict.
 
+## 2026-09-14 — P06-T18: assemble G6 evidence on production
+
+Parent is `origin/main` at `32cdee4` (p06-t17 merge, PR #148). Read-only
+against production. No src, supabase or seed change. No row written.
+Production SHA `32cdee474c6d70334dc8ce2ba4497fc3cba9edc1` READY / PROMOTED
+equals `origin/main`. Twenty-eight public pages HTTP 200, pending 0 in
+both locales. Catalogue 612/612. html 24. Migrations 34. Open CF
+101 + 0 − 0 = 101. This report is G6 evidence; the reviewer issues the
+gate.
+
+Do not start G8-R2, P04 or P09. Do not add a CSP header. Do not
+build A4. Do not merge before the verdict.
+
 
 
 
