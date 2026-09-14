@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Twenty-nine of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27, OD-28, OD-29). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Thirty of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27, OD-28, OD-29, OD-30). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -1097,6 +1097,75 @@ disposition rule and its boundary stand as the OD-19 amendment set them.
 Does not decide: anything in P04's, P10's or P09's own scope, or the
 numeric identifier's design, which its own OD decides and which lands at
 P10-T01.
+
+---
+
+### OD-30 — Operator-provisioned PartnerLab accounts with a numeric identifier
+
+**Status:** SIGNED
+**Signed:** 14 September 2026
+**Amends:** Option A, and SECURITY_MODEL.md §4's account-creation list.
+Both narrowly. Nothing else in either is relaxed.
+
+**1. What is added.** An Operator may create a PartnerLab account from the
+dashboard by supplying a numeric identifier and a password. This is an
+additional path. OD-15 §4's open self-signup remains exactly as it is, with
+its approval, rejection and revocation behaviour unchanged, and existing
+accounts are not migrated, modified or deleted.
+
+**2. The identifier.** The numeric identifier is an authentication credential,
+not a field about the laboratory. It is digits only, handled as text, variable
+length, unique, and preserved exactly: 123, 0123 and 00123 are three
+distinct identifiers and no normalisation may collapse them. It is never
+presented or validated as an email address.
+
+It is carried in the auth schema as the local part of a synthetic address at
+a domain reserved under RFC 2606, derived by a pure function of the exact
+string with no lookup, because the identifier must resolve before
+authentication. The address can never receive mail, by construction. If a
+future flow depends on mail reaching an account, D-49 governs and this OD does
+not authorise it.
+
+**3. Option A, relaxed for this and nothing else.** Option A forbids a lab
+name, lab number, contact person or phone field. The numeric identifier is
+permitted as an authentication credential in the auth schema. No lab name
+field is added anywhere. No contact person, no phone, no organisation, no
+free-text note, no column in public identifying an account holder. Boundary
+gate item 10 and D-40 are untouched and remain non-waivable.
+
+**4. SECURITY_MODEL.md §4 gains a third account-creation path, alongside
+deliberate Operator creation and PartnerLab self-signup: an Operator
+creating a PartnerLab.** It is deliberate and human-initiated, as the others
+are.
+
+**5. The password.** The Operator sets a permanent password at creation. It
+is not temporary and the laboratory is not required to change it. It is
+submitted once, passed server-side to the Auth Admin API, and never stored by
+this platform, never written to a log, never placed in a URL or a redirect,
+and never returned to any browser after submission. There is no retrieval path
+and none is created. Replacement is by setting a new password, not by reading
+the old one.
+
+**6. Authorization is unchanged.** A provisioned account is created pending
+and reaches approval through the existing queue. The approved, rejected and
+revoked state machine remains authoritative, private Offer access remains
+governed by the existing policy, and PartnerLab permissions are not
+expanded.
+
+**7. Neutrality.** OD-18 §6 extends to numeric identifiers: no public route
+may return a response that varies on whether an identifier is known. A numeric
+space is cheaper to enumerate than an email space, so this is measured at
+sign-in in both locales rather than inherited.
+
+**8. Provisioning is production-only.** Creating an auth account requires the
+Auth Admin API and therefore the service-role key. Production holds it;
+Preview does not and must not. The provisioning surface fails with a stated
+message where the key is absent rather than failing obscurely.
+
+**Does not decide:** a lab name field, now or later. Any password reset,
+recovery or first-login-change route — SECURITY_MODEL.md §4's "no
+PartnerLab password reset" stands and introducing one reopens it. Whether
+public self-signup should later close.
 
 ---
 

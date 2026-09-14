@@ -272,10 +272,23 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [x] **P04-T01** — Confirm the flag, then build the bilingual catalogue index
 - [x] **P04-T01-F** — Produce the artefact and explain the card count
 - [x] **P04-T02** — Search on the programmes page, both locales
-- [ ] **P04-T03** — Assemble G4 evidence on production
+- [x] **P04-T03** — Assemble G4 evidence on production
 - [ ] static bilingual index over Programmes and LabTests
 - [ ] search on the البرامج page, both locales
-- [ ] **G4** — clinical, data integrity and bilingual gates
+- [x] **G4** — clinical, data integrity and bilingual gates
+
+### P10 — Operator-provisioned PartnerLab accounts · UNSTARTED · AFTER G4
+
+Follows G4. Precedes P09 (OD-29). Operator-provisioned PartnerLab account
+with a numeric authentication identifier. Three tasks: the identifier
+mapping and its injectivity specification; sign-in accepting a numeric
+identifier with enumeration neutrality measured; and the Operator
+provisioning form, production-only.
+
+- [ ] **P10-T01** — The numeric identifier mapping
+- [ ] sign-in accepting a numeric identifier with enumeration neutrality measured
+- [ ] the Operator provisioning form, production-only
+- [ ] **G10** — item 9 re-proved against both account-creation paths; item 10 and D-40 untouched; OD-18 §6 neutrality measured for numeric identifiers; injectivity of 123, 0123 and 00123; existing self-signup and sign-in still working
 
 ### P07 — Hardening and cutover · UNSTARTED · AFTER G9
 
