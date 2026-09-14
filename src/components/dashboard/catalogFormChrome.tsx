@@ -117,6 +117,7 @@ function errorKey(notice: Exclude<CatalogNotice, "saved" | null>): CatalogKey {
   if (notice === "bilingual") return "dashboard.siteSettings.errorBilingual";
   if (notice === "signOff") return "dashboard.catalog.errorSignOff";
   if (notice === "affirmation") return "dashboard.announcements.errorAffirmation";
+  if (notice === "publicationMaximum") return "dashboard.announcements.errorPublicationMaximum";
   if (notice === "axesTaken") return "dashboard.programmes.errorAxesTaken";
   if (notice === "membershipTaken") return "dashboard.programmes.errorMembershipTaken";
   if (notice === "eligibility") return "dashboard.programmes.errorEligibility";
@@ -206,7 +207,9 @@ export function CatalogNoticeView({
   return (
     <p className={site.errorRow}>
       <CautionIcon size={14} />
-      <span>{message}</span>
+      <span>
+        <IsolatedCopy locale={locale} text={message} />
+      </span>
     </p>
   );
 }

@@ -261,7 +261,8 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [x] **P06-T12** — Let the Main Page see content changes
 - [x] **P06-T13** — Bind the photography slots to MediaAsset
 - [x] **P06-T14** — The Announcements module, and the last homepage gates
-- [ ] **P06-T15** — The Announcement listing route, and two #insights corrections
+- [x] **P06-T15** — The Announcement listing route, and two #insights corrections
+- [ ] **P06-T16** — A configurable per-module publishing limit
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06

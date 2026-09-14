@@ -2,10 +2,12 @@ import { notFound, redirect } from "next/navigation";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { readOperatorAccessFrom } from "@/lib/dashboard/assurance";
 import {
+  announcementPublishBlockedByMaximum,
   bilingualErrorQuery,
   branchStoredCoordinates,
   confirmFromForm,
   confirmToken,
+  countPublishedAnnouncements,
   createAnnouncementRow,
   createBranchRow,
   createEquipmentRow,
@@ -42,6 +44,7 @@ import {
   programmeLabTestConfirmToken,
   programmeTierConfirmToken,
   readAnnouncementRow,
+  readAnnouncementPublishedMaximum,
   readBranchRow,
   readEquipmentRow,
   readLabTestRow,
@@ -498,6 +501,16 @@ function catalogWriteHandlers(entity: CatalogEntity) {
         nextState === "published",
       );
       if (attach !== null) toEdit(locale, rowId, errorQuery(attach));
+      if (
+        announcementPublishBlockedByMaximum(
+          row.publication_state,
+          nextState,
+          (await countPublishedAnnouncements(supabase)) ?? 0,
+          await readAnnouncementPublishedMaximum(supabase),
+        )
+      ) {
+        toEdit(locale, rowId, errorQuery("publicationMaximum"));
+      }
       const written = await writeAnnouncementRow(supabase, rowId, parsed.columns, nextState);
       if (!written.ok) toEdit(locale, rowId, errorQuery(written.reason));
       if (nextState === "published" && parsed.columns.MediaAsset !== null) {

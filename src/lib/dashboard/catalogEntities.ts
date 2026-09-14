@@ -136,6 +136,7 @@ export type CatalogWriteReason =
   | "file"
   | "signOff"
   | "affirmation"
+  | "publicationMaximum"
   | "axesTaken"
   | "membershipTaken"
   | "eligibility"
@@ -564,11 +565,48 @@ function uniqueReason(message: string | undefined, entity: CatalogEntityName): C
   return "write";
 }
 
+export const PUBLICATION_MAXIMUM_ERRCODE = "P5MAX";
+export const PUBLICATION_MAXIMUM_MESSAGE_PREFIX = "NEL_PUBLICATION_MAXIMUM";
+
+export function isPublicationMaximumError(
+  code: string | undefined,
+  message: string | undefined,
+): boolean {
+  if (code === PUBLICATION_MAXIMUM_ERRCODE) return true;
+  const text = message ?? "";
+  return (
+    text === PUBLICATION_MAXIMUM_MESSAGE_PREFIX ||
+    text.startsWith(`${PUBLICATION_MAXIMUM_MESSAGE_PREFIX}:`) ||
+    text.startsWith(`${PUBLICATION_MAXIMUM_MESSAGE_PREFIX} `)
+  );
+}
+
+export function announcementPublishBlockedByMaximum(
+  currentState: PublicationState,
+  nextState: PublicationState,
+  publishedCount: number,
+  maximum: number | null,
+): boolean {
+  if (nextState !== "published") return false;
+  if (currentState === "published") return false;
+  if (maximum === null) return false;
+  return publishedCount >= maximum;
+}
+
+export function catalogWriteReasonFromError(
+  code: string | undefined,
+  message: string | undefined,
+  entity: CatalogEntityName = "Announcement",
+): CatalogWriteReason {
+  return writeReason(code, message, entity);
+}
+
 function writeReason(
   code: string | undefined,
   message: string | undefined,
   entity: CatalogEntityName,
 ): CatalogWriteReason {
+  if (isPublicationMaximumError(code, message)) return "publicationMaximum";
   if (code === "23514") return "dates";
   if (code === "23503") return "held";
   if (code === "23505") return uniqueReason(message, entity);
@@ -748,6 +786,7 @@ export function noticeFromQuery(query: { error?: string; saved?: string; poster?
     error === "file" ||
     error === "signOff" ||
     error === "affirmation" ||
+    error === "publicationMaximum" ||
     error === "axesTaken" ||
     error === "membershipTaken" ||
     error === "eligibility" ||
@@ -1046,6 +1085,31 @@ export async function readAnnouncementRow(
     .maybeSingle();
   if (error || data === null) return null;
   return parseAnnouncementRow(data);
+}
+
+export async function countPublishedAnnouncements(supabase: SupabaseClient): Promise<number | null> {
+  const { count, error } = await supabase
+    .from("Announcement")
+    .select("id", { count: "exact", head: true })
+    .eq("publication_state", "published");
+  if (error || count === null) return null;
+  return count;
+}
+
+export async function readAnnouncementPublishedMaximum(
+  supabase: SupabaseClient,
+): Promise<number | null> {
+  const { data, error } = await supabase
+    .from("PublicationMaximum")
+    .select("published_maximum")
+    .eq("governed_table", "Announcement")
+    .maybeSingle();
+  if (error || data === null) return null;
+  const row = asRecord(data);
+  if (row === null) return null;
+  const value = row.published_maximum;
+  if (typeof value !== "number" || !Number.isInteger(value) || value <= 0) return null;
+  return value;
 }
 
 export type OfferWriteColumns = {
