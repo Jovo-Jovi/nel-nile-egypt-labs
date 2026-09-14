@@ -1362,6 +1362,20 @@ gate.
 Do not start G8-R2, P04 or P09. Do not add a CSP header. Do not
 build A4. Do not merge before the verdict.
 
+## 2026-09-14 — P08-T27: rewrite OD-21 section 3 and land the live-principal policy
+
+Parent is `origin/main` at `0c9274b` (p06-t18 merge, PR #149). OD-28
+signed from the P08-T26 measurement. Forward and reverse authored.
+Rehearsed inside `BEGIN; … ROLLBACK;`. Positive 1, cleared 0, stale JWT
+0 with the JWT still carrying PartnerLab, anon 0, rollback restored M9.
+`npx supabase db push` was not run. `invalidateSessions` is unchanged:
+removing it now would leave revocation with no control between merge
+and `db push`. G6 recorded PASSED. CF-104 closed. CF-192, CF-193,
+CF-194 landed. Open CF 101 + 3 − 1 = 103.
+
+Do not apply the migration. Do not remove `invalidateSessions`. Do not
+start G8-R2, P04 or P09. Do not merge before the verdict.
+
 
 
 

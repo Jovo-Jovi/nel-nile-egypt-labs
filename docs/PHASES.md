@@ -264,8 +264,8 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [x] **P06-T15** — The Announcement listing route, and two #insights corrections
 - [x] **P06-T16** — A configurable per-module publishing limit
 - [x] **P06-T17** — Stop a transient database blip from killing a deploy
-- [ ] **P06-T18** — Assemble G6 evidence on production
-- [ ] **G6** — clinical and bilingual gates
+- [x] **P06-T18** — Assemble G6 evidence on production
+- [x] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06
 
@@ -328,6 +328,7 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **P08-T24** — Measure what T23 left void, and reconcile two ledger defects
 - [x] **P08-T25** — Sign the OD-20 §2 amendment and close the ledger
 - [x] **P08-T26** — Rehearse the live-principal policy before any decision is written
+- [ ] **P08-T27** — Rewrite OD-21 §3 and land the live-principal policy
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 
@@ -454,5 +455,6 @@ G8 is FAIL. G8-R of 10 September 2026 did not pass it. G8-R2 has no done-step ro
 
 OD-09 is SIGNED and priced at 1000 EGP (OD-24). `"Announcement"` was authored at P06-T14 and applied by the human. ClinicalNotice is not built.
 
-P06 is in flight. P06-T07 restored `SECURITY_MODEL.md` §3 on production. G6 has not started. CF-180 and CF-181 are OPEN. The id-less content-entry box is still unchecked.
+~~P06 is in flight. P06-T07 restored `SECURITY_MODEL.md` §3 on production. G6 has not started. CF-180 and CF-181 are OPEN. The id-less content-entry box is still unchecked.~~
+**UNRATIFIED residual repair, PR-19, P08-T27.** The fence set the phase-map Gate cell to PASSED, which requires the G6 box to be checked. Leaving "G6 has not started" would contradict that cell. G6 PASSED at reviewer verdict on P06-T18 evidence, 13 September 2026. CF-180 and CF-181 are already closed. The id-less content-entry box is still unchecked. P06-T03 and P06-T11 stay unchecked (PR-36).
 
