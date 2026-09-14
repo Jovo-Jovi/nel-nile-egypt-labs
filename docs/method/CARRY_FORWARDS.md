@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-195**
+**Next free id: CF-196**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -200,6 +200,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-192 | `contact.linkedin` renders the Latin string "LinkedIn" inside Arabic chrome without isolation, unlike فيسبوك, إنستغرام and يوتيوب which are translated. The bilingual standard requires Latin runs inside Arabic to be explicitly isolated. Recorded at G6; do not repair it here. | builder | OPEN | P09 |
 | CF-193 | The open-CF count is not reproducible across hosts. PR-28's arithmetic needs a byte-exact method as PR-37 gave digests. Recorded at G6; do not repair it here. | reviewer | OPEN | P07 |
 | CF-194 | `NEL_LABTEST_CONTENT` is unset in Vercel Production, so the 71 signed LabTest names reach no visitor. Recorded at G6; do not repair it here. Closed at P04-T01: the key is present on the production deployment env list (Secret, Hidden). Unauthenticated LabTest lists render, and `isLabTestContentEnabled` accepts only the value `"on"`, so the deployed value is `"on"`. Not read-and-then-set. | human | CLOSED at P04-T01 | P04-T01 |
+| CF-195 | The four privilege-removing PartnerLab review Locations were measured in `ar` only at G8-R2 because the smoke runner hardcodes the locale, so the Operator review flow has no rendered evidence in `en`. Recorded at P04-T01-F from the G8-R2 evidence note; do not repair it. | builder | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

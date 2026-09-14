@@ -1423,6 +1423,21 @@ html 24. Route table unchanged. Catalogue 612/612. Open CF 101 + 0 − 2 = 99.
 
 Do not start P04-T02, P10, G4, P09 or P07. Do not merge before the verdict.
 
+## 2026-09-14 — P04-T01-F: Produce the artefact and explain the card count
+
+Parent is `origin/p04-t01` at `696575b`, not main. Local dotenv
+`NEL_LABTEST_CONTENT=on` (gitignored). `npm run prebuild` wrote
+`src/generated/catalogue-index.json`: 36210 bytes, `ar`/`en` 71 identical
+keys, unsigned names 0, unpublished slugs 0. The file is gitignored and
+untracked. Three emit throws raise with no file. Retry is T17's three
+attempts / 100 ms. Live `programmeLabTests` sums to 178 cards (103 on
+`general-checkup`); `"ProgrammeLabTest"` remains 124 → 71. CF-195 OPEN.
+Open CF 99 + 1 − 0 = 100. Catalogue 612/612. html 24. Migrations 36.
+
+Do not start P04-T02, P10, G4, P09 or P07. Do not merge before the verdict.
+The human opens one PR from `p04-t01-f` carrying both commits.
+
+
 
 
 
