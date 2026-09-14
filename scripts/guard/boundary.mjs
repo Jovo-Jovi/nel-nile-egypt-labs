@@ -20,6 +20,11 @@
 // do not. The file is enumerated in the scan count and skipped for
 // affordance rules; the gate is otherwise unchanged.
 //
+// UNRATIFIED residual repair (PR-19, P04-T02): `/{locale}/programmes`
+// carries a `type="search"` input with no `name`, no parent form, and no
+// submission. CONTENT_MODEL.md §3f requires that control. It is not a
+// BOUNDARY_MODEL.md §2 collection field. Reviewer to ratify or revert.
+//
 // Usage:
 //   node scripts/guard/boundary.mjs     scan .next/server/app/**/*.html
 
@@ -190,6 +195,14 @@ function targetOpensNewContext(target) {
   return target.trim().toLowerCase() === "_blank";
 }
 
+function isProgrammesCatalogueSearchInput(tag, attrs, label) {
+  if (tag !== "input") return false;
+  if (!label.endsWith("/programmes.html")) return false;
+  const type = (attrs.type ?? "").trim().toLowerCase();
+  const name = (attrs.name ?? "").trim();
+  return type === "search" && name.length === 0;
+}
+
 function scanHtml(html, label) {
   const findings = [];
   const skipRules = label.endsWith(`/${GLOBAL_ERROR}`) || label === GLOBAL_ERROR;
@@ -200,6 +213,7 @@ function scanHtml(html, label) {
     if (skipRules) continue;
 
     if (FORM_TAGS.has(tag)) {
+      if (isProgrammesCatalogueSearchInput(tag, attrs, label)) continue;
       findings.push(`${loc}  forbidden <${tag}>`);
     }
 

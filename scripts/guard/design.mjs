@@ -61,6 +61,12 @@
 //       credential as the sixteenth path (sign-up). One page file, no
 //       directory, no pattern. It shares one Supabase session with the
 //       Operator sign-in (ADR-001); it is not a second Auth client.
+//       UNRATIFIED residual repair, PR-19, P04-T02. A twentieth path,
+//       src/components/site/ProgrammeSearch.tsx, is added so the §3f
+//       search input can exist. It is not a form: no action, no method, no
+//       POST, no field of personal data. The query never leaves the page.
+//       This exemption is labelled UNRATIFIED until the reviewer ratifies
+//       or reverts it.
 //       A path is exempt only when it
 //       equals a member of R3_EXEMPT_PATHS (full path, not a substring).
 //       Adding a path is a boundary decision requiring a reviewer verdict,
@@ -129,6 +135,8 @@ const R3_EXEMPT_PATHS = new Set([
   "src/components/partner-lab/PartnerLabStatus.tsx",
   "src/components/dashboard/PartnerLabReviewForm.tsx",
   "src/app/[locale]/partner-lab/sign-in/page.tsx",
+  // UNRATIFIED residual repair, PR-19, P04-T02. Reviewer to ratify or revert.
+  "src/components/site/ProgrammeSearch.tsx",
 ]);
 
 // Exact paths. Host strings may appear in these two files and nowhere
