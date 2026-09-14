@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Twenty-six of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26). A decision is in force when it appears here. Conversation does not amend this file.
+Forty-nine decisions. Twenty-seven of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27). A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -969,6 +969,34 @@ NEL_LABTEST_CONTENT is enabled.
 **Consequence:** a region left hardcoded after this OD is named in the task
 report with the reason and the task that will carry it. Silence is not an
 acceptable disposition for a region that did not get wired.
+
+---
+
+### OD-27 — Publishing limits are configured per module and enforced in Postgres
+
+Status: SIGNED
+Signed: 13 September 2026
+Decides: a module may declare a maximum number of simultaneously published
+records. The maximum is configuration, not code, so a future module declares
+its own without a new mechanism. Enforcement is in Postgres; the server action
+check is a second layer for the message, never the only layer.
+Behaviour: while the maximum is reached, a record may still be created,
+edited and saved as a draft, and an attempt to publish it is refused and the
+record stays draft. The Operator is told, in both locales, that the limit is
+reached. The system never chooses a published record to unpublish and never
+replaces one. The Operator moves a published record back to draft explicitly,
+and a draft may then be published. Unpublishing is never blocked. Editing a
+record that is already published is never blocked.
+Announcements: the maximum is 3. Ordering of the published set and the
+Main Page feature continue to be governed by display_order, which this OD
+does not change.
+Does not decide: a maximum for any other module. Modules that render into
+fixed Main Page slots are reported at P06-T16 for a separate decision; none is
+assigned a number here. The Main Page magazine composition, which stays three
+slots and is P09's to review under OD-25.
+Boundary: the configuration table carries a module name and an integer. It
+holds no personal or medical data and no column identifying an account holder
+(BOUNDARY_MODEL.md §2 item 10).
 
 ---
 

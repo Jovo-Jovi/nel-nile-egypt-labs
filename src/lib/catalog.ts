@@ -428,6 +428,8 @@ const ar = {
   "dashboard.announcements.affirmation": "أقرّ أن هذا النص لا يحتوي تعليمات طبية.",
   "dashboard.announcements.errorAffirmation":
     "النشر يتطلب الإقرار بأن النص لا يحتوي تعليمات طبية.",
+  "dashboard.announcements.errorPublicationMaximum":
+    "تم بلوغ حد النشر لوحدة Announcement 3. بقي هذا السجل مسودة. لنشره، أعد أحد السجلات المنشورة إلى المسودة أولًا.",
   "dashboard.announcements.publishNext":
     "الحالة مسودة. للنشر على الصفحة الرئيسية أقرّ أولاً أن النص لا يحمل تعليمات طبية.",
   "dashboard.partnerLab.heading": "مراجعة حسابات المعامل الشريكة",
@@ -1148,6 +1150,8 @@ const en = {
   "dashboard.announcements.affirmation": "I affirm that this text contains no medical instruction.",
   "dashboard.announcements.errorAffirmation":
     "Publication requires affirming that the text contains no medical instruction.",
+  "dashboard.announcements.errorPublicationMaximum":
+    "The Announcement publishing limit of 3 is reached. This record has been kept as a draft. To publish it, move one of the published Announcements back to draft first.",
   "dashboard.announcements.publishNext":
     "This row is a draft. To publish it on the home page, first affirm that the text contains no medical instruction.",
   "dashboard.partnerLab.heading": "Partner laboratory account review",

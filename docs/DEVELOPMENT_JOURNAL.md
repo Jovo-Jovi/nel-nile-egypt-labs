@@ -1318,6 +1318,23 @@ pending. Catalogue 610/610. html 22. CF-187 CLOSED. Open CF 100 + 0 − 1
 Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
 build A4. Do not invent or publish an Announcement row.
 
+## 2026-09-14 — P06-T16: a configurable per-module publishing limit
+
+Parent is `origin/main` at `b3b1386` (p06-t15 merge, PR #146).
+The builder did not run `npx supabase db push`. Forward
+`20260913234353_publication_maximum.sql` and reverse
+`publication_maximum.down.sql` are authored. OD-27 SIGNED.
+`public."PublicationMaximum"` seeds Announcement at 3. Trigger
+`Announcement_enforcePublicationMaximum` refuses a transition into
+published at the maximum with errcode P5MAX. Rehearsal cases 1–5 and 7
+quoted inside BEGIN/ROLLBACK; case 6 could not be overlapped on the
+linked CLI. Catalogue 612/612. html 24. CF-189 OPEN. Open CF 99 + 1 − 0
+= 100.
+
+Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
+build A4. The human runs `npx supabase db push`.
+
+
 
 
 
