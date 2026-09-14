@@ -465,6 +465,31 @@ const ar = {
     "سحب الاعتماد يُنهي الوصول فوراً. الحساب لا يقرأ عرضاً آخر بالجلسة الحالية، بخلاف الاعتماد الذي ينتظر التحديث التالي.",
   "dashboard.partnerLab.savedEnded":
     "حُفظ التعديل. انتهى الوصول فوراً — لا عند تحديث الجلسة التالية.",
+  "dashboard.partnerLab.provisionHeading": "إنشاء حساب معمل شريك",
+  "dashboard.partnerLab.provisionLede":
+    "معرّف رقمي وكلمة مرور فقط. لا يُطلب اسم المعمل ولا جهة اتصال. الحساب يُنشأ قيد المراجعة.",
+  "dashboard.partnerLab.numericIdentifier": "المعرّف الرقمي",
+  "dashboard.partnerLab.numericIdentifierHelp":
+    "أرقام لاتينية فقط، حتى \u206664\u2069 خانة. الأصفار البادئة تُحفظ، فـ \u20660123\u2069 غير \u2066123\u2069.",
+  "dashboard.partnerLab.provisionPasswordHelp":
+    "كلمة المرور دائمة. لا تُحفظ هنا بعد الإرسال ولا يمكن استرجاعها.",
+  "dashboard.partnerLab.provisionSubmit": "إنشاء الحساب",
+  "dashboard.partnerLab.provisionCreated":
+    "أُنشئ الحساب قيد المراجعة. يظهر في قائمة قيد المراجعة.",
+  "dashboard.partnerLab.errorIdentifierEmpty": "المعرّف الرقمي فارغ.",
+  "dashboard.partnerLab.errorIdentifierTooLong":
+    "المعرّف الرقمي أطول من \u206664\u2069 خانة.",
+  "dashboard.partnerLab.errorIdentifierNonDigit":
+    "المعرّف الرقمي يقبل الأرقام اللاتينية فقط.",
+  "dashboard.partnerLab.errorIdentifierEastern":
+    "الأرقام العربية الشرقية غير مقبولة. استخدم الأرقام اللاتينية.",
+  "dashboard.partnerLab.errorDuplicate": "هذا المعرّف الرقمي مرتبط بحساب قائم.",
+  "dashboard.partnerLab.errorConfig":
+    "تعذّر الإنشاء: إعدادات النشر لا تتضمن مفتاح إدارة المصادقة. التزويد متاح في بيئة الإنتاج فقط.",
+  "dashboard.partnerLab.errorPassword": "كلمة المرور فارغة.",
+  "dashboard.partnerLab.errorPasswordRefused":
+    "خدمة المصادقة رفضت كلمة المرور.",
+  "dashboard.partnerLab.errorWrite": "تعذّر إنشاء الحساب. حاول مرة أخرى.",
   "dashboard.catalog.mediaAsset": "MediaAsset",
   "dashboard.media.heading": "مكتبة الوسائط",
   "dashboard.media.pending": "قيد الانتظار — بانتظار ملفات الوسائط",
@@ -1196,6 +1221,32 @@ const en = {
     "Revocation ends access immediately. The account cannot read another Offer with its current session, unlike approval, which waits for the next refresh.",
   "dashboard.partnerLab.savedEnded":
     "Saved. Access ended immediately — not on the next token refresh.",
+  "dashboard.partnerLab.provisionHeading": "Create a partner laboratory account",
+  "dashboard.partnerLab.provisionLede":
+    "A numeric identifier and a password only. No laboratory name and no contact. The account is created pending.",
+  "dashboard.partnerLab.numericIdentifier": "Numeric identifier",
+  "dashboard.partnerLab.numericIdentifierHelp":
+    "Latin digits only, up to 64 characters. Leading zeros are kept, so 0123 is not 123.",
+  "dashboard.partnerLab.provisionPasswordHelp":
+    "The password is permanent. It is not stored here after submission and cannot be retrieved.",
+  "dashboard.partnerLab.provisionSubmit": "Create account",
+  "dashboard.partnerLab.provisionCreated":
+    "The account was created pending. It appears in the pending list.",
+  "dashboard.partnerLab.errorIdentifierEmpty": "The numeric identifier is empty.",
+  "dashboard.partnerLab.errorIdentifierTooLong":
+    "The numeric identifier is longer than 64 characters.",
+  "dashboard.partnerLab.errorIdentifierNonDigit":
+    "The numeric identifier accepts Latin digits only.",
+  "dashboard.partnerLab.errorIdentifierEastern":
+    "Eastern Arabic digits are not accepted. Use Latin digits.",
+  "dashboard.partnerLab.errorDuplicate":
+    "That numeric identifier already belongs to an account.",
+  "dashboard.partnerLab.errorConfig":
+    "Could not create the account: this deployment is missing the Auth Admin configuration. Provisioning is production-only.",
+  "dashboard.partnerLab.errorPassword": "The password is empty.",
+  "dashboard.partnerLab.errorPasswordRefused":
+    "The authentication service refused the password.",
+  "dashboard.partnerLab.errorWrite": "Could not create the account. Try again.",
   "dashboard.catalog.mediaAsset": "MediaAsset",
   "dashboard.media.heading": "Media Library",
   "dashboard.media.pending": "Pending — awaiting MediaAsset rows",

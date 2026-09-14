@@ -1496,6 +1496,24 @@ Open CF 102 + 0 − 0 = 102.
 Do not start P10-T03, P09 or P07. Do not merge before the verdict.
 The human opens the PR.
 
+## 2026-09-15 — P10-T03: Operator provisioning
+
+Cut from `origin/main` at `bbbfae6` (merge of `p10-t02`, PR #158).
+CF-199 closed: the T02 throwaway left no `auth.identities` row
+(`identity_by_user_id` 0, `identity_by_email` 0; totals 5 and 5).
+The Operator module now has a two-field provisioning form. The
+action maps the identifier through T01, calls Auth Admin
+`createUser` with no `app_metadata` so the account is pending, and
+fails with a deployment-configuration message where the service-role
+key is absent. Catalogue 620 + 16 = 636. html 24. Migrations 36.
+Research 32. Open CF 102 + 2 − 1 = 103. Production SHA equals
+`origin/main` (`bbbfae6`, READY / PROMOTED); the new handler is not
+on that SHA, so the attended provision-through-approve-revoke legs
+are deferred.
+
+Do not start G10, P09 or P07. Do not merge before the verdict.
+The human opens the PR.
+
 
 
 
