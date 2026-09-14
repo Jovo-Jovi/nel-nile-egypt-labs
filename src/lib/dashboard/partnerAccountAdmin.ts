@@ -1,5 +1,4 @@
 import type { User } from "@supabase/supabase-js";
-import { supabasePublicEnv } from "@/lib/supabase/env";
 import { createSupabaseServiceRoleClient } from "@/lib/supabase/serviceRole";
 
 export type PartnerLabReviewKind = "pending" | "approved" | "rejected";
@@ -97,25 +96,6 @@ async function mergeAppMetadata(
   return "ok";
 }
 
-// OD-20 §2. Auth Admin `signOut` in this SDK takes the subject's JWT, which
-// the Operator does not hold. The Admin logout-by-id endpoint is the Auth
-// Admin path that terminates every session for that one id. Service-role
-// key stays server-only (serviceRole.ts).
-async function invalidateSessions(id: string): Promise<boolean> {
-  const env = supabasePublicEnv();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (env === null) return false;
-  if (typeof serviceRoleKey !== "string" || serviceRoleKey.length === 0) return false;
-  const response = await fetch(`${env.url}/auth/v1/admin/users/${id}/logout`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${serviceRoleKey}`,
-      apikey: serviceRoleKey,
-    },
-  });
-  return response.status === 204 || response.ok;
-}
-
 async function revokeApproved(
   id: string,
   mutate: (current: Record<string, unknown>) => void,
@@ -130,8 +110,10 @@ async function revokeApproved(
   mutate(next);
   const updated = await admin.auth.admin.updateUserById(id, { app_metadata: next });
   if (updated.error) return "write";
-  const signedOut = await invalidateSessions(id);
-  if (!signedOut) return "write";
+  // OD-28 §"Session termination stays out of scope" retires
+  // invalidateSessions. POST /auth/v1/admin/users/{id}/logout is HTTP 404
+  // on this project (P08-T23). The live-principal policy is now what
+  // makes revocation effective.
   return "ok";
 }
 
@@ -151,15 +133,12 @@ export async function applyPartnerLabReviewAction(
       current.nel_partner_state = "rejected";
     });
     if (merged !== "ok") return merged;
-    // Reject from approved is privilege removal: M9's policy tests
-    // nel_principal = "PartnerLab", so leaving that claim set keeps a
-    // rejected laboratory reading private Offers. OD-20 §2: a
-    // privilege-removing action must invalidate sessions in the same
-    // request; a live token would keep reading until it expired. The
-    // same call revokeApproved makes. Merge, never replace, so
-    // provider and providers survive.
-    const signedOut = await invalidateSessions(id);
-    if (!signedOut) return "write";
+    // Reject from approved is privilege removal: clearing nel_principal
+    // in auth.users is the write. OD-28 §"Session termination stays out
+    // of scope" retires invalidateSessions. POST
+    // /auth/v1/admin/users/{id}/logout is HTTP 404 on this project
+    // (P08-T23). The live-principal policy is now what makes revocation
+    // effective. Merge, never replace, so provider and providers survive.
     return "ok";
   }
   if (action === "revoke-to-pending") {

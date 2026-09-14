@@ -1376,6 +1376,21 @@ CF-194 landed. Open CF 101 + 3 − 1 = 103.
 Do not apply the migration. Do not remove `invalidateSessions`. Do not
 start G8-R2, P04 or P09. Do not merge before the verdict.
 
+## 2026-09-14 — P08-T28: verify the live swap, author ADR-002, retire invalidateSessions
+
+Parent is `origin/main` at `c329767` (p08-t27 merge, PR #150). STEP 1a
+quoted `currentNelPrincipal` live with `prosecdef` true and
+`proacl` `{postgres=X/postgres,authenticated=X/postgres}`.
+`Offer_partner_read` calls the function, not `auth.jwt()`. STEP 1b
+positive control PASS O8: throwaway title present on `/ar/offers` and
+`/en/offers`. `O11-rest-before` HTTP 200 with two published ids;
+`O11-rest-after` HTTP 200 body `[]` on the identical bearer. ADR-002
+authored. `invalidateSessions` retired after that measurement.
+Catalogue 612/612. html 24. CF-169 and CF-170 stay OPEN. Open CF
+103 + 0 − 0 = 103.
+
+Do not start G8-R2, P04 or P09. Do not merge before the verdict.
+
 
 
 

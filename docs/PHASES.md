@@ -328,7 +328,8 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **P08-T24** — Measure what T23 left void, and reconcile two ledger defects
 - [x] **P08-T25** — Sign the OD-20 §2 amendment and close the ledger
 - [x] **P08-T26** — Rehearse the live-principal policy before any decision is written
-- [ ] **P08-T27** — Rewrite OD-21 §3 and land the live-principal policy
+- [x] **P08-T27** — Rewrite OD-21 §3 and land the live-principal policy
+- [ ] **P08-T28** — Verify the live swap, author the companion ADR, retire invalidateSessions
 - [ ] **G8-R2** — re-run in full
 - [ ] **G8** — Boundary
 
@@ -451,7 +452,10 @@ Sent to the client today, that document understates the project badly.
 
 ## §7 What stops the project today
 
-G8 is FAIL. G8-R of 10 September 2026 did not pass it. G8-R2 has no done-step row and has not run. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks; what remains is the revocation control. P08-T22 halted (CF-169). CF-170 is OPEN. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it. `currentNelPrincipal` exists only as a rolled-back rehearsal at P08-T26; `git grep currentNelPrincipal supabase/` is empty.
+G8 is FAIL. G8-R of 10 September 2026 did not pass it. G8-R2 has no done-step row and has not run. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks; what remains is the revocation control. P08-T22 halted (CF-169). CF-170 is OPEN. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it.
+
+~~`currentNelPrincipal` exists only as a rolled-back rehearsal at P08-T26; `git grep currentNelPrincipal supabase/` is empty.~~
+**UNRATIFIED residual repair, PR-19, P08-T28.** That sentence was false after T27 authored the migration and T28 read the live function. Struck. `currentNelPrincipal` is authored (P08-T27) and live (P08-T28 STEP 1a). G8 remains FAIL. G8-R2 has not run. CF-169 and CF-170 stay OPEN.
 
 OD-09 is SIGNED and priced at 1000 EGP (OD-24). `"Announcement"` was authored at P06-T14 and applied by the human. ClinicalNotice is not built.
 
