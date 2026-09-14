@@ -6,6 +6,7 @@ import { SiteRoot } from "@/components/site/SiteRoot";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import shell from "@/components/site/StaticShellPage.module.css";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import { readOperatorAccess } from "@/lib/dashboard/assurance";
 import { gateSignInPage } from "@/lib/dashboard/gates";
@@ -59,17 +60,28 @@ export default async function PartnerLabSignInPage({ params, searchParams }: Pro
             </p>
           ) : null}
           <div className={formStyles.field}>
-            <label className={formStyles.label} htmlFor="partner-lab-sign-in-email">
-              {translate(locale, "dashboard.signIn.email")}
+            <label className={formStyles.label} htmlFor="partner-lab-sign-in-identifier">
+              <IsolatedCopy
+                locale={locale}
+                text={translate(locale, "partnerLab.signIn.identifier")}
+              />
             </label>
             <input
-              id="partner-lab-sign-in-email"
+              id="partner-lab-sign-in-identifier"
               className={formStyles.control}
-              type="email"
+              type="text"
               name="email"
               autoComplete="username"
+              placeholder={translate(locale, "partnerLab.signIn.identifierPlaceholder")}
+              aria-describedby="partner-lab-sign-in-identifier-help"
               required
             />
+            <p id="partner-lab-sign-in-identifier-help" className={formStyles.help}>
+              <IsolatedCopy
+                locale={locale}
+                text={translate(locale, "partnerLab.signIn.identifierHelp")}
+              />
+            </p>
           </div>
           <div className={formStyles.field}>
             <label className={formStyles.label} htmlFor="partner-lab-sign-in-password">

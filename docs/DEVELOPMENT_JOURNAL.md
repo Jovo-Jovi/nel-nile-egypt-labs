@@ -1478,6 +1478,24 @@ Catalogue 617/617. html 24. Migrations 36. Research 32.
 Do not start P10-T02, P09 or P07. Do not merge before the verdict.
 The human opens the PR.
 
+## 2026-09-15 — P10-T02: Sign in by numeric identifier
+
+Cut from `origin/main` at `72fe64c` (merge of `p10-t01`, PR #157).
+The platform accepted `00015092602@nel.invalid` through the public
+production signup route (HTTP 303, Location `created=1`; `auth.users`
+row with `nel_partner_state` absent). Sign-in now maps an all-digit
+identifier through the T01 function; an `@` input is the email path
+unchanged; anything else is the same `?error=1` as a wrong password.
+Six failure cases × two locales were indistinguishable on status,
+Location, body length, body sha256 and Set-Cookie count. Positive
+control signed in with the numeric identifier and, separately, with
+its mapped address. Throwaway deleted; `auth.users` 6 → 5.
+Catalogue 617 + 3 = 620. html 24. Migrations 36. Research 32.
+Open CF 102 + 0 − 0 = 102.
+
+Do not start P10-T03, P09 or P07. Do not merge before the verdict.
+The human opens the PR.
+
 
 
 

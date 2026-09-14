@@ -80,6 +80,10 @@ const ar = {
   "partnerLab.signUp.invalidEmail": "صيغة البريد الإلكتروني غير صالحة.",
   "partnerLab.signUp.passwordMismatch": "كلمتا المرور غير متطابقتين.",
   "partnerLab.signUp.weakPassword": "يجب أن تحتوي كلمة المرور على حرف صغير وحرف كبير ورقم ورمز.",
+  "partnerLab.signIn.identifier": "البريد الإلكتروني أو المعرّف الرقمي",
+  "partnerLab.signIn.identifierPlaceholder": "\u2066name@domain\u2069 أو \u20660123\u2069",
+  "partnerLab.signIn.identifierHelp":
+    "يُقبل عنوان البريد الإلكتروني، أو معرّف رقمي مثل \u20660123\u2069. الأرقام لاتينية فقط، والأصفار البادئة تُحفظ.",
   "partnerLab.status.pendingTitle": "الطلب قيد المراجعة",
   "partnerLab.status.pendingBody": "سيراجع أحد المشغّلين الطلب.",
   "partnerLab.status.declinedTitle": "لم يُقبل الطلب",
@@ -807,6 +811,10 @@ const en = {
   "partnerLab.signUp.invalidEmail": "The email address is not valid.",
   "partnerLab.signUp.passwordMismatch": "The two passwords do not match.",
   "partnerLab.signUp.weakPassword": "The password must include a lowercase letter, an uppercase letter, a number, and a symbol.",
+  "partnerLab.signIn.identifier": "Email or numeric identifier",
+  "partnerLab.signIn.identifierPlaceholder": "name@domain or 0123",
+  "partnerLab.signIn.identifierHelp":
+    "An email address, or a numeric identifier of Latin digits only. Leading zeros are kept.",
   "partnerLab.status.pendingTitle": "Request pending review",
   "partnerLab.status.pendingBody": "An Operator will review the request.",
   "partnerLab.status.declinedTitle": "Request declined",

@@ -285,8 +285,8 @@ mapping and its injectivity specification; sign-in accepting a numeric
 identifier with enumeration neutrality measured; and the Operator
 provisioning form, production-only.
 
-- [ ] **P10-T01** — The numeric identifier mapping
-- [ ] sign-in accepting a numeric identifier with enumeration neutrality measured
+- [x] **P10-T01** — The numeric identifier mapping
+- [ ] **P10-T02** — Sign in by numeric identifier
 - [ ] the Operator provisioning form, production-only
 - [ ] **G10** — item 9 re-proved against both account-creation paths; item 10 and D-40 untouched; OD-18 §6 neutrality measured for numeric identifiers; injectivity of 123, 0123 and 00123; existing self-signup and sign-in still working
 

@@ -34,6 +34,13 @@
   letter-spacing: 0;
 }
 
+.help {
+  margin: 0;
+  color: var(--nel-color-muted);
+  font-size: var(--nel-size-sm);
+  letter-spacing: 0;
+}
+
 .control {
   min-block-size: 44px;
   padding-block: var(--nel-space-12);
