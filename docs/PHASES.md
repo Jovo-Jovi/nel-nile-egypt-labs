@@ -269,6 +269,7 @@ P09 Design follows G4 and precedes P07 (OD-25).
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06
 
+- [ ] **P04-T01** — Confirm the flag, then build the bilingual catalogue index
 - [ ] static bilingual index over Programmes and LabTests
 - [ ] search on the البرامج page, both locales
 - [ ] **G4** — clinical, data integrity and bilingual gates
@@ -283,7 +284,7 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [ ] Owner handover — unscoped, see §5
 - [ ] **G7** launch — all four standards
 
-### P08 — PartnerLab accounts and private Offers · OPEN · G8 FAIL
+### P08 — PartnerLab accounts and private Offers · CLOSED at G8, 14 September 2026
 
 ~~Follows G5. Position relative to G7 undecided. Not in OD-12's delivery sequence; OD-12 predates OD-15.~~
 Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 predates OD-15.
@@ -330,9 +331,9 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **P08-T26** — Rehearse the live-principal policy before any decision is written
 - [x] **P08-T27** — Rewrite OD-21 §3 and land the live-principal policy
 - [x] **P08-T28** — Verify the live swap, author the companion ADR, retire invalidateSessions
-- [ ] **P08-T29** — G8-R2
-- [ ] **G8-R2** — re-run in full
-- [ ] **G8** — Boundary
+- [x] **P08-T29** — G8-R2
+- [x] **G8-R2** — re-run in full
+- [x] **G8** — Boundary
 
 ### P09 — Design · UNSTARTED · AFTER G4
 
@@ -453,12 +454,13 @@ Sent to the client today, that document understates the project badly.
 
 ## §7 What stops the project today
 
-G8 is FAIL until the reviewer issues it. G8-R of 10 September 2026 did not pass it. G8-R2 ran at P08-T29 on 14 September 2026; evidence is `docs/research/g8r2-evidence.md`. This document does not record G8 as PASSED. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks. CF-169 and CF-170 CLOSED at P08-T29. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it.
+G8 PASSED at reviewer verdict on 14 September 2026, on P08-T29 / G8-R2 evidence at `docs/research/g8r2-evidence.md`. G8-R of 10 September 2026 did not pass it. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks. CF-169 and CF-170 CLOSED at P08-T29. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it.
 
 ~~`currentNelPrincipal` exists only as a rolled-back rehearsal at P08-T26; `git grep currentNelPrincipal supabase/` is empty.~~
 **UNRATIFIED residual repair, PR-19, P08-T28.** That sentence was false after T27 authored the migration and T28 read the live function. Struck. `currentNelPrincipal` is authored (P08-T27) and live (P08-T28 STEP 1a).
 ~~G8 remains FAIL. G8-R2 has not run. CF-169 and CF-170 stay OPEN.~~
-**UNRATIFIED residual repair, PR-19, P08-T29.** Those three sentences were false after G8-R2 landed. G8 remains FAIL until the reviewer issues it. G8-R2 evidence is `docs/research/g8r2-evidence.md`. CF-169 and CF-170 CLOSED at P08-T29.
+**UNRATIFIED residual repair, PR-19, P08-T29.** Those three sentences were false after G8-R2 landed. G8-R2 evidence is `docs/research/g8r2-evidence.md`. CF-169 and CF-170 CLOSED at P08-T29.
+**UNRATIFIED residual repair, PR-19, P04-T01.** The heading and the first §7 sentence still said G8 FAIL after the reviewer issued PASS. G8 PASSED 14 September 2026. The P08 heading is CLOSED at G8.
 
 OD-09 is SIGNED and priced at 1000 EGP (OD-24). `"Announcement"` was authored at P06-T14 and applied by the human. ClinicalNotice is not built.
 

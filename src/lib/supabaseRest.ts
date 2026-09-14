@@ -13,6 +13,8 @@ export function supabaseRestConfig(): SupabaseRestConfig | null {
 type PublishedTable =
   | "Programme"
   | "ProgrammeTier"
+  | "ProgrammeLabTest"
+  | "LabTest"
   | "LabUnit"
   | "Offer"
   | "Video"

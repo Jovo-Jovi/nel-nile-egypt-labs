@@ -1406,6 +1406,23 @@ issues it.
 
 Do not start P04 or P09. Do not merge before the verdict.
 
+## 2026-09-14 — P04-T01: Confirm the flag, then build the bilingual catalogue index
+
+Parent is `origin/main` at `ec13a4a` (p08-t29 merge, PR #152). OD-29
+SIGNED. G8 recorded PASSED. Production SHA equals origin/main.
+`NEL_LABTEST_CONTENT` is present on the production deployment; kidney-profile
+renders 8 LabTestCard in both locales; 18 detail URLs render lists; unique
+rendered names 142, matched 142, unsigned 0. CF-22 and CF-194 CLOSED.
+
+§3f quoted. Linked counts 9, 71, 124, 71. Index assembler emits
+`src/generated/catalogue-index.json` (gitignored, not a public route) only
+when the flag is `"on"`. Live measure 71 LabTest keys in both locales,
+identical, 9 Programmes in membership. Local dotenv lacks the flag, so
+prebuild skips the artefact; Vercel Production will emit. No search UI.
+html 24. Route table unchanged. Catalogue 612/612. Open CF 101 + 0 − 2 = 99.
+
+Do not start P04-T02, P10, G4, P09 or P07. Do not merge before the verdict.
+
 
 
 
