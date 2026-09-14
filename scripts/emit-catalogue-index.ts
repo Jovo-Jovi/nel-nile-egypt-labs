@@ -1,6 +1,7 @@
 // CONTENT_MODEL.md §3f — emit the catalogue index at build time, only when
-// NEL_LABTEST_CONTENT is exactly "on". Not a public route. Unconsumed by
-// any search UI (P04-T02).
+// NEL_LABTEST_CONTENT is exactly "on". Not a public route. The programmes
+// page reads this file with fs when the flag is on and never statically
+// imports it, so a flag-off build does not need the file to resolve.
 
 import { createRequire } from "node:module";
 import { mkdir, unlink, writeFile } from "node:fs/promises";

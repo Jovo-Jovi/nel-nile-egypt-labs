@@ -1437,6 +1437,21 @@ Open CF 99 + 1 − 0 = 100. Catalogue 612/612. html 24. Migrations 36.
 Do not start P04-T02, P10, G4, P09 or P07. Do not merge before the verdict.
 The human opens one PR from `p04-t01-f` carrying both commits.
 
+## 2026-09-14 — P04-T02: Search on the programmes page, both locales
+
+Cut from `origin/main` at `0a04a22` (merge of `p04-t01-f`, PR #154).
+`tmp-p04-t01/` removed first. Search is client-side over the §3f artefact,
+fs-read when the flag is on, never a static import. Flag-off build skips
+the artefact and does not render search. Flag-on ships both locale maps
+(+27628 / +27521 html bytes). Spec 10 pass; runner 55 pass 0 fail.
+Catalogue 612 + 5 = 617. CF-196 OPEN. Open CF 100 + 1 − 0 = 101.
+html 24. Route table unchanged. G4 not run. `124 → 71` membership,
+178 render count. UNRATIFIED: R3 exemption on `ProgrammeSearch.tsx` and
+a `guard:boundary` skip of `programmes.html` `type=search` with no name.
+
+Do not start G4, P10, P09 or P07. Do not merge before the verdict.
+The human opens the PR.
+
 
 
 
