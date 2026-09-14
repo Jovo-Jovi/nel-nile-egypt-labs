@@ -263,7 +263,8 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [x] **P06-T14** — The Announcements module, and the last homepage gates
 - [x] **P06-T15** — The Announcement listing route, and two #insights corrections
 - [x] **P06-T16** — A configurable per-module publishing limit
-- [ ] **P06-T17** — Stop a transient database blip from killing a deploy
+- [x] **P06-T17** — Stop a transient database blip from killing a deploy
+- [ ] **P06-T18** — Assemble G6 evidence on production
 - [ ] **G6** — clinical and bilingual gates
 
 ### P04 — Catalogue search · UNSTARTED · AFTER P06
