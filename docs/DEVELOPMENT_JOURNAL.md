@@ -1334,6 +1334,21 @@ linked CLI. Catalogue 612/612. html 24. CF-189 OPEN. Open CF 99 + 1 − 0
 Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
 build A4. The human runs `npx supabase db push`.
 
+## 2026-09-14 — P06-T17: stop a transient database blip from killing a deploy
+
+Parent is `origin/main` at `0a09a80` (p06-t16 merge, PR #147). No
+migration. `fetchAnonPublishedJson` retries a network throw and statuses
+408, 429, 500, 502, 503, 504; 400 and 404 throw on the first attempt.
+Three attempts, 100 ms backoff, Retry-After capped at 250 ms, worst-case
+added wall time 500 ms per fetch. Exhaustion still throws. Injected-fetch
+specs: 7 cases in `supabaseRest.spec.ts`; runner
+`node --import ./scripts/spec/register.mjs --test` reports 33 pass 0 fail
+with the existing 26. html 24. Catalogue 612/612. CF-183 CLOSED. CF-190
+and CF-191 OPEN. Open CF 100 + 2 − 1 = 101.
+
+Do not start G8-R2, G6, P04 or P09. Do not add a CSP header. Do not
+build A4. Do not merge before the verdict.
+
 
 
 
