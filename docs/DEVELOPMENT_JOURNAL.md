@@ -1552,3 +1552,16 @@ exists; none was created.
 
 Open CF 103 + 0 − 0 = 103. Next free CF-201. Do not start P07.
 Do not merge before the verdict. The human opens the PR.
+
+## 2026-09-15 — P09-T01-F: Correct the pack, settle the note count, land it
+
+Cut from `origin/p09-t01` at `76b87b4`, not from main. Documents only.
+
+STEP 0 recorded the P09-T01 halt box as unchecked (PR-36) and added
+unchecked P09-T01-F. Halted at STEP 1: CF-25's three does not match the
+live 27 empty-note restricted rows of 30, so the pack eligibility-note
+bullet needs rewording and was not rewritten. The pack was not landed.
+CF-201 OPEN, owner reviewer, P07.
+
+Open CF 103 + 1 − 0 = 104. Next free CF-202. Do not start P07.
+Do not merge before the verdict. The human opens the PR.

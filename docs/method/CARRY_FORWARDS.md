@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-201**
+**Next free id: CF-202**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -206,6 +206,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-198 | PartnerLab sign-in response timing at P10-T02 STEP 3 separated a malformed input from a recognised one by two orders of magnitude (3–4 ms local vs 109–466 ms Auth-backed) and the known-wrong sample was slower than the unknown one. One sample per case cannot tell a real identifier oracle from connection warmup. OD-18 §6 turns on whether a response varies with whether an identifier is known. Do not measure it here — that is G10's. CLOSED at P10-T04: 30 randomised samples per case per locale through the production alias. Known vs unknown of the same format is not separable (ar Δmedian 17.7 ms inside IQR 56.9/33.6; en Δmedian 3.1 ms inside IQR 72.2/31.9). Format vs malformed remains separable and is not the OD-18 §6 question. Five HTTP fields identical across the six cases inside each locale. | builder | CLOSED at P10-T04 | P10-T04 |
 | CF-199 | The P10-T02 STEP 1 throwaway `00015092602@nel.invalid` (id `5434434a-8f3f-497e-a89e-f09f30016bfa`) was removed by a direct `auth.users` delete rather than the Auth Admin API, which can leave rows in `auth.identities`. Confirm none remain. CLOSED at P10-T03: `npx supabase db query --linked` returned `identity_by_user_id` 0, `identity_by_email` 0, `users_by_email` 0. `auth.users` total 5 and `auth.identities` total 5. Only SELECT was issued; no other identity was touched. | builder | CLOSED at P10-T03 | P10-T03 |
 | CF-200 | The PartnerLab provisioning form has not been rendered in a browser because it sits behind AAL2, so its RTL layout, keyboard order and focus behaviour are asserted from source. Recorded at P10-T04; do not repair it. | builder | OPEN | P09 |
+| CF-201 | CF-25 Item records unauthored notes for three audience-restricted `"ProgrammeLabTest"` rows (August record). P09-T01-F linked query of published `"ProgrammeLabTest"` grouped by `eligibility_audience`: `all` 94 rows, 94 with `note_ar` or `note_en` null or btrim-empty; `male` 14 rows, 12 empty; `female` 16 rows, 15 empty. Restricted published 30; empty-note restricted 27. Command: `npx supabase db query --linked --output-format json`. CF-25 was not edited. | reviewer | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
