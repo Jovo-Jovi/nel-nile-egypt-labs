@@ -1539,3 +1539,16 @@ each locale. CF-198 CLOSED. CF-200 OPEN (P09, form not rendered).
 Evidence at `docs/research/g10-evidence.md`. G10 is not recorded as
 passed. Do not start P09 or P07. Do not merge before the verdict.
 The human opens the PR.
+
+## 2026-09-15 — P09-T01: Land the design review pack
+
+Cut from `origin/main` at `5edc793` (merge of `p10-t04`, PR #160).
+Documents only. No source, migration or schema change.
+
+STEP 0 recorded the P10-T04 PASS and G10 PASSED. Halted at STEP 1:
+two pack claims failed their pre-landing checks, so
+`docs/DESIGN_REVIEW_PACK.md` was not landed. No docs-tree index
+exists; none was created.
+
+Open CF 103 + 0 − 0 = 103. Next free CF-201. Do not start P07.
+Do not merge before the verdict. The human opens the PR.
