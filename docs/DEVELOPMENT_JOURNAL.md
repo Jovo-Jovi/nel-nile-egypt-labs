@@ -1514,9 +1514,28 @@ are deferred.
 Do not start G10, P09 or P07. Do not merge before the verdict.
 The human opens the PR.
 
+## 2026-09-15 — P10-T04: Measure provisioning end to end, and settle the timing
 
+Cut from `origin/main` at `b1a24f2` (merge of `p10-t03`, PR #159).
+No source, migration or schema change.
 
+Production identity: `npx vercel api` → sha `b1a24f2`, READY / PROMOTED,
+target production, message Merge pull request #159. Equal to
+`origin/main`. `git cat-file -e` of
+`src/app/[locale]/dashboard/(session)/(modules)/partner-lab/provision/route.ts`
+at that SHA exits 0.
 
+Seven legs on the production alias with throwaway `00015092604` /
+`00015092604@nel.invalid`. Provision pending. Sign-in both locales.
+Pending cannot read a private Offer. Approve is the positive control
+(1 published row). Same bearer after revoke returns `[]`. Reject matches
+G8-R2 O5. Delete read back 0 / 0. Totals 6 / 6.
 
+Timing through the Vercel edge: 12 warmup discarded, 30 samples per
+case per locale, randomised. Known vs unknown of the same format is not
+separable. Format vs malformed is. Five HTTP fields identical inside
+each locale. CF-198 CLOSED. CF-200 OPEN (P09, form not rendered).
 
-
+Evidence at `docs/research/g10-evidence.md`. G10 is not recorded as
+passed. Do not start P09 or P07. Do not merge before the verdict.
+The human opens the PR.

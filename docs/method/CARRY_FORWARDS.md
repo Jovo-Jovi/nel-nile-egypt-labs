@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-200**
+**Next free id: CF-201**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -203,8 +203,9 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-195 | The four privilege-removing PartnerLab review Locations were measured in `ar` only at G8-R2 because the smoke runner hardcodes the locale, so the Operator review flow has no rendered evidence in `en`. Recorded at P04-T01-F from the G8-R2 evidence note; do not repair it. | builder | OPEN | P07 |
 | CF-196 | `CONTENT_MODEL.md` §3b states Platinum Male at 26 LabTests where the live signed RPC resolves 27, so a document states a total its own contents enumerate and the total is wrong; clinical data is unaffected — `verify_seed` is `124 -> 71` and the signed worklist matches. Do not repair it. | reviewer | OPEN | P07 |
 | CF-197 | The catalogue search control's keyboard order, focus order and `aria-live` announcement were asserted from source at P04-T02 and never exercised in a browser or with assistive technology. Recorded at P04-T03; do not repair it. | builder | OPEN | P09 |
-| CF-198 | PartnerLab sign-in response timing at P10-T02 STEP 3 separated a malformed input from a recognised one by two orders of magnitude (3–4 ms local vs 109–466 ms Auth-backed) and the known-wrong sample was slower than the unknown one. One sample per case cannot tell a real identifier oracle from connection warmup. OD-18 §6 turns on whether a response varies with whether an identifier is known. Do not measure it here — that is G10's. | builder | OPEN | G10 |
+| CF-198 | PartnerLab sign-in response timing at P10-T02 STEP 3 separated a malformed input from a recognised one by two orders of magnitude (3–4 ms local vs 109–466 ms Auth-backed) and the known-wrong sample was slower than the unknown one. One sample per case cannot tell a real identifier oracle from connection warmup. OD-18 §6 turns on whether a response varies with whether an identifier is known. Do not measure it here — that is G10's. CLOSED at P10-T04: 30 randomised samples per case per locale through the production alias. Known vs unknown of the same format is not separable (ar Δmedian 17.7 ms inside IQR 56.9/33.6; en Δmedian 3.1 ms inside IQR 72.2/31.9). Format vs malformed remains separable and is not the OD-18 §6 question. Five HTTP fields identical across the six cases inside each locale. | builder | CLOSED at P10-T04 | P10-T04 |
 | CF-199 | The P10-T02 STEP 1 throwaway `00015092602@nel.invalid` (id `5434434a-8f3f-497e-a89e-f09f30016bfa`) was removed by a direct `auth.users` delete rather than the Auth Admin API, which can leave rows in `auth.identities`. Confirm none remain. CLOSED at P10-T03: `npx supabase db query --linked` returned `identity_by_user_id` 0, `identity_by_email` 0, `users_by_email` 0. `auth.users` total 5 and `auth.identities` total 5. Only SELECT was issued; no other identity was touched. | builder | CLOSED at P10-T03 | P10-T03 |
+| CF-200 | The PartnerLab provisioning form has not been rendered in a browser because it sits behind AAL2, so its RTL layout, keyboard order and focus behaviour are asserted from source. Recorded at P10-T04; do not repair it. | builder | OPEN | P09 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
