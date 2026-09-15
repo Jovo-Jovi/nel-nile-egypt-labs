@@ -287,7 +287,8 @@ provisioning form, production-only.
 
 - [x] **P10-T01** — The numeric identifier mapping
 - [x] **P10-T02** — Sign in by numeric identifier
-- [ ] **P10-T03** — the Operator provisioning form, production-only
+- [x] **P10-T03** — the Operator provisioning form, production-only
+- [ ] **P10-T04** — Measure provisioning end to end, and settle the timing
 - [ ] **G10** — item 9 re-proved against both account-creation paths; item 10 and D-40 untouched; OD-18 §6 neutrality measured for numeric identifiers; injectivity of 123, 0123 and 00123; existing self-signup and sign-in still working
 
 ### P07 — Hardening and cutover · UNSTARTED · AFTER G9
