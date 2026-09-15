@@ -288,8 +288,8 @@ provisioning form, production-only.
 - [x] **P10-T01** — The numeric identifier mapping
 - [x] **P10-T02** — Sign in by numeric identifier
 - [x] **P10-T03** — the Operator provisioning form, production-only
-- [ ] **P10-T04** — Measure provisioning end to end, and settle the timing
-- [ ] **G10** — item 9 re-proved against both account-creation paths; item 10 and D-40 untouched; OD-18 §6 neutrality measured for numeric identifiers; injectivity of 123, 0123 and 00123; existing self-signup and sign-in still working
+- [x] **P10-T04** — Measure provisioning end to end, and settle the timing
+- [x] **G10** — item 9 re-proved against both account-creation paths; item 10 and D-40 untouched; OD-18 §6 neutrality measured for numeric identifiers; injectivity of 123, 0123 and 00123; existing self-signup and sign-in still working
 
 ### P07 — Hardening and cutover · UNSTARTED · AFTER G9
 
@@ -359,6 +359,9 @@ reviewed and merged one at a time (OD-19 §3). The design envelope is its own OD
 authored at P09; gate criteria are not decided here.
 
 - [ ] Short-lived branches from `main`, reviewed and merged one at a time
+- [ ] **P09-T01** — Land the design review pack
+- [ ] **P09-T01-F** — Correct the pack, settle the note count, land it
+- [ ] **P09-T01-F2** — Land the pack with all three corrections
 - [ ] **G9** — criteria not yet decided (OD-19)
 
 ---
