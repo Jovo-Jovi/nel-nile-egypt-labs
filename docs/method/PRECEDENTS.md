@@ -4,7 +4,7 @@ Binding procedural rulings. Consult before re-deriving an established pattern.
 A precedent binds every prompt issued and every verdict returned. To change one,
 supersede it explicitly and name what it replaces. Never deviate silently.
 
-**Next free id: PR-38**
+**Next free id: PR-39**
 
 | Id | Ruling |
 |---|---|
@@ -45,3 +45,4 @@ supersede it explicitly and name what it replaces. Never deviate silently.
 | **PR-35** | A Windows checkout without `.gitattributes` converts LF to CRLF, so any hash taken from the working file diverges from the committed bytes. The canonical method for every frozen-artefact check on this project is `git show <ref>:<path>` piped to `sha256sum`. A hash computed any other way — `hashlib` over the working file, a PowerShell pipe that transcodes, CRLF-normalised bytes — is not evidence. Established at P08-T24, where the signed addendum was byte-identical to `main` (blob `612d7491…`) and the reported digest `20b07ec8…24545` was the sha256 of the CRLF working file, not of the committed bytes `2b63422e…340d`. |
 | **PR-36** | A halted task's Verdict cell uses the `halted` class even when the reviewer judges the halt correct; the correctness belongs in the prose. A PASS-prefixed verdict on an unchecked box fails `guard:phases` R3, and checking the box to satisfy the guard records a task as complete when it stopped early. Established at P06-T03/T05. |
 | **PR-37** | Amends PR-35. PR-35's canonical command (`git show <ref>:<path>` piped to `sha256sum`) is unavailable in this project's default shell (PowerShell). A substitute that pipes through that shell transcodes and is not evidence. The byte-exact method is `subprocess.run(["git", "show", "<ref>:<path>"], capture_output=True).stdout` hashed with `hashlib.sha256` — no shell pipe touches the blob. A frozen-artefact digest that does not match its known value **halts the task** rather than being reported as a result. Established at P06-T12, where that method reproduced the three known clinical digests `22b2c73b…7569f`, `aa0469ee…aef7`, and `2b63422e…340d`. |
+| **PR-38** | A row figure from a statistics source — the Supabase MCP `list_tables` tool's row field included — is an estimate, never a count. A row count is `count(*)` from a named command, and an estimate that disagrees with the record is resolved by that count before it is reported as a finding. Established at ENV-T01-F, 17 September 2026, where `list_tables` read `"Programme"` and `"ProgrammeTier"` as 0 and `count(*)` returned 9 and 14, all published. |

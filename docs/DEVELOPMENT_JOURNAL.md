@@ -1577,3 +1577,24 @@ docs-tree index exists; none created. CF-25 and CF-201 unedited.
 
 Open CF 104 + 0 − 0 = 104. Next free CF-202. Do not start P07.
 Do not merge before the verdict. The human opens the PR.
+
+## 2026-09-17 — P09-T02: Record the pack verdict and land the environment rows
+
+Cut from `origin/main` at `41ce6f4`. Documents and `.gitignore` only.
+
+STEP 0 recorded P09-T01-F2 as PASS at reviewer verdict, re-verified on main
+after the merge, and checked its box. P09-T01 and P09-T01-F stay unchecked
+with halted-class verdicts (PR-36). Unchecked P09-T02 added.
+
+Two local environment tasks preceded this one and landed nothing in the
+repository. ENV-T01 halted correctly at preflight on a reviewer fence
+defect. ENV-T01-F moved the Cursor MCP config out of git, counted the
+catalogue with count(*) at 9 Programme, 14 ProgrammeTier, 124
+ProgrammeLabTest and 71 LabTest, all published, and scoped the Supabase MCP
+server to database, debugging and docs with writes left on by the human's
+decision. PR-38 and CF-203 come from that task.
+
+PR-38 landed. CF-202, CF-203 and CF-204 landed OPEN. `.cursor/mcp.json` is
+ignored by a tracked line. Open CF 104 + 3 − 0 = 107. Next free CF-205.
+Next free PR-39. Do not start P07. Do not merge before the verdict. The
+human opens the PR.

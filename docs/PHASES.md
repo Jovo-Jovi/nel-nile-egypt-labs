@@ -361,7 +361,8 @@ authored at P09; gate criteria are not decided here.
 - [ ] Short-lived branches from `main`, reviewed and merged one at a time
 - [ ] **P09-T01** — Land the design review pack
 - [ ] **P09-T01-F** — Correct the pack, settle the note count, land it
-- [ ] **P09-T01-F2** — Land the pack with all three corrections
+- [x] **P09-T01-F2** — Land the pack with all three corrections
+- [ ] **P09-T02** — Record the pack verdict, land PR-38, three carry-forwards and the MCP ignore line
 - [ ] **G9** — criteria not yet decided (OD-19)
 
 ---
