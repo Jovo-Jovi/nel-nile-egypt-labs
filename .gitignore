@@ -22,6 +22,9 @@ tsconfig.tsbuildinfo
 supabase/.temp/
 supabase/.branches/
 
+# Cursor MCP config — machine-local, carries a project ref (PR-23)
+.cursor/mcp.json
+
 # Logs
 *.log
 
