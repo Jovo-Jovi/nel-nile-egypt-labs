@@ -1598,3 +1598,39 @@ PR-38 landed. CF-202, CF-203 and CF-204 landed OPEN. `.cursor/mcp.json` is
 ignored by a tracked line. Open CF 104 + 3 − 0 = 107. Next free CF-205.
 Next free PR-39. Do not start P07. Do not merge before the verdict. The
 human opens the PR.
+
+## 23 September 2026 — P09-T03 to P09-T03-F4: Land the designer's dashboard composition
+
+P09-T03 cut `p09-t03` from `origin/main` at `e6e7645`, applied the
+designer's fourteen dashboard files from `origin/designer-review` at
+`acbc8c9` with C1 to C6 and the DESIGN_SYSTEM amendment, and halted at
+STEP 4b on an identity check that compared build framing.
+
+P09-T03-F replaced that check with a rendered one, proved every public
+page unchanged, then halted on two findings:
+- The designer's glass never blurred in a production build. Every rule
+  declared `backdrop-filter` and then `-webkit-backdrop-filter`, and the
+  minifier kept only the prefixed form, which Chromium ignores.
+- Site Settings logged React error 418, which main logs too.
+
+P09-T03-F2 deleted the thirteen hand-written prefixes (C7), then halted
+when its zero-occurrence check counted the designer's `@supports`
+fallback, which stays. P09-T03-F3 then halted when its focus check
+treated the designer's stronger focus style as a regression.
+
+P09-T03-F4 finished the task. The build emits both forms of every glass
+declaration. It re-proved the public pages on the final tree: 24 of 24
+structurally identical, every differing CSS rule dashboard-scoped, and
+56 of 56 pixel pairs identical against main. Every rendered glass
+surface computes its blur. Console errors and focus stops were compared
+with main, and neither regressed.
+
+Four carry-forwards landed:
+- CF-205: public routes download dashboard CSS (83,990 bytes on main,
+  98,324 here).
+- CF-206: the pre-existing React 418 on Site Settings.
+- CF-207: the gaps panel and the PartnerLab review tabs, to be seen on
+  production after merge.
+- CF-208: a date-input tab stop without visible focus, which main shares.
+
+Open CF 107 + 4 − 0 = 111. Next free CF-209.
