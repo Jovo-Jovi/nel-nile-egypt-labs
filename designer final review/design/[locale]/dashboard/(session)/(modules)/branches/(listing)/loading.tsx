@@ -1,0 +1,13 @@
+import { DashboardSegmentLoading } from "@/components/dashboard/DashboardSegmentLoading";
+
+// Listing-only. A loading.tsx beside [id] starts the response as 200, so
+// notFound() on a missing row cannot set HTTP 404 (Next.js loading.js).
+
+export default function Loading() {
+  return (
+    <DashboardSegmentLoading
+      titleKey="dashboard.branches.heading"
+      pendingLabelKey="dashboard.branches.pending"
+    />
+  );
+}

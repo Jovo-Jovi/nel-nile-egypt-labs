@@ -1,0 +1,37 @@
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-16);
+  margin-block: 0;
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.wellGate {
+  --nel-gate-radius: var(--nel-radius-md);
+  border-radius: var(--nel-radius-md);
+  background-color: var(--nel-color-surface);
+  box-shadow: var(--nel-elevation-1-shadow);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--nel-color-surface);
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--nel-color-background);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nel-space-8);
+  padding: var(--nel-space-32);
+}

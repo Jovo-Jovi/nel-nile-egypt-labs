@@ -1,0 +1,681 @@
+// Published-only listings for Programme, LabUnit, Offer, Video,
+// Equipment, Branch, SiteSettings and Announcement. Ordered by display_order.
+// Unpublished rows are never selected. Offers are read through the
+// session client (listPublishedOffers) so M9's partner-read policy can
+// match the JWT; the published filter is appended in that function where
+// a caller cannot omit it (PR-08). Every other listing still uses
+// fetchAnonPublishedJson, which appends the same filter. An empty list
+// is D-42 failing closed — the pass condition, not a gap to fill.
+// youtube_id is selected as the watch destination only. The poster stays
+// the linked MediaAsset. A listing must never emit a host thumbnail or an
+// autoloading embed (D-13, OD-14, BOUNDARY_MODEL.md §5).
+// Programme listings select name, description and slug. No LabTest name,
+// membership, tier or preparation notes. The listing card links to
+// /{locale}/programmes/{slug}. Detail membership is resolved by
+// public."programmeLabTests".
+
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { fetchAnonPublishedJson, type PublishedFetchCache } from "./supabaseRest";
+import { offerIsExpired } from "./listingFormat";
+import { createSupabaseServerClient } from "./supabase/server";
+
+export type MediaPoster = {
+  storagePath: string;
+  altAr: string | null;
+  altEn: string | null;
+};
+
+export type PublishedOffer = {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  validFrom: string | null;
+  validUntil: string | null;
+  priceAmount: string | null;
+  priceCurrency: string | null;
+  poster: MediaPoster | null;
+};
+
+export type PublishedVideo = {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  youtubeId: string | null;
+  poster: MediaPoster | null;
+};
+
+export type PublishedEquipment = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  poster: MediaPoster | null;
+};
+
+export type PublishedAnnouncement = {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  bodyAr: string;
+  bodyEn: string;
+  publishedAt: string | null;
+  poster: MediaPoster | null;
+};
+
+export type PublishedProgramme = {
+  id: string;
+  slug: string;
+  nameAr: string;
+  nameEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+};
+
+export type PublishedLabUnit = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+};
+
+export type PublishedBranch = {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  isHeadOffice: boolean;
+  latitude: number | null;
+  longitude: number | null;
+  addressAr: string | null;
+  addressEn: string | null;
+  hoursAr: string | null;
+  hoursEn: string | null;
+  whatsappE164: string | null;
+};
+
+export type BranchMapPin = {
+  id: string;
+  name: string;
+  isHeadOffice: boolean;
+  x: number;
+  y: number;
+};
+
+export type PublishedSiteSettings = {
+  id: string;
+  hotline: string | null;
+  whatsappE164: string | null;
+  whatsappMessageAr: string | null;
+  whatsappMessageEn: string | null;
+  hoursAr: string | null;
+  hoursEn: string | null;
+  facebookUrl: string | null;
+  instagramUrl: string | null;
+  linkedinUrl: string | null;
+  youtubeUrl: string | null;
+  labToLabAr: string | null;
+  labToLabEn: string | null;
+  aboutBodyAr: string | null;
+  aboutBodyEn: string | null;
+  privacyBodyAr: string | null;
+  privacyBodyEn: string | null;
+  seoTitleAr: string | null;
+  seoTitleEn: string | null;
+  seoDescriptionAr: string | null;
+  seoDescriptionEn: string | null;
+  heroEyebrowAr: string | null;
+  heroEyebrowEn: string | null;
+  heroHeadlineAr: string | null;
+  heroHeadlineEn: string | null;
+  heroStandfirstAr: string | null;
+  heroStandfirstEn: string | null;
+  reason1TitleAr: string | null;
+  reason1TitleEn: string | null;
+  reason1BodyAr: string | null;
+  reason1BodyEn: string | null;
+  reason2TitleAr: string | null;
+  reason2TitleEn: string | null;
+  reason2BodyAr: string | null;
+  reason2BodyEn: string | null;
+  reason3TitleAr: string | null;
+  reason3TitleEn: string | null;
+  reason3BodyAr: string | null;
+  reason3BodyEn: string | null;
+  heroMediaId: string | null;
+  faviconMediaId: string | null;
+  appIconMediaId: string | null;
+};
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
+
+function asNonEmptyString(value: unknown): string | null {
+  return typeof value === "string" && value.length > 0 ? value : null;
+}
+
+function asOptionalString(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  return typeof value === "string" ? value : null;
+}
+
+function asPriceAmount(value: unknown): string | null {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value === "string" && value.length > 0) return value;
+  return null;
+}
+
+function asBoolean(value: unknown): boolean {
+  return value === true;
+}
+
+function asHttpsUrl(value: unknown): string | null {
+  const text = asNonEmptyString(value);
+  if (text === null || !text.startsWith("https://")) return null;
+  try {
+    const parsed = new URL(text);
+    return parsed.protocol === "https:" ? text : null;
+  } catch {
+    return null;
+  }
+}
+
+function asCoordinate(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.length > 0) {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) ? numeric : null;
+  }
+  return null;
+}
+
+const YOUTUBE_HOST_ID = /^[A-Za-z0-9_-]{11}$/;
+
+function asYoutubeId(value: unknown): string | null {
+  const text = asNonEmptyString(value);
+  if (text === null || !YOUTUBE_HOST_ID.test(text)) return null;
+  return text;
+}
+
+function parsePoster(value: unknown): MediaPoster | null {
+  const record = asRecord(value);
+  if (record === null) return null;
+  if (record.publication_state !== undefined && record.publication_state !== "published") {
+    return null;
+  }
+  const storagePath = asNonEmptyString(record.storage_path);
+  if (storagePath === null) return null;
+  return {
+    storagePath,
+    altAr: asOptionalString(record.alt_ar),
+    altEn: asOptionalString(record.alt_en),
+  };
+}
+
+const MEDIA_EMBED = "MediaAsset(storage_path,alt_ar,alt_en,publication_state)";
+
+const OFFER_COLUMNS =
+  `id,title_ar,title_en,description_ar,description_en,valid_from,valid_until,price_amount,price_currency,publication_state,display_order,${MEDIA_EMBED}`;
+
+const VIDEO_SELECT =
+  `select=id,title_ar,title_en,description_ar,description_en,youtube_id,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
+const EQUIPMENT_SELECT =
+  `select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
+const ANNOUNCEMENT_SELECT =
+  `select=id,title_ar,title_en,body_ar,body_en,published_at,publication_state,display_order,${MEDIA_EMBED}&order=display_order.asc`;
+
+const PROGRAMME_SELECT =
+  "select=id,slug,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
+
+const LAB_UNIT_SELECT =
+  "select=id,name_ar,name_en,description_ar,description_en,publication_state,display_order&order=display_order.asc";
+
+// address_*, hours_* and whatsapp_e164 are selected so they can render.
+// PR-16 governs where published business data is stored, not whether it
+// renders. CONTENT_MODEL.md row 6 puts addresses in the table precisely
+// so they can be published.
+const BRANCH_SELECT =
+  "select=id,name_ar,name_en,is_head_office,latitude,longitude,address_ar,address_en,hours_ar,hours_en,whatsapp_e164,publication_state,display_order&order=display_order.asc";
+
+const SITE_SETTINGS_SELECT =
+  "select=id,hotline,whatsapp_e164,whatsapp_message_ar,whatsapp_message_en,hours_ar,hours_en,facebook_url,instagram_url,linkedin_url,youtube_url,lab_to_lab_ar,lab_to_lab_en,about_body_ar,about_body_en,privacy_body_ar,privacy_body_en,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,hero_eyebrow_ar,hero_eyebrow_en,hero_headline_ar,hero_headline_en,hero_standfirst_ar,hero_standfirst_en,reason1_title_ar,reason1_title_en,reason1_body_ar,reason1_body_en,reason2_title_ar,reason2_title_en,reason2_body_ar,reason2_body_en,reason3_title_ar,reason3_title_en,reason3_body_ar,reason3_body_en,hero_media,favicon_media,app_icon_media,publication_state,display_order&order=display_order.asc";
+
+function parseOffer(value: unknown): PublishedOffer | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const titleAr = asNonEmptyString(row.title_ar);
+  const titleEn = asNonEmptyString(row.title_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || titleAr === null || titleEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  const validUntil = asOptionalString(row.valid_until);
+  if (offerIsExpired(validUntil)) return null;
+  return {
+    id,
+    titleAr,
+    titleEn,
+    descriptionAr,
+    descriptionEn,
+    validFrom: asOptionalString(row.valid_from),
+    validUntil,
+    priceAmount: asPriceAmount(row.price_amount),
+    priceCurrency: asNonEmptyString(row.price_currency),
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function parseVideo(value: unknown): PublishedVideo | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const titleAr = asNonEmptyString(row.title_ar);
+  const titleEn = asNonEmptyString(row.title_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || titleAr === null || titleEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  return {
+    id,
+    titleAr,
+    titleEn,
+    descriptionAr,
+    descriptionEn,
+    youtubeId: asYoutubeId(row.youtube_id),
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function parseEquipment(value: unknown): PublishedEquipment | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const nameAr = asNonEmptyString(row.name_ar);
+  const nameEn = asNonEmptyString(row.name_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || nameAr === null || nameEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  return {
+    id,
+    nameAr,
+    nameEn,
+    descriptionAr,
+    descriptionEn,
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function parseAnnouncement(value: unknown): PublishedAnnouncement | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const titleAr = asNonEmptyString(row.title_ar);
+  const titleEn = asNonEmptyString(row.title_en);
+  const bodyAr = asNonEmptyString(row.body_ar);
+  const bodyEn = asNonEmptyString(row.body_en);
+  const publishedAtRaw = asNonEmptyString(row.published_at);
+  const publishedAt = publishedAtRaw === null ? null : publishedAtRaw.slice(0, 10);
+  if (id === null || titleAr === null || titleEn === null) return null;
+  if (bodyAr === null || bodyEn === null || publishedAt === null) return null;
+  return {
+    id,
+    titleAr,
+    titleEn,
+    bodyAr,
+    bodyEn,
+    publishedAt,
+    poster: parsePoster(row.MediaAsset),
+  };
+}
+
+function parseNamedDescription(
+  value: unknown,
+): { id: string; nameAr: string; nameEn: string; descriptionAr: string; descriptionEn: string } | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const nameAr = asNonEmptyString(row.name_ar);
+  const nameEn = asNonEmptyString(row.name_en);
+  const descriptionAr = asNonEmptyString(row.description_ar);
+  const descriptionEn = asNonEmptyString(row.description_en);
+  if (id === null || nameAr === null || nameEn === null) return null;
+  if (descriptionAr === null || descriptionEn === null) return null;
+  return { id, nameAr, nameEn, descriptionAr, descriptionEn };
+}
+
+function parseProgramme(value: unknown): PublishedProgramme | null {
+  const named = parseNamedDescription(value);
+  if (named === null) return null;
+  const row = asRecord(value);
+  if (row === null) return null;
+  const slug = asNonEmptyString(row.slug);
+  if (slug === null) return null;
+  return { ...named, slug };
+}
+
+function parseLabUnit(value: unknown): PublishedLabUnit | null {
+  return parseNamedDescription(value);
+}
+
+function parseSiteSettings(value: unknown): PublishedSiteSettings | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  if (id === null) return null;
+  return {
+    id,
+    hotline: asNonEmptyString(row.hotline),
+    whatsappE164: asNonEmptyString(row.whatsapp_e164),
+    whatsappMessageAr: asOptionalString(row.whatsapp_message_ar),
+    whatsappMessageEn: asOptionalString(row.whatsapp_message_en),
+    hoursAr: asNonEmptyString(row.hours_ar),
+    hoursEn: asNonEmptyString(row.hours_en),
+    facebookUrl: asHttpsUrl(row.facebook_url),
+    instagramUrl: asHttpsUrl(row.instagram_url),
+    linkedinUrl: asHttpsUrl(row.linkedin_url),
+    youtubeUrl: asHttpsUrl(row.youtube_url),
+    labToLabAr: asNonEmptyString(row.lab_to_lab_ar),
+    labToLabEn: asNonEmptyString(row.lab_to_lab_en),
+    aboutBodyAr: asNonEmptyString(row.about_body_ar),
+    aboutBodyEn: asNonEmptyString(row.about_body_en),
+    privacyBodyAr: asNonEmptyString(row.privacy_body_ar),
+    privacyBodyEn: asNonEmptyString(row.privacy_body_en),
+    seoTitleAr: asNonEmptyString(row.seo_title_ar),
+    seoTitleEn: asNonEmptyString(row.seo_title_en),
+    seoDescriptionAr: asNonEmptyString(row.seo_description_ar),
+    seoDescriptionEn: asNonEmptyString(row.seo_description_en),
+    heroEyebrowAr: asNonEmptyString(row.hero_eyebrow_ar),
+    heroEyebrowEn: asNonEmptyString(row.hero_eyebrow_en),
+    heroHeadlineAr: asNonEmptyString(row.hero_headline_ar),
+    heroHeadlineEn: asNonEmptyString(row.hero_headline_en),
+    heroStandfirstAr: asNonEmptyString(row.hero_standfirst_ar),
+    heroStandfirstEn: asNonEmptyString(row.hero_standfirst_en),
+    reason1TitleAr: asNonEmptyString(row.reason1_title_ar),
+    reason1TitleEn: asNonEmptyString(row.reason1_title_en),
+    reason1BodyAr: asNonEmptyString(row.reason1_body_ar),
+    reason1BodyEn: asNonEmptyString(row.reason1_body_en),
+    reason2TitleAr: asNonEmptyString(row.reason2_title_ar),
+    reason2TitleEn: asNonEmptyString(row.reason2_title_en),
+    reason2BodyAr: asNonEmptyString(row.reason2_body_ar),
+    reason2BodyEn: asNonEmptyString(row.reason2_body_en),
+    reason3TitleAr: asNonEmptyString(row.reason3_title_ar),
+    reason3TitleEn: asNonEmptyString(row.reason3_title_en),
+    reason3BodyAr: asNonEmptyString(row.reason3_body_ar),
+    reason3BodyEn: asNonEmptyString(row.reason3_body_en),
+    heroMediaId: asNonEmptyString(row.hero_media),
+    faviconMediaId: asNonEmptyString(row.favicon_media),
+    appIconMediaId: asNonEmptyString(row.app_icon_media),
+  };
+}
+
+function parseBranch(value: unknown): PublishedBranch | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  const id = asNonEmptyString(row.id);
+  const nameAr = asNonEmptyString(row.name_ar);
+  const nameEn = asNonEmptyString(row.name_en);
+  if (id === null || nameAr === null || nameEn === null) return null;
+  return {
+    id,
+    nameAr,
+    nameEn,
+    isHeadOffice: asBoolean(row.is_head_office),
+    latitude: asCoordinate(row.latitude),
+    longitude: asCoordinate(row.longitude),
+    addressAr: asNonEmptyString(row.address_ar),
+    addressEn: asNonEmptyString(row.address_en),
+    hoursAr: asNonEmptyString(row.hours_ar),
+    hoursEn: asNonEmptyString(row.hours_en),
+    whatsappE164: asNonEmptyString(row.whatsapp_e164),
+  };
+}
+
+function mapPublished<T>(payload: unknown, parse: (value: unknown) => T | null): T[] {
+  if (!Array.isArray(payload)) return [];
+  const rows: T[] = [];
+  for (const item of payload) {
+    const parsed = parse(item);
+    if (parsed !== null) rows.push(parsed);
+  }
+  return rows;
+}
+
+export async function listPublishedOffers(
+  client?: SupabaseClient | null,
+): Promise<PublishedOffer[]> {
+  // Session-bound. After M10, Offer_published_read is gone, so the
+  // anonymous REST helper cannot see a row. createSupabaseServerClient
+  // forwards the request cookies; Postgres then sees the JWT and
+  // Offer_partner_read can match nel_principal. The published filter is
+  // still appended here where a caller cannot omit it (PR-08). A caller
+  // that has just refreshed the pending token may pass that same client
+  // so this request's JWT is the refreshed one.
+  const supabase = client ?? (await createSupabaseServerClient());
+  if (supabase === null) return [];
+  const { data, error } = await supabase
+    .from("Offer")
+    .select(OFFER_COLUMNS)
+    .eq("publication_state", "published")
+    .order("display_order", { ascending: true });
+  if (error || !Array.isArray(data)) return [];
+  return mapPublished(data, parseOffer);
+}
+
+export async function listPublishedVideos(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedVideo[]> {
+  const payload = await fetchAnonPublishedJson("Video", VIDEO_SELECT, cache);
+  return mapPublished(payload, parseVideo);
+}
+
+export async function listPublishedEquipment(): Promise<PublishedEquipment[]> {
+  const payload = await fetchAnonPublishedJson("Equipment", EQUIPMENT_SELECT);
+  return mapPublished(payload, parseEquipment);
+}
+
+export async function listPublishedAnnouncements(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedAnnouncement[]> {
+  const payload = await fetchAnonPublishedJson("Announcement", ANNOUNCEMENT_SELECT, cache);
+  return mapPublished(payload, parseAnnouncement);
+}
+
+export async function listPublishedProgrammes(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedProgramme[]> {
+  // A caught transport failure returning [] is indistinguishable from an
+  // empty published set, which is CF-99's defect class. A build that dies
+  // loudly is recoverable by redeploy; a build that ships an empty
+  // catalogue is not visible at all. Do not catch-to-empty.
+  const payload = await fetchAnonPublishedJson("Programme", PROGRAMME_SELECT, cache);
+  return mapPublished(payload, parseProgramme);
+}
+
+export async function listPublishedLabUnits(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedLabUnit[]> {
+  const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_SELECT, cache);
+  return mapPublished(payload, parseLabUnit);
+}
+
+export async function listPublishedBranches(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedBranch[]> {
+  const payload = await fetchAnonPublishedJson("Branch", BRANCH_SELECT, cache);
+  return mapPublished(payload, parseBranch);
+}
+
+// Singleton. The published-only filter is the same as every other table
+// in this module. Zero published rows returns null — D-42 fail-closed.
+export async function publishedSiteSettings(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedSiteSettings | null> {
+  const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_SELECT, cache);
+  const rows = mapPublished(payload, parseSiteSettings);
+  return rows[0] ?? null;
+}
+
+// Additive columns from 20260913140000_photography_slot_media.sql.
+// Shared SiteSettings and LabUnit selects stay on columns that already
+// exist so SSG pages keep building. The home route is force-dynamic and
+// reads these columns here. A query failure throws; it is not converted
+// into an empty overlay.
+const SITE_SETTINGS_STORY_SELECT =
+  "select=id,story_main_media,story_float_media,story_float_alt_media,publication_state";
+
+const LAB_UNIT_PHOTOGRAPHY_SELECT =
+  "select=id,photography_media,publication_state,display_order&order=display_order.asc";
+
+export type PublishedStoryMediaIds = {
+  storyMainMediaId: string | null;
+  storyFloatMediaId: string | null;
+  storyFloatAltMediaId: string | null;
+};
+
+const EMPTY_STORY_MEDIA: PublishedStoryMediaIds = {
+  storyMainMediaId: null,
+  storyFloatMediaId: null,
+  storyFloatAltMediaId: null,
+};
+
+function parseStoryMediaIds(value: unknown): PublishedStoryMediaIds | null {
+  const row = asRecord(value);
+  if (row === null) return null;
+  if (row.publication_state !== "published") return null;
+  return {
+    storyMainMediaId: asNonEmptyString(row.story_main_media),
+    storyFloatMediaId: asNonEmptyString(row.story_float_media),
+    storyFloatAltMediaId: asNonEmptyString(row.story_float_alt_media),
+  };
+}
+
+export async function publishedStoryMediaIds(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<PublishedStoryMediaIds> {
+  const payload = await fetchAnonPublishedJson("SiteSettings", SITE_SETTINGS_STORY_SELECT, cache);
+  const rows = mapPublished(payload, parseStoryMediaIds);
+  return rows[0] ?? EMPTY_STORY_MEDIA;
+}
+
+export async function publishedLabUnitPhotographyMedia(
+  cache: PublishedFetchCache = "force-cache",
+): Promise<ReadonlyMap<string, string | null>> {
+  const payload = await fetchAnonPublishedJson("LabUnit", LAB_UNIT_PHOTOGRAPHY_SELECT, cache);
+  const map = new Map<string, string | null>();
+  if (!Array.isArray(payload)) return map;
+  for (const item of payload) {
+    const row = asRecord(item);
+    if (row === null || row.publication_state !== "published") continue;
+    const id = asNonEmptyString(row.id);
+    if (id === null) continue;
+    map.set(id, asNonEmptyString(row.photography_media));
+  }
+  return map;
+}
+
+const MEDIA_ROW_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const MEDIA_POSTER_SELECT = "select=id,storage_path,alt_ar,alt_en,publication_state";
+
+export async function publishedMediaPoster(
+  id: string | null,
+  cache: PublishedFetchCache = "force-cache",
+): Promise<MediaPoster | null> {
+  if (id === null || !MEDIA_ROW_ID.test(id)) return null;
+  const payload = await fetchAnonPublishedJson(
+    "MediaAsset",
+    `${MEDIA_POSTER_SELECT}&id=eq.${id}`,
+    cache,
+  );
+  const rows = mapPublished(payload, parsePoster);
+  return rows[0] ?? null;
+}
+
+// The map is approved only when every published Branch carries both
+// coordinates. A partial set is still CF-69: missing geography is a
+// defect, not a pin to invent.
+export function publishedBranchesHaveMapCoordinates(rows: PublishedBranch[]): boolean {
+  return rows.length > 0 && rows.every((row) => row.latitude !== null && row.longitude !== null);
+}
+
+// Pins are placed on the schematic only when every published row carries
+// both coordinates. The drawing is not a georeferenced map (CF-69): x/y
+// are a relative fit of those published points into the viewBox, north-up,
+// so a missing coordinate still cannot be guessed. PR-16 governs where
+// published business data is stored, not whether it renders.
+export function branchMapPins(rows: PublishedBranch[], locale: "ar" | "en"): BranchMapPin[] {
+  if (!publishedBranchesHaveMapCoordinates(rows)) return [];
+  const latitudes: number[] = [];
+  const longitudes: number[] = [];
+  for (const row of rows) {
+    if (row.latitude === null || row.longitude === null) return [];
+    latitudes.push(row.latitude);
+    longitudes.push(row.longitude);
+  }
+  const minLat = Math.min(...latitudes);
+  const maxLat = Math.max(...latitudes);
+  const minLng = Math.min(...longitudes);
+  const maxLng = Math.max(...longitudes);
+  const latSpan = Math.max(maxLat - minLat, 0.01);
+  const lngSpan = Math.max(maxLng - minLng, 0.01);
+  const pad = 18;
+  const inner = 100 - pad * 2;
+  const pins: BranchMapPin[] = [];
+  for (const row of rows) {
+    const latitude = row.latitude;
+    const longitude = row.longitude;
+    if (latitude === null || longitude === null) return [];
+    const name = locale === "ar" ? row.nameAr : row.nameEn;
+    if (name.length === 0) return [];
+    pins.push({
+      id: row.id,
+      name,
+      isHeadOffice: row.isHeadOffice,
+      x: pad + ((longitude - minLng) / lngSpan) * inner,
+      y: pad + ((maxLat - latitude) / latSpan) * inner,
+    });
+  }
+  return pins;
+}
+
+const FORBIDDEN_POSTER = /youtube\.com|youtu\.be|ytimg\.com/i;
+
+export function posterSrc(poster: MediaPoster | null): string | null {
+  if (poster === null) return null;
+  const path = poster.storagePath;
+  if (FORBIDDEN_POSTER.test(path)) return null;
+  if (/^https?:\/\//i.test(path)) return null;
+  if (path.includes("..") || path.includes("/") || path.includes("\\")) return null;
+  if (path.length === 0) return null;
+  return `/media-asset/${encodeURIComponent(path)}`;
+}
+
+export function posterAlt(locale: "ar" | "en", poster: MediaPoster | null): string | null {
+  if (poster === null) return null;
+  return locale === "ar" ? poster.altAr : poster.altEn;
+}
+
+// Destination only. Never a host thumbnail, never an embed. The host
+// string lives here so R5's visitor trees stay clean (D-13, OD-14).
+export function videoWatchHref(youtubeId: string | null): string | null {
+  if (youtubeId === null) return null;
+  return `https://www.youtube.com/watch?v=${youtubeId}`;
+}

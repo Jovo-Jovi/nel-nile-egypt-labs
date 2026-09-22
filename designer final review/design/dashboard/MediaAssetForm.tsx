@@ -1,0 +1,522 @@
+"use client";
+
+import { useRef, useState, type DragEvent } from "react";
+import { createPortal } from "react-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { CatalogKey, Locale } from "@/lib/catalog";
+import { IsolatedCopy } from "@/components/ui/Isolate";
+import { useClientReady } from "@/components/ui/useClientReady";
+import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
+import { translate } from "@/lib/catalog";
+import {
+  confirmToken,
+  type CatalogNotice,
+} from "@/lib/dashboard/catalogEntities";
+import {
+  MEDIA_ASSET_ALLOWED_MIME_TYPES,
+  MEDIA_ASSET_FILE_SIZE_LIMIT_BYTES,
+  MEDIA_ASSET_FORM_COLUMNS,
+  mediaAssetHasBilingualAlt,
+  type MediaAssetHolder,
+  type MediaAssetOption,
+  type MediaAssetRow,
+} from "@/lib/dashboard/mediaAsset";
+import { localeHref } from "@/lib/locale";
+import {
+  ActionStatus,
+  CatalogDeleteBlock,
+  CatalogNoticeView,
+  CatalogPublishControls,
+  CatalogSection,
+  FieldLabel,
+  FieldLegend,
+  LocaleColumns,
+  PublicationStatus,
+  PublishAside,
+  useCatalogFormFlight,
+} from "./catalogFormChrome";
+import extra from "./CatalogEntityForm.module.css";
+import site from "./SiteSettingsForm.module.css";
+import { Button } from "@/components/ui/Button";
+
+// Form `name` → `"MediaAsset"` column. Every rendered field that writes is listed.
+// alt_ar → alt_ar
+// alt_en → alt_en
+// display_order → display_order
+// Publish / unpublish write publication_state.
+// row_id identifies `"MediaAsset".id` and is not assigned on create.
+// confirm_name is not a column: typed confirmation per ADMIN_SPEC.md §4d,
+// compared then discarded.
+// file is not a column: the bytes go to the private bucket; on success the
+// writer sets storage_path, mime_type and byte_size. The MIME allowlist
+// (image/jpeg, image/png, image/webp) and the size limit (5242880 bytes /
+// 5 MiB) are bucket columns, not form checks. The accept attribute below
+// is advice.
+// No field accepts a Visitor or patient name, phone, email, address, date of birth
+// or identifier, or a patient document.
+void MEDIA_ASSET_FORM_COLUMNS;
+void MEDIA_ASSET_ALLOWED_MIME_TYPES;
+void MEDIA_ASSET_FILE_SIZE_LIMIT_BYTES;
+
+function holderNavKey(entity: MediaAssetHolder["entity"]): CatalogKey {
+  if (entity === "Offer") return "dashboard.nav.offers";
+  if (entity === "Video") return "dashboard.nav.videos";
+  if (entity === "Announcement") return "dashboard.nav.announcements";
+  return "dashboard.nav.equipment";
+}
+
+export function MediaAssetPicker({
+  locale,
+  assets,
+  selectedId,
+  helpKey,
+  fieldName = "MediaAsset",
+  searchId = "media-search",
+  legendKey,
+}: {
+  locale: Locale;
+  assets: MediaAssetOption[];
+  selectedId: string | null;
+  helpKey?: CatalogKey;
+  fieldName?: string;
+  searchId?: string;
+  legendKey?: CatalogKey;
+}) {
+  const pathname = usePathname();
+  const ready = useClientReady();
+  const [query, setQuery] = useState("");
+  const [selected, setSelected] = useState(selectedId ?? "");
+  const needle = query.trim().toLowerCase();
+  const visible = assets.filter((asset) => {
+    if (needle.length === 0) return true;
+    const ar = (asset.alt_ar ?? "").toLowerCase();
+    const en = (asset.alt_en ?? "").toLowerCase();
+    const path = asset.storage_path.toLowerCase();
+    return ar.includes(needle) || en.includes(needle) || path.includes(needle);
+  });
+  const selectedAsset = assets.find((asset) => asset.id === selected) ?? null;
+  const altFormId = `nel-media-alt-${fieldName}`;
+  const saveHref = localeHref(locale, "/dashboard/media-assets/submit/save");
+
+  const Wrapper = legendKey ? "fieldset" : "div";
+
+  return (
+    <Wrapper className={legendKey ? site.group : site.field}>
+      {legendKey ? <FieldLegend locale={locale} legendKey={legendKey} /> : null}
+      <input type="hidden" name={fieldName} value={selected} />
+      <FieldLabel locale={locale} htmlFor={searchId} labelKey="dashboard.media.search" />
+      <input
+        id={searchId}
+        className={site.control}
+        type="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        autoComplete="off"
+      />
+      <ul className={extra.thumbGrid}>
+        <li>
+          <button
+            type="button"
+            className={selected === "" ? `${extra.thumb} ${extra.thumbSelected}` : extra.thumb}
+            onClick={() => setSelected("")}
+          >
+            {translate(locale, "dashboard.media.pickerNone")}
+          </button>
+        </li>
+        {visible.map((asset) => {
+          const alt = locale === "ar" ? asset.alt_ar ?? asset.alt_en : asset.alt_en ?? asset.alt_ar;
+          const unnamed = translate(locale, "dashboard.catalog.unnamed");
+          const base =
+            alt !== null && alt.length > 0
+              ? alt
+              : asset.storage_path.length > 0
+                ? `${unnamed} — ${asset.storage_path}`
+                : unnamed;
+          const incomplete = !mediaAssetHasBilingualAlt(asset);
+          const selectedThumb = selected === asset.id;
+          return (
+            <li key={asset.id}>
+              <button
+                type="button"
+                className={selectedThumb ? `${extra.thumb} ${extra.thumbSelected}` : extra.thumb}
+                onClick={() => setSelected(asset.id)}
+              >
+                {asset.thumbSrc ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- signed Operator URL, not a remote host allowlist
+                  <img className={extra.thumbImage} src={asset.thumbSrc} alt={base} />
+                ) : (
+                  <span className={extra.thumbFallback}>{base}</span>
+                )}
+                <span className={extra.thumbLabel}>
+                  {incomplete ? `${base} — ${translate(locale, "dashboard.media.altIncomplete")}` : base}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      {selectedAsset !== null ? (
+        <div key={selectedAsset.id} className={site.field}>
+          <input type="hidden" form={altFormId} name="row_id" value={selectedAsset.id} />
+          <input
+            type="hidden"
+            form={altFormId}
+            name="display_order"
+            value={String(selectedAsset.display_order)}
+          />
+          <input type="hidden" form={altFormId} name="return_to" value={pathname} />
+          <Pair
+            locale={locale}
+            nameAr="alt_ar"
+            nameEn="alt_en"
+            legendKey="dashboard.media.alt"
+            defaultAr={selectedAsset.alt_ar}
+            defaultEn={selectedAsset.alt_en}
+            formId={altFormId}
+          />
+          <p className={extra.help}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.altHelp")} />
+          </p>
+          <Button type="submit" variant="secondary" form={altFormId} formAction={saveHref}>
+            {translate(locale, "dashboard.media.saveAlt")}
+          </Button>
+        </div>
+      ) : null}
+      <p className={extra.help}>
+        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.attach")} />
+      </p>
+      <p className={extra.help}>
+        <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.pickerHelp")} />
+      </p>
+      {helpKey ? (
+        <p className={extra.help}>
+          <IsolatedCopy locale={locale} text={translate(locale, helpKey)} />
+        </p>
+      ) : null}
+      {ready
+        ? createPortal(<form id={altFormId} method="post" action={saveHref} />, document.body)
+        : null}
+    </Wrapper>
+  );
+}
+
+export function MediaLibraryListing({
+  locale,
+  rows,
+}: {
+  locale: Locale;
+  rows: MediaAssetOption[];
+}) {
+  const [query, setQuery] = useState("");
+  const needle = query.trim().toLowerCase();
+  const visible = rows.filter((row) => {
+    if (needle.length === 0) return true;
+    const ar = (row.alt_ar ?? "").toLowerCase();
+    const en = (row.alt_en ?? "").toLowerCase();
+    const path = row.storage_path.toLowerCase();
+    return ar.includes(needle) || en.includes(needle) || path.includes(needle);
+  });
+
+  return (
+    <div className={site.field}>
+      <FieldLabel locale={locale} htmlFor="media-library-search" labelKey="dashboard.media.search" />
+      <input
+        id="media-library-search"
+        className={site.control}
+        type="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        autoComplete="off"
+      />
+      <ul className={extra.thumbGrid}>
+        {visible.map((row) => {
+          const alt = locale === "ar" ? row.alt_ar ?? row.alt_en : row.alt_en ?? row.alt_ar;
+          const unnamed = translate(locale, "dashboard.catalog.unnamed");
+          const base =
+            alt !== null && alt.length > 0
+              ? alt
+              : row.storage_path.length > 0
+                ? `${unnamed} — ${row.storage_path}`
+                : unnamed;
+          const href = localeHref(locale, `/dashboard/media-assets/${row.id}`);
+          const statusKey: CatalogKey =
+            row.publication_state === "published" ? "dashboard.siteSettings.published" : "dashboard.siteSettings.draft";
+          return (
+            <li key={row.id}>
+              <Link className={extra.thumb} href={href}>
+                {row.thumbSrc ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- signed Operator URL, not a remote host allowlist
+                  <img className={extra.thumbImage} src={row.thumbSrc} alt={base} />
+                ) : (
+                  <span className={extra.thumbFallback}>{base}</span>
+                )}
+                <span className={extra.thumbLabel}>{base}</span>
+                <StatusStateBadge
+                  state={row.publication_state === "published" ? "published" : "draft"}
+                  label={translate(locale, statusKey)}
+                />
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+function Pair({
+  locale,
+  nameAr,
+  nameEn,
+  legendKey,
+  defaultAr,
+  defaultEn,
+  formId,
+}: {
+  locale: Locale;
+  nameAr: string;
+  nameEn: string;
+  legendKey: CatalogKey;
+  defaultAr: string | null;
+  defaultEn: string | null;
+  formId?: string;
+}) {
+  const idAr = formId ? `${formId}-${nameAr}` : nameAr;
+  const idEn = formId ? `${formId}-${nameEn}` : nameEn;
+  return (
+    <fieldset className={site.group}>
+      <FieldLegend locale={locale} legendKey={legendKey} required="publish" />
+      <div className={site.pair}>
+        <div className={site.field}>
+          <label className={site.pairLocale} htmlFor={idAr}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeAr")} />
+          </label>
+          <input
+            id={idAr}
+            className={site.control}
+            type="text"
+            name={nameAr}
+            defaultValue={defaultAr ?? ""}
+            autoComplete="off"
+            form={formId}
+          />
+        </div>
+        <div className={site.field}>
+          <label className={site.pairLocale} htmlFor={idEn}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.siteSettings.localeEn")} />
+          </label>
+          <input
+            id={idEn}
+            className={site.control}
+            type="text"
+            name={nameEn}
+            defaultValue={defaultEn ?? ""}
+            autoComplete="off"
+            form={formId}
+          />
+        </div>
+      </div>
+    </fieldset>
+  );
+}
+
+export function MediaAssetForm({
+  locale,
+  row,
+  notice,
+  bucketAvailable,
+  holders,
+}: {
+  locale: Locale;
+  row: MediaAssetRow | null;
+  notice: CatalogNotice;
+  bucketAvailable: boolean;
+  holders: MediaAssetHolder[];
+}) {
+  const { flight, setFlight, clientNotice, showQueryNotice, onSubmit } = useCatalogFormFlight();
+  const isCreate = row === null;
+  const saveAction = localeHref(locale, "/dashboard/media-assets/submit/create");
+  const editSave = localeHref(locale, "/dashboard/media-assets/submit/save");
+  const expectedConfirm = row === null ? "" : confirmToken(locale, { id: row.id, name_ar: row.alt_ar, name_en: row.alt_en });
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <form
+      className={site.splitForm}
+      method="post"
+      action={isCreate ? saveAction : editSave}
+      encType="multipart/form-data"
+      id={isCreate ? "create" : undefined}
+      onSubmit={onSubmit}
+      onInput={() => {
+        if (flight?.phase === "saved") setFlight(null);
+      }}
+      aria-busy={flight?.phase === "busy" || undefined}
+    >
+      {row !== null ? <input type="hidden" name="row_id" value={row.id} /> : null}
+      <div className={site.body}>
+        <div className={site.intro}>
+          {bucketAvailable ? null : (
+            <p className={site.errorRow}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.bucketMissing")} />
+            </p>
+          )}
+          {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
+          {notice === "held" || clientNotice === "held" ? (
+            <ul className={extra.list}>
+              {holders.map((holder) => (
+                <li key={`${holder.entity}-${holder.id}`}>
+                  <p className={extra.help}>
+                    <IsolatedCopy
+                      locale={locale}
+                      text={`${translate(locale, holderNavKey(holder.entity))} — ${holder.label}`}
+                    />
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+
+        <CatalogSection locale={locale} titleKey="dashboard.media.sectionFile">
+          <div
+            className={extra.drop}
+            onDragOver={(event: DragEvent<HTMLDivElement>) => {
+              event.preventDefault();
+            }}
+            onDrop={(event: DragEvent<HTMLDivElement>) => {
+              event.preventDefault();
+              const dropped = event.dataTransfer.files;
+              if (fileInputRef.current !== null && dropped.length > 0) {
+                fileInputRef.current.files = dropped;
+              }
+            }}
+          >
+            <div className={site.field}>
+              <FieldLabel
+                locale={locale}
+                htmlFor="file"
+                labelKey="dashboard.media.file"
+                required={isCreate ? "always" : undefined}
+              />
+              <input
+                id="file"
+                ref={fileInputRef}
+                className={site.control}
+                type="file"
+                name="file"
+                accept="image/jpeg,image/png,image/webp"
+              />
+            </div>
+            <p className={extra.help}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.drop")} />
+            </p>
+          </div>
+          <p className={extra.help}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.mimeHelp")} />
+          </p>
+          {isCreate ? (
+            <p className={extra.help}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.fileRequired")} />
+            </p>
+          ) : (
+            <p className={extra.help}>
+              <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.replaceHelp")} />
+            </p>
+          )}
+        </CatalogSection>
+
+        <CatalogSection locale={locale} titleKey="dashboard.media.sectionAlt">
+          <LocaleColumns locale={locale} />
+          <Pair
+            locale={locale}
+            nameAr="alt_ar"
+            nameEn="alt_en"
+            legendKey="dashboard.media.alt"
+            defaultAr={row?.alt_ar ?? null}
+            defaultEn={row?.alt_en ?? null}
+          />
+          <p className={extra.help}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.media.altHelp")} />
+          </p>
+        </CatalogSection>
+
+        {holders.length > 0 ? (
+          <CatalogSection locale={locale} titleKey="dashboard.media.sectionHolders">
+            <ul className={extra.list}>
+              {holders.map((holder) => (
+                <li key={`${holder.entity}-${holder.id}`}>
+                  <article className={extra.row}>
+                    <p className={extra.rowName}>
+                      <IsolatedCopy
+                        locale={locale}
+                        text={`${translate(locale, holderNavKey(holder.entity))} — ${holder.label}`}
+                      />
+                    </p>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          </CatalogSection>
+        ) : null}
+      </div>
+
+      <PublishAside locale={locale}>
+        <PublicationStatus
+          locale={locale}
+          state={row === null ? null : row.publication_state === "published" ? "published" : "draft"}
+          reasonKey="dashboard.catalog.draftReason"
+        />
+        {row !== null ? (
+          <p className={site.status}>
+            <IsolatedCopy locale={locale} text={translate(locale, "dashboard.catalog.unpublishHint")} />
+          </p>
+        ) : null}
+        <div className={site.field}>
+          <FieldLabel locale={locale} htmlFor="display_order" labelKey="dashboard.catalog.displayOrder" />
+          <input
+            id="display_order"
+            className={site.control}
+            type="text"
+            name="display_order"
+            defaultValue={row === null ? "0" : String(row.display_order)}
+            autoComplete="off"
+            inputMode="numeric"
+          />
+        </div>
+        <CatalogPublishControls
+          locale={locale}
+          isCreate={isCreate}
+          publishHref={localeHref(locale, "/dashboard/media-assets/submit/publish")}
+          unpublishHref={localeHref(locale, "/dashboard/media-assets/submit/unpublish")}
+          flight={flight}
+        />
+        {isCreate ? null : (
+          <CatalogDeleteBlock
+            locale={locale}
+            expectedConfirm={expectedConfirm}
+            deleteHref={localeHref(locale, "/dashboard/media-assets/submit/delete")}
+            flight={flight}
+          >
+            <div className={site.field}>
+              <FieldLabel
+                locale={locale}
+                htmlFor="media-asset-confirm_name"
+                labelKey="dashboard.catalog.confirmDelete"
+              />
+              <input
+                id="media-asset-confirm_name"
+                className={site.control}
+                type="text"
+                name="confirm_name"
+                autoComplete="off"
+              />
+            </div>
+          </CatalogDeleteBlock>
+        )}
+        <ActionStatus locale={locale} flight={flight} clientNotice={clientNotice} />
+      </PublishAside>
+    </form>
+  );
+}

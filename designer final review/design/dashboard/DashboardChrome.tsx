@@ -1,0 +1,69 @@
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { MarkSlot } from "@/components/ui/MarkSlot";
+import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
+import { localeHref } from "@/lib/locale";
+import styles from "./DashboardChrome.module.css";
+
+// ADMIN_SPEC.md §4f — module page title at 2xl. This is not a §10
+// SectionHeader: that component is lg, defaults to h1, and dashboard
+// groups pass h2 so a module page keeps exactly one h1.
+export function DashboardModuleTitle({
+  locale,
+  titleKey,
+  showEyebrow = true,
+}: {
+  locale: Locale;
+  titleKey: CatalogKey;
+  showEyebrow?: boolean;
+}) {
+  return (
+    <header className={styles.pageHeader}>
+      {showEyebrow ? (
+        <p className={styles.eyebrow}>{translate(locale, "dashboard.module.eyebrow")}</p>
+      ) : null}
+      <h1 className={styles.pageTitle}>{translate(locale, titleKey)}</h1>
+    </header>
+  );
+}
+
+export function DashboardChrome({
+  locale,
+  showSignOut,
+  children,
+}: {
+  locale: Locale;
+  showSignOut: boolean;
+  children: ReactNode;
+}) {
+  const markHref = showSignOut
+    ? localeHref(locale, "/dashboard")
+    : localeHref(locale, "/dashboard/sign-in");
+
+  return (
+    <div className={styles.root}>
+      <div className={styles.wash} aria-hidden="true">
+        <span className={styles.orbA} />
+        <span className={styles.orbB} />
+      </div>
+      <header className={styles.bar}>
+        <Link href={markHref} className={styles.mark}>
+          <MarkSlot blockSize={32} fallbackLabel={translate(locale, "header.markFallback")} />
+        </Link>
+        <div className={styles.actions}>
+          <LanguageSwitcher locale={locale} />
+          {showSignOut ? (
+            <form className={styles.signOut} method="post" action={localeHref(locale, "/dashboard/sign-out")}>
+              <Button type="submit" variant="text">
+                {translate(locale, "dashboard.signOut")}
+              </Button>
+            </form>
+          ) : null}
+        </div>
+      </header>
+      <main className={styles.main}>{children}</main>
+    </div>
+  );
+}
