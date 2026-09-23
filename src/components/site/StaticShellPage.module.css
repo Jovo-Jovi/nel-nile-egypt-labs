@@ -21,6 +21,12 @@
   flex-direction: column;
   gap: var(--nel-space-12);
   padding: var(--nel-space-16);
+  background-color: var(--nel-color-surface);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-panel-edge);
+  border-radius: var(--nel-radius-panel);
+  box-shadow: var(--nel-elevation-1-shadow);
 }
 
 .actions {

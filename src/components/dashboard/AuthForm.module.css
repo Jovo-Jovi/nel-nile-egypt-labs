@@ -86,3 +86,31 @@
   inline-size: 160px;
   block-size: 160px;
 }
+
+[data-nel-chrome="dashboard"] .form {
+  gap: var(--nel-space-16);
+  max-inline-size: 28rem;
+  padding: var(--nel-space-24);
+  background-color: color-mix(in srgb, var(--nel-color-surface) 88%, transparent);
+  border-radius: var(--nel-dash-radius);
+  border-color: color-mix(in srgb, var(--nel-color-surface) 58%, transparent);
+  box-shadow: var(--nel-elevation-2-shadow), inset 0 1px 0 color-mix(in srgb, var(--nel-color-surface) 80%, transparent);
+  backdrop-filter: blur(18px) saturate(1.4);
+}
+
+[data-nel-chrome="dashboard"] .control {
+  border-radius: var(--nel-radius-md);
+  transition: border-color var(--nel-duration, 150ms);
+}
+
+[data-nel-chrome="dashboard"] .control:focus-visible {
+  border-color: var(--nel-color-primary);
+  outline: 2px solid color-mix(in srgb, var(--nel-color-primary) 28%, transparent);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nel-chrome="dashboard"] .control {
+    transition: none;
+  }
+}

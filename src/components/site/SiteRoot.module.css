@@ -5,6 +5,11 @@
   display: flex;
   flex-direction: column;
   background-color: var(--nel-color-background);
+  background-image:
+    radial-gradient(circle min(40vw, 760px) at 0% 50%, var(--nel-glow-accent), transparent),
+    radial-gradient(circle min(40vw, 760px) at 100% 50%, var(--nel-glow-primary), transparent);
+  background-size: 100% 1600px;
+  background-repeat: repeat-y;
   color: var(--nel-color-text);
   line-height: var(--nel-line-height-body);
   --nel-header-stack: calc(var(--nel-space-12) + 56px);
@@ -14,20 +19,6 @@
   .root {
     --nel-header-stack: calc(var(--nel-space-12) + 72px);
   }
-}
-
-.hex {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  color: var(--nel-color-primary);
-  opacity: 0.12;
-}
-
-.hex svg {
-  inline-size: 100%;
-  block-size: 100%;
 }
 
 .main {

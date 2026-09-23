@@ -6,18 +6,24 @@ import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
 import { localeHref } from "@/lib/locale";
 import styles from "./ModuleNav.module.css";
 
-const MODULES: { suffix: string; labelKey: CatalogKey }[] = [
-  { suffix: "/dashboard/offers", labelKey: "dashboard.nav.offers" },
-  { suffix: "/dashboard/videos", labelKey: "dashboard.nav.videos" },
-  { suffix: "/dashboard/equipment", labelKey: "dashboard.nav.equipment" },
-  { suffix: "/dashboard/branches", labelKey: "dashboard.nav.branches" },
-  { suffix: "/dashboard/programmes", labelKey: "dashboard.nav.programmes" },
-  { suffix: "/dashboard/lab-tests", labelKey: "dashboard.nav.labTests" },
-  { suffix: "/dashboard/lab-units", labelKey: "dashboard.nav.labUnits" },
-  { suffix: "/dashboard/site-settings", labelKey: "dashboard.nav.siteSettings" },
-  { suffix: "/dashboard/media-assets", labelKey: "dashboard.nav.mediaAssets" },
-  { suffix: "/dashboard/announcements", labelKey: "dashboard.nav.announcements" },
-  { suffix: "/dashboard/partner-lab", labelKey: "dashboard.nav.partnerLab" },
+const GROUPS: { suffix: string; labelKey: CatalogKey }[][] = [
+  [
+    { suffix: "/dashboard/offers", labelKey: "dashboard.nav.offers" },
+    { suffix: "/dashboard/videos", labelKey: "dashboard.nav.videos" },
+    { suffix: "/dashboard/equipment", labelKey: "dashboard.nav.equipment" },
+    { suffix: "/dashboard/branches", labelKey: "dashboard.nav.branches" },
+    { suffix: "/dashboard/announcements", labelKey: "dashboard.nav.announcements" },
+  ],
+  [
+    { suffix: "/dashboard/programmes", labelKey: "dashboard.nav.programmes" },
+    { suffix: "/dashboard/lab-tests", labelKey: "dashboard.nav.labTests" },
+    { suffix: "/dashboard/lab-units", labelKey: "dashboard.nav.labUnits" },
+  ],
+  [
+    { suffix: "/dashboard/site-settings", labelKey: "dashboard.nav.siteSettings" },
+    { suffix: "/dashboard/media-assets", labelKey: "dashboard.nav.mediaAssets" },
+    { suffix: "/dashboard/partner-lab", labelKey: "dashboard.nav.partnerLab" },
+  ],
 ];
 
 export function ModuleNav({ locale }: { locale: Locale }) {
@@ -25,20 +31,24 @@ export function ModuleNav({ locale }: { locale: Locale }) {
 
   return (
     <nav className={styles.nav} aria-label={translate(locale, "dashboard.nav.label")}>
-      {MODULES.map((item) => {
-        const href = localeHref(locale, item.suffix);
-        const current = pathname === href || pathname.startsWith(`${href}/`);
-        return (
-          <Link
-            key={item.suffix}
-            className={styles.link}
-            href={href}
-            aria-current={current ? "page" : undefined}
-          >
-            {translate(locale, item.labelKey)}
-          </Link>
-        );
-      })}
+      {GROUPS.map((group) => (
+        <div className={styles.group} key={group[0].suffix}>
+          {group.map((item) => {
+            const href = localeHref(locale, item.suffix);
+            const current = pathname === href || pathname.startsWith(`${href}/`);
+            return (
+              <Link
+                key={item.suffix}
+                className={styles.link}
+                href={href}
+                aria-current={current ? "page" : undefined}
+              >
+                {translate(locale, item.labelKey)}
+              </Link>
+            );
+          })}
+        </div>
+      ))}
     </nav>
   );
 }

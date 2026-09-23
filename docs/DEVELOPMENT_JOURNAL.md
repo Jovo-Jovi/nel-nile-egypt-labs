@@ -1598,3 +1598,65 @@ PR-38 landed. CF-202, CF-203 and CF-204 landed OPEN. `.cursor/mcp.json` is
 ignored by a tracked line. Open CF 104 + 3 − 0 = 107. Next free CF-205.
 Next free PR-39. Do not start P07. Do not merge before the verdict. The
 human opens the PR.
+
+## 23 September 2026 — P09-T03 to P09-T03-F4: Land the designer's dashboard composition
+
+P09-T03 cut `p09-t03` from `origin/main` at `e6e7645`, applied the
+designer's fourteen dashboard files from `origin/designer-review` at
+`acbc8c9` with C1 to C6 and the DESIGN_SYSTEM amendment, and halted at
+STEP 4b on an identity check that compared build framing.
+
+P09-T03-F replaced that check with a rendered one, proved every public
+page unchanged, then halted on two findings:
+- The designer's glass never blurred in a production build. Every rule
+  declared `backdrop-filter` and then `-webkit-backdrop-filter`, and the
+  minifier kept only the prefixed form, which Chromium ignores.
+- Site Settings logged React error 418, which main logs too.
+
+P09-T03-F2 deleted the thirteen hand-written prefixes (C7), then halted
+when its zero-occurrence check counted the designer's `@supports`
+fallback, which stays. P09-T03-F3 then halted when its focus check
+treated the designer's stronger focus style as a regression.
+
+P09-T03-F4 finished the task. The build emits both forms of every glass
+declaration. It re-proved the public pages on the final tree: 24 of 24
+structurally identical, every differing CSS rule dashboard-scoped, and
+56 of 56 pixel pairs identical against main. Every rendered glass
+surface computes its blur. Console errors and focus stops were compared
+with main, and neither regressed.
+
+Four carry-forwards landed:
+- CF-205: public routes download dashboard CSS (83,990 bytes on main,
+  98,324 here).
+- CF-206: the pre-existing React 418 on Site Settings.
+- CF-207: the gaps panel and the PartnerLab review tabs, to be seen on
+  production after merge.
+- CF-208: a date-input tab stop without visible focus, which main shares.
+
+Open CF 107 + 4 − 0 = 111. Next free CF-209.
+
+## 2026-09-23 — P09-T04: Restyle the Visitor pages in the dashboard's visual language
+
+Cut from `origin/p09-t03` at `91a4b01`, before either change merged, so
+one pull request carries both. STEP 0 recorded P09-T03-F4 as PASS and
+checked its box.
+
+OD-31 landed. It takes the designer's dashboard language to the Visitor
+pages from his 22 September screenshots, without his code, which is built
+on the 29 August mock. It amends DESIGN_SYSTEM in three places:
+- §2 principle 3, for Visitor glass: certified against a pure black
+  backdrop at 92% `surface`, and 96% for small `accent` or `success`
+  text, with only the header blurring.
+- §5, for the 20px panel radius on every surface.
+- §9 and D-29, to admit an `accent` glow. This also decides the
+  dashboard's pink orb, which P09-T03's verdict passed without naming.
+
+The restyle changed styles and wrappers only. Content identity held
+against the P09-T03 build on 14 routes in both locales at two widths:
+body text, links, images and headings unchanged, apart from the hero
+stats card, whose counts equal the published rows. The dashboard sign-in
+stayed pixel-identical. 0 contrast remedies were applied.
+
+CF-209 records what the screenshots show but this task could not land:
+his own code, new copy, the footer credit, and the navigation. Open CF
+111 + 1 − 0 = 112. Next free CF-210.

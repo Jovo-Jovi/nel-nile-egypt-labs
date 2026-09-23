@@ -40,10 +40,11 @@
   --nel-space-64: 64px;
   --nel-space-96: 96px;
 
-  /* §5 Radius set — five values */
+  /* §5 Radius set — six values; 20px panel per P09-T03 and OD-31 */
   --nel-radius-none: 0;
   --nel-radius-sm: 4px;
   --nel-radius-md: 8px;
+  --nel-radius-panel: 20px;
   --nel-radius-well: 32px;
   --nel-radius-full: 9999px;
 
@@ -68,6 +69,19 @@
 
   /* Motion — colour and border only, 150ms. No bounce, no fade of text. */
   --nel-duration: 150ms;
+
+  /* OD-31 — shared surface recipes, each derived from the eleven colours;
+     none is a new colour (D-29). */
+  --nel-well: color-mix(in srgb, var(--nel-color-primary) 7%, var(--nel-color-surface));
+  --nel-panel-edge: color-mix(in srgb, var(--nel-color-border) 28%, var(--nel-color-surface));
+  --nel-glass: color-mix(in srgb, var(--nel-color-surface) 92%, transparent);
+  --nel-glass-strong: color-mix(in srgb, var(--nel-color-surface) 96%, transparent);
+  --nel-glass-edge: color-mix(in srgb, var(--nel-color-surface) 58%, transparent);
+  --nel-glass-blur: blur(22px) saturate(1.6);
+  --nel-glow-primary: color-mix(in srgb, var(--nel-color-primary) 4.5%, transparent);
+  --nel-glow-accent: color-mix(in srgb, var(--nel-color-accent) 5.5%, transparent);
+  --nel-band-card: color-mix(in srgb, var(--nel-color-surface) 12%, var(--nel-color-primary));
+  --nel-band-edge: color-mix(in srgb, var(--nel-color-surface) 24%, var(--nel-color-primary));
 }
 
 @media (min-width: 768px) {

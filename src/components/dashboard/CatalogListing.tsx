@@ -56,7 +56,7 @@ export function CatalogRowList({
         const href = localeHref(locale, `${editPrefix}/${row.id}`);
         return (
           <li key={row.id}>
-            <article className={styles.row}>
+            <Link className={styles.row} href={href}>
               <div className={styles.rowMain}>
                 <p className={styles.rowName}>
                   {name !== null && name.length > 0 ? (
@@ -78,10 +78,7 @@ export function CatalogRowList({
                   ) : null}
                 </p>
               </div>
-              <Link className={styles.editLink} href={href}>
-                {translate(locale, "dashboard.catalog.edit")}
-              </Link>
-            </article>
+            </Link>
           </li>
         );
       })}

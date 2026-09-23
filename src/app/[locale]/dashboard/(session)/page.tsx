@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CompletenessAwaitingLine, CompletenessHeader } from "@/components/dashboard/CompletenessHeader";
+import { CompletenessHeader } from "@/components/dashboard/CompletenessHeader";
 import { DashboardModuleTitle } from "@/components/dashboard/DashboardChrome";
 import extra from "@/components/dashboard/CatalogEntityForm.module.css";
-import { IsolatedCopy } from "@/components/ui/Isolate";
 import { requireLocale } from "@/components/site/StaticShellPage";
 import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
 import {
@@ -90,54 +89,23 @@ export default async function DashboardHomePage({ params }: Props) {
   return (
     <>
       <DashboardModuleTitle locale={locale} titleKey="dashboard.home.title" />
-      <CompletenessHeader locale={locale} variant="full" />
-      <div className={extra.groups} data-nel-container="home">
-        <ul className={extra.list}>
-          {MODULE_CARDS.map((mod) => {
-            const clinical = mod.table === "Programme" || mod.table === "LabTest";
-            return (
-              <li key={mod.suffix}>
-                <article className={extra.row}>
-                  <div className={extra.rowMain}>
-                    <p className={extra.rowName}>{translate(locale, mod.labelKey)}</p>
-                    {clinical ? (
-                      <>
-                        <CompletenessAwaitingLine
-                          locale={locale}
-                          text={translate(locale, "dashboard.home.awaitingSignOff")}
-                        />
-                        {clinicalLines(locale, progress)
-                          .slice(1)
-                          .map((line) => (
-                            <p key={line} className={extra.rowMeta}>
-                              <IsolatedCopy locale={locale} text={line} />
-                            </p>
-                          ))}
-                      </>
-                    ) : (
-                      <p className={extra.rowMeta}>{countLabel(locale, counts[mod.table])}</p>
-                    )}
-                  </div>
-                  <Link className={extra.editLink} href={localeHref(locale, mod.suffix)}>
-                    {translate(locale, "dashboard.home.open")}
-                  </Link>
-                </article>
-              </li>
-            );
-          })}
-          <li>
-            <article className={extra.row}>
-              <div className={extra.rowMain}>
-                <p className={extra.rowName}>{translate(locale, "dashboard.nav.partnerLab")}</p>
-                <p className={extra.rowMeta}>{translate(locale, "dashboard.partnerLab.homeMeta")}</p>
-              </div>
-              <Link className={extra.editLink} href={localeHref(locale, "/dashboard/partner-lab")}>
-                {translate(locale, "dashboard.home.open")}
-              </Link>
-            </article>
+      <CompletenessHeader locale={locale} variant="full" notes={clinicalLines(locale, progress)} />
+      <ul className={extra.homeGrid} data-nel-container="home">
+        {MODULE_CARDS.map((mod) => (
+          <li key={mod.suffix}>
+            <Link className={extra.homeCell} href={localeHref(locale, mod.suffix)}>
+              <span className={extra.homeName}>{translate(locale, mod.labelKey)}</span>
+              <span className={extra.homeMeta}>{countLabel(locale, counts[mod.table])}</span>
+            </Link>
           </li>
-        </ul>
-      </div>
+        ))}
+        <li>
+          <Link className={extra.homeCell} href={localeHref(locale, "/dashboard/partner-lab")}>
+            <span className={extra.homeName}>{translate(locale, "dashboard.nav.partnerLab")}</span>
+            <span className={extra.homeMeta}>{translate(locale, "dashboard.partnerLab.homeMeta")}</span>
+          </Link>
+        </li>
+      </ul>
     </>
   );
 }

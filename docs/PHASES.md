@@ -362,7 +362,13 @@ authored at P09; gate criteria are not decided here.
 - [ ] **P09-T01** — Land the design review pack
 - [ ] **P09-T01-F** — Correct the pack, settle the note count, land it
 - [x] **P09-T01-F2** — Land the pack with all three corrections
-- [ ] **P09-T02** — Record the pack verdict, land PR-38, three carry-forwards and the MCP ignore line
+- [x] **P09-T02** — Record the pack verdict, land PR-38, three carry-forwards and the MCP ignore line
+- [ ] **P09-T03** — Land the designer's dashboard composition
+- [ ] **P09-T03-F** — Resume P09-T03 at STEP 4b with a rendered public-identity check
+- [ ] **P09-T03-F2** — Emit the designer's glass for every browser and finish P09-T03
+- [ ] **P09-T03-F3** — Finish P09-T03 from STEP 2b
+- [x] **P09-T03-F4** — Finish P09-T03 from STEP 5c
+- [ ] **P09-T04** — Restyle the Visitor pages in the dashboard's visual language
 - [ ] **G9** — criteria not yet decided (OD-19)
 
 ---

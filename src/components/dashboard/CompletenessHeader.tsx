@@ -181,28 +181,55 @@ function owningModuleHref(locale: Locale, slot: CompletenessSlot): string {
   return localeHref(locale, "/dashboard/site-settings");
 }
 
-function Summary({ locale, tally }: { locale: Locale; tally: CompletenessTally }) {
+function Summary({
+  locale,
+  tally,
+}: {
+  locale: Locale;
+  tally: CompletenessTally;
+}) {
   const populated = formatWesternCount(locale, tally.populated);
   const required = formatWesternCount(locale, tally.required);
   const summary = translate(locale, "dashboard.completeness.summary")
     .replace("{populated}", populated)
     .replace("{required}", required);
   const complete = tally.state === "complete";
+  const ratio = tally.required === 0 ? 0 : Math.min(1, tally.populated / tally.required);
+  const ring = 2 * Math.PI * 28;
   return (
     <div className={styles.summary} data-nel-completeness="summary">
-      <p
-        className={`${styles.state} ${complete ? styles.stateComplete : styles.stateIncomplete}`}
-        data-nel-completeness-state={tally.state}
-      >
-        {complete ? <CompletenessCheckIcon size={20} /> : <CompletenessGapIcon size={20} />}
-        {translate(locale, complete ? "dashboard.completeness.complete" : "dashboard.completeness.incomplete")}
-      </p>
-      <p className={styles.count}>
-        <IsolatedCopy locale={locale} text={summary} />
-      </p>
-      <span hidden data-nel-completeness-populated={String(tally.populated)} />
-      <span hidden data-nel-completeness-required={String(tally.required)} />
-      {complete ? <p className={styles.claim}>{translate(locale, "dashboard.completeness.allPopulated")}</p> : null}
+      <span className={styles.gauge} aria-hidden="true">
+        <svg className={styles.gaugeRing} viewBox="0 0 72 72">
+          <circle className={styles.gaugeTrack} cx="36" cy="36" r="28" fill="none" />
+          <circle
+            className={styles.gaugeSweep}
+            cx="36"
+            cy="36"
+            r="28"
+            fill="none"
+            strokeDasharray={ring}
+            strokeDashoffset={ring * (1 - ratio)}
+          />
+        </svg>
+        <span className={styles.gaugeValue}>
+          <IsolatedCopy locale={locale} text={populated} />
+        </span>
+      </span>
+      <div className={styles.summaryCopy}>
+        <p
+          className={`${styles.state} ${complete ? styles.stateComplete : styles.stateIncomplete}`}
+          data-nel-completeness-state={tally.state}
+        >
+          {complete ? <CompletenessCheckIcon size={20} /> : <CompletenessGapIcon size={20} />}
+          {translate(locale, complete ? "dashboard.completeness.complete" : "dashboard.completeness.incomplete")}
+        </p>
+        <p className={styles.count}>
+          <IsolatedCopy locale={locale} text={summary} />
+        </p>
+        <span hidden data-nel-completeness-populated={String(tally.populated)} />
+        <span hidden data-nel-completeness-required={String(tally.required)} />
+        {complete ? <p className={styles.claim}>{translate(locale, "dashboard.completeness.allPopulated")}</p> : null}
+      </div>
     </div>
   );
 }
@@ -228,9 +255,11 @@ export function CompletenessAwaitingLine({ locale, text }: { locale: Locale; tex
 export async function CompletenessHeader({
   locale,
   variant,
+  notes,
 }: {
   locale: Locale;
   variant: "compact" | "full";
+  notes?: readonly string[];
 }) {
   const tally = await loadCompletenessTally();
   if (tally === null) return null;
@@ -238,7 +267,7 @@ export async function CompletenessHeader({
   if (variant === "compact") {
     const gaps = missingSlots(tally);
     return (
-      <div className={styles.header} data-nel-completeness="header">
+      <div className={`${styles.header} ${styles.compact}`} data-nel-completeness="header">
         <Summary locale={locale} tally={tally} />
         {gaps.length > 0 ? (
           <div className={styles.gaps} data-nel-completeness="gaps">
@@ -264,7 +293,17 @@ export async function CompletenessHeader({
   return (
     <div className={styles.header} data-nel-completeness="header">
       <Summary locale={locale} tally={tally} />
+      {notes !== undefined && notes.length > 0 ? (
+        <ul className={styles.notes}>
+          {notes.map((line) => (
+            <li key={line}>
+              <IsolatedCopy locale={locale} text={line} />
+            </li>
+          ))}
+        </ul>
+      ) : null}
       <h2 className={styles.sectionTitle}>{translate(locale, "dashboard.completeness.pagesHeading")}</h2>
+      <div className={styles.pages}>
       {tally.pages.map((page) => (
         <section
           key={page.routePattern}
@@ -299,6 +338,7 @@ export async function CompletenessHeader({
           </ul>
         </section>
       ))}
+      </div>
       <h2 className={styles.sectionTitle}>{translate(locale, "dashboard.completeness.clientHeading")}</h2>
       <ul className={styles.clientList}>
         {tally.clientMaterials.map((material) => {

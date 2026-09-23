@@ -21,17 +21,7 @@ export async function SiteRoot({ locale, children }: SiteRootProps) {
   const portalHref = resultsPortalVisitorHref()?.href ?? null;
 
   return (
-    <div className={styles.root} data-locale={locale}>
-      <div className={styles.hex} aria-hidden="true">
-        <svg>
-          <defs>
-            <pattern id="nel-site-hex" width="56" height="64" patternUnits="userSpaceOnUse">
-              <path d="M28 2 52 16v28L28 58 4 44V16Z" fill="none" stroke="currentColor" strokeWidth="0.75" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#nel-site-hex)" />
-        </svg>
-      </div>
+    <div className={styles.root} data-locale={locale} data-nel-chrome="site">
       <SiteHeader locale={locale} whatsappHref={chrome.whatsappHref} portalHref={portalHref} />
       <main className={styles.main}>{children}</main>
       <SiteFooter locale={locale} chrome={chrome} />
