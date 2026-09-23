@@ -1738,3 +1738,15 @@ with 5 remedies, and then found no failures.
 
 Branches `p09-t06` and `designer-review` were deleted, both contained in
 main. Open CF 113. Next free CF-212.
+
+## 2026-09-24 — P09-T08: Remove the tokens.css animation workaround
+
+Cut from `origin/main` after #168 merged. STEP 1 recorded P09-T07 as
+PASS, including the publish-card commit made on its branch.
+
+P09-T07's fence required the orbs' literal animation name. CSS modules
+hash keyframe names, so the builder added global keyframes and an
+`!important` rule on a structural selector to `tokens.css`. The module's
+own keyframes already worked. This task removed the workaround, and the
+orbs animate as before, stopping under reduced motion. CF-212 records it,
+closed. Branch `p09-t07` was deleted. Open CF 113. Next free CF-213.

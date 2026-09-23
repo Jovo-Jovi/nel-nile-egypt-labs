@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-212**
+**Next free id: CF-213**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -217,6 +217,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-209 | The designer's own public-page work and the approved footer credit are not in the repository. His 22 September screenshots run on a working copy built on the 29 August mock (`605f27f`): placeholder programmes, offers, videos with durations, and copy that current main has since replaced with wired content. P09-T04 took his visual language from those screenshots without his code. Still owed: his branch pushed from its real base as `designer-public`; the laboratory's approval of any new copy; the footer credit's exact Arabic and English wording, placement and link, recorded in an OD with Androw's approval; and a decision on the navigation he showed. | human | OPEN | G9 |
 | CF-210 | Pending labels (`ApprovalGate` `pendingLabel`, `muted`) rendered on the `primary` hero, lab-to-lab and footer bands whenever their content was pending: 1.93:1 after P09-T04, and 2.38:1 on main's earlier `primary-strong` band. They did not render with production's data, so P09-T04's live-data audit passed; the reviewer's data-less audit found them on 23 September 2026. OD-31 §2 requires `surface` text on a band. P09-T05 gave pending labels on a band `surface` text. | reviewer | CLOSED at P09-T05 | P09-T05 |
 | CF-211 | Footer text links measure under 44×44: the reviewer counted 130 undersized `link` and `privacy` elements across 26 page renders on main at 70ba193, and 117 on the design-session branch. DESIGN_SYSTEM §8 criterion 2 requires 44×44 on every interactive element. Pre-existing. | reviewer | OPEN | P07 |
+| CF-212 | P09-T07 added a global `@keyframes nel-site-orb` and an `!important` rule on the structural selector `[data-nel-chrome="site"] > :first-child > span` to src/styles/tokens.css, because its fence required the literal animation name and CSS modules hash keyframe names. The module's own keyframes already animated the orbs. The rule hit only the two orbs, but any change to the site root's first child would have animated other spans. P09-T08 removed it; the orbs animate under the module's hashed keyframes and stop under reduced motion. | reviewer | CLOSED at P09-T08 | P09-T08 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation
