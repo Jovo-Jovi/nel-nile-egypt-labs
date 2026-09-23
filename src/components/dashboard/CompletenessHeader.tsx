@@ -312,6 +312,7 @@ export async function CompletenessHeader({
         const complete = page.state === "complete";
         return (
           <details
+            open={!complete}
             key={page.routePattern}
             className={styles.page}
             data-nel-completeness-page={page.routePattern}

@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-210**
+**Next free id: CF-211**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -215,6 +215,7 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-207 | Two P09-T03 corrections could not be rendered before merge without writing to the only database. The compact completeness gaps panel (C1) renders only for an incomplete module, and every module is complete; its markup is main's, restored verbatim, and its styles are present in the emitted CSS. The PartnerLab review tabs and notes (C6) render only when the review list loads, and locally it returned null and the page showed the provision form (`SUPABASE_SERVICE_ROLE_KEY` present locally: false); their styles are present in the emitted CSS. Confirm both render on production after merge, read-only. | human | OPEN | G9 |
 | CF-208 | On Offer date inputs, one tab stop inside each of `valid_from` and `valid_until` leaves the input focused with `:focus-visible` false, so neither its outline nor its border changes. The main build at e6e7645 behaves the same at the same stops, so this predates the designer's dashboard. Whether the browser draws its own ring on the date control at that stop is not established. DESIGN_SYSTEM §8 criterion 3 requires visible focus on every interactive element. | reviewer | OPEN | P07 |
 | CF-209 | The designer's own public-page work and the approved footer credit are not in the repository. His 22 September screenshots run on a working copy built on the 29 August mock (`605f27f`): placeholder programmes, offers, videos with durations, and copy that current main has since replaced with wired content. P09-T04 took his visual language from those screenshots without his code. Still owed: his branch pushed from its real base as `designer-public`; the laboratory's approval of any new copy; the footer credit's exact Arabic and English wording, placement and link, recorded in an OD with Androw's approval; and a decision on the navigation he showed. | human | OPEN | G9 |
+| CF-210 | Pending labels (`ApprovalGate` `pendingLabel`, `muted`) rendered on the `primary` hero, lab-to-lab and footer bands whenever their content was pending: 1.93:1 after P09-T04, and 2.38:1 on main's earlier `primary-strong` band. They did not render with production's data, so P09-T04's live-data audit passed; the reviewer's data-less audit found them on 23 September 2026. OD-31 §2 requires `surface` text on a band. P09-T05 gave pending labels on a band `surface` text. | reviewer | CLOSED at P09-T05 | P09-T05 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

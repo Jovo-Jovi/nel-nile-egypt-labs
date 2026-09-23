@@ -21,7 +21,7 @@ interface SiteFooterProps {
 export function SiteFooter({ locale, chrome }: SiteFooterProps) {
   const portal = resultsPortalVisitorHref();
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} data-nel-band="primary">
       <div className={styles.shell}>
         <div className={styles.grid}>
           <div className={styles.brand}>
@@ -189,6 +189,22 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
             )}
           </div>
         </div>
+        <p className={styles.credit} data-nel-credit="">
+          {translate(locale, "footer.credit.label")}
+          <Isolate>{translate(locale, "footer.credit.names")}</Isolate>
+          <a
+            href="https://antonysaleeb.me"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.creditLink}
+          >
+            <Isolate>{translate(locale, "footer.credit.site")}</Isolate>
+          </a>
+          <span aria-hidden="true">·</span>
+          <span className={styles.creditAddress}>
+            <Isolate>{translate(locale, "footer.credit.address")}</Isolate>
+          </span>
+        </p>
       </div>
     </footer>
   );

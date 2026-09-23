@@ -368,7 +368,8 @@ authored at P09; gate criteria are not decided here.
 - [ ] **P09-T03-F2** — Emit the designer's glass for every browser and finish P09-T03
 - [ ] **P09-T03-F3** — Finish P09-T03 from STEP 2b
 - [x] **P09-T03-F4** — Finish P09-T03 from STEP 5c
-- [ ] **P09-T04** — Restyle the Visitor pages in the dashboard's visual language
+- [x] **P09-T04** — Restyle the Visitor pages in the dashboard's visual language
+- [ ] **P09-T05** — Adopt the collapsible completeness list, fix band pending labels, add the development credit, delete merged branches
 - [ ] **G9** — criteria not yet decided (OD-19)
 
 ---

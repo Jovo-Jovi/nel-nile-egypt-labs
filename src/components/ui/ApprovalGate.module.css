@@ -80,3 +80,7 @@
   white-space: nowrap;
   pointer-events: none;
 }
+
+[data-nel-chrome="site"] [data-nel-band="primary"] .pendingLabel {
+  color: var(--nel-color-surface);
+}
