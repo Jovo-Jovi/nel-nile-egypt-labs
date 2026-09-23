@@ -360,7 +360,7 @@
 .publishAside {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: stretch;
   gap: var(--nel-space-12);
   padding: var(--nel-space-16);
   background-color: color-mix(in srgb, var(--nel-color-surface) 88%, transparent);
@@ -378,24 +378,35 @@
 @media (max-width: 767px) {
   .publishAside {
     order: -1;
-    position: sticky;
-    inset-block-start: var(--nel-dash-clearance, 76px);
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--nel-space-8);
-    padding-block: var(--nel-space-12);
-    padding-inline: var(--nel-space-16);
+    position: static;
+    z-index: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--nel-space-12);
   }
 
   .publishAside > * {
-    flex-basis: 100%;
-  }
-
-  .publishAside > .actionsMain,
-  .publishAside > .actionsUnpublish {
     flex-basis: auto;
   }
+}
+
+.publishAside .control {
+  inline-size: 100%;
+}
+
+.publishAside .actionsMain {
+  inline-size: 100%;
+}
+
+.publishAside .actionsMain > .slot {
+  display: flex;
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.publishAside .actionsMain button {
+  flex: 1;
+  inline-size: 100%;
 }
 
 @media (min-width: 768px) {
