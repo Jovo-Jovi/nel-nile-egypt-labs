@@ -22,6 +22,10 @@ export async function SiteRoot({ locale, children }: SiteRootProps) {
 
   return (
     <div className={styles.root} data-locale={locale} data-nel-chrome="site">
+      <div className={styles.wash} aria-hidden="true">
+        <span className={styles.orbA} />
+        <span className={styles.orbB} />
+      </div>
       <SiteHeader locale={locale} whatsappHref={chrome.whatsappHref} portalHref={portalHref} />
       <main className={styles.main}>{children}</main>
       <SiteFooter locale={locale} chrome={chrome} />

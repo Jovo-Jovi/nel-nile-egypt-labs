@@ -102,8 +102,8 @@ export type BranchMapPin = {
   id: string;
   name: string;
   isHeadOffice: boolean;
-  x: number;
-  y: number;
+  latitude: number;
+  longitude: number;
 };
 
 export type PublishedSiteSettings = {
@@ -616,41 +616,22 @@ export function publishedBranchesHaveMapCoordinates(rows: PublishedBranch[]): bo
   return rows.length > 0 && rows.every((row) => row.latitude !== null && row.longitude !== null);
 }
 
-// Pins are placed on the schematic only when every published row carries
-// both coordinates. The drawing is not a georeferenced map (CF-69): x/y
-// are a relative fit of those published points into the viewBox, north-up,
-// so a missing coordinate still cannot be guessed. PR-16 governs where
-// published business data is stored, not whether it renders.
+// Pins render only when every published row carries both coordinates.
+// The map projects those published values; a missing coordinate is not
+// guessed. PR-16 governs where published business data is stored.
 export function branchMapPins(rows: PublishedBranch[], locale: "ar" | "en"): BranchMapPin[] {
   if (!publishedBranchesHaveMapCoordinates(rows)) return [];
-  const latitudes: number[] = [];
-  const longitudes: number[] = [];
-  for (const row of rows) {
-    if (row.latitude === null || row.longitude === null) return [];
-    latitudes.push(row.latitude);
-    longitudes.push(row.longitude);
-  }
-  const minLat = Math.min(...latitudes);
-  const maxLat = Math.max(...latitudes);
-  const minLng = Math.min(...longitudes);
-  const maxLng = Math.max(...longitudes);
-  const latSpan = Math.max(maxLat - minLat, 0.01);
-  const lngSpan = Math.max(maxLng - minLng, 0.01);
-  const pad = 18;
-  const inner = 100 - pad * 2;
   const pins: BranchMapPin[] = [];
   for (const row of rows) {
-    const latitude = row.latitude;
-    const longitude = row.longitude;
-    if (latitude === null || longitude === null) return [];
+    if (row.latitude === null || row.longitude === null) return [];
     const name = locale === "ar" ? row.nameAr : row.nameEn;
     if (name.length === 0) return [];
     pins.push({
       id: row.id,
       name,
       isHeadOffice: row.isHeadOffice,
-      x: pad + ((longitude - minLng) / lngSpan) * inner,
-      y: pad + ((maxLat - latitude) / latSpan) * inner,
+      latitude: row.latitude,
+      longitude: row.longitude,
     });
   }
   return pins;

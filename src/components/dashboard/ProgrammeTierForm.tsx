@@ -39,6 +39,8 @@ import site from "./SiteSettingsForm.module.css";
 // date of birth or identifier.
 void PROGRAMME_TIER_FORM_COLUMNS;
 
+const PROGRAMME_TIER_DECLARED_FIELDS: readonly string[] = [];
+
 function TextField({
   locale,
   name,
@@ -143,7 +145,7 @@ export function ProgrammeTierForm({
           ) : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.programmes.sectionTiers">
+        <CatalogSection locale={locale} declaredFields={PROGRAMME_TIER_DECLARED_FIELDS} titleKey="dashboard.programmes.sectionTiers">
           <AxisSelect
             locale={locale}
             name="tier_axis"

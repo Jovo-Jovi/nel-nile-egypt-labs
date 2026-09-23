@@ -64,6 +64,21 @@
   list-style: none;
 }
 
+.call {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  color: var(--nel-color-primary);
+  font-size: var(--nel-size-lg);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.call:focus-visible {
+  outline: 2px solid var(--nel-color-accent);
+  outline-offset: 2px;
+}
+
 .outbound {
   display: inline-flex;
   align-items: center;

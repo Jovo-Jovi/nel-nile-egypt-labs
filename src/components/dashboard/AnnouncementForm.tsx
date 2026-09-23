@@ -4,6 +4,7 @@ import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import {
+  ANNOUNCEMENT_BILINGUAL_PAIRS,
   ANNOUNCEMENT_FORM_COLUMNS,
   confirmToken,
   type CatalogNotice,
@@ -18,6 +19,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -45,6 +47,8 @@ import site from "./SiteSettingsForm.module.css";
 // No field accepts a Visitor or patient name, phone, email, address, date of birth
 // or identifier. No author, creator, editor or created_by field.
 void ANNOUNCEMENT_FORM_COLUMNS;
+
+const ANNOUNCEMENT_DECLARED_FIELDS = declaredFieldsFromPairs(ANNOUNCEMENT_BILINGUAL_PAIRS);
 
 function TextField({
   locale,
@@ -166,7 +170,7 @@ export function AnnouncementForm({
           </p>
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionCopy">
+        <CatalogSection locale={locale} declaredFields={ANNOUNCEMENT_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionCopy">
           <LocaleColumns locale={locale} />
           <Pair
             locale={locale}
@@ -187,7 +191,7 @@ export function AnnouncementForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionValidity">
+        <CatalogSection locale={locale} declaredFields={ANNOUNCEMENT_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionValidity">
           <TextField
             locale={locale}
             name="published_at"
@@ -197,7 +201,7 @@ export function AnnouncementForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
+        <CatalogSection locale={locale} declaredFields={ANNOUNCEMENT_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionMedia">
           <MediaAssetPicker locale={locale} assets={assets} selectedId={row?.MediaAsset ?? null} />
         </CatalogSection>
       </div>

@@ -232,6 +232,34 @@ export function XMarkIcon({ size = 20 }: IconProps) {
   );
 }
 
+export function XBrandIcon({ size = 20 }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
+      <path
+        d="M14.6 3.5h2.7l-5.9 6.7 6.9 9.3h-2.6l-4.7-6.3-5.4 6.3H3.9l6.3-7.3L3.6 3.5h2.7l4.2 5.7 4.1-5.7Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+export function LinkedInMarkIcon({ size = 20 }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
+      <rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="8.2" cy="9" r="0.9" fill="currentColor" />
+      <path d="M8.2 11.2V16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M12 16v-2.8c0-1.3.7-2.1 1.8-2.1 1.1 0 1.7.7 1.7 2.1V16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function YoutubeMarkIcon({ size = 20 }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">

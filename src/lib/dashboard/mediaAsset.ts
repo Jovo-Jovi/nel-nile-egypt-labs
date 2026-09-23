@@ -56,7 +56,7 @@ export const MEDIA_ASSET_FORM_COLUMNS = {
   display_order: "display_order",
 } as const;
 
-const MEDIA_ASSET_BILINGUAL_PAIRS = [["alt_ar", "alt_en"]] as const;
+export const MEDIA_ASSET_BILINGUAL_PAIRS = [["alt_ar", "alt_en"]] as const;
 
 const MEDIA_ASSET_SELECT = [
   "id",

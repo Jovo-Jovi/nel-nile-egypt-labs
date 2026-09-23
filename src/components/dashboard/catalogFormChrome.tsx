@@ -1,16 +1,17 @@
 "use client";
 
 import type { FormEvent, ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import type { CatalogNotice } from "@/lib/dashboard/catalogEntities";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { Button } from "@/components/ui/Button";
-import { CautionIcon } from "@/components/ui/icons";
+import { CautionIcon, CompletenessCheckIcon } from "@/components/ui/icons";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
+import { requiredFieldHoldsValue } from "@/lib/placeholders";
 import site from "./SiteSettingsForm.module.css";
 import extra from "./CatalogEntityForm.module.css";
 
@@ -340,18 +341,160 @@ export function LocaleColumns({ locale }: { locale: Locale }) {
   );
 }
 
+export function declaredFieldsFromPairs(
+  pairs: readonly (readonly [string, string])[],
+): readonly string[] {
+  const names: string[] = [];
+  for (const [arField, enField] of pairs) {
+    names.push(arField, enField);
+  }
+  return names;
+}
+
+type CountedControl = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+
+function countableControls(root: HTMLElement): CountedControl[] {
+  return [...root.querySelectorAll("input, textarea, select")].filter((node): node is CountedControl => {
+    if (!(node instanceof HTMLInputElement || node instanceof HTMLTextAreaElement || node instanceof HTMLSelectElement)) {
+      return false;
+    }
+    if (node.disabled) return false;
+    if (node instanceof HTMLInputElement) {
+      const type = node.type;
+      if (
+        type === "hidden" ||
+        type === "search" ||
+        type === "button" ||
+        type === "submit" ||
+        type === "file" ||
+        type === "checkbox" ||
+        type === "radio"
+      ) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
+
+function controlLabelText(control: CountedControl): string | null {
+  if (control.labels !== null) {
+    for (const label of control.labels) {
+      const text = (label.textContent ?? "").replace(/\s+/g, " ").trim();
+      if (text.length > 0) return text;
+    }
+  }
+  const aria = control.getAttribute("aria-label");
+  if (aria !== null && aria.trim().length > 0) return aria.trim();
+  return null;
+}
+
+// Counts only enabled controls whose name the entity declares. A placeholder
+// is never filled. Media picks are not counted, so a media-only section has
+// no status. A counted control with neither a label nor an aria-label is a
+// halt: the missing line would have to invent a name.
+function sectionIsDone(
+  root: HTMLElement,
+  declared: ReadonlySet<string>,
+): { done: boolean; missing: readonly string[] } | null {
+  const fields = countableControls(root).filter((control) => declared.has(control.name));
+  if (fields.length === 0) return null;
+  const missing: string[] = [];
+  for (const field of fields) {
+    if (requiredFieldHoldsValue(field.value)) continue;
+    const label = controlLabelText(field);
+    if (label === null) {
+      root.setAttribute("data-nel-unlabelled-declared", field.name);
+      return null;
+    }
+    missing.push(label);
+  }
+  root.removeAttribute("data-nel-unlabelled-declared");
+  if (missing.length === 0) return { done: true, missing };
+  return { done: false, missing };
+}
+
 export function CatalogSection({
   locale,
   titleKey,
+  declaredFields,
   children,
 }: {
   locale: Locale;
   titleKey: CatalogKey;
+  declaredFields: readonly string[];
   children: ReactNode;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const [status, setStatus] = useState<{ done: boolean; missing: readonly string[] } | null>(null);
+  const declaredKey = declaredFields.join("\0");
+
+  function read() {
+    const root = ref.current;
+    if (root === null) return;
+    const next = sectionIsDone(root, new Set(declaredFields));
+    setStatus((current) => {
+      if (current === null && next === null) return current;
+      if (current !== null && next !== null && current.done === next.done && current.missing.join("\0") === next.missing.join("\0")) {
+        return current;
+      }
+      return next;
+    });
+  }
+
+  useEffect(() => {
+    const root = ref.current;
+    if (root === null) return;
+    const names = declaredKey.length === 0 ? [] : declaredKey.split("\0");
+    const next = sectionIsDone(root, new Set(names));
+    setStatus((current) => {
+      if (current === null && next === null) return current;
+      if (
+        current !== null &&
+        next !== null &&
+        current.done === next.done &&
+        current.missing.join("\0") === next.missing.join("\0")
+      ) {
+        return current;
+      }
+      return next;
+    });
+  }, [declaredKey]);
+
+  function schedule() {
+    requestAnimationFrame(read);
+  }
+
+  const doneLabel = translate(locale, "dashboard.completeness.complete");
+  const openLabel = translate(locale, "dashboard.completeness.incomplete");
+  const separator = locale === "ar" ? "، " : ", ";
+
   return (
-    <section className={site.section}>
-      <SectionHeader locale={locale} titleKey={titleKey} level="h2" />
+    <section
+      ref={ref}
+      className={status?.done === true ? `${site.section} ${site.sectionDone}` : site.section}
+      onInput={schedule}
+      onChange={schedule}
+    >
+      <div className={site.sectionHead}>
+        <SectionHeader locale={locale} titleKey={titleKey} level="h2" />
+        {status === null ? null : (
+          <div className={site.stepStatus}>
+            <span className={status.done ? site.stepDone : site.stepOpen}>
+              {status.done ? <CompletenessCheckIcon size={16} /> : null}
+              {status.done ? doneLabel : openLabel}
+            </span>
+            {status.done ? null : (
+              <p className={site.missingFields}>
+                <IsolatedCopy
+                  locale={locale}
+                  text={`${translate(locale, "dashboard.completeness.missingFields")} ${status.missing.join(separator)}`}
+                />
+              </p>
+            )}
+          </div>
+        )}
+      </div>
       {children}
     </section>
   );

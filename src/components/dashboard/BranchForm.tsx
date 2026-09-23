@@ -6,6 +6,7 @@ import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import { callingCodeSelectOptions } from "@/lib/dashboard/callingCodes";
 import {
+  BRANCH_BILINGUAL_PAIRS,
   BRANCH_FORM_COLUMNS,
   confirmToken,
   type BranchRow,
@@ -24,6 +25,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   FieldMessage,
@@ -60,6 +62,8 @@ import site from "./SiteSettingsForm.module.css";
 // not a Visitor's (PR-16, DATA_MODEL.md §6). No field accepts a Visitor or
 // patient name, phone, email, address, date of birth or identifier.
 void BRANCH_FORM_COLUMNS;
+
+const BRANCH_DECLARED_FIELDS = declaredFieldsFromPairs(BRANCH_BILINGUAL_PAIRS);
 
 function TextField({
   locale,
@@ -320,7 +324,7 @@ export function BranchForm({
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionIdentity">
+        <CatalogSection locale={locale} declaredFields={BRANCH_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionIdentity">
           <LocaleColumns locale={locale} />
           <Pair
             locale={locale}
@@ -349,7 +353,7 @@ export function BranchForm({
           </div>
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionContact">
+        <CatalogSection locale={locale} declaredFields={BRANCH_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionContact">
           <LocaleColumns locale={locale} />
           <Pair
             locale={locale}
@@ -387,7 +391,7 @@ export function BranchForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionLocation">
+        <CatalogSection locale={locale} declaredFields={BRANCH_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionLocation">
           <p className={extra.help}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.branches.coordinatesHelp")} />
           </p>

@@ -1,0 +1,46 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nel-space-8);
+  margin: 0;
+  padding-inline-start: 0;
+  list-style: none;
+}
+
+.btnOnPrimary,
+.btnOnSurface {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--nel-radius-full);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.btnOnPrimary {
+  border-color: color-mix(in srgb, var(--nel-color-surface) 55%, transparent);
+  color: var(--nel-color-surface);
+}
+
+.btnOnPrimary:hover {
+  background-color: color-mix(in srgb, var(--nel-color-surface) 12%, transparent);
+}
+
+.btnOnSurface {
+  border-color: var(--nel-color-border);
+  color: var(--nel-color-primary);
+}
+
+.btnOnSurface:hover {
+  background-color: color-mix(in srgb, var(--nel-color-primary) 8%, var(--nel-color-surface));
+}
+
+.btnOnPrimary:focus-visible,
+.btnOnSurface:focus-visible {
+  outline: 2px solid var(--nel-color-accent);
+  outline-offset: 2px;
+}

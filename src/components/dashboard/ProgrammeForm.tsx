@@ -4,6 +4,7 @@ import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import {
+  PROGRAMME_BILINGUAL_PAIRS,
   PROGRAMME_FORM_COLUMNS,
   confirmToken,
   type CatalogNotice,
@@ -17,6 +18,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -44,6 +46,8 @@ import site from "./SiteSettingsForm.module.css";
 // No field accepts a Visitor or patient name, phone, email, address,
 // date of birth or identifier.
 void PROGRAMME_FORM_COLUMNS;
+
+const PROGRAMME_DECLARED_FIELDS = declaredFieldsFromPairs(PROGRAMME_BILINGUAL_PAIRS);
 
 const PAIR_LEGEND: Record<string, CatalogKey> = {
   name: "dashboard.programmes.name",
@@ -180,7 +184,7 @@ export function ProgrammeForm({
           ) : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionIdentity">
+        <CatalogSection locale={locale} declaredFields={PROGRAMME_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionIdentity">
           <TextField
             locale={locale}
             name="slug"

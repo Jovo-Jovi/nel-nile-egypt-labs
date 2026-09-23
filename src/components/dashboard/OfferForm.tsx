@@ -4,6 +4,7 @@ import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import {
+  OFFER_BILINGUAL_PAIRS,
   OFFER_FORM_COLUMNS,
   confirmToken,
   type CatalogNotice,
@@ -18,6 +19,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -49,6 +51,8 @@ import site from "./SiteSettingsForm.module.css";
 // No field accepts a Visitor or patient name, phone, email, address, date of birth
 // or identifier.
 void OFFER_FORM_COLUMNS;
+
+const OFFER_DECLARED_FIELDS = declaredFieldsFromPairs(OFFER_BILINGUAL_PAIRS);
 
 function TextField({
   locale,
@@ -167,7 +171,7 @@ export function OfferForm({
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionCopy">
+        <CatalogSection locale={locale} declaredFields={OFFER_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionCopy">
           <LocaleColumns locale={locale} />
           <Pair
             locale={locale}
@@ -188,7 +192,7 @@ export function OfferForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionValidity">
+        <CatalogSection locale={locale} declaredFields={OFFER_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionValidity">
           <TextField
             locale={locale}
             name="valid_from"
@@ -205,7 +209,7 @@ export function OfferForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionPrice">
+        <CatalogSection locale={locale} declaredFields={OFFER_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionPrice">
           <TextField
             locale={locale}
             name="price_amount"
@@ -224,7 +228,7 @@ export function OfferForm({
           </p>
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
+        <CatalogSection locale={locale} declaredFields={OFFER_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionMedia">
           <MediaAssetPicker locale={locale} assets={assets} selectedId={row?.MediaAsset ?? null} />
           <TextField
             locale={locale}

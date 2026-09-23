@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { useClientReady } from "@/components/ui/useClientReady";
+import { CompletenessCheckIcon } from "@/components/ui/icons";
 import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import {
@@ -15,6 +16,7 @@ import {
 } from "@/lib/dashboard/catalogEntities";
 import {
   MEDIA_ASSET_ALLOWED_MIME_TYPES,
+  MEDIA_ASSET_BILINGUAL_PAIRS,
   MEDIA_ASSET_FILE_SIZE_LIMIT_BYTES,
   MEDIA_ASSET_FORM_COLUMNS,
   mediaAssetHasBilingualAlt,
@@ -29,6 +31,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -56,6 +59,8 @@ import { Button } from "@/components/ui/Button";
 // No field accepts a Visitor or patient name, phone, email, address, date of birth
 // or identifier, or a patient document.
 void MEDIA_ASSET_FORM_COLUMNS;
+
+const MEDIA_ASSET_DECLARED_FIELDS = declaredFieldsFromPairs(MEDIA_ASSET_BILINGUAL_PAIRS);
 void MEDIA_ASSET_ALLOWED_MIME_TYPES;
 void MEDIA_ASSET_FILE_SIZE_LIMIT_BYTES;
 
@@ -119,8 +124,16 @@ export function MediaAssetPicker({
           <button
             type="button"
             className={selected === "" ? `${extra.thumb} ${extra.thumbSelected}` : extra.thumb}
+            aria-pressed={selected === ""}
+            data-media-pick="none"
             onClick={() => setSelected("")}
           >
+            {selected === "" ? (
+              <span className={extra.thumbBadge}>
+                <CompletenessCheckIcon size={16} />
+                {translate(locale, "dashboard.media.selected")}
+              </span>
+            ) : null}
             {translate(locale, "dashboard.media.pickerNone")}
           </button>
         </li>
@@ -140,8 +153,16 @@ export function MediaAssetPicker({
               <button
                 type="button"
                 className={selectedThumb ? `${extra.thumb} ${extra.thumbSelected}` : extra.thumb}
+                aria-pressed={selectedThumb}
+                data-media-pick="asset"
                 onClick={() => setSelected(asset.id)}
               >
+                {selectedThumb ? (
+                  <span className={extra.thumbBadge}>
+                    <CompletenessCheckIcon size={16} />
+                    {translate(locale, "dashboard.media.selected")}
+                  </span>
+                ) : null}
                 {asset.thumbSrc ? (
                   // eslint-disable-next-line @next/next/no-img-element -- signed Operator URL, not a remote host allowlist
                   <img className={extra.thumbImage} src={asset.thumbSrc} alt={base} />
@@ -379,7 +400,7 @@ export function MediaAssetForm({
           ) : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.media.sectionFile">
+        <CatalogSection locale={locale} declaredFields={MEDIA_ASSET_DECLARED_FIELDS} titleKey="dashboard.media.sectionFile">
           <div
             className={extra.drop}
             onDragOver={(event: DragEvent<HTMLDivElement>) => {
@@ -427,7 +448,7 @@ export function MediaAssetForm({
           )}
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.media.sectionAlt">
+        <CatalogSection locale={locale} declaredFields={MEDIA_ASSET_DECLARED_FIELDS} titleKey="dashboard.media.sectionAlt">
           <LocaleColumns locale={locale} />
           <Pair
             locale={locale}
@@ -443,7 +464,7 @@ export function MediaAssetForm({
         </CatalogSection>
 
         {holders.length > 0 ? (
-          <CatalogSection locale={locale} titleKey="dashboard.media.sectionHolders">
+          <CatalogSection locale={locale} declaredFields={MEDIA_ASSET_DECLARED_FIELDS} titleKey="dashboard.media.sectionHolders">
             <ul className={extra.list}>
               {holders.map((holder) => (
                 <li key={`${holder.entity}-${holder.id}`}>

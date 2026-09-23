@@ -1684,3 +1684,38 @@ address is shown as text and never as a `mailto:` link.
 Branches `p09-t03` and `p09-t04`, both contained in main, were deleted.
 `designer-review` was archived as the tag `archive/designer-review` at
 `acbc8c9` and deleted. Open CF 112. Next free CF-211.
+
+## 2026-09-23 — P09-T06 and P09-T06-F: The design session of 23 September 2026
+
+P09-T06 cut `p09-t06` from `origin/designer-review` at `862f05c`, the
+design session that the developers, the designer and Androw reviewed, and
+recorded P09-T05 as PASS. It halted at STEP 4g, because its fence
+required the map's whole accessible name to equal its first sentence.
+P09-T06-F corrected that check, and replaced a placeholder test that
+used a value outside the canonical list.
+
+Every session change landed:
+- the horizontal programmes band
+- the footer's columns and circular social marks, shared by the contact
+  page
+- the rights notice
+- the schematic Cairo map, with pins at published coordinates opening
+  Google Maps
+- the selected-media badge
+- the public orbs
+- the hotline call link
+- the form-section status
+
+The last three were made compliant rather than removed:
+- **The orbs** keep their shapes and fixed positions, now static,
+  unfiltered, and at OD-31's glow limits over a flat canvas; 0 Visitor
+  text runs needed a solid surface.
+- **The call link** stands under OD-33, which amends OD-16 and ratifies
+  the guard change.
+- **The section status** reads each entity's declared publish
+  requirements through the same placeholder-aware test as §4h, names
+  what is missing, and leaves media-only sections to their Selected
+  badge. The §4h header stays authoritative.
+
+CF-211 records footer links under 44×44, which predate the session.
+Open CF 113. Next free CF-212.
