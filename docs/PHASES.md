@@ -372,7 +372,8 @@ authored at P09; gate criteria are not decided here.
 - [x] **P09-T05** — Adopt the collapsible completeness list, fix band pending labels, add the development credit, delete merged branches
 - [ ] **P09-T06** — Land the design session with its three features made compliant
 - [x] **P09-T06-F** — Finish P09-T06 from STEP 4g with corrected checks
-- [ ] **P09-T07** — Give every Visitor page the dashboard's background (OD-34)
+- [x] **P09-T07** — Give every Visitor page the dashboard's background (OD-34)
+- [ ] **P09-T08** — Remove the tokens.css animation workaround; record P09-T07
 - [ ] **G9** — criteria not yet decided (OD-19)
 
 ---
