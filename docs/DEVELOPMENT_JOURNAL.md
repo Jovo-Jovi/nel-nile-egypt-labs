@@ -1719,3 +1719,22 @@ The last three were made compliant rather than removed:
 
 CF-211 records footer links under 44×44, which predate the session.
 Open CF 113. Next free CF-212.
+
+## 2026-09-23 — P09-T07: The dashboard's background on every Visitor page
+
+Cut from `origin/main` after #167 merged. STEP 0 recorded P09-T06-F as
+PASS and checked its box.
+
+OD-34 gives every Visitor page the Operator dashboard's background: the
+canvas running to a 7% `primary` tint, and the orb pair at 34% `primary`
+and 22% `accent`, fixed and drifting only when motion is allowed. The
+orbs are drawn as soft radial gradients rather than blurred elements, so
+they cost no filter. The dashboard's own orbs now read the same tokens.
+
+At that strength, only dark body text and large headings stay legible
+directly on the background. The rendered audit put every other run on a
+surface — a solid chip for single lines, a glass panel for longer runs —
+with 5 remedies, and then found no failures.
+
+Branches `p09-t06` and `designer-review` were deleted, both contained in
+main. Open CF 113. Next free CF-212.

@@ -38,7 +38,7 @@
   inset-block-start: -8%;
   inline-size: min(48vw, 32rem);
   block-size: min(48vw, 32rem);
-  background: color-mix(in srgb, var(--nel-color-primary) 34%, transparent);
+  background: var(--nel-orb-primary);
   animation: nel-dash-orb 28s ease-in-out infinite;
 }
 
@@ -47,7 +47,7 @@
   inset-block-start: 28%;
   inline-size: min(40vw, 24rem);
   block-size: min(40vw, 24rem);
-  background: color-mix(in srgb, var(--nel-color-accent) 22%, transparent);
+  background: var(--nel-orb-accent);
   animation: nel-dash-orb 34s ease-in-out infinite reverse;
 }
 

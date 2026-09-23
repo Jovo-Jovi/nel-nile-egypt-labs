@@ -22,7 +22,13 @@
 :global([data-nel-chrome="site"]) .title {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: var(--nel-space-8);
+  background-color: var(--nel-color-surface);
+  border-radius: var(--nel-radius-full);
+  padding-block: var(--nel-space-4);
+  padding-inline: var(--nel-space-12);
+  inline-size: fit-content;
   color: var(--nel-color-primary);
   font-weight: 700;
 }
