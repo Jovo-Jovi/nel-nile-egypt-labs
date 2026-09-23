@@ -2,15 +2,17 @@ import Link from "next/link";
 import { translate, type Locale } from "@/lib/catalog";
 import { localeHref } from "@/lib/locale";
 import { isPartnerSignupEnabled } from "@/lib/partnerSignupFlag";
-import { FOOTER_MEDIA, HEADER_NAV } from "@/lib/siteNav";
-import { resultsPortalVisitorHref } from "@/lib/resultsPortalLink";
+import { FOOTER_MEDIA, FOOTER_SITEMAP } from "@/lib/siteNav";
+import { buildHotlineHref } from "@/lib/hotlineLink";
 import type { PublicChrome } from "@/lib/publicChrome";
+import { resultsPortalVisitorHref } from "@/lib/resultsPortalLink";
 import { MarkSlot } from "@/components/ui/MarkSlot";
 import { ApprovalGate } from "@/components/ui/ApprovalGate";
 import { Isolate, IsolatedCopy } from "@/components/ui/Isolate";
 import { SkeletonBar } from "@/components/ui/SkeletonBar";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
 import { ResultsPortalLinkAction } from "@/components/ui/ResultsPortalLinkAction";
+import { SocialIconList } from "./SocialIconList";
 import styles from "./SiteFooter.module.css";
 
 interface SiteFooterProps {
@@ -20,10 +22,11 @@ interface SiteFooterProps {
 
 export function SiteFooter({ locale, chrome }: SiteFooterProps) {
   const portal = resultsPortalVisitorHref();
+  const hotlineHref = buildHotlineHref(chrome.hotline);
   return (
     <footer className={styles.footer} data-nel-band="primary">
       <div className={styles.shell}>
-        <div className={styles.grid}>
+        <div className={styles.top}>
           <div className={styles.brand}>
             <Link href={localeHref(locale, "")} className={styles.lockup}>
               <span className={styles.mark}>
@@ -49,9 +52,28 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
               </ApprovalGate>
             )}
           </div>
+          {chrome.social.length > 0 ? (
+            <div className={styles.social}>
+              <SocialIconList
+                locale={locale}
+                links={chrome.social}
+                label={translate(locale, "footer.social")}
+                tone="onPrimary"
+              />
+            </div>
+          ) : (
+            <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
+              <span className={styles.meta}>
+                <span>{translate(locale, "footer.social")}</span>
+                <SkeletonBar size="sm" widthPercent={48} />
+              </span>
+            </ApprovalGate>
+          )}
+        </div>
+        <div className={styles.columns}>
           <nav className={styles.column} aria-label={translate(locale, "footer.sitemap")}>
             <h2 className={styles.heading}>{translate(locale, "footer.sitemap")}</h2>
-            {HEADER_NAV.map((item) => (
+            {FOOTER_SITEMAP.map((item) => (
               <Link key={item.suffix} href={localeHref(locale, item.suffix)} className={styles.link}>
                 {translate(locale, item.labelKey)}
               </Link>
@@ -94,7 +116,13 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
             {chrome.hotline ? (
               <span className={styles.meta}>
                 <span>{translate(locale, "footer.hotlineLabel")}</span>
-                <Isolate>{chrome.hotline}</Isolate>
+                {hotlineHref ? (
+                  <a className={styles.hotline} href={hotlineHref}>
+                    <Isolate>{chrome.hotline}</Isolate>
+                  </a>
+                ) : (
+                  <Isolate>{chrome.hotline}</Isolate>
+                )}
               </span>
             ) : (
               <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
@@ -127,26 +155,6 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
                 <span className={styles.meta}>
                   <span>{translate(locale, "footer.addressLabel")}</span>
                   <SkeletonBar size="sm" widthPercent={78} />
-                </span>
-              </ApprovalGate>
-            )}
-            {chrome.social.length > 0 ? (
-              chrome.social.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className={styles.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {translate(locale, item.labelKey)}
-                </a>
-              ))
-            ) : (
-              <ApprovalGate locale={locale} state="pending" pendingLabelKey="approval.pending.businessData">
-                <span className={styles.meta}>
-                  <span>{translate(locale, "footer.social")}</span>
-                  <SkeletonBar size="sm" widthPercent={48} />
                 </span>
               </ApprovalGate>
             )}

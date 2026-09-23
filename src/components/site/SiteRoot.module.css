@@ -5,14 +5,64 @@
   display: flex;
   flex-direction: column;
   background-color: var(--nel-color-background);
-  background-image:
-    radial-gradient(circle min(40vw, 760px) at 0% 50%, var(--nel-glow-accent), transparent),
-    radial-gradient(circle min(40vw, 760px) at 100% 50%, var(--nel-glow-primary), transparent);
-  background-size: 100% 1600px;
-  background-repeat: repeat-y;
+  background-image: linear-gradient(
+    180deg,
+    var(--nel-color-background),
+    color-mix(in srgb, var(--nel-color-primary) 7%, var(--nel-color-surface))
+  );
   color: var(--nel-color-text);
   line-height: var(--nel-line-height-body);
   --nel-header-stack: calc(var(--nel-space-12) + 56px);
+}
+
+.wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.orbA,
+.orbB {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+}
+
+.orbA {
+  inset-inline-start: -14%;
+  inset-block-start: -8%;
+  inline-size: min(48vw, 32rem);
+  block-size: min(48vw, 32rem);
+  background: color-mix(in srgb, var(--nel-color-primary) 34%, transparent);
+  animation: nel-site-orb 28s ease-in-out infinite;
+}
+
+.orbB {
+  inset-inline-end: -10%;
+  inset-block-start: 28%;
+  inline-size: min(40vw, 24rem);
+  block-size: min(40vw, 24rem);
+  background: color-mix(in srgb, var(--nel-color-accent) 22%, transparent);
+  animation: nel-site-orb 34s ease-in-out infinite reverse;
+}
+
+@keyframes nel-site-orb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 24px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbA,
+  .orbB {
+    animation: none;
+  }
 }
 
 @media (min-width: 768px) {

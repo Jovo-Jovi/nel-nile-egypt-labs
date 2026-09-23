@@ -23,6 +23,46 @@
   font-size: var(--nel-size-base);
 }
 
+.sectionDone {
+  border-color: var(--nel-color-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nel-color-success) 22%, transparent);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nel-space-8) var(--nel-space-16);
+}
+
+.sectionHead header {
+  flex: 1 1 12rem;
+}
+
+.stepDone,
+.stepOpen {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nel-space-8);
+  min-block-size: 32px;
+  padding-inline: var(--nel-space-12);
+  border-radius: var(--nel-radius-full);
+  font-size: var(--nel-size-sm);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.stepDone {
+  color: var(--nel-color-success);
+  background-color: color-mix(in srgb, var(--nel-color-success) 14%, var(--nel-color-surface));
+}
+
+.stepOpen {
+  color: var(--nel-color-muted);
+  background-color: color-mix(in srgb, var(--nel-color-primary) 8%, var(--nel-color-surface));
+}
+
 .groupedSections {
   display: flex;
   flex-direction: column;

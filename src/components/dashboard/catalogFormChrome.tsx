@@ -1,13 +1,13 @@
 "use client";
 
 import type { FormEvent, ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import type { CatalogNotice } from "@/lib/dashboard/catalogEntities";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { Button } from "@/components/ui/Button";
-import { CautionIcon } from "@/components/ui/icons";
+import { CautionIcon, CompletenessCheckIcon } from "@/components/ui/icons";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
@@ -340,6 +340,50 @@ export function LocaleColumns({ locale }: { locale: Locale }) {
   );
 }
 
+function controlHasValue(control: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement): boolean {
+  return control.value.trim().length > 0;
+}
+
+function countableControls(root: HTMLElement): Array<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
+  return [...root.querySelectorAll("input, textarea, select")].filter(
+    (node): node is HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement => {
+      if (!(node instanceof HTMLInputElement || node instanceof HTMLTextAreaElement || node instanceof HTMLSelectElement)) {
+        return false;
+      }
+      if (node.disabled || node.hasAttribute("data-optional")) return false;
+      if (node instanceof HTMLInputElement) {
+        const type = node.type;
+        if (
+          type === "hidden" ||
+          type === "search" ||
+          type === "button" ||
+          type === "submit" ||
+          type === "file" ||
+          type === "checkbox" ||
+          type === "radio"
+        ) {
+          return false;
+        }
+      }
+      return true;
+    },
+  );
+}
+
+// A step is done when every typed field in it has a value. A media-only
+// step is done when an image is the pressed choice, so the Operator can
+// see that before moving on to Create or Publish.
+function sectionIsDone(root: HTMLElement): boolean | null {
+  const fields = countableControls(root);
+  const picks = [...root.querySelectorAll("[data-media-pick]")];
+  const pressed = picks.find((node) => node.getAttribute("aria-pressed") === "true");
+  if (fields.length === 0 && picks.length === 0) return null;
+  const fieldsDone = fields.every((field) => controlHasValue(field));
+  const mediaDone = picks.length === 0 || pressed?.getAttribute("data-media-pick") === "asset";
+  if (fields.length === 0) return mediaDone;
+  return fieldsDone && mediaDone;
+}
+
 export function CatalogSection({
   locale,
   titleKey,
@@ -349,9 +393,44 @@ export function CatalogSection({
   titleKey: CatalogKey;
   children: ReactNode;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const [done, setDone] = useState<boolean | null>(null);
+
+  function read() {
+    const root = ref.current;
+    if (root === null) return;
+    const next = sectionIsDone(root);
+    setDone((current) => (current === next ? current : next));
+  }
+
+  useEffect(() => {
+    read();
+  }, []);
+
+  function schedule() {
+    requestAnimationFrame(read);
+  }
+
+  const doneLabel = translate(locale, "dashboard.completeness.complete");
+  const openLabel = translate(locale, "dashboard.completeness.incomplete");
+
   return (
-    <section className={site.section}>
-      <SectionHeader locale={locale} titleKey={titleKey} level="h2" />
+    <section
+      ref={ref}
+      className={done === true ? `${site.section} ${site.sectionDone}` : site.section}
+      onInput={schedule}
+      onChange={schedule}
+      onClick={schedule}
+    >
+      <div className={site.sectionHead}>
+        <SectionHeader locale={locale} titleKey={titleKey} level="h2" />
+        {done === null ? null : (
+          <span className={done ? site.stepDone : site.stepOpen}>
+            {done ? <CompletenessCheckIcon size={16} /> : null}
+            {done ? doneLabel : openLabel}
+          </span>
+        )}
+      </div>
       {children}
     </section>
   );

@@ -1,31 +1,29 @@
-import { LocationPinIcon } from "./icons";
+import { useId } from "react";
+import {
+  MAP_SVG_HEIGHT,
+  MAP_SVG_WIDTH,
+  branchMapsHref,
+  drawCairo,
+  frameAround,
+  projectPercent,
+} from "./cairoMapGeometry";
 import styles from "./GreaterCairoMap.module.css";
 
-// DESIGN_SYSTEM.md v4 §10 "The map is a drawn SVG, not an embed and not
-// a tile." A hand-authored, simplified vector of Greater Cairo in the
-// project's own tokens — background landmass, border for the Nile and
-// the major axes, muted district labels at xs. No tile request, no API
-// key, no third-party script, no embedded map.
-//
-// Pins come from published Branch rows (coordinates, name, head-office
-// flag). None are authored here. Zero published rows means zero pins.
-// CF-69 — the four addresses have not been supplied; an unverified pin
-// is a defect, not a placeholder (PR-16). This file holds viewBox
-// geometry for the drawing, never a location.
+// DESIGN_SYSTEM.md §10 — a drawn SVG, not an embed and not a tile.
+// The Nile, parks and arteries are projected with the same frame as the
+// published Branch coordinates, so each pin sits on the city it belongs to.
+// No tile request, no API key, no third-party script.
 
 export interface MapPin {
   id: string;
   name: string;
   isHeadOffice: boolean;
-  // Percentage position within the map's viewBox, from a published row.
-  x: number;
-  y: number;
+  latitude: number;
+  longitude: number;
 }
 
 interface DistrictLabel {
   id: string;
-  x: number;
-  y: number;
   label: string;
 }
 
@@ -34,103 +32,123 @@ interface GreaterCairoMapProps {
   pinLabel: string;
   headOfficePinLabel: string;
   districtLabels: DistrictLabel[];
+  directionsLabel: string;
   pins?: MapPin[];
 }
 
-// I18N_MODEL.md §4 — "media assets whose own content is directional" is
-// one of exactly two carve-outs where a physical property is legal,
-// because it does not mirror. Real geography does not flip with reading
-// direction. Rather than write a literal left/right property (which
-// would also mirror nothing, since it would be pinned to one physical
-// side, but would read as a §4 violation to a text search that cannot
-// tell the two apart), this component forces dir="ltr" on its own root
-// — the same isolation technique Isolate.tsx uses for a Latin run inside
-// Arabic text — so every logical inset-inline-* below resolves to a
-// fixed physical side in both locales.
+// I18N_MODEL.md §4 — geography does not mirror. dir="ltr" on the map root
+// keeps the drawing on one physical orientation in both locales. Branch
+// names keep their own direction via dir="auto".
 export function GreaterCairoMap({
   ariaLabel,
   pinLabel,
   headOfficePinLabel,
   districtLabels,
+  directionsLabel,
   pins = [],
 }: GreaterCairoMapProps) {
+  const patternId = `nel-fabric-${useId().replace(/:/g, "")}`;
+  const frame = frameAround(pins);
+  const drawn = drawCairo(frame);
+  const ordered = [...pins].sort((a, b) => Number(b.isHeadOffice) - Number(a.isHeadOffice));
+  const placed = spreadPins(
+    ordered.map((pin) => ({ ...pin, ...projectPercent(frame, pin.latitude, pin.longitude) })),
+  );
+  const labels = new Map(districtLabels.map((district) => [district.id, district.label]));
   const headOfficePin = pins.find((pin) => pin.isHeadOffice);
   const describedParts = [ariaLabel];
-  if (headOfficePin) {
-    describedParts.push(`${headOfficePinLabel}: ${headOfficePin.name}`);
-  }
-  if (pins.length > 0) {
-    describedParts.push(pinLabel);
-  }
+  if (headOfficePin) describedParts.push(`${headOfficePinLabel}: ${headOfficePin.name}`);
+  if (pins.length > 0) describedParts.push(pinLabel);
   const described = describedParts.join(". ");
-  const labelledBy = pins.length === 0 ? "img" : "group";
 
   return (
-    <div className={styles.map} role={labelledBy} aria-label={described} dir="ltr">
+    <div className={styles.root}>
+      <div className={styles.canvas} role={pins.length === 0 ? "img" : "group"} aria-label={described} dir="ltr">
       <svg
         className={styles.svg}
-        viewBox="0 0 100 62.5"
-        preserveAspectRatio="xMidYMid slice"
+        viewBox={`0 0 ${MAP_SVG_WIDTH} ${MAP_SVG_HEIGHT}`}
+        preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
         focusable="false"
       >
-        {/* Landmass — background fill, no stroke: it reads as a shape
-            against the surface card without claiming a coastline this
-            build has no data for. */}
-        <path
-          d="M6 10 Q2 26 8 40 Q4 52 18 58 Q40 62 58 58 Q80 60 94 46 Q98 30 88 18 Q82 4 60 4 Q34 -2 6 10 Z"
-          fill="var(--nel-color-background)"
-        />
-        {/* The Nile — border stroke, no fill, a simplified north-south
-            curve through the landmass. */}
-        <path
-          d="M50 2 Q44 16 48 28 Q52 40 44 52 Q40 58 42 62"
-          fill="none"
-          stroke="var(--nel-color-border)"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-        />
-        {/* Major axes — two schematic ring-road / desert-road lines, same
-            token, thinner. */}
-        <path
-          d="M10 44 Q40 50 90 34"
-          fill="none"
-          stroke="var(--nel-color-border)"
-          strokeWidth="0.7"
-          strokeDasharray="2 2"
-        />
-        <path
-          d="M20 16 Q46 30 76 52"
-          fill="none"
-          stroke="var(--nel-color-border)"
-          strokeWidth="0.7"
-          strokeDasharray="2 2"
-        />
-        {districtLabels.map((district) => (
-          <text
-            key={district.id}
-            x={district.x}
-            y={district.y}
-            className={styles.districtLabel}
-            textAnchor="middle"
-          >
-            {district.label}
-          </text>
+        <defs>
+          <pattern id={patternId} width="3.4" height="3.4" patternUnits="userSpaceOnUse">
+            <rect className={styles.block} width="1.7" height="1.05" rx="0.2" />
+          </pattern>
+        </defs>
+        <rect className={styles.land} width={MAP_SVG_WIDTH} height={MAP_SVG_HEIGHT} />
+        <rect className={styles.fabric} width={MAP_SVG_WIDTH} height={MAP_SVG_HEIGHT} fill={`url(#${patternId})`} />
+        <path className={styles.bank} d={drawn.bank} />
+        <path className={styles.water} d={drawn.water} />
+        {drawn.parks.map((park) => (
+          <ellipse key={`${park.cx}-${park.cy}`} className={styles.park} cx={park.cx} cy={park.cy} rx={park.rx} ry={park.ry} />
         ))}
+        {drawn.streets.map((street) => (
+          <path key={street} className={styles.street} d={street} />
+        ))}
+        {drawn.arteries.map((artery) => (
+          <path key={artery} className={styles.artery} d={artery} />
+        ))}
+        {drawn.districts.map((district) => {
+          const label = labels.get(district.id);
+          if (label === undefined) return null;
+          return (
+            <text key={district.id} className={styles.districtLabel} x={district.x} y={district.y} textAnchor="middle">
+              {label}
+            </text>
+          );
+        })}
       </svg>
-      {pins.map((pin) => (
-        <span
-          key={pin.id}
-          data-map-pin={pin.id}
-          data-head-office={pin.isHeadOffice ? "true" : undefined}
-          className={pin.isHeadOffice ? styles.pinMarkHeadOffice : styles.pinMark}
-          style={{ insetInlineStart: `${pin.x}%`, insetBlockStart: `${pin.y}%` }}
-          role="img"
-          aria-label={pin.isHeadOffice ? `${headOfficePinLabel}: ${pin.name}` : pin.name}
-        >
-          <LocationPinIcon size={pin.isHeadOffice ? 28 : 24} />
-        </span>
-      ))}
+      {placed.map((pin, index) => {
+        const href = branchMapsHref(pin.latitude, pin.longitude);
+        const label = `${directionsLabel}: ${pin.isHeadOffice ? headOfficePinLabel : pinLabel}. ${pin.name}`;
+        return (
+          <span
+            key={pin.id}
+            data-map-pin={pin.id}
+            data-head-office={pin.isHeadOffice ? "true" : undefined}
+            className={pin.isHeadOffice ? styles.pinHeadOffice : styles.pin}
+            style={{ insetInlineStart: `${pin.x}%`, insetBlockStart: `${pin.y}%` }}
+          >
+            <a className={styles.pinLink} href={href} aria-label={label}>
+              <span className={pin.isHeadOffice ? styles.pinMarkHeadOffice : styles.pinMark} aria-hidden="true">
+                {index + 1}
+              </span>
+            </a>
+          </span>
+        );
+      })}
+      </div>
+      {placed.length > 0 ? (
+        <ol className={styles.legend}>
+          {placed.map((pin, index) => (
+            <li key={pin.id}>
+              <a className={styles.legendLink} href={branchMapsHref(pin.latitude, pin.longitude)}>
+                <span className={pin.isHeadOffice ? styles.legendIndexHeadOffice : styles.legendIndex} aria-hidden="true">
+                  {index + 1}
+                </span>
+                <span dir="auto">{pin.name}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      ) : null}
     </div>
   );
+}
+
+function spreadPins<T extends { x: number; y: number }>(pins: T[]): T[] {
+  const used: { x: number; y: number }[] = [];
+  return pins.map((pin) => {
+    let x = pin.x;
+    let y = pin.y;
+    let step = 0;
+    while (used.some((other) => Math.hypot(other.x - x, other.y - y) < 8) && step < 5) {
+      x += 7;
+      y -= 5;
+      step += 1;
+    }
+    used.push({ x, y });
+    return { ...pin, x, y };
+  });
 }

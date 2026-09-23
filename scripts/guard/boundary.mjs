@@ -4,12 +4,15 @@
 // Scans the Next build output under `.next/server/app/**/*.html` for public
 // boundary affordances. This is the check that a raw `mailto:` substring
 // grep got wrong: the string inside escaped prose is published content
-// (OD-16); an anchor whose href begins `mailto:` or `tel:` is an
-// implemented channel and is forbidden.
+// (OD-16); an anchor whose href begins `mailto:` is an implemented
+// channel and is forbidden. A `tel:` href is allowed only for the
+// published hotline short code.
 //
 // Fails on:
-//   - `<a href>` beginning `mailto:` or `tel:` (attribute-parsed, never a
+//   - `<a href>` beginning `mailto:` (attribute-parsed, never a
 //     substring search)
+//   - `<a href>` beginning `tel:` unless it is only a 3-to-6 digit
+//     short-code dial for the published hotline
 //   - `<form`, `<input`, `<textarea`, `<select`, or a submit `<button>`
 //   - `<iframe`, `<embed`, `<object`
 //   - an anchor or frame source on the results-portal host that is not a
@@ -231,8 +234,11 @@ function scanHtml(html, label) {
     if (tag === "a") {
       const href = (attrs.href ?? "").trim();
       const scheme = hrefScheme(href);
-      if (scheme === "mailto:" || scheme === "tel:") {
+      if (scheme === "mailto:") {
         findings.push(`${loc}  <a> href begins ${scheme}`);
+      }
+      if (scheme === "tel:" && !/^tel:\d{3,6}$/.test(href)) {
+        findings.push(`${loc}  <a> href begins tel: and is not a short-code dial`);
       }
 
       const parsed = parseAbsoluteUrl(href);

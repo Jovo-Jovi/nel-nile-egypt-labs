@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { useClientReady } from "@/components/ui/useClientReady";
+import { CompletenessCheckIcon } from "@/components/ui/icons";
 import { StatusStateBadge } from "@/components/ui/StatusStateBadge";
 import { translate } from "@/lib/catalog";
 import {
@@ -119,8 +120,16 @@ export function MediaAssetPicker({
           <button
             type="button"
             className={selected === "" ? `${extra.thumb} ${extra.thumbSelected}` : extra.thumb}
+            aria-pressed={selected === ""}
+            data-media-pick="none"
             onClick={() => setSelected("")}
           >
+            {selected === "" ? (
+              <span className={extra.thumbBadge}>
+                <CompletenessCheckIcon size={16} />
+                {translate(locale, "dashboard.media.selected")}
+              </span>
+            ) : null}
             {translate(locale, "dashboard.media.pickerNone")}
           </button>
         </li>
@@ -140,8 +149,16 @@ export function MediaAssetPicker({
               <button
                 type="button"
                 className={selectedThumb ? `${extra.thumb} ${extra.thumbSelected}` : extra.thumb}
+                aria-pressed={selectedThumb}
+                data-media-pick="asset"
                 onClick={() => setSelected(asset.id)}
               >
+                {selectedThumb ? (
+                  <span className={extra.thumbBadge}>
+                    <CompletenessCheckIcon size={16} />
+                    {translate(locale, "dashboard.media.selected")}
+                  </span>
+                ) : null}
                 {asset.thumbSrc ? (
                   // eslint-disable-next-line @next/next/no-img-element -- signed Operator URL, not a remote host allowlist
                   <img className={extra.thumbImage} src={asset.thumbSrc} alt={base} />

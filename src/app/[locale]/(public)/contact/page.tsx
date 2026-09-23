@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import { translate } from "@/lib/catalog";
+import { buildHotlineHref } from "@/lib/hotlineLink";
 import { localizedText } from "@/lib/listingFormat";
 import { pageMetadata } from "@/lib/pageMetadata";
+import { socialLinksFromSettings } from "@/lib/publicChrome";
 import { publishedSiteSettings } from "@/lib/publishedListings";
 import { buildWhatsAppHref } from "@/lib/whatsappLink";
 import { requireLocale } from "@/components/site/StaticShellPage";
-import { CopyCard, InfoPage, OutboundList, PendingSlot } from "@/components/site/InfoPage";
+import { CopyCard, InfoPage, PendingSlot } from "@/components/site/InfoPage";
+import { SocialIconList } from "@/components/site/SocialIconList";
+import { IsolatedCopy } from "@/components/ui/Isolate";
 import { WhatsAppAction } from "@/components/ui/WhatsAppAction";
+import styles from "@/components/site/InfoPage.module.css";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -25,20 +30,8 @@ export default async function Page({ params }: Props) {
     settings?.hoursAr && settings.hoursEn
       ? localizedText(locale, settings.hoursAr, settings.hoursEn)
       : null;
-  const social = [
-    settings?.facebookUrl
-      ? { href: settings.facebookUrl, label: translate(locale, "contact.facebook") }
-      : null,
-    settings?.instagramUrl
-      ? { href: settings.instagramUrl, label: translate(locale, "contact.instagram") }
-      : null,
-    settings?.linkedinUrl
-      ? { href: settings.linkedinUrl, label: translate(locale, "contact.linkedin") }
-      : null,
-    settings?.youtubeUrl
-      ? { href: settings.youtubeUrl, label: translate(locale, "contact.youtube") }
-      : null,
-  ].filter((item): item is { href: string; label: string } => item !== null);
+  const social = settings ? socialLinksFromSettings(settings) : [];
+  const hotlineHref = buildHotlineHref(settings?.hotline ?? null);
 
   return (
     <InfoPage locale={locale} titleKey="page.contact.title">
@@ -54,11 +47,26 @@ export default async function Page({ params }: Props) {
       )}
       {hours ? <CopyCard locale={locale} title={translate(locale, "contact.hoursTitle")} body={hours} /> : null}
       {settings?.hotline ? (
-        <CopyCard locale={locale} title={translate(locale, "footer.hotlineLabel")} body={settings.hotline} />
+        <CopyCard locale={locale} title={translate(locale, "footer.hotlineLabel")}>
+          {hotlineHref ? (
+            <a className={styles.call} href={hotlineHref}>
+              <IsolatedCopy locale={locale} text={settings.hotline} />
+            </a>
+          ) : (
+            <p className={styles.copy}>
+              <IsolatedCopy locale={locale} text={settings.hotline} />
+            </p>
+          )}
+        </CopyCard>
       ) : null}
       {social.length > 0 ? (
         <CopyCard locale={locale} title={translate(locale, "contact.socialTitle")}>
-          <OutboundList locale={locale} items={social} />
+          <SocialIconList
+            locale={locale}
+            links={social}
+            label={translate(locale, "contact.socialTitle")}
+            tone="onSurface"
+          />
         </CopyCard>
       ) : null}
     </InfoPage>

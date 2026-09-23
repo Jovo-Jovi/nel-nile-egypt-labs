@@ -271,7 +271,8 @@
 .offer,
 .story,
 .band,
-.split {
+.split,
+.panelBand {
   max-inline-size: 1120px;
   margin-inline: auto;
   padding-inline: var(--nel-space-16);
@@ -282,9 +283,14 @@
   .offer,
   .story,
   .band,
-  .split {
+  .split,
+  .panelBand {
     padding-inline: var(--nel-space-24);
   }
+}
+
+.panelBand {
+  max-inline-size: 1360px;
 }
 
 .inset {
@@ -653,16 +659,12 @@
 }
 
 .split {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
   gap: var(--nel-space-24);
-}
-
-@media (min-width: 768px) {
-  .split {
-    grid-template-columns: 0.8fr 1.2fr;
-    align-items: start;
-  }
+  inline-size: 100%;
+  max-inline-size: 1360px;
 }
 
 .split .kicker,
@@ -671,15 +673,8 @@
 }
 
 .map {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--nel-radius-panel);
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--nel-panel-edge);
-  aspect-ratio: 16 / 9;
-  background-color: var(--nel-color-surface);
-  box-shadow: var(--nel-elevation-1-shadow);
+  inline-size: 100%;
+  min-inline-size: 0;
 }
 
 .cards {

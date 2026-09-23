@@ -8,15 +8,7 @@
 }
 
 .mapFrame {
-  aspect-ratio: 16 / 9;
   inline-size: 100%;
-  border-radius: var(--nel-radius-panel);
-  overflow: hidden;
-  background-color: var(--nel-color-surface);
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--nel-panel-edge);
-  box-shadow: var(--nel-elevation-1-shadow);
 }
 
 @media (min-width: 768px) {

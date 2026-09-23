@@ -29,6 +29,7 @@ import {
 import { localeHref } from "@/lib/locale";
 import {
   CatalogPublishControls,
+  CatalogSection,
   FieldLegend,
   FieldMessage,
   FieldSummary,
@@ -529,10 +530,9 @@ function SettingsSection({
   children: ReactNode;
 }) {
   return (
-    <section className={styles.section}>
-      <SectionHeader locale={locale} titleKey={titleKey} level="h2" />
+    <CatalogSection locale={locale} titleKey={titleKey}>
       {children}
-    </section>
+    </CatalogSection>
   );
 }
 

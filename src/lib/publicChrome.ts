@@ -14,9 +14,12 @@ import {
 } from "@/lib/publishedListings";
 import { buildWhatsAppHref } from "@/lib/whatsappLink";
 
+export type SocialNetwork = "facebook" | "instagram" | "linkedin" | "youtube" | "x";
+
 export type PublicSocialLink = {
   href: string;
   labelKey: CatalogKey;
+  network: SocialNetwork;
 };
 
 export type PublicChrome = {
@@ -64,19 +67,36 @@ export function headOfficeHoursFromBranches(
   return localizedHeadOfficeField(branches, locale, (row) => row.hoursAr, (row) => row.hoursEn);
 }
 
-function socialFromSettings(settings: PublishedSiteSettings): PublicSocialLink[] {
+function socialLink(
+  href: string,
+  labelKey: CatalogKey,
+  network: SocialNetwork,
+): PublicSocialLink {
+  let host = "";
+  try {
+    host = new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    host = "";
+  }
+  if (host === "x.com" || host === "twitter.com") {
+    return { href, labelKey: "footer.social.x", network: "x" };
+  }
+  return { href, labelKey, network };
+}
+
+export function socialLinksFromSettings(settings: PublishedSiteSettings): PublicSocialLink[] {
   const links: PublicSocialLink[] = [];
   if (settings.facebookUrl !== null) {
-    links.push({ href: settings.facebookUrl, labelKey: "contact.facebook" });
+    links.push(socialLink(settings.facebookUrl, "footer.social.facebook", "facebook"));
   }
   if (settings.instagramUrl !== null) {
-    links.push({ href: settings.instagramUrl, labelKey: "contact.instagram" });
+    links.push(socialLink(settings.instagramUrl, "footer.social.instagram", "instagram"));
   }
   if (settings.linkedinUrl !== null) {
-    links.push({ href: settings.linkedinUrl, labelKey: "contact.linkedin" });
+    links.push(socialLink(settings.linkedinUrl, "footer.social.linkedin", "linkedin"));
   }
   if (settings.youtubeUrl !== null) {
-    links.push({ href: settings.youtubeUrl, labelKey: "contact.youtube" });
+    links.push(socialLink(settings.youtubeUrl, "footer.social.youtube", "youtube"));
   }
   return links;
 }
@@ -110,7 +130,7 @@ export function chromeFromPublishedSettings(
     whatsappHref: buildWhatsAppHref(settings.whatsappE164, message),
     hotline: settings.hotline,
     hours,
-    social: socialFromSettings(settings),
+    social: socialLinksFromSettings(settings),
     aboutBody,
     headOfficeAddress,
   };

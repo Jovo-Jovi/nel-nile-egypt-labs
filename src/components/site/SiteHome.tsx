@@ -100,10 +100,12 @@ interface SiteHomeProps {
   clinicalCatalogueSignedOff: boolean;
 }
 
-const DISTRICT_LABEL_KEYS: { id: string; x: number; y: number; key: CatalogKey }[] = [
-  { id: "giza", x: 22, y: 30, key: "locations.map.district.giza" },
-  { id: "cairo", x: 60, y: 26, key: "locations.map.district.cairo" },
-  { id: "maadi", x: 56, y: 74, key: "locations.map.district.maadi" },
+const DISTRICT_LABEL_KEYS: { id: string; key: CatalogKey }[] = [
+  { id: "giza", key: "locations.map.district.giza" },
+  { id: "cairo", key: "locations.map.district.cairo" },
+  { id: "maadi", key: "locations.map.district.maadi" },
+  { id: "heliopolis", key: "locations.map.district.heliopolis" },
+  { id: "kobba", key: "locations.map.district.kobba" },
 ];
 
 const OCCUPANCY = [0, 1, 2] as const;
@@ -440,9 +442,6 @@ export function SiteHome({
               href={portalHref}
             />
           </div>
-          <div id="programmes">
-            <SitePanels locale={locale} programmes={programmes} branches={branches} announcements={announcements} />
-          </div>
         </div>
         <div className={styles.storyMedia}>
           <div className={styles.storyMain}>
@@ -488,6 +487,10 @@ export function SiteHome({
             </ApprovalGate>
           </div>
         </div>
+      </section>
+
+      <section className={styles.panelBand} id="programmes">
+        <SitePanels locale={locale} programmes={programmes} branches={branches} announcements={announcements} />
       </section>
 
       <section className={`${styles.band} ${styles.inset}`} id="why">
@@ -586,12 +589,11 @@ export function SiteHome({
               ariaLabel={translate(locale, "locations.map.ariaLabel")}
               pinLabel={translate(locale, "locations.map.pinLabel")}
               headOfficePinLabel={translate(locale, "locations.map.headOfficePinLabel")}
-              districtLabels={DISTRICT_LABEL_KEYS.map(({ id, x, y, key }) => ({
-                id,
-                x,
-                y,
-                label: translate(locale, key),
-              }))}
+              directionsLabel={translate(locale, "locations.action")}
+            districtLabels={DISTRICT_LABEL_KEYS.map(({ id, key }) => ({
+              id,
+              label: translate(locale, key),
+            }))}
               pins={mapPins}
             />
           </ApprovalGate>

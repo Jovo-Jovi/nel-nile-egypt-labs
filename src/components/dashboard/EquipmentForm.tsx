@@ -51,12 +51,14 @@ function TextField({
   labelKey,
   defaultValue,
   inputMode,
+  optional = false,
 }: {
   locale: Locale;
   name: string;
   labelKey: CatalogKey;
   defaultValue: string | null;
   inputMode?: "numeric";
+  optional?: boolean;
 }) {
   return (
     <div className={site.field}>
@@ -69,6 +71,7 @@ function TextField({
         defaultValue={defaultValue ?? ""}
         autoComplete="off"
         inputMode={inputMode}
+        data-optional={optional ? "" : undefined}
       />
     </div>
   );
@@ -188,6 +191,7 @@ export function EquipmentForm({
             name="Video"
             labelKey="dashboard.equipment.video"
             defaultValue={row?.Video ?? null}
+            optional
           />
           <p className={extra.help}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.equipment.videoHelp")} />

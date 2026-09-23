@@ -57,6 +57,7 @@ function TextField({
   defaultValue,
   inputMode,
   type = "text",
+  optional = false,
 }: {
   locale: Locale;
   name: string;
@@ -64,6 +65,7 @@ function TextField({
   defaultValue: string | null;
   inputMode?: "decimal" | "numeric";
   type?: "text" | "date";
+  optional?: boolean;
 }) {
   return (
     <div className={site.field}>
@@ -76,6 +78,7 @@ function TextField({
         defaultValue={defaultValue ?? ""}
         autoComplete="off"
         inputMode={inputMode}
+        data-optional={optional ? "" : undefined}
       />
     </div>
   );
@@ -231,6 +234,7 @@ export function OfferForm({
             name="Programme"
             labelKey="dashboard.offers.programme"
             defaultValue={row?.Programme ?? null}
+            optional
           />
           <p className={extra.help}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.offers.programmeHelp")} />

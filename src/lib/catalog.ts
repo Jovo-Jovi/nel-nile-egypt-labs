@@ -494,6 +494,7 @@ const ar = {
   "dashboard.media.heading": "مكتبة الوسائط",
   "dashboard.media.pending": "قيد الانتظار — بانتظار ملفات الوسائط",
   "dashboard.media.pickerNone": "بلا صورة",
+  "dashboard.media.selected": "محدد",
   "dashboard.media.altIncomplete": "النص البديل غير مكتمل",
   "dashboard.media.pickerHelp":
     "لا يُربط ملف بصف منشور قبل اكتمال النص البديل بالعربية والإنجليزية.",
@@ -589,13 +590,15 @@ const ar = {
   "locations.hotlineLabel": "الخط الساخن",
   "locations.action": "الحصول على الاتجاهات",
 
-  // v4 §10 drawn Greater Cairo map — CF-69, indicative pin positions only
-  "locations.map.ariaLabel": "خريطة تخطيطية للقاهرة الكبرى، مواقع الفروع تقريبية",
-  "locations.map.pinLabel": "موقع فرع (تقريبي)",
-  "locations.map.headOfficePinLabel": "موقع المقر الرئيسي (تقريبي)",
+  // Drawn Greater Cairo map. Pins use published Branch coordinates.
+  "locations.map.ariaLabel": "خريطة القاهرة ومواقع الفروع المنشورة",
+  "locations.map.pinLabel": "موقع فرع",
+  "locations.map.headOfficePinLabel": "موقع المقر الرئيسي",
   "locations.map.district.giza": "الجيزة",
   "locations.map.district.cairo": "القاهرة",
   "locations.map.district.maadi": "المعادي",
+  "locations.map.district.heliopolis": "مصر الجديدة",
+  "locations.map.district.kobba": "حدائق القبة",
   "branch.headOffice": "المقر الرئيسي",
 
   // Card band — Programmes
@@ -689,10 +692,11 @@ const ar = {
   "footer.social": "تابعنا",
   "footer.social.facebook": "فيسبوك",
   "footer.social.instagram": "إنستغرام",
+  "footer.social.linkedin": "لينكدإن",
   "footer.social.x": "منصة إكس",
   "footer.social.youtube": "يوتيوب",
   "footer.social.pending": "روابط الحسابات تظهر بعد إدخالها في إعدادات الموقع.",
-  "footer.notice": "معاينة داخلية فقط، وليست نسخة منشورة. جميع البيانات وهمية.",
+  "footer.notice": "جميع الحقوق محفوظة لمعامل النيل مصر.",
 
   // System view — shared chrome
   "system.heading": "نظام التصميم",
@@ -1255,6 +1259,7 @@ const en = {
   "dashboard.media.heading": "Media Library",
   "dashboard.media.pending": "Pending — awaiting MediaAsset rows",
   "dashboard.media.pickerNone": "None",
+  "dashboard.media.selected": "Selected",
   "dashboard.media.altIncomplete": "alt text incomplete",
   "dashboard.media.pickerHelp":
     "A MediaAsset cannot attach to a published row until Arabic and English alt text are both present.",
@@ -1349,13 +1354,15 @@ const en = {
   "locations.hotlineLabel": "Hotline",
   "locations.action": "Get directions",
 
-  // v4 §10 drawn Greater Cairo map — CF-69, indicative pin positions only
-  "locations.map.ariaLabel": "Schematic map of Greater Cairo, branch positions indicative",
-  "locations.map.pinLabel": "Branch location (indicative)",
-  "locations.map.headOfficePinLabel": "Head office location (indicative)",
+  // Drawn Greater Cairo map. Pins use published Branch coordinates.
+  "locations.map.ariaLabel": "Map of Cairo with published branch locations",
+  "locations.map.pinLabel": "Branch location",
+  "locations.map.headOfficePinLabel": "Head office location",
   "locations.map.district.giza": "Giza",
   "locations.map.district.cairo": "Cairo",
   "locations.map.district.maadi": "Maadi",
+  "locations.map.district.heliopolis": "Heliopolis",
+  "locations.map.district.kobba": "Hadayek El Kobba",
   "branch.headOffice": "Head office",
 
   // Card band — Programmes
@@ -1449,10 +1456,11 @@ const en = {
   "footer.social": "Follow us",
   "footer.social.facebook": "Facebook",
   "footer.social.instagram": "Instagram",
+  "footer.social.linkedin": "LinkedIn",
   "footer.social.x": "X",
   "footer.social.youtube": "YouTube",
   "footer.social.pending": "Account links appear once they are entered in Site Settings.",
-  "footer.notice": "Internal preview only, not a published version. All data is synthetic.",
+  "footer.notice": "All rights reserved to Nile Egypt Lab.",
 
   // System view — shared chrome
   "system.heading": "Design system",

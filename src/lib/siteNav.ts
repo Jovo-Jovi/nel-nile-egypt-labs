@@ -11,6 +11,15 @@ export const HEADER_NAV: { suffix: string; labelKey: CatalogKey }[] = [
   { suffix: "/contact", labelKey: "header.nav.contact" },
 ];
 
+export const FOOTER_SITEMAP: { suffix: string; labelKey: CatalogKey }[] = [
+  { suffix: "", labelKey: "header.nav.home" },
+  { suffix: "/about", labelKey: "header.nav.about" },
+  { suffix: "/programmes", labelKey: "header.nav.programmes" },
+  { suffix: "/locations", labelKey: "header.nav.locations" },
+  { suffix: "/offers", labelKey: "header.nav.offers" },
+  { suffix: "/announcements", labelKey: "header.nav.insights" },
+];
+
 export const FOOTER_MEDIA: { suffix: string; labelKey: CatalogKey }[] = [
   { suffix: "/departments", labelKey: "header.nav.departments" },
   { suffix: "/videos", labelKey: "header.nav.videos" },

@@ -54,9 +54,9 @@ finding that requires one to change will be dispositioned out of scope rather
 than actioned.
 
 **No patient data, anywhere.** The site collects nothing. No contact form, no
-booking, no enquiry field, no newsletter, no chat. WhatsApp is the only contact
-channel and it is an outbound link. A design that asks a visitor to type
-anything is out of scope.
+booking, no enquiry field, no newsletter, no chat. WhatsApp is an outbound
+link. The published hotline is an outbound call link, so a phone opens the
+dialer. A design that asks a visitor to type anything is out of scope.
 
 **The results portal is a separate system.** It is linked and nothing else.
 No embedding, no framing, no login on our side, no fetching results.
@@ -68,7 +68,8 @@ not propose changing, shortening, regrouping or rewording them.
 
 **No third-party assets.** No Google Fonts, no analytics, no embedded video
 player, no map tiles, no CDN icons. Everything is self-hosted. The Cairo map is
-a drawn SVG, deliberately.
+a drawn SVG. Tapping a pin leaves the site and opens that branch in Google
+Maps. The page does not embed a map.
 
 **No new features.** If a finding needs something the site does not do, it is a
 scope conversation with the client, not a design fix.
@@ -159,3 +160,60 @@ One thing worth holding in mind while you work: the site this replaces is live
 now, with eight-year-old placeholder text and clinical errors in it. Every week
 this review takes is a week patients still see that. The review is worth doing.
 It is not worth doing slowly.
+
+## 9. Changes recorded from the design session
+
+Recorded 23 September 2026, from the working session on the local site.
+These are built. They are not open findings.
+
+### Home — programmes, branches, and insights
+
+The programmes block is a wide band. On a wide screen the tabs (البرامج،
+الفروع، المستجدات / Programmes, Branches, Insights) sit beside the title
+and standfirst, with a red rule on the tab rail. The cards sit in a
+horizontal row. On a narrow screen the tabs sit in a row above the cards.
+
+### Footer
+
+Social accounts are circular outline icons: Facebook, Instagram, LinkedIn,
+and YouTube, in that DOM order so Arabic reads YouTube toward Facebook
+from the inline start. The columns on the blue band are أقسام الموقع /
+Site sections, تواصل معنا / Contact, and من المعمل / From the laboratory.
+The legal line that said the site was an internal preview with synthetic
+data now reads «جميع الحقوق محفوظة لمعامل النيل مصر.» /
+«All rights reserved to Nile Egypt Lab.»
+
+### Map — home and locations
+
+Published branch coordinates are drawn as numbered pins on a Cairo SVG.
+The head office pin is larger and ringed. Tapping a pin, or its name in
+the list, opens that coordinate in Google Maps. On a phone the same link
+opens the Google Maps app when it is installed.
+
+On the home page the map is the full width of the section, not the
+narrower half of a two-column split. The numbered name list sits under
+the map. It no longer covers the drawing. The locations page uses the
+same map and the same list placement.
+
+### Page background
+
+Public pages use the same background as the operator dashboard: a vertical
+wash and two soft coloured orbs.
+
+### Contact — تواصل
+
+The laboratory accounts on the contact page use the same circular media
+icons as the footer, on the light card. The hotline number is a call
+link. Tapping الخط الساخن / Hotline opens the phone dialer on a mobile
+device. The link is built only from a published short code of three to
+six digits. WhatsApp remains the written-message channel. There is still
+no form.
+
+### Dashboard — media selection and step status
+
+On every draft and published form, the chosen media image has a thick
+accent ring and a “Selected” / «محدد» badge. It is no longer only a thin
+border. Each form section shows مكتمل / Complete when its fields are
+filled and, where the section is a media choice, when an image is the
+chosen thumb. An open section stays غير مكتمل / Incomplete, so Create
+and Publish are used after the Operator can see that every step is done.

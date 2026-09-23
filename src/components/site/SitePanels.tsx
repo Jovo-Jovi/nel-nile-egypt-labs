@@ -81,23 +81,36 @@ export function SitePanels({ locale, programmes, branches, announcements }: Site
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.tabs} role="tablist" aria-label={translate(locale, "header.nav.label")}>
-        {PANELS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            role="tab"
-            aria-selected={item.id === active}
-            className={styles.tab}
-            onClick={() => setActive(item.id)}
-          >
-            {translate(locale, item.tab)}
-          </button>
-        ))}
+      <div className={styles.head}>
+        <div className={styles.tabs} role="tablist" aria-label={translate(locale, "header.nav.label")}>
+          {PANELS.map((item) => (
+            <button
+              key={item.id}
+              id={`panel-tab-${item.id}`}
+              type="button"
+              role="tab"
+              aria-selected={item.id === active}
+              aria-controls={`panel-${item.id}`}
+              className={styles.tab}
+              onClick={() => setActive(item.id)}
+            >
+              {translate(locale, item.tab)}
+            </button>
+          ))}
+        </div>
+        <div className={styles.intro}>
+          <h3 className={styles.title} id={`panel-title-${panel.id}`}>
+            {translate(locale, panel.title)}
+          </h3>
+          <p className={styles.body}>{translate(locale, panel.body)}</p>
+        </div>
       </div>
-      <div className={styles.panel} role="tabpanel">
-        <h3 className={styles.title}>{translate(locale, panel.title)}</h3>
-        <p className={styles.body}>{translate(locale, panel.body)}</p>
+      <div
+        className={styles.panel}
+        id={`panel-${panel.id}`}
+        role="tabpanel"
+        aria-labelledby={`panel-tab-${panel.id}`}
+      >
         <ApprovalGate locale={locale} state={gateState} pendingLabelKey={panelGateKey(panel.id)}>
           {panel.id === "programmes" && programmes.length > 0 ? (
             <ul className={styles.cardList}>
