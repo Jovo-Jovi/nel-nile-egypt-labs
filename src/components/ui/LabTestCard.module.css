@@ -17,6 +17,11 @@
     transform var(--nel-duration);
 }
 
+:global([data-nel-chrome="site"]) .card {
+  border-color: var(--nel-panel-edge);
+  border-radius: var(--nel-radius-panel);
+}
+
 .card:hover {
   border-color: var(--nel-color-primary);
   box-shadow: var(--nel-elevation-2-shadow);

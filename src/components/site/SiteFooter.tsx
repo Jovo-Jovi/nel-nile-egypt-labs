@@ -167,12 +167,14 @@ export function SiteFooter({ locale, chrome }: SiteFooterProps) {
           </Link>
           <div className={styles.chips}>
             {/* chip omitted href. Ratified at the P05-T19 verdict. */}
-            <ResultsPortalLinkAction
-              label={translate(locale, "hero.portalAction")}
-              variant="secondary"
-              pill
-              href={portal?.href}
-            />
+            <span className={styles.bandPortal}>
+              <ResultsPortalLinkAction
+                label={translate(locale, "hero.portalAction")}
+                variant="secondary"
+                pill
+                href={portal?.href}
+              />
+            </span>
             {chrome.whatsappHref ? (
               <WhatsAppAction
                 label={translate(locale, "hero.whatsappAction")}

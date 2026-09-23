@@ -1634,3 +1634,29 @@ Four carry-forwards landed:
 - CF-208: a date-input tab stop without visible focus, which main shares.
 
 Open CF 107 + 4 − 0 = 111. Next free CF-209.
+
+## 2026-09-23 — P09-T04: Restyle the Visitor pages in the dashboard's visual language
+
+Cut from `origin/p09-t03` at `91a4b01`, before either change merged, so
+one pull request carries both. STEP 0 recorded P09-T03-F4 as PASS and
+checked its box.
+
+OD-31 landed. It takes the designer's dashboard language to the Visitor
+pages from his 22 September screenshots, without his code, which is built
+on the 29 August mock. It amends DESIGN_SYSTEM in three places:
+- §2 principle 3, for Visitor glass: certified against a pure black
+  backdrop at 92% `surface`, and 96% for small `accent` or `success`
+  text, with only the header blurring.
+- §5, for the 20px panel radius on every surface.
+- §9 and D-29, to admit an `accent` glow. This also decides the
+  dashboard's pink orb, which P09-T03's verdict passed without naming.
+
+The restyle changed styles and wrappers only. Content identity held
+against the P09-T03 build on 14 routes in both locales at two widths:
+body text, links, images and headings unchanged, apart from the hero
+stats card, whose counts equal the published rows. The dashboard sign-in
+stayed pixel-identical. 0 contrast remedies were applied.
+
+CF-209 records what the screenshots show but this task could not land:
+his own code, new copy, the footer credit, and the navigation. Open CF
+111 + 1 − 0 = 112. Next free CF-210.

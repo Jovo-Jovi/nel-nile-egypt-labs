@@ -84,7 +84,9 @@ AA is a floor this project does not negotiate. Second, `backdrop-filter` is expe
 the low-end Android hardware this audience carries. Third, it dates the site on launch
 day. Glassmorphism was proposed and is rejected on all three grounds.
 
-**Amended 22 September 2026, P09-T03 — the Operator dashboard only.** On the owner's instruction to land the designer's dashboard composition, a translucent surface with `backdrop-filter` is permitted inside `DashboardChrome`, the element carrying `data-nel-chrome="dashboard"`, and nowhere else. The first ground is answered by computation, not waived. The dashboard's backdrop is fixed: a canvas running from `background` to a 7% `primary` tint, under two blurred orbs, `primary` at 34% and `accent` at 22%. Under the thinnest glass, 82% `surface`, with both orbs stacked at full density over the darker end of the canvas and `saturate` up to 1.6, `text` holds 14.08, `muted` 4.74, `primary` 9.14, `success` 4.57, `warning` 5.08 and `error` 5.61 against 4.5. `accent` holds 4.37, above its 3.0 non-text floor, and carries small text only on glass of 86% or more, where it holds 4.52. `border` falls to 2.81, so a control on glass keeps its own solid fill and its `border` is measured against that fill. On the bare wash only `text` (6.15) and `primary-strong` (4.94) pass for small text, so small text in any other colour sits on a surface: a label on a solid `surface` pill, a row of controls on the dashboard's 82% glass strip, anything else on a glass panel of 86% or more. Any change to an orb's colour or alpha, the canvas, a glass alpha or a token reopens this computation. The second ground is accepted as a cost on an Operator-only surface; the third is the owner's call. Every Visitor surface, the PartnerLab pages included, stays under this principle unamended.
+**Amended 22 September 2026, P09-T03 — the Operator dashboard only.** On the owner's instruction to land the designer's dashboard composition, a translucent surface with `backdrop-filter` is permitted inside `DashboardChrome`, the element carrying `data-nel-chrome="dashboard"`, and nowhere else. The first ground is answered by computation, not waived. The dashboard's backdrop is fixed: a canvas running from `background` to a 7% `primary` tint, under two blurred orbs, `primary` at 34% and `accent` at 22%. Under the thinnest glass, 82% `surface`, with both orbs stacked at full density over the darker end of the canvas and `saturate` up to 1.6, `text` holds 14.08, `muted` 4.74, `primary` 9.14, `success` 4.57, `warning` 5.08 and `error` 5.61 against 4.5. `accent` holds 4.37, above its 3.0 non-text floor, and carries small text only on glass of 86% or more, where it holds 4.52. `border` falls to 2.81, so a control on glass keeps its own solid fill and its `border` is measured against that fill. On the bare wash only `text` (6.15) and `primary-strong` (4.94) pass for small text, so small text in any other colour sits on a surface: a label on a solid `surface` pill, a row of controls on the dashboard's 82% glass strip, anything else on a glass panel of 86% or more. Any change to an orb's colour or alpha, the canvas, a glass alpha or a token reopens this computation. The second ground is accepted as a cost on an Operator-only surface; the third is the owner's call. Visitor surfaces take a narrower exception under OD-31, below.
+
+**Amended 23 September 2026, OD-31 — Visitor surfaces.** Glass on a Visitor surface is certified against the worst possible backdrop, pure black: at least 92% `surface` (`text` 13.72, `muted` 4.62, `primary` 8.91), and 96% where it carries small `accent` or `success` text (4.66, 4.88). A control on it keeps its own solid fill. Only the site header blurs; it turns solid `surface` under `prefers-reduced-transparency: reduce` and where `backdrop-filter` is unsupported. On a `primary` band, text is `surface` only, on the band or on a card of at most 16% `surface`.
 
 **4. Every interactive target is at least 44×44 CSS pixels.** Including in the
 dashboard, including on desktop. This is not a mobile-only rule.
@@ -311,10 +313,10 @@ avatars. Radius is uniform per component; no component mixes two.
 `32px` is the well radius, added at P02-T14 after the owner-approved composition used it
 throughout. A well is a large inset region — the hero, an inset section — not a card. The
 distinction is size: below roughly 400px inline size, a region uses `8px` and is a card.
-Nothing between `8px` and `32px` exists, and a sixth value requires a decision. `20px` is that decision for the Operator dashboard only: its panels use `--nel-dash-radius: 20px`, set on the `DashboardChrome` root, and its inputs take `8px` (P09-T03, 22 September 2026). No Visitor surface uses either.
+Nothing between `8px` and `32px` exists, and a sixth value requires a decision. `20px` is that decision: panels on every surface use `--nel-radius-panel: 20px` (P09-T03 for the Operator dashboard, OD-31 for Visitor surfaces), and dashboard inputs take `8px`.
 
 **Elevation.** Three levels, each a 1px `border` plus a shadow. No blur surface, no
-translucency, per §2 principle 3 — except inside the Operator dashboard, under that principle's 22 September 2026 amendment.
+translucency, per §2 principle 3 — except as that principle's two amendments allow: the Operator dashboard (22 September 2026) and Visitor surfaces (OD-31).
 
 | Level | Use | Border | Shadow |
 |---|---|---|---|
@@ -670,7 +672,7 @@ two neutrals or uses space.
 
 Permitted, within one hue family only. `primary` → `primary-strong`, or `background` →
 `surface`. Never multi-hue, never lavender-to-pink-to-blue: that is three chromatic
-families and D-29 fixes one.
+families and D-29 fixes one. OD-31 admits one exception: a decorative `accent` glow — the dashboard orb, and on Visitor pages a static glow of at most 5.5% beside a `primary` glow of at most 4.5%, never overlapping. That glow pair replaces the hex lattice on Visitor pages.
 
 A gradient may sit behind a section or a hero band. It may **not** sit behind text
 unless the text clears its floor against **both** stops, verified at each end and

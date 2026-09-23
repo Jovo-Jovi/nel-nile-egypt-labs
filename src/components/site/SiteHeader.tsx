@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { translate, type Locale } from "@/lib/catalog";
 import { localeHref } from "@/lib/locale";
@@ -24,6 +25,7 @@ interface SiteHeaderProps {
 export function SiteHeader({ locale, whatsappHref, portalHref }: SiteHeaderProps) {
   const [navOpen, setNavOpen] = useState(false);
   const [compact, setCompact] = useState(false);
+  const pathname = usePathname() ?? `/${locale}`;
 
   useEffect(() => {
     const onScroll = () => setCompact(window.scrollY > 24);
@@ -58,16 +60,20 @@ export function SiteHeader({ locale, whatsappHref, portalHref }: SiteHeaderProps
   const closeNav = () => setNavOpen(false);
 
   const renderNavLinks = (keyPrefix: string) =>
-    HEADER_NAV.map((item) => (
-      <Link
-        key={`${keyPrefix}-${item.suffix}`}
-        href={localeHref(locale, item.suffix)}
-        className={styles.navLink}
-        onClick={closeNav}
-      >
-        {translate(locale, item.labelKey)}
-      </Link>
-    ));
+    HEADER_NAV.map((item) => {
+      const href = localeHref(locale, item.suffix);
+      return (
+        <Link
+          key={`${keyPrefix}-${item.suffix}`}
+          href={href}
+          className={styles.navLink}
+          aria-current={pathname === href ? "page" : undefined}
+          onClick={closeNav}
+        >
+          {translate(locale, item.labelKey)}
+        </Link>
+      );
+    });
 
   return (
     <header className={styles.header} data-nav-open={navOpen} data-compact={compact}>
@@ -111,7 +117,9 @@ export function SiteHeader({ locale, whatsappHref, portalHref }: SiteHeaderProps
               <span>{translate(locale, "header.whatsappCompactLabel")}</span>
             </ApprovalGate>
           )}
-          <LanguageSwitcher locale={locale} />
+          <span className={styles.localeTrack}>
+            <LanguageSwitcher locale={locale} />
+          </span>
         </div>
       </div>
       <button

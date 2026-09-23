@@ -221,6 +221,36 @@ function TrustStat({
   );
 }
 
+function HeroStats({
+  locale,
+  labUnitCount,
+  programmeCount,
+  branchCount,
+}: {
+  locale: Locale;
+  labUnitCount: number;
+  programmeCount: number;
+  branchCount: number;
+}) {
+  const stats: { count: number; labelKey: CatalogKey }[] = [];
+  if (labUnitCount > 0) stats.push({ count: labUnitCount, labelKey: "departments.heading" });
+  if (programmeCount > 0) stats.push({ count: programmeCount, labelKey: "header.nav.programmes" });
+  if (branchCount > 0) stats.push({ count: branchCount, labelKey: "header.nav.locations" });
+  if (stats.length === 0) return null;
+  return (
+    <div className={styles.heroStats} data-nel-hero-stats="">
+      {stats.map((stat) => (
+        <div key={stat.labelKey} className={styles.heroStat}>
+          <p className={styles.heroStatCount}>
+            <Isolate>{formatWesternCount(locale, stat.count)}</Isolate>
+          </p>
+          <p className={styles.heroStatLabel}>{translate(locale, stat.labelKey)}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function SiteHome({
   locale,
   whatsappHref,
@@ -270,11 +300,19 @@ export function SiteHome({
             pendingLabelKey="approval.pending.photography"
           >
             <div className={styles.well}>
-              <div className={styles.photo}>
-                <HeroPhoto
-                  src={heroPosterSrc}
-                  alt={heroPosterAlt ?? photographyLabel}
-                  fallbackLabel={photographyLabel}
+              <div className={styles.mediaColumn}>
+                <div className={styles.photo}>
+                  <HeroPhoto
+                    src={heroPosterSrc}
+                    alt={heroPosterAlt ?? photographyLabel}
+                    fallbackLabel={photographyLabel}
+                  />
+                </div>
+                <HeroStats
+                  locale={locale}
+                  labUnitCount={labUnits.length}
+                  programmeCount={programmes.length}
+                  branchCount={branches.length}
                 />
               </div>
             <div className={styles.veil} aria-hidden="true" />
@@ -306,12 +344,14 @@ export function SiteHome({
                 </ApprovalGate>
               )}
               <div className={styles.actions}>
-                <ResultsPortalLinkAction
-                  label={translate(locale, "hero.portalAction")}
-                  variant="secondary"
-                  pill
-                  href={portalHref}
-                />
+                <span className={styles.heroPortal}>
+                  <ResultsPortalLinkAction
+                    label={translate(locale, "hero.portalAction")}
+                    variant="secondary"
+                    pill
+                    href={portalHref}
+                  />
+                </span>
                 {whatsappHref ? (
                   <WhatsAppAction
                     label={translate(locale, "hero.whatsappAction")}
@@ -718,12 +758,14 @@ export function SiteHome({
           <div className={styles.ctaPanel}>
             <p className={styles.ctaPanelBody}>{translate(locale, "labToLab.ctaBody")}</p>
             <div className={styles.actions}>
-              <ResultsPortalLinkAction
-                label={translate(locale, "hero.portalAction")}
-                variant="primary"
-                pill
-                href={portalHref}
-              />
+              <span className={styles.bandPortal}>
+                <ResultsPortalLinkAction
+                  label={translate(locale, "hero.portalAction")}
+                  variant="primary"
+                  pill
+                  href={portalHref}
+                />
+              </span>
               {whatsappHref ? (
                 <WhatsAppAction
                   label={translate(locale, "hero.whatsappAction")}

@@ -5,6 +5,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--nel-space-12);
+  padding: var(--nel-space-16);
+  background-color: var(--nel-color-surface);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-panel-edge);
+  border-radius: var(--nel-radius-panel);
+  box-shadow: var(--nel-elevation-1-shadow);
 }
 
 .label {
@@ -21,8 +28,8 @@
   border-width: var(--nel-elevation-1-border-width);
   border-style: solid;
   border-color: var(--nel-color-border);
-  border-radius: var(--nel-radius-sm);
-  background-color: var(--nel-color-background);
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-surface);
   color: var(--nel-color-text);
   font-family: inherit;
   font-size: var(--nel-size-base);

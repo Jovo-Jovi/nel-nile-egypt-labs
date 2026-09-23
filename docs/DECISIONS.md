@@ -1169,6 +1169,65 @@ public self-signup should later close.
 
 ---
 
+### OD-31 — The dashboard's visual language on Visitor surfaces
+
+**Status:** SIGNED
+**Signed:** 23 September 2026
+**Amends:** DESIGN_SYSTEM.md §2 principle 3, §5 and §9 Gradients, and D-29,
+each narrowly. The P09-T03 dashboard amendment stands and is extended, not
+replaced.
+
+**1. What is decided.** Visitor surfaces take the Operator dashboard's visual
+language, as the designer delivered it for the dashboard and showed it for the
+public site on 22 September 2026: a floating glass header, 20px panels, pill
+controls and navigation, eyebrow chips, a `primary` hero band and footer band,
+and a soft glow on the canvas. This is a restyle. No copy, data, route,
+navigation item, image or section changes.
+
+**2. Glass on Visitor surfaces.** A Visitor surface has no fixed backdrop, so
+its glass is certified against the worst one, pure black. Glass is at least
+92% `surface`, where `text` holds 13.72, `muted` 4.62 and `primary` 8.91;
+small `accent` or `success` text needs 96%, where they hold 4.66 and 4.88. A
+control on glass keeps its own solid fill. Only the site header blurs, and it
+turns solid `surface` under `prefers-reduced-transparency: reduce` and where
+`backdrop-filter` is unsupported. On a `primary` band, text is `surface` only,
+on the band (10.66) or on a card of at most 16% `surface` (6.83); `accent`
+carries no text there (2.09).
+
+**3. The glow, and D-29.** D-29 fixes one chromatic family and §9 forbids
+multi-hue gradients. This OD admits `accent` as a decorative glow and nowhere
+else beyond its existing roles. In the dashboard that is the orb at 22% that
+P09-T03 landed, behind glass certified in that amendment. On Visitor pages it
+is a static radial glow of at most 5.5% `accent` beside a glow of at most 4.5%
+`primary`, the two never overlapping, with no filter and no animation; at
+those strengths `muted`, `accent` and `primary` keep 4.90, 4.51 and 9.44
+against the first and 4.91, 4.52 and 9.47 against the second. The glow pair
+replaces the hex lattice on Visitor pages, as the orbs replaced it in the
+dashboard. `accent` still never fills a surface that carries text or a control.
+
+**4. Radius.** `20px` is the panel radius on every surface, as
+`--nel-radius-panel`.
+
+**5. What the reviewer missed.** P09-T03's verdict passed the dashboard's
+`accent` orb without naming its conflict with D-29 and §9 Gradients. This OD
+decides that conflict before either change merges.
+
+**6. Basis of signature.** On 23 September 2026 the human instructed that the
+public site take the dashboard's design now, glass included, from the
+designer's screenshots, and reported that Androw, for the laboratory, approved
+the designer's glassmorphism. Merging the pull request that lands this OD is
+the confirming act. If the human intends something narrower — in particular
+keeping D-29's single family, which turns every `accent` glow to `primary` —
+he says so before merge and the status reverts to DRAFT.
+
+**Does not decide:** the designer's own public-page code, which lands
+separately against current main; any copy, including the hero, why-us and
+about wording in his screenshots; the footer credit; the navigation's items
+or behaviour; section images the data model has no slot for; video durations;
+public `Offer` cards.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze

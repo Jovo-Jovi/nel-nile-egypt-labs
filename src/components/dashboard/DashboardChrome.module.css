@@ -2,9 +2,9 @@
   --nel-dash-inset: 8px;
   --nel-dash-bar: 56px;
   --nel-dash-clearance: calc(var(--nel-dash-inset) + var(--nel-dash-bar) + var(--nel-space-12));
-  --nel-dash-radius: 20px;
-  --nel-dash-line: color-mix(in srgb, var(--nel-color-border) 28%, var(--nel-color-surface));
-  --nel-dash-well: color-mix(in srgb, var(--nel-color-primary) 7%, var(--nel-color-surface));
+  --nel-dash-radius: var(--nel-radius-panel);
+  --nel-dash-line: var(--nel-panel-edge);
+  --nel-dash-well: var(--nel-well);
   isolation: isolate;
   position: relative;
   display: flex;

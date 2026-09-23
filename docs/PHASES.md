@@ -367,7 +367,8 @@ authored at P09; gate criteria are not decided here.
 - [ ] **P09-T03-F** — Resume P09-T03 at STEP 4b with a rendered public-identity check
 - [ ] **P09-T03-F2** — Emit the designer's glass for every browser and finish P09-T03
 - [ ] **P09-T03-F3** — Finish P09-T03 from STEP 2b
-- [ ] **P09-T03-F4** — Finish P09-T03 from STEP 5c
+- [x] **P09-T03-F4** — Finish P09-T03 from STEP 5c
+- [ ] **P09-T04** — Restyle the Visitor pages in the dashboard's visual language
 - [ ] **G9** — criteria not yet decided (OD-19)
 
 ---

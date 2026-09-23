@@ -13,3 +13,24 @@
   line-height: var(--nel-line-height-heading);
   letter-spacing: 0;
 }
+
+:global([data-nel-chrome="site"]) .header {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+:global([data-nel-chrome="site"]) .title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nel-space-8);
+  color: var(--nel-color-primary);
+  font-weight: 700;
+}
+
+:global([data-nel-chrome="site"]) .title::before {
+  content: "";
+  inline-size: 16px;
+  block-size: 2px;
+  border-radius: var(--nel-radius-full);
+  background-color: var(--nel-color-accent);
+}

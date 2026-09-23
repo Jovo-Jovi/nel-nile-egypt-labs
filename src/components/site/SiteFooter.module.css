@@ -1,9 +1,10 @@
 .footer {
   position: relative;
   z-index: 1;
-  padding-block: var(--nel-space-32) var(--nel-space-48);
+  padding-block: var(--nel-space-48);
   padding-inline: var(--nel-space-16);
-  background-color: var(--nel-color-background);
+  background-color: var(--nel-color-primary);
+  color: var(--nel-color-surface);
 }
 
 @media (min-width: 768px) {
@@ -16,11 +17,11 @@
 .shell {
   max-inline-size: 1360px;
   margin-inline: auto;
-  padding-block: var(--nel-space-48);
-  padding-inline: var(--nel-space-24);
-  background-color: var(--nel-color-primary-strong);
+  padding-block: 0;
+  padding-inline: 0;
+  background-color: transparent;
   color: var(--nel-color-surface);
-  border-radius: var(--nel-radius-well);
+  border-radius: 0;
 }
 
 @media (min-width: 768px) {
@@ -54,6 +55,13 @@
   display: flex;
   flex-direction: column;
   align-items: start;
+  padding: var(--nel-space-24);
+  background-color: var(--nel-band-card);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--nel-band-edge);
+  border-radius: var(--nel-radius-panel);
+  color: var(--nel-color-surface);
 }
 
 .lockup {
@@ -94,16 +102,22 @@
   line-height: var(--nel-line-height-heading);
 }
 
-.brandLine {
-  color: color-mix(in srgb, var(--nel-color-surface) 72%, var(--nel-color-primary-strong));
-  font-size: var(--nel-size-xs);
-  font-weight: 600;
+.brandLine,
+.blurb,
+.link,
+.linkMuted,
+.meta,
+.notice,
+.privacy,
+.heading,
+.brandName {
+  color: var(--nel-color-surface);
 }
 
 .blurb {
   margin-block: 0 var(--nel-space-24);
   max-inline-size: 36ch;
-  color: color-mix(in srgb, var(--nel-color-surface) 78%, var(--nel-color-primary-strong));
+  color: var(--nel-color-surface);
   font-size: var(--nel-size-sm);
   line-height: var(--nel-line-height-body);
 }
@@ -132,10 +146,20 @@
 }
 
 .heading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nel-space-8);
   margin-block: 0 var(--nel-space-16);
   color: var(--nel-color-surface);
   font-size: var(--nel-size-sm);
   font-weight: 700;
+}
+
+.heading::before {
+  content: "";
+  inline-size: 2px;
+  block-size: 1em;
+  background-color: var(--nel-color-accent);
 }
 
 .link,
@@ -144,7 +168,7 @@
   display: flex;
   align-items: center;
   min-block-size: 44px;
-  color: color-mix(in srgb, var(--nel-color-surface) 78%, var(--nel-color-primary-strong));
+  color: var(--nel-color-surface);
   font-size: var(--nel-size-sm);
   font-weight: 500;
   text-decoration: none;
@@ -171,7 +195,7 @@
 .meta span:first-child {
   font-size: var(--nel-size-xs);
   font-weight: 600;
-  color: color-mix(in srgb, var(--nel-color-surface) 62%, var(--nel-color-primary-strong));
+  color: var(--nel-color-surface);
 }
 
 .bar {
@@ -189,7 +213,7 @@
 .notice,
 .privacy {
   margin-block: 0;
-  color: color-mix(in srgb, var(--nel-color-surface) 62%, var(--nel-color-primary-strong));
+  color: var(--nel-color-surface);
   font-size: var(--nel-size-xs);
 }
 
@@ -201,6 +225,19 @@
 .privacy:focus-visible {
   outline: 2px solid var(--nel-color-accent);
   outline-offset: 2px;
+}
+
+.brandLine {
+  font-size: var(--nel-size-xs);
+  font-weight: 600;
+}
+
+.bandPortal :global(a),
+.bandPortal :global(a:hover),
+.bandPortal :global(a:active) {
+  background-color: var(--nel-color-surface);
+  border-color: var(--nel-color-surface);
+  color: var(--nel-color-primary);
 }
 
 .chips {

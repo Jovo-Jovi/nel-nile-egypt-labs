@@ -11,6 +11,12 @@
   border-radius: inherit;
 }
 
+:global([data-nel-chrome="site"]) .frame {
+  background-color: var(--nel-color-surface);
+  border-color: var(--nel-panel-edge);
+  border-radius: var(--nel-radius-panel);
+}
+
 .label {
   color: var(--nel-color-muted);
   font-size: var(--nel-size-sm);
