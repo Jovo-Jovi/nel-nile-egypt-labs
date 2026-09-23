@@ -3,7 +3,9 @@ import {
   CompletenessAwaitingIcon,
   CompletenessCheckIcon,
   CompletenessGapIcon,
+  ScrollDownIcon,
 } from "@/components/ui/icons";
+import { CompletenessSections } from "@/components/dashboard/CompletenessSections";
 import { translate, type CatalogKey, type Locale } from "@/lib/catalog";
 import { formatWesternCount } from "@/lib/listingFormat";
 import type { CompletenessSlot, CompletenessTally } from "@/lib/dashboard/completeness";
@@ -303,42 +305,50 @@ export async function CompletenessHeader({
         </ul>
       ) : null}
       <h2 className={styles.sectionTitle}>{translate(locale, "dashboard.completeness.pagesHeading")}</h2>
-      <div className={styles.pages}>
-      {tally.pages.map((page) => (
-        <section
-          key={page.routePattern}
-          className={styles.page}
-          data-nel-completeness-page={page.routePattern}
-        >
-          <div className={styles.pageTitle}>
-            <p
-              className={`${styles.state} ${page.state === "complete" ? styles.stateComplete : styles.stateIncomplete}`}
-            >
-              {page.state === "complete" ? (
-                <CompletenessCheckIcon size={20} />
-              ) : (
-                <CompletenessGapIcon size={20} />
-              )}
-              {translate(
-                locale,
-                page.state === "complete"
-                  ? "dashboard.completeness.complete"
-                  : "dashboard.completeness.incomplete",
-              )}
-            </p>
-            <p className={styles.pageTitle}>{translate(locale, PAGE_TITLE[page.routePattern] ?? "dashboard.home.title")}</p>
-          </div>
-          <ul className={styles.fields}>
-            {page.slots.map((slot) => (
-              <li key={slot.id} className={styles.field} data-nel-column={slot.column}>
-                <p className={styles.fieldName}>{slotLabel(locale, slot)}</p>
-                <FieldMark locale={locale} filled={slot.filled} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-      </div>
+      <CompletenessSections>
+      {tally.pages.map((page) => {
+        const filledCount = page.slots.filter((slot) => slot.filled).length;
+        const countLabel = `${formatWesternCount(locale, filledCount)} / ${formatWesternCount(locale, page.slots.length)}`;
+        const complete = page.state === "complete";
+        return (
+          <details
+            open={!complete}
+            key={page.routePattern}
+            className={styles.page}
+            data-nel-completeness-page={page.routePattern}
+          >
+            <summary className={styles.pageSummary}>
+              <span className={styles.pageSummaryLead}>
+                <span className={styles.disclosure}>
+                  <ScrollDownIcon size={16} />
+                </span>
+                {complete ? <CompletenessCheckIcon size={20} /> : <CompletenessGapIcon size={20} />}
+                <span className={styles.pageTitle}>
+                  {translate(locale, PAGE_TITLE[page.routePattern] ?? "dashboard.home.title")}
+                </span>
+              </span>
+              <span className={styles.pageSummaryMeta}>
+                <span className={`${styles.state} ${complete ? styles.stateComplete : styles.stateIncomplete}`}>
+                  {translate(
+                    locale,
+                    complete ? "dashboard.completeness.complete" : "dashboard.completeness.incomplete",
+                  )}
+                </span>
+                <IsolatedCopy locale={locale} text={countLabel} />
+              </span>
+            </summary>
+            <ul className={styles.pageFields}>
+              {page.slots.map((slot) => (
+                <li key={slot.id} className={styles.field} data-nel-column={slot.column}>
+                  <p className={styles.fieldName}>{slotLabel(locale, slot)}</p>
+                  <FieldMark locale={locale} filled={slot.filled} />
+                </li>
+              ))}
+            </ul>
+          </details>
+        );
+      })}
+      </CompletenessSections>
       <h2 className={styles.sectionTitle}>{translate(locale, "dashboard.completeness.clientHeading")}</h2>
       <ul className={styles.clientList}>
         {tally.clientMaterials.map((material) => {

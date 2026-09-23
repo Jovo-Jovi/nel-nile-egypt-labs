@@ -292,7 +292,7 @@ export function SiteHome({
 
   return (
     <div className={styles.page}>
-      <section className={styles.hero} id="home">
+      <section className={styles.hero} id="home" data-nel-band="primary">
         <div className={styles.wellGate}>
           <ApprovalGate
             locale={locale}
@@ -749,7 +749,7 @@ export function SiteHome({
         </ApprovalGate>
       </section>
 
-      <section className={styles.cta} id="lab-to-lab">
+      <section className={styles.cta} id="lab-to-lab" data-nel-band="primary">
         <div className={styles.ctaInner}>
           <div className={styles.ctaCopy}>
             <h2 className={styles.ctaTitle}>{translate(locale, "labToLab.heading")}</h2>

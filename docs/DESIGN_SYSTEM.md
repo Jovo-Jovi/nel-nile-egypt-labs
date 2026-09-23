@@ -577,7 +577,7 @@ a `surface` plate rather than on the band, so button contrast is measured agains
 
 **Footer island.** A `primary-strong` region at radius `32px` sitting on page
 `background` with inline and block margin, rather than a full-bleed slab. Contents:
-mark lockup at 32px · social marks · three link columns · a hairline legal bar.
+mark lockup at 32px · social marks · three link columns · a hairline legal bar · a development credit (OD-32). Under OD-31 the island became a full-bleed `primary` band.
 
 **Numbered stills.** A row of media frames each carrying a two-digit index at `xs` weight
 600 in `accent`, above its label. Indices are Western digits in both locales (D-25) and
@@ -821,7 +821,7 @@ in privacy-enhanced mode; nothing loads before the click (D-13).
 **Trust entry.** 24px icon in `primary`, label at `sm` weight 600 in `text`, qualifier at
 `xs` in `muted`. No card, no border. **Every claim needs a verified source — see §12.**
 
-**Footer.** A `primary-strong` island at radius `32px` on page `background`, per §9.
+**Footer.** A full-bleed `primary` band under OD-31; before it, a `primary-strong` island at radius `32px` on page `background`, per §9.
 Nothing in the footer collects: no newsletter, no contact form, no `tel:` link.
 
 Anatomy, in block order:
@@ -833,9 +833,10 @@ Anatomy, in block order:
 | Contact column | WhatsApp action · `ResultsPortalLink` action · Lab-to-Lab entry · hotline and address, both `pending` until `SiteSettings` carries them |
 | Media column | departments · videos · privacy |
 | Legal bar | hairline `border` at 20% · notice · privacy · two action chips |
+| Credit | development credit under OD-32: label · names · website link · address as text, never `mailto:` · Latin runs isolated · `--nel-band-card` pill |
 
 Three columns at `md` and above, stacked below, in reading order per locale. Type is
-`surface` throughout; every pairing measured against `primary-strong`, not against page
+`surface` throughout; every pairing measured against `primary` (OD-31; `primary-strong` before it), not against page
 `background`.
 
 **No certification, standards or compliance chip renders in the footer** — or anywhere —

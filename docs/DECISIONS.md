@@ -1228,6 +1228,40 @@ public `Offer` cards.
 
 ---
 
+### OD-32 — Development credit in the public footer
+
+**Status:** SIGNED
+**Signed:** 23 September 2026
+**Amends:** nothing. It decides the footer credit that CF-209 held open and
+nothing else CF-209 lists.
+
+**1. What is decided.** The public footer carries a development credit, as the
+designer showed it on 22 September 2026 and Androw approved it for the
+laboratory: the label تطوير / Developed by, the names Jiovanny Adel and Antony
+Saleeb, the website antonysaleeb.me as an outbound link, and the address
+tonysaleeb23@gmail.com as plain text. It sits in its own row below the
+footer's legal bar, on every page that carries the site footer, in both
+locales. The names, website and address are Latin in both locales and are
+isolated inside Arabic text.
+
+**2. Boundary.** A published address is not a channel (BOUNDARY_MODEL.md,
+OD-16), and nothing here accepts a submission. The address is shown and never
+linked: a `mailto:` anchor is an implemented channel and `guard:boundary`
+fails it. The website opens in a new browsing context with
+`noopener noreferrer`.
+
+**3. Basis of signature.** On 23 September 2026 the human shared the
+designer's footer screenshot and reported that Androw, for the laboratory,
+approved it. Merging the pull request that lands this OD is the confirming
+act. If the human intends something narrower, such as names only, he says so
+before merge and the status reverts to DRAFT.
+
+**Does not decide:** the designer's own public-page code, new copy, or the
+navigation, which CF-209 still holds; any credit in the Operator dashboard,
+where none appears.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze

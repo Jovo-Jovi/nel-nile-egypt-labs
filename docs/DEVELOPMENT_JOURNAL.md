@@ -1660,3 +1660,27 @@ stayed pixel-identical. 0 contrast remedies were applied.
 CF-209 records what the screenshots show but this task could not land:
 his own code, new copy, the footer credit, and the navigation. Open CF
 111 + 1 − 0 = 112. Next free CF-210.
+
+## 2026-09-23 — P09-T05: Collapsible completeness list, band pending labels, development credit
+
+Cut from `origin/main` at `b96fb02`. STEP 2 recorded P09-T04 as PASS and
+checked its box.
+
+The collapsible completeness list on `completeness-sections` (`ba30a79`)
+was reviewed and merged into this branch. It turns the dashboard home's
+per-page checklist into native disclosures, one open at a time. The
+reviewer added one correction under ADMIN_SPEC §4h: a page reported
+incomplete opens by default, so it names its missing fields without a
+tap; a complete page stays collapsed and can be opened.
+
+Pending labels on the `primary` hero, lab-to-lab and footer bands now
+take `surface` text. They failed at 1.93:1 when content was pending;
+CF-210 records the finding, closed here.
+
+OD-32 landed the development credit Androw approved: label, names,
+website link and address, in the public footer in both locales. The
+address is shown as text and never as a `mailto:` link.
+
+Branches `p09-t03` and `p09-t04`, both contained in main, were deleted.
+`designer-review` was archived as the tag `archive/designer-review` at
+`acbc8c9` and deleted. Open CF 112. Next free CF-211.
