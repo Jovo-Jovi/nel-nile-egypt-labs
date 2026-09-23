@@ -672,7 +672,7 @@ two neutrals or uses space.
 
 Permitted, within one hue family only. `primary` → `primary-strong`, or `background` →
 `surface`. Never multi-hue, never lavender-to-pink-to-blue: that is three chromatic
-families and D-29 fixes one. OD-31 admits one exception: a decorative `accent` glow — the dashboard orb, and on Visitor pages a static glow of at most 5.5% beside a `primary` glow of at most 4.5%, never overlapping. That glow pair replaces the hex lattice on Visitor pages.
+families and D-29 fixes one. OD-31 admits one exception: a decorative `accent` glow — the dashboard orb, and on Visitor pages, under OD-34, the dashboard's orb pair at the dashboard's strength — 34% `primary` and 22% `accent` at the centre, never overlapping, drifting only when motion is allowed. That glow pair replaces the hex lattice on Visitor pages.
 
 A gradient may sit behind a section or a hero band. It may **not** sit behind text
 unless the text clears its floor against **both** stops, verified at each end and
@@ -839,7 +839,7 @@ Three columns at `md` and above, stacked below, in reading order per locale. Typ
 `surface` throughout; every pairing measured against `primary` (OD-31; `primary-strong` before it), not against page
 `background`.
 
-**Design session, 23 September 2026.** Adopted with P09-T06 and recorded in `DESIGN_REVIEW_PACK.md` §9: the home programmes, branches and insights block as a wide horizontal band; the footer's three columns and circular social marks, which the contact page shares; the rights notice in place of the preview notice; the drawn Cairo map, schematic, with Branch pins projected from their published coordinates and each pin and name opening Google Maps outbound; on Visitor pages, the dashboard's orb pair, fixed to the viewport as in the dashboard but static, unfiltered and at OD-31's glow limits — 4.5% `primary` and 5.5% `accent` at the centre, never overlapping — over a flat `background` canvas, with a solid surface behind any Visitor text the rendered audit flags; the hotline as a call link under OD-33; the dashboard's selected-media badge; and a data-entry status on dashboard form sections that reads each entity's declared publish requirements, names what is missing, and sits beneath the §4h completeness header, which stays authoritative.
+**Design session, 23 September 2026.** Adopted with P09-T06 and recorded in `DESIGN_REVIEW_PACK.md` §9: the home programmes, branches and insights block as a wide horizontal band; the footer's three columns and circular social marks, which the contact page shares; the rights notice in place of the preview notice; the drawn Cairo map, schematic, with Branch pins projected from their published coordinates and each pin and name opening Google Maps outbound; on every Visitor page, under OD-34, the dashboard's background — the canvas running to a 7% `primary` tint and the orb pair at 34% `primary` and 22% `accent`, fixed, drifting only when motion is allowed, drawn as soft radial gradients without `filter` — with every Visitor text run the audit flags set on a solid chip or a glass panel; the hotline as a call link under OD-33; the dashboard's selected-media badge; and a data-entry status on dashboard form sections that reads each entity's declared publish requirements, names what is missing, and sits beneath the §4h completeness header, which stays authoritative.
 
 **No certification, standards or compliance chip renders in the footer** — or anywhere —
 without a verified source under §12. A footer is where unverified badges accumulate

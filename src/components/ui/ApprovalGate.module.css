@@ -81,6 +81,21 @@
   pointer-events: none;
 }
 
+[data-nel-chrome="site"] .pendingLabel {
+  align-self: flex-start;
+  background-color: var(--nel-color-surface);
+  border-radius: var(--nel-radius-full);
+  padding-block: var(--nel-space-4);
+  padding-inline: var(--nel-space-12);
+  inline-size: fit-content;
+}
+
 [data-nel-chrome="site"] [data-nel-band="primary"] .pendingLabel {
+  align-self: auto;
+  background-color: transparent;
+  border-radius: 0;
+  padding-block: 0;
+  padding-inline: 0;
+  inline-size: auto;
   color: var(--nel-color-surface);
 }

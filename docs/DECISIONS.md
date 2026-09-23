@@ -1294,6 +1294,38 @@ any tracking of calls.
 
 ---
 
+### OD-34 — The dashboard's background on every Visitor page
+
+**Status:** SIGNED
+**Signed:** 23 September 2026
+**Amends:** OD-31 §3 and DESIGN_SYSTEM.md §9 Gradients, narrowly. OD-31 §§1, 2
+and 4 stand, and so does the rest of D-29.
+
+**1. What is decided.** Every Visitor page carries the Operator dashboard's
+background: a canvas running from `background` to a 7% `primary` tint, under
+two orbs fixed to the viewport, `primary` at 34% and `accent` at 22% at their
+centre, drifting as the dashboard's do. The orbs are soft radial gradients,
+not blurred elements, and they stop under `prefers-reduced-motion: reduce`.
+
+**2. Legibility.** At that strength, only `text` (6.15) and `primary-strong`
+(4.94) hold 4.5 for small text directly on the background, and `primary` holds
+3.99 for large text. Every other Visitor text run sits on a surface: a single
+line on a solid `surface` chip, a longer run on a glass panel of at least 92%
+`surface`. The rendered contrast audit measures loose text against both orbs
+stacked at full strength over the canvas's darker end, and must find nothing.
+
+**3. Cost.** No `filter` is used, so the orbs cost a composited transform, not
+a blur. The header remains the only element with `backdrop-filter`.
+
+**4. Basis of signature.** On 23 September 2026 the human asked that the
+background of every page be the dashboard's. Merging the pull request that
+lands this OD is the confirming act.
+
+**Does not decide:** any change to the dashboard's own background, whose orbs
+now read the same tokens.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze

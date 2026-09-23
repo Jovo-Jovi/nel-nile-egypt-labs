@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   background-color: var(--nel-color-background);
+  background-image: linear-gradient(180deg, var(--nel-color-background), var(--nel-well));
   color: var(--nel-color-text);
   line-height: var(--nel-line-height-body);
   --nel-header-stack: calc(var(--nel-space-12) + 56px);
@@ -29,7 +30,8 @@
   inset-block-start: -8%;
   inline-size: min(48vw, 32rem);
   block-size: min(48vw, 32rem);
-  background: radial-gradient(circle closest-side, var(--nel-glow-primary), transparent);
+  background: radial-gradient(circle closest-side, var(--nel-orb-primary) 0%, var(--nel-orb-primary) 40%, transparent 100%);
+  animation: nel-site-orb 28s ease-in-out infinite;
 }
 
 .orbB {
@@ -37,7 +39,8 @@
   inset-block-start: 28%;
   inline-size: min(40vw, 24rem);
   block-size: min(40vw, 24rem);
-  background: radial-gradient(circle closest-side, var(--nel-glow-accent), transparent);
+  background: radial-gradient(circle closest-side, var(--nel-orb-accent) 0%, var(--nel-orb-accent) 40%, transparent 100%);
+  animation: nel-site-orb 34s ease-in-out infinite reverse;
 }
 
 @media (min-width: 768px) {
@@ -50,4 +53,21 @@
   position: relative;
   z-index: 1;
   flex: 1;
+}
+
+@keyframes nel-site-orb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 24px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbA,
+  .orbB {
+    animation: none;
+  }
 }

@@ -82,6 +82,8 @@
   --nel-glow-accent: color-mix(in srgb, var(--nel-color-accent) 5.5%, transparent);
   --nel-band-card: color-mix(in srgb, var(--nel-color-surface) 12%, var(--nel-color-primary));
   --nel-band-edge: color-mix(in srgb, var(--nel-color-surface) 24%, var(--nel-color-primary));
+  --nel-orb-primary: color-mix(in srgb, var(--nel-color-primary) 34%, transparent);
+  --nel-orb-accent: color-mix(in srgb, var(--nel-color-accent) 22%, transparent);
 }
 
 @media (min-width: 768px) {
@@ -101,4 +103,26 @@
   --nel-line-height-body: var(--nel-line-height-body-en);
   --nel-line-height-heading: var(--nel-line-height-heading-en);
   --nel-line-height-tight: var(--nel-line-height-tight-en);
+}
+
+/* CSS modules rename @keyframes in SiteRoot.module.css. This is the
+   literal name the orbs animate under. */
+@keyframes nel-site-orb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 24px, 0);
+  }
+}
+
+[data-nel-chrome="site"] > :first-child > span {
+  animation-name: nel-site-orb !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nel-chrome="site"] > :first-child > span {
+    animation-name: none !important;
+  }
 }
