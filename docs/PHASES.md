@@ -112,20 +112,21 @@ and is not in OD-12's sequence.
 
 ## §3 The phases, in delivery order
 
-Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T03, `9dac44f`). Under OD-19 as amended by OD-25: **P08 → G8 → P06 → G6 → P04 → G4 → P09 → G9 → P07 → G7**. P08 is delivered before G7 (OD-19 §1).
+Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T03, `9dac44f`). Under OD-19, OD-25 and OD-29: **P08 → G8 → P06 → G6 → P04 → G4 → P10 → G10 → P09 → G9 → P07 → G7**. P08 is delivered before G7 (OD-19 §1).
 
 | Order | Phase | What it produces | Gate | Non-waivable | State |
 |---|---|---|---|---|---|
 | — | P00 Prepare | Documents, decisions, seed verified | G0 | — | **Closed** |
 | — | P01 Foundation | Repository, CI, schema, row-level security, seed import | G1 | Boundary | **Closed** — 31 Aug 2026 |
 | — | P02 Design system | Colour and type tokens, RTL primitives, executable lint rules | G2 | — | **Closed** — 1 Sep 2026 |
-| 1 | P03 Public site | The thirteen pages, both locales, 42 URLs | G3 | Boundary · Bilingual | **Active** |
-| 2 | P05 Admin dashboard | Eight modules, Operator accounts, login and MFA | G5 | Boundary · Bilingual | Next · spec unwritten |
-| ~~—~~ 3 | P08 PartnerLab accounts | `PartnerLab` signup and private Offers (OD-15) | G8 | Boundary | After G5 · before G7 (OD-19 §1) · **Opening** |
-| ~~3~~ 4 | P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | Longest pole |
-| ~~4~~ 5 | P04 Catalogue search | Bilingual search over Programmes and LabTests | G4 | Clinical · Data integrity · Bilingual | After P06, by necessity |
-| 6 | P09 Design | Visual iteration before cutover (OD-25) | G9 | — | After G4 · before P07 |
-| ~~5~~ 7 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | After G9 (OD-25) · runbook unwritten |
+| 1 | P03 Public site | The thirteen pages, both locales, 42 URLs | G3 | Boundary · Bilingual | **Closed** — 2 Sep 2026 |
+| 2 | P05 Admin dashboard | Eight modules, Operator accounts, login and MFA | G5 | Boundary · Bilingual | **Closed** — G5-R, 7 Sep 2026 |
+| 3 | P08 PartnerLab accounts | `PartnerLab` signup and private Offers (OD-15) | G8 | Boundary | **Closed** — 14 Sep 2026 |
+| 4 | P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | **Closed** — 13 Sep 2026 |
+| 5 | P04 Catalogue search | Bilingual search over Programmes and LabTests | G4 | Clinical · Data integrity · Bilingual | **Closed** — 14 Sep 2026 |
+| 6 | P10 Operator-provisioned PartnerLab accounts | Numeric-identifier accounts provisioned by an Operator (OD-30) | G10 | Boundary | **Closed** — 14 Sep 2026 |
+| 7 | P09 Design | The designer's review and its landing, before cutover (OD-25) | G9 | — | **Active** — G9 pending |
+| 8 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | Next |
 
 ### Why this order
 
@@ -238,13 +239,10 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [x] **M7B-2-F** — Supply the missing review gate and record the lockout check
 - [x] **M7C** — The application gate reads the Operator claim
 
-### P06 — Content and Arabic · IN FLIGHT
+### P06 — Content and Arabic · CLOSED at G6, 13 September 2026
 
-- [ ] ~~72 Arabic `LabTest` names — written and reviewed~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 71
-- [ ] ~~121 membership judgements — which tests belong to which programme and tier~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 124
-- [ ] ~~5 QA-flagged records — two high severity, resolved with the lab~~ M8 signed 6 September 2026, hash aa0469ee…aef7: 0
-- [ ] ~~Written clinical sign-off — not waivable by anyone, including the client~~ SIGNED 6 September 2026, hash aa0469ee…aef7
-- [ ] Content entry — through the dashboard, not through SQL
+Delivered under G6: 71 Arabic `LabTest` names, 124 membership judgements, the QA-flagged records resolved, and the written clinical sign-off (M8, 6 September 2026, hash aa0469ee…aef7); content entered through the dashboard.
+
 - [x] **P06-T01** — Measure what was entered, against the signed seed
 - [x] **P06-T02** — Measure the live homepage against the publication state
 - [ ] **P06-T03** — Make Programme detail render from published rows, not from a build
@@ -267,17 +265,15 @@ P09 Design follows G4 and precedes P07 (OD-25).
 - [x] **P06-T18** — Assemble G6 evidence on production
 - [x] **G6** — clinical and bilingual gates
 
-### P04 — Catalogue search · UNSTARTED · AFTER P06
+### P04 — Catalogue search · CLOSED at G4, 14 September 2026
 
 - [x] **P04-T01** — Confirm the flag, then build the bilingual catalogue index
 - [x] **P04-T01-F** — Produce the artefact and explain the card count
 - [x] **P04-T02** — Search on the programmes page, both locales
 - [x] **P04-T03** — Assemble G4 evidence on production
-- [ ] static bilingual index over Programmes and LabTests
-- [ ] search on the البرامج page, both locales
 - [x] **G4** — clinical, data integrity and bilingual gates
 
-### P10 — Operator-provisioned PartnerLab accounts · UNSTARTED · AFTER G4
+### P10 — Operator-provisioned PartnerLab accounts · CLOSED at G10, 14 September 2026
 
 Follows G4. Precedes P09 (OD-29). Operator-provisioned PartnerLab account
 with a numeric authentication identifier. Three tasks: the identifier
@@ -352,13 +348,12 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **G8-R2** — re-run in full
 - [x] **G8** — Boundary
 
-### P09 — Design · UNSTARTED · AFTER G4
+### P09 — Design · ACTIVE · G9 pending
 
 Follows G4. Precedes P07 (OD-25). Short-lived branches from `main`,
 reviewed and merged one at a time (OD-19 §3). The design envelope is its own OD,
-authored at P09; gate criteria are not decided here.
+decided in OD-31, OD-33 and OD-34; G9 gates on every design-review finding having a disposition (OD-25).
 
-- [ ] Short-lived branches from `main`, reviewed and merged one at a time
 - [ ] **P09-T01** — Land the design review pack
 - [ ] **P09-T01-F** — Correct the pack, settle the note count, land it
 - [x] **P09-T01-F2** — Land the pack with all three corrections
@@ -373,8 +368,9 @@ authored at P09; gate criteria are not decided here.
 - [ ] **P09-T06** — Land the design session with its three features made compliant
 - [x] **P09-T06-F** — Finish P09-T06 from STEP 4g with corrected checks
 - [x] **P09-T07** — Give every Visitor page the dashboard's background (OD-34)
-- [ ] **P09-T08** — Remove the tokens.css animation workaround; record P09-T07
-- [ ] **G9** — criteria not yet decided (OD-19)
+- [x] **P09-T08** — Remove the tokens.css animation workaround; record P09-T07
+- [ ] **P09-T09** — Record the design-gate dispositions and tidy the phase plan
+- [ ] **G9** — every design-review finding has a disposition (OD-25)
 
 ---
 

@@ -974,7 +974,7 @@ acceptable disposition for a region that did not get wired.
 
 ### OD-27 — Publishing limits are configured per module and enforced in Postgres
 
-Status: SIGNED
+**Status:** SIGNED
 Signed: 13 September 2026
 Decides: a module may declare a maximum number of simultaneously published
 records. The maximum is configuration, not code, so a future module declares
@@ -1002,7 +1002,7 @@ holds no personal or medical data and no column identifying an account holder
 
 ### OD-28 — Revocation is enforced by a live-principal policy
 
-Status: SIGNED
+**Status:** SIGNED
 Signed: 13 September 2026
 Supersedes: OD-21 §3, which is SUSPENDED. OD-21 §1, §2, §4, §5, §6 and §7
 stand. OD-21's text is not edited.
@@ -1557,3 +1557,16 @@ password reset, address verification, account recovery, notification — is a ne
 and is reviewed as one. It is not inherited from this.** `SECURITY_MODEL.md` §4 promises
 no `PartnerLab` password reset and no such route exists in `src/`; introducing one
 reopens this question rather than assuming it.
+
+### D-50 — Cross-script catalogue search
+
+A catalogue query is folded to NFC and lower case, and matched as a
+substring against each entry's Arabic name, English name and every alias in
+both locales. It is not transliterated between scripts, and Arabic letter
+variants are not folded into one another. An Arabic query therefore reaches a
+`LabTest` or `Programme` through its Arabic name or an Arabic alias; every
+published `LabTest` carries an Arabic name, so a search by official Arabic name
+reaches all of them. The human tested this on 24 September 2026, including an
+Arabic query against a Latin-name case, and accepted it as the project's
+behaviour; CF-54 closed at P09-T09. CF-204, Arabic aliases for twelve
+`LabTest` rows, is the laboratory's and is unaffected.

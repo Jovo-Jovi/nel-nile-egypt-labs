@@ -1750,3 +1750,31 @@ hash keyframe names, so the builder added global keyframes and an
 own keyframes already worked. This task removed the workaround, and the
 orbs animate as before, stopping under reduced motion. CF-212 records it,
 closed. Branch `p09-t07` was deleted. Open CF 113. Next free CF-213.
+
+## 2026-09-24 — P09-T09: Design-gate dispositions and a tidy phase plan
+
+Cut from `origin/main` after #169 merged. STEP 1 recorded P09-T08 as PASS.
+
+On 24 September 2026 the human tested and dispositioned the five
+carry-forwards the design gate waited on:
+- CF-197 (search keyboard and live region), closed on his attestation
+- CF-200 (the PartnerLab provisioning form), closed on his attestation
+- CF-207 (the review strip's three tabs and the incomplete-content
+  treatment, on production), closed on his attestation
+- CF-209 (the designer's public-page direction and the design session's
+  work), closed on his attestation
+- CF-54, closed, with D-50 recording the cross-script search behaviour
+  he accepted
+P03 and P04 are not reopened.
+
+CF-202 closed:
+- PHASES.md's headings, order table, G9 text and delivered-but-unchecked
+  bullets were corrected
+- the SESSION_CONTEXT phase map was reordered to OD-29
+- CF-163's pipes were escaped
+- the OD-27 and OD-28 status lines were bolded
+- the pack's §4 wording now reads sex only
+Halted task boxes stay unchecked, as PR-36 requires.
+
+Every design-review finding now has a disposition. Open CF 113 − 6 = 107.
+Next free CF-213.
