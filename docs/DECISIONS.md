@@ -1262,6 +1262,38 @@ where none appears.
 
 ---
 
+### OD-33 — The published hotline as a call link
+
+**Status:** SIGNED
+**Signed:** 23 September 2026
+**Amends:** OD-16, narrowly, and BOUNDARY_MODEL.md §2. D-09 as OD-16 restated
+it stands: WhatsApp is the only contact channel NEL builds, operates or
+instruments.
+
+**1. What is decided.** The published hotline, when its value is a short code
+of three to six digits, renders as a `tel:` link on Visitor pages so a phone
+opens its dialer. A value of any other shape stays plain text. No other `tel:`
+anchor and no `mailto:` anchor exists on any public page.
+
+**2. Why this is not a channel.** A `tel:` link hands a number the laboratory
+already publishes to the Visitor's own phone. NEL builds, operates and
+instruments nothing on that path: no route handler, no field, no log, no
+tracking parameter. The boundary gate is untouched and remains non-waivable.
+
+**3. The guard.** `guard:boundary` fails any `tel:` href that is not `tel:`
+followed by three to six digits. That repair, made in the design session of
+23 September 2026 without a fence, is ratified here.
+
+**4. Basis of signature.** The human reported on 23 September 2026 that the
+developers, the designer and Androw, for the laboratory, reviewed and approved
+the call link, and confirmed it as a final decision. Merging the pull request
+that lands this OD is the confirming act.
+
+**Does not decide:** a call link for the WhatsApp number or any Branch number;
+any tracking of calls.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze

@@ -495,6 +495,7 @@ const ar = {
   "dashboard.media.pending": "قيد الانتظار — بانتظار ملفات الوسائط",
   "dashboard.media.pickerNone": "بلا صورة",
   "dashboard.media.selected": "محدد",
+  "dashboard.completeness.missingFields": "الحقول الناقصة:",
   "dashboard.media.altIncomplete": "النص البديل غير مكتمل",
   "dashboard.media.pickerHelp":
     "لا يُربط ملف بصف منشور قبل اكتمال النص البديل بالعربية والإنجليزية.",
@@ -591,7 +592,7 @@ const ar = {
   "locations.action": "الحصول على الاتجاهات",
 
   // Drawn Greater Cairo map. Pins use published Branch coordinates.
-  "locations.map.ariaLabel": "خريطة القاهرة ومواقع الفروع المنشورة",
+  "locations.map.ariaLabel": "خريطة تخطيطية للقاهرة، الفروع في إحداثياتها المنشورة",
   "locations.map.pinLabel": "موقع فرع",
   "locations.map.headOfficePinLabel": "موقع المقر الرئيسي",
   "locations.map.district.giza": "الجيزة",
@@ -1260,6 +1261,7 @@ const en = {
   "dashboard.media.pending": "Pending — awaiting MediaAsset rows",
   "dashboard.media.pickerNone": "None",
   "dashboard.media.selected": "Selected",
+  "dashboard.completeness.missingFields": "Missing fields:",
   "dashboard.media.altIncomplete": "alt text incomplete",
   "dashboard.media.pickerHelp":
     "A MediaAsset cannot attach to a published row until Arabic and English alt text are both present.",
@@ -1355,7 +1357,7 @@ const en = {
   "locations.action": "Get directions",
 
   // Drawn Greater Cairo map. Pins use published Branch coordinates.
-  "locations.map.ariaLabel": "Map of Cairo with published branch locations",
+  "locations.map.ariaLabel": "Schematic map of Cairo, branches at their published coordinates",
   "locations.map.pinLabel": "Branch location",
   "locations.map.headOfficePinLabel": "Head office location",
   "locations.map.district.giza": "Giza",

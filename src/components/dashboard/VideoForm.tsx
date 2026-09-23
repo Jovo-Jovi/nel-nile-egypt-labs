@@ -4,6 +4,7 @@ import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import {
+  VIDEO_BILINGUAL_PAIRS,
   VIDEO_FORM_COLUMNS,
   confirmToken,
   type CatalogNotice,
@@ -16,6 +17,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -48,6 +50,8 @@ import site from "./SiteSettingsForm.module.css";
 // No field accepts a Visitor or patient name, phone, email, address, date of birth
 // or identifier.
 void VIDEO_FORM_COLUMNS;
+
+const VIDEO_DECLARED_FIELDS = declaredFieldsFromPairs(VIDEO_BILINGUAL_PAIRS);
 
 function TextField({
   locale,
@@ -168,7 +172,7 @@ export function VideoForm({
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionHost">
+        <CatalogSection locale={locale} declaredFields={VIDEO_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionHost">
           <TextField
             locale={locale}
             name="youtube_url"
@@ -180,7 +184,7 @@ export function VideoForm({
           </p>
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionCopy">
+        <CatalogSection locale={locale} declaredFields={VIDEO_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionCopy">
           <LocaleColumns locale={locale} />
           <Pair
             locale={locale}
@@ -201,7 +205,7 @@ export function VideoForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
+        <CatalogSection locale={locale} declaredFields={VIDEO_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionMedia">
           <div className={site.field}>
             <div className={extra.checkRow}>
               <input
@@ -218,7 +222,7 @@ export function VideoForm({
           </div>
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.videos.preview">
+        <CatalogSection locale={locale} declaredFields={VIDEO_DECLARED_FIELDS} titleKey="dashboard.videos.preview">
           {previewId !== null && previewId.length > 0 ? (
             <iframe
               className={extra.previewFrame}
@@ -239,7 +243,7 @@ export function VideoForm({
           ) : null}
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.videos.posterOverride">
+        <CatalogSection locale={locale} declaredFields={VIDEO_DECLARED_FIELDS} titleKey="dashboard.videos.posterOverride">
           <div className={site.field}>
             <FieldLabel locale={locale} htmlFor="poster_file" labelKey="dashboard.media.file" />
             <input

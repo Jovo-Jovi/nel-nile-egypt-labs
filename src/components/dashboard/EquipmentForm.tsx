@@ -4,6 +4,7 @@ import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import {
+  EQUIPMENT_BILINGUAL_PAIRS,
   EQUIPMENT_FORM_COLUMNS,
   confirmToken,
   type CatalogNotice,
@@ -18,6 +19,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -45,20 +47,20 @@ import site from "./SiteSettingsForm.module.css";
 // or identifier.
 void EQUIPMENT_FORM_COLUMNS;
 
+const EQUIPMENT_DECLARED_FIELDS = declaredFieldsFromPairs(EQUIPMENT_BILINGUAL_PAIRS);
+
 function TextField({
   locale,
   name,
   labelKey,
   defaultValue,
   inputMode,
-  optional = false,
 }: {
   locale: Locale;
   name: string;
   labelKey: CatalogKey;
   defaultValue: string | null;
   inputMode?: "numeric";
-  optional?: boolean;
 }) {
   return (
     <div className={site.field}>
@@ -71,7 +73,6 @@ function TextField({
         defaultValue={defaultValue ?? ""}
         autoComplete="off"
         inputMode={inputMode}
-        data-optional={optional ? "" : undefined}
       />
     </div>
   );
@@ -163,7 +164,7 @@ export function EquipmentForm({
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionIdentity">
+        <CatalogSection locale={locale} declaredFields={EQUIPMENT_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionIdentity">
           <LocaleColumns locale={locale} />
           <Pair
             locale={locale}
@@ -184,14 +185,13 @@ export function EquipmentForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
+        <CatalogSection locale={locale} declaredFields={EQUIPMENT_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionMedia">
           <MediaAssetPicker locale={locale} assets={assets} selectedId={row?.MediaAsset ?? null} />
           <TextField
             locale={locale}
             name="Video"
             labelKey="dashboard.equipment.video"
             defaultValue={row?.Video ?? null}
-            optional
           />
           <p className={extra.help}>
             <IsolatedCopy locale={locale} text={translate(locale, "dashboard.equipment.videoHelp")} />

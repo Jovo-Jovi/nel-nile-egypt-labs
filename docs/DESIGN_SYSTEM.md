@@ -822,22 +822,24 @@ in privacy-enhanced mode; nothing loads before the click (D-13).
 `xs` in `muted`. No card, no border. **Every claim needs a verified source — see §12.**
 
 **Footer.** A full-bleed `primary` band under OD-31; before it, a `primary-strong` island at radius `32px` on page `background`, per §9.
-Nothing in the footer collects: no newsletter, no contact form, no `tel:` link.
+Nothing in the footer collects: no newsletter, no contact form, and no `tel:` link except the published hotline short code (OD-33).
 
 Anatomy, in block order:
 
 | Region | Contents |
 |---|---|
-| Brand | mark lockup at 32px in the light variant · social marks, monochrome `surface` (§9) |
-| Sitemap column | in-page anchors only, `surface` links |
+| Brand | mark lockup at 32px in the light variant · circular outline social marks, monochrome `surface` (§9), each at least 44×44 |
+| Sitemap column | six route links — home, about, programmes, locations, offers, insights — as `surface` links |
 | Contact column | WhatsApp action · `ResultsPortalLink` action · Lab-to-Lab entry · hotline and address, both `pending` until `SiteSettings` carries them |
 | Media column | departments · videos · privacy |
-| Legal bar | hairline `border` at 20% · notice · privacy · two action chips |
+| Legal bar | hairline `border` at 20% · rights notice · privacy · two action chips |
 | Credit | development credit under OD-32: label · names · website link · address as text, never `mailto:` · Latin runs isolated · `--nel-band-card` pill |
 
 Three columns at `md` and above, stacked below, in reading order per locale. Type is
 `surface` throughout; every pairing measured against `primary` (OD-31; `primary-strong` before it), not against page
 `background`.
+
+**Design session, 23 September 2026.** Adopted with P09-T06 and recorded in `DESIGN_REVIEW_PACK.md` §9: the home programmes, branches and insights block as a wide horizontal band; the footer's three columns and circular social marks, which the contact page shares; the rights notice in place of the preview notice; the drawn Cairo map, schematic, with Branch pins projected from their published coordinates and each pin and name opening Google Maps outbound; on Visitor pages, the dashboard's orb pair, fixed to the viewport as in the dashboard but static, unfiltered and at OD-31's glow limits — 4.5% `primary` and 5.5% `accent` at the centre, never overlapping — over a flat `background` canvas, with a solid surface behind any Visitor text the rendered audit flags; the hotline as a call link under OD-33; the dashboard's selected-media badge; and a data-entry status on dashboard form sections that reads each entity's declared publish requirements, names what is missing, and sits beneath the §4h completeness header, which stays authoritative.
 
 **No certification, standards or compliance chip renders in the footer** — or anywhere —
 without a verified source under §12. A footer is where unverified badges accumulate

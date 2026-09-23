@@ -5,11 +5,6 @@
   display: flex;
   flex-direction: column;
   background-color: var(--nel-color-background);
-  background-image: linear-gradient(
-    180deg,
-    var(--nel-color-background),
-    color-mix(in srgb, var(--nel-color-primary) 7%, var(--nel-color-surface))
-  );
   color: var(--nel-color-text);
   line-height: var(--nel-line-height-body);
   --nel-header-stack: calc(var(--nel-space-12) + 56px);
@@ -27,7 +22,6 @@
 .orbB {
   position: absolute;
   border-radius: 50%;
-  filter: blur(72px);
 }
 
 .orbA {
@@ -35,8 +29,7 @@
   inset-block-start: -8%;
   inline-size: min(48vw, 32rem);
   block-size: min(48vw, 32rem);
-  background: color-mix(in srgb, var(--nel-color-primary) 34%, transparent);
-  animation: nel-site-orb 28s ease-in-out infinite;
+  background: radial-gradient(circle closest-side, var(--nel-glow-primary), transparent);
 }
 
 .orbB {
@@ -44,25 +37,7 @@
   inset-block-start: 28%;
   inline-size: min(40vw, 24rem);
   block-size: min(40vw, 24rem);
-  background: color-mix(in srgb, var(--nel-color-accent) 22%, transparent);
-  animation: nel-site-orb 34s ease-in-out infinite reverse;
-}
-
-@keyframes nel-site-orb {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, 24px, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .orbA,
-  .orbB {
-    animation: none;
-  }
+  background: radial-gradient(circle closest-side, var(--nel-glow-accent), transparent);
 }
 
 @media (min-width: 768px) {

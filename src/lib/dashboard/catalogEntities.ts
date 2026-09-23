@@ -249,13 +249,13 @@ const LAB_UNIT_SELECT = [
   "display_order",
 ].join(",");
 
-const BRANCH_BILINGUAL_PAIRS = [
+export const BRANCH_BILINGUAL_PAIRS = [
   ["name_ar", "name_en"],
   ["address_ar", "address_en"],
   ["hours_ar", "hours_en"],
 ] as const;
 
-const LAB_UNIT_BILINGUAL_PAIRS = [
+export const LAB_UNIT_BILINGUAL_PAIRS = [
   ["name_ar", "name_en"],
   ["description_ar", "description_en"],
 ] as const;
@@ -854,22 +854,22 @@ const ANNOUNCEMENT_SELECT = [
   "display_order",
 ].join(",");
 
-const OFFER_BILINGUAL_PAIRS = [
+export const OFFER_BILINGUAL_PAIRS = [
   ["title_ar", "title_en"],
   ["description_ar", "description_en"],
 ] as const;
 
-const VIDEO_BILINGUAL_PAIRS = [
+export const VIDEO_BILINGUAL_PAIRS = [
   ["title_ar", "title_en"],
   ["description_ar", "description_en"],
 ] as const;
 
-const EQUIPMENT_BILINGUAL_PAIRS = [
+export const EQUIPMENT_BILINGUAL_PAIRS = [
   ["name_ar", "name_en"],
   ["description_ar", "description_en"],
 ] as const;
 
-const ANNOUNCEMENT_BILINGUAL_PAIRS = [
+export const ANNOUNCEMENT_BILINGUAL_PAIRS = [
   ["title_ar", "title_en"],
   ["body_ar", "body_en"],
 ] as const;

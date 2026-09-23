@@ -5,6 +5,7 @@ import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import {
   ELIGIBILITY_AUDIENCES,
+  PROGRAMME_LAB_TEST_BILINGUAL_PAIRS,
   PROGRAMME_LAB_TEST_FORM_COLUMNS,
   programmeLabTestConfirmToken,
   type CatalogNotice,
@@ -18,6 +19,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -46,6 +48,8 @@ import site from "./SiteSettingsForm.module.css";
 // No field accepts a Visitor or patient name, phone, email, address,
 // date of birth or identifier.
 void PROGRAMME_LAB_TEST_FORM_COLUMNS;
+
+const PROGRAMME_LAB_TEST_DECLARED_FIELDS = declaredFieldsFromPairs(PROGRAMME_LAB_TEST_BILINGUAL_PAIRS);
 
 const PAIR_LEGEND: Record<string, CatalogKey> = {
   note: "dashboard.programmes.note",
@@ -147,7 +151,7 @@ export function ProgrammeLabTestForm({
           ) : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.programmes.sectionMemberships">
+        <CatalogSection locale={locale} declaredFields={PROGRAMME_LAB_TEST_DECLARED_FIELDS} titleKey="dashboard.programmes.sectionMemberships">
           <div className={site.field}>
             <FieldLabel locale={locale} htmlFor="LabTest" labelKey="dashboard.labTests.name" required="always" />
             <select

@@ -18,6 +18,7 @@ import {
   type SiteSettingsFormField,
   type SiteSettingsRow,
 } from "@/lib/dashboard/siteSettings";
+import { requiredSiteSettingsColumns } from "@/lib/dashboard/completenessTally";
 import {
   SEO_DESCRIPTION_WARN_CHARS,
   SEO_TITLE_WARN_CHARS,
@@ -30,6 +31,7 @@ import { localeHref } from "@/lib/locale";
 import {
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLegend,
   FieldMessage,
   FieldSummary,
@@ -39,6 +41,11 @@ import {
 import { MediaAssetPicker } from "./MediaAssetForm";
 import type { MediaAssetOption } from "@/lib/dashboard/mediaAsset";
 import styles from "./SiteSettingsForm.module.css";
+
+const SITE_SETTINGS_DECLARED_FIELDS = [
+  ...declaredFieldsFromPairs(BILINGUAL_PAIRS),
+  ...requiredSiteSettingsColumns(),
+];
 
 // Form `name` → `"SiteSettings"` column. Every rendered field is listed.
 // hotline → hotline
@@ -530,7 +537,7 @@ function SettingsSection({
   children: ReactNode;
 }) {
   return (
-    <CatalogSection locale={locale} titleKey={titleKey}>
+    <CatalogSection locale={locale} declaredFields={SITE_SETTINGS_DECLARED_FIELDS} titleKey={titleKey}>
       {children}
     </CatalogSection>
   );

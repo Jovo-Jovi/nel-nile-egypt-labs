@@ -4,6 +4,7 @@ import type { CatalogKey, Locale } from "@/lib/catalog";
 import { IsolatedCopy } from "@/components/ui/Isolate";
 import { translate } from "@/lib/catalog";
 import {
+  LAB_UNIT_BILINGUAL_PAIRS,
   LAB_UNIT_FORM_COLUMNS,
   confirmToken,
   type CatalogNotice,
@@ -18,6 +19,7 @@ import {
   CatalogNoticeView,
   CatalogPublishControls,
   CatalogSection,
+  declaredFieldsFromPairs,
   FieldLabel,
   FieldLegend,
   LocaleColumns,
@@ -45,6 +47,8 @@ import site from "./SiteSettingsForm.module.css";
 // No field accepts a Visitor or patient name, phone, email,
 // address, date of birth or identifier.
 void LAB_UNIT_FORM_COLUMNS;
+
+const LAB_UNIT_DECLARED_FIELDS = declaredFieldsFromPairs(LAB_UNIT_BILINGUAL_PAIRS);
 
 function TextField({
   locale,
@@ -163,7 +167,7 @@ export function LabUnitForm({
           {showQueryNotice ? <CatalogNoticeView locale={locale} notice={notice} /> : null}
         </div>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionIdentity">
+        <CatalogSection locale={locale} declaredFields={LAB_UNIT_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionIdentity">
           <TextField
             locale={locale}
             name="slug"
@@ -194,7 +198,7 @@ export function LabUnitForm({
           />
         </CatalogSection>
 
-        <CatalogSection locale={locale} titleKey="dashboard.catalog.sectionMedia">
+        <CatalogSection locale={locale} declaredFields={LAB_UNIT_DECLARED_FIELDS} titleKey="dashboard.catalog.sectionMedia">
           <MediaAssetPicker
             locale={locale}
             assets={assets}
