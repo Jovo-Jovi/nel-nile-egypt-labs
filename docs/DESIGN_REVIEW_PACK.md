@@ -87,7 +87,7 @@ but do not design a replacement for it.
 Three specific things are known and owned:
 
 - **Twenty-seven of the thirty restricted tests carry no eligibility note.**
-  Some tests are restricted by sex or age. The restriction by sex reaches
+  Some tests are restricted by sex. The restriction by sex reaches
   the visitor through the list heading — Platinum — Female, Platinum — Male
   — and the card shows a name. Three tests do carry a note, such as "For
   males only.", and those sit on lists that are not split by sex. Nothing
