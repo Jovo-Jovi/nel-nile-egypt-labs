@@ -33,7 +33,7 @@ A result only counts if it links to `nileegyptlabs.com`, uses the email `info@ni
 - Branch: 71 Othman Ibn Affan St, El-Nozha, Heliopolis — `30.0982735, 31.3398149` — phone +20 100 011 8644
 - Branch: El Khalifa El Maamoun St, Manshiyet El Bakry, Heliopolis — `30.0877826, 31.3091217` — phone +20 120 013 9207
 - Public email: `info@nileegyptlabs.org`
-- WhatsApp Business: 01278616166
+- WhatsApp Business: [redacted-phone]
 - Four laboratory units: Immunology, Chemistry, Haematology, Molecular Biology
 
 ## Tasks

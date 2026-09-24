@@ -323,7 +323,7 @@ We need access to the accounts below. **Please do not send passwords by WhatsApp
 - Contact: ____________________
 - [ ] Nobody — we handle it ourselves
 
-**The current website footer credits "Eng. Androw Nader" as the developer.**
+**The current website footer credits "Eng. Androw" as the developer.**
 
 - Are you still in contact with them? [ ] Yes  [ ] No
 - Do they still have access to the website or domain? [ ] Yes  [ ] No  [ ] Not sure

@@ -1796,3 +1796,25 @@ re-measured that and closed it.
 
 P09 is closed at G9 and P07 is active. Open CF 107 − 1 = 106. Next free
 CF-213.
+
+## 2026-09-24 — P07-T02: Personal data out of the tree; the handover programme
+
+Cut from `origin/main` after #171 merged. STEP 1 recorded P07-T01 as PASS.
+
+Two audits of the repository disagreed about personal data, so the reviewer
+measured it. The lab representative's answered owner form had sat in the public
+tree since the bootstrap commit, holding his personal email address, two
+unpublished mobile numbers and his full name. One number and the name had been
+copied into six research notes, and no fork existed.
+
+This task moved the form outside the repository and redacted the copies.
+History is not rewritten: squashing would erase the approval trail every
+verdict cites. The human kept the repository public for review until the
+Stage 4 transfer, accepting that the details stay reachable in history until
+then, so CF-213 stays open until the repository is private. PR-39 keeps such
+documents out of the repository from now on.
+
+OD-35 sets the handover programme: documentation, hardening, handover documents
+and the cutover plan, and only then transfer, cutover and G7. CF-214 to CF-217
+record the other audit findings; missing security headers were already CF-177.
+Open CF 111. Next free CF-218.

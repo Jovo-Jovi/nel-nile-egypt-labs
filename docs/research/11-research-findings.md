@@ -171,7 +171,7 @@ These must come from the lab. Further searching will not produce them.
 |---|---|---|---|
 | Hotline | 16402 — own site, 2018 | 15504 — 140.tel, Apr 2025 | **15504**, per client |
 | Founded | **2007** — about-us.html | 2011 — LinkedIn | **2007** — first-party claim |
-| WhatsApp | 01278616166 — client-confirmed | +201006150790 — hotlines.tel | **Client's number**; aggregator stale |
+| WhatsApp | [redacted-phone] — client-confirmed | +201006150790 — hotlines.tel | **Client's number**; aggregator stale |
 | Fourth branch | 37A — client | 37 — directories | Unresolved, CF-04 |
 | Hours | 10:00–23:00 — client | Google: Friday closed / 24h | Unresolved, CF-05 |
 | Kidney panel | Description names Cystatin C | Table omits it | CF-01 |
