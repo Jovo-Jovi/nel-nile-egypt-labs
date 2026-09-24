@@ -2,26 +2,25 @@
 
 | File | State |
 |---|---|
-| `quotation-draft-no-price.md` | Draft, prices blank. **Not yet issued** |
+| `quotation-draft-no-price.md` | The quotation baseline as drafted, prices blank. The client signed an amended quotation on 4 September 2026; the signed copy is held by the human, outside this repository. Kept unchanged as the historical baseline |
+| `quotation-revision-1-delivered-scope.md` | Revision 1: the delivered scope beside the baseline, with the decision that admitted each change. **Draft, awaiting the human's approval. No prices** |
 
-## SCOPE.md derives from the signed quotation
+## Where each commercial fact lives
 
-The quotation is the scope freeze. Until it is signed, `SCOPE.md` cannot be
-authored and no build task issues (`SESSION_CONTEXT.md`, blocking condition).
+- **The baseline** — `quotation-draft-no-price.md`. Not edited to match the build.
+- **The signed amendments** — the signed copy, and the schedule that records them,
+  `docs/QUOTATION_AMENDMENTS.md`.
+- **Changes approved after signature** — the signed ODs and decisions in
+  `docs/DECISIONS.md`.
+- **The delivered scope** — `docs/SCOPE.md`, and Revision 1 for the commercial view of it.
+- **Prices, rates and totals** — the human's, never stated in this repository. The one
+  price a decision records is OD-09's, in OD-24.
 
-## Before issuing
+## History
 
-Content volume is now exact — **9 Programmes · 72 LabTests · 121 relationships ·
-4 Branches · 4 LabUnits · 1 Lab-to-Lab section**. Use the numbers; an
-unquantified cap is not a cap.
-
-Carry as **priced options**, not as reasons to delay:
-
-- Logo and basic brand identity — evidence says they have none (CF-02)
-- Arabic translation — 72 LabTest names plus all site copy. Clinical Arabic is
-  not marketing copy
-- Phasing — single delivery, or Phase 1 / Phase 2
-
-Add to exclusions, each defensible in one line: correcting the stale directory
-listings still publishing 16402 (CF-09), and consolidating the three Facebook
-pages (CF-10). Naming them as excluded is how they later become paid work.
+This README first carried pre-signature advice: fill the content volumes, price the
+brand, translation and phasing options, and name two exclusions. The quotation was
+signed on 4 September 2026 (CF-50, closed), and `docs/SCOPE.md` now exists. The two
+exclusions it proposed stay open carry-forwards, both outside the delivered scope:
+correcting the directory listings that still publish the old hotline (CF-09), and
+consolidating the laboratory's three Facebook pages (CF-10).

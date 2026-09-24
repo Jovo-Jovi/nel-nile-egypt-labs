@@ -7,6 +7,9 @@ not identifiers.
 **Authored under:** OD-05 bound 3 — this document precedes `DESIGN_SYSTEM.md` because
 Arabic typography and RTL constrain the design system, not the reverse.
 **Decisions this file records:** D-10, D-25, D-26, D-27, D-28.
+**Amended at P07-T03 · authored 24 September 2026:** the route figures in §2 and §3 are
+restated to the delivered 44, and the items in §1 and §11 that later decisions settled
+point to those decisions.
 **Precedence:** document 6. `PRODUCT_BRIEF.md`, `GLOSSARY.md`, `DECISIONS.md`,
 `SCOPE.md`, `CONTENT_MODEL.md` and `BOUNDARY_MODEL.md` all outrank it. Where this
 document appears to conflict with any of them, they win and the conflict is raised as
@@ -16,8 +19,8 @@ Counts stated here are enumerated in the sections that follow and are verified
 programmatically before landing (PR-01, PR-28). Route and locale cardinalities are
 computed from `CONTENT_MODEL.md` §3c, not re-derived by hand.
 
-`SECURITY_MODEL.md` (document 5) is not yet authored. Nothing in this file decides a
-security question, and nothing here pre-empts it.
+`SECURITY_MODEL.md` (document 5) was authored at P02-T17. Nothing in this file decides
+a security question, and nothing here pre-empts it.
 
 ---
 
@@ -27,9 +30,9 @@ Every Visitor-facing string, every locale-dependent route, the direction of ever
 layout, the typography of both scripts, and the rules a reviewer applies when checking
 bilingual evidence at a gate.
 
-It does not govern the Operator dashboard's own chrome language. That is a separate
-question, deferred to `ADMIN_SPEC.md`, and it is named as a carry-forward rather than
-assumed.
+It does not govern the Operator dashboard's own chrome language. `ADMIN_SPEC.md` §4a
+decides it: the dashboard is bilingual on the same locale switch as the public site,
+Arabic default, and every rule in this document applies to it.
 
 ---
 
@@ -56,7 +59,7 @@ reasons, and the first is binding:
    §2 holds the platform to no personal data of any kind, and a locale cookie keyed to a
    Visitor is a stored preference about a person.
 2. A URL-only locale is cacheable, shareable, and printable. The lab prints addresses.
-3. It is verifiable. A reviewer can enumerate 42 URLs and check every one. An inferred
+3. It is verifiable. A reviewer can enumerate 44 URLs and check every one. An inferred
    locale cannot be enumerated.
 
 ---
@@ -67,9 +70,11 @@ Locale is the first path segment on every public page. The complete route set is
 `CONTENT_MODEL.md` §3c and is not restated here; this section states only what locale
 adds to it.
 
-**Rendered URL count: 42.** Static 12 × 2 locales = 24, dynamic 9 `Programme` detail
-pages × 2 = 18. The `/` redirect is locale-agnostic, renders no content, and is not
-among the 42. Verify by command against §3c before any claim about coverage.
+**Rendered URL count: 44.** Static 13 × 2 locales = 26, dynamic 9 `Programme` detail
+pages × 2 = 18. The thirteenth static pattern, `/{locale}/announcements`, was added at
+P06-T15. The dynamic count is the number of published Programmes, nine at the last
+measurement. The `/` redirect is locale-agnostic, renders no content, and is not among
+the 44. Verify by command against §3c before any claim about coverage.
 
 **Slugs are Latin in both locales.** `/ar/programmes/kidney-profile` and
 `/en/programmes/kidney-profile` carry the same slug. A slug is data identity promoted to
@@ -77,7 +82,7 @@ a public segment (`CONTENT_MODEL.md` §3c); it is not a translated string, no Ar
 set exists, and none is authored. Arabic-script URLs percent-encode to unreadable byte
 sequences when copied, pasted or printed, which defeats the reason a slug is public.
 
-**Every page carries an alternate.** Each of the 42 URLs declares `hreflang` for `ar`,
+**Every page carries an alternate.** Each of the 44 URLs declares `hreflang` for `ar`,
 `en` and `x-default`, with `x-default` pointing at the Arabic page. The language switcher
 navigates to the same page in the other locale — never to the home page. A switcher that
 drops the Visitor at `/` is a defect, not a simplification.
@@ -178,7 +183,8 @@ the `ResultsPortalLink` target when displayed as text · the WhatsApp number · 
 
 ## §7 Typography
 
-**Two families, maximum. One Arabic, one Latin.** They are matched at optical weight and
+**Two families, maximum. One Arabic, one Latin.** D-31 selected one family, IBM Plex Sans
+Arabic, which covers both scripts, so the delivered site loads one family, self-hosted. They are matched at optical weight and
 at x-height-to-Arabic-body-height, not at nominal weight number. A 400-weight Latin face
 next to a 400-weight Arabic face routinely looks mismatched because the numbers describe
 different things.
@@ -276,13 +282,10 @@ Where that is the case, the verdict says so rather than claiming a pass.
 
 Named so no future instance assumes silence is permission.
 
-- The Operator dashboard's own chrome language. Deferred to `ADMIN_SPEC.md`.
-- The specific Arabic and Latin faces. Selected before `DESIGN_SYSTEM.md` fixes a type
-  scale; the selection lands as a decision with the tested string.
+- The Operator dashboard's own chrome language. Decided in `ADMIN_SPEC.md` §4a.
+- The specific Arabic and Latin faces. Decided by D-31.
 - The type scale, spacing scale and any colour value. `DESIGN_SYSTEM.md`, constrained by
   this document and by OD-07 bound 1.
-- Whether search matches across scripts — an Arabic query returning a Latin-named
-  `LabTest`. `CONTENT_MODEL.md` records a build-time index across both locales (D-06,
-  OD-02); the cross-script matching rule is a search-architecture question and is carried
-  forward, not answered here.
-- Any security question. `SECURITY_MODEL.md` is unauthored.
+- Whether search matches across scripts. Decided by D-50: no transliteration; an Arabic
+  query reaches a `LabTest` through its Arabic name or an Arabic alias.
+- Any security question. `SECURITY_MODEL.md` governs.

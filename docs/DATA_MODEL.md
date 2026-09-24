@@ -2,6 +2,9 @@
 
 **Status:** v3 · AUTHORED at P02-T18 · §10 amended at P01-T03-R-M1 · §5, §6, §7, §8, §9
 amended at P01-T03-R-M3 to `CONTENT_MODEL.md` §3a, which outranks this document
+· §6 to §11 amended at P07-T03 (authored 24 September 2026) to the delivered schema: the
+eighteen forward migrations in `supabase/migrations/`. §1's findings stand as history,
+each followed by its resolution.
 **Vocabulary:** frozen `GLOSSARY.md` · 2026-08-25, as superseded in part by its §7.
 **Precedence:** document 7. Everything above it wins on conflict, and a conflict is raised
 as a formal amendment rather than reconciled in SQL. `SECURITY_MODEL.md` (document 5) and
@@ -63,6 +66,12 @@ exist. Producing them is Opus-class work by the model rule — *a mistranslated 
 name on a laboratory site is a harm vector and it is invisible to a reviewer who does not
 read clinical Arabic* — and each one then requires the lab's sign-off under the clinical
 gate. This work is unscheduled and unpriced.
+
+**Resolved.** F2 and F3 were closed by the laboratory's written clinical sign-off of
+6 September 2026 and transcribed by M8 (`20260906110552_m8_signed_catalogue.sql`): 71
+`LabTest` rows each carry an Arabic name, all 124 memberships carry an explicit
+eligibility value (94 `all`, 16 `female`, 14 `male`, 0 `unreviewed`), and no `qa_flag` is
+set. F1's harm case is prevented by §7's eligibility step and the explicit values.
 
 ---
 
@@ -185,7 +194,7 @@ page that shows a prostate marker to a woman is not.
 
 ## §6 Tables
 
-Eleven are specified and eleven exist as of M5. Thirteen are listed — rows 12 and 13 still waiting on OD-09. `Visitor` and `ResultsPortalLink` are not tables — the first is never persisted,
+Fourteen are listed. Thirteen exist, created by the forward migrations in `supabase/migrations/` (counted by `scripts/audit/inventory.py`): rows 1 to 12 and row 14. Row 13 was withdrawn by OD-37 and has no migration. `Visitor` and `ResultsPortalLink` are not tables — the first is never persisted,
 the second is a build-time constant (D-07). `Operator` lives in the provider's auth schema
 and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 
@@ -195,19 +204,20 @@ and is never copied into the application schema (`SECURITY_MODEL.md` §6).
 | 2 | `"ProgrammeTier"` | `"Programme"` fk `on delete cascade` · `tier_axis` · `audience_axis` · unique on the triple |
 | 3 | `"ProgrammeLabTest"` | **`"ProgrammeTier"` fk** `on delete cascade` · `"LabTest"` fk `on delete restrict` · `source_name` · `eligibility_audience` · `note_ar` · `note_en` · unique on the pair |
 | 4 | `"LabTest"` | `slug` unique · `name_ar` · `name_en` · `aliases text[]` · `qa_flag` · `"LabUnit"` fk nullable |
-| 5 | `"LabUnit"` | `slug` unique · `name_ar` · `name_en` · `description_ar` · `description_en` |
+| 5 | `"LabUnit"` | `slug` unique · `name_ar` · `name_en` · `description_ar` · `description_en` · `photography_media` → `"MediaAsset"` nullable, `on delete set null` (P06-T13) |
 | 6 | `"Branch"` | `name_ar` · `name_en` · `address_ar` · `address_en` · `is_head_office boolean` · `latitude` · `longitude` nullable · `hours_ar` · `hours_en` · `whatsapp_e164` |
 | 7 | `"Offer"` | `title_ar` · `title_en` · `description_ar` · `description_en` · `valid_from date` · `valid_until date` · `price_amount numeric(10,2)` · `price_currency` · `"MediaAsset"` fk nullable · `"Programme"` fk nullable (D-18). No currency is hardcoded in application source and none is named here (CF-21); `price_currency` is stored per row with no default |
 | 8 | `"Equipment"` | `name_ar` · `name_en` · `description_ar` · `description_en` · `"MediaAsset"` fk nullable · `"Video"` fk nullable. No `"LabUnit"` foreign key: `CONTENT_MODEL.md` §3a line 78 does not list one, `/{locale}/equipment` is a flat listing, and grouping by department is an amendment if the dashboard ever wants it |
 | 9 | `"Video"` | `youtube_id` · `title_ar` · `title_en` · `description_ar` · `description_en` · `is_featured boolean` · `"MediaAsset"` fk nullable, the poster (D-13, `DESIGN_SYSTEM.md` §10, `CONTENT_MODEL.md` §3a as amended at M5A) |
-| 10 | `"SiteSettings"` | singleton, enforced by a one-row check. Hotline · WhatsApp · hours · social URLs · map · About and Privacy bodies · Lab-to-Lab copy · default SEO · hero eyebrow, headline and standfirst (`hero_eyebrow_ar` / `hero_eyebrow_en`, `hero_headline_ar` / `hero_headline_en`, `hero_standfirst_ar` / `hero_standfirst_en`; one headline field per locale, not two lines) · three reason cards (`reason1`–`reason3` title and body, each `_ar` / `_en`) · nullable `"MediaAsset"` keys `favicon_media`, `app_icon_media`, `hero_media` (`on delete set null`) |
+| 10 | `"SiteSettings"` | singleton, enforced by a one-row check. Hotline · WhatsApp · hours · social URLs · map · About and Privacy bodies · Lab-to-Lab copy · default SEO · hero eyebrow, headline and standfirst (`hero_eyebrow_ar` / `hero_eyebrow_en`, `hero_headline_ar` / `hero_headline_en`, `hero_standfirst_ar` / `hero_standfirst_en`; one headline field per locale, not two lines) · three reason cards (`reason1`–`reason3` title and body, each `_ar` / `_en`) · nullable `"MediaAsset"` keys `favicon_media`, `app_icon_media`, `hero_media` (`on delete set null`), and from P06-T13 `story_main_media`, `story_float_media`, `story_float_alt_media`. No map column exists; see the row 10 note below. Forty-nine columns |
 | 11 | `"MediaAsset"` | `storage_path` · `alt_ar` · `alt_en` · `width` · `height` · `byte_size` · `mime_type` |
-| 12 | `"Announcement"` | title, body, `published_at`. **Does not exist until OD-09 is signed** |
-| 13 | `"ClinicalNotice"` | title, body, plus `signed_by`, `signed_at`, `signed_text_hash`. **Does not exist until OD-09 is signed** |
+| 12 | `"Announcement"` | `title_ar` · `title_en` · `body_ar` · `body_en` · `published_at date` · `"MediaAsset"` fk nullable · `no_medical_instruction_affirmed boolean not null default false`. When published: both pairs complete, `published_at` set and the affirmation true, each a check constraint. Created at P06-T14 |
+| 13 | `"ClinicalNotice"` | title, body, plus `signed_by`, `signed_at`, `signed_text_hash`. **Withdrawn by OD-37; never built.** No migration creates it |
+| 14 | `"PublicationMaximum"` | `module_key` · `governed_table` · `published_maximum`. No common column set. One row: `Announcement`, 3. Created at P06-T16 (OD-27); enforced by the `enforcePublicationMaximum` trigger on `"Announcement"` |
 
 Rows 7–9 were reconciled field by field against `CONTENT_MODEL.md` §3a at M5A under CF-86, naming the three changes: `body` → `description` and the added `"Programme"` fk on `"Offer"`, the dropped `"LabUnit"` fk and added `"Video"` fk on `"Equipment"`, and the `"MediaAsset"` poster on `"Video"` carried by a §3a amendment rather than kept silently.
 
-Row 10 was reconciled against `CONTENT_MODEL.md` §3a at M6A under CF-86. §3a was amended first to name the hero, reason-card and media-role fields; this row was then made to match. Pre-existing §3a `map` is kept in both documents; no maps URL column is added.
+Row 10 was reconciled against `CONTENT_MODEL.md` §3a at M6A under CF-86. §3a was amended first to name the hero, reason-card and media-role fields; this row was then made to match. Pre-existing §3a `map` is kept in both documents; no maps URL column is added. **As delivered, no map column exists:** the map is drawn and places its pins from published `"Branch"` coordinates (OD-22), and both documents now say so.
 
 **Row 3 belongs to a `"ProgrammeTier"`, not to a `"Programme"` with loose axis columns.**
 `CONTENT_MODEL.md` §3a states it and §3a's relationship table makes `ProgrammeTier` →
@@ -221,8 +231,8 @@ quadruple — and the axes reach a membership through its tier.
 invention and is dropped; the note a §3b step 4 exclusion shows belongs to the membership
 row, which is where row 3 now carries `note_ar` and `note_en`.
 
-Rows 12 and 13 are listed for completeness and are not created by any migration before
-OD-09 leaves DRAFT.
+Row 12 exists. Row 13 is kept as the record of what OD-09 specified; OD-37 withdrew it and
+no migration creates it.
 
 **`"Branch"."whatsapp_e164"` and `"SiteSettings"` hotline are business data, not personal
 data.** They are the lab's published contact points, and PR-16 keeps them out of source
@@ -230,7 +240,8 @@ and in the database, which is exactly where this puts them.
 
 **`"ClinicalNotice"."signed_text_hash"` is what makes OD-09's rule enforceable**: editing
 signed text changes the hash, the hash no longer matches the signature, and publication
-fails. The gate is arithmetic rather than memory.
+fails. The gate is arithmetic rather than memory. OD-37 withdrew the table; this paragraph
+records the design.
 
 ---
 
@@ -240,9 +251,12 @@ fails. The gate is arithmetic rather than memory.
 vectors. It is implemented **once**, as a SQL function, and every caller uses it.
 
 ```
-"programmeLabTests"(programme uuid, tier ProgrammeTierAxis, audience AudienceAxis)
-  returns setof "LabTest"
+"programmeLabTests"("programme" uuid, tier ProgrammeTierAxis, audience AudienceAxis)
+  returns table (every "LabTest" column, note_ar, note_en)
 ```
+
+As delivered at M4a the function returns a table rather than `setof "LabTest"`, because
+the note shown for a restricted row belongs to the membership, not to the `"LabTest"`.
 
 Reasons, in order of weight:
 
@@ -266,6 +280,14 @@ filter on axis columns repeated per membership.
 **The function is `security definer` with a fixed `search_path`**, so it cannot be
 subverted by a caller's schema. It reads only published rows.
 
+**Two further functions exist, neither of them a catalogue rule.**
+`public."currentNelPrincipal"()` returns the caller's `nel_principal` from live
+server-side account state; the `Offer` partner-read policy calls it, so a revoked
+`PartnerLab` stops reading on its next request rather than at token expiry (OD-28,
+ADR-002). It is `security definer`, `stable`, with a fixed `search_path`, and executable
+by `authenticated` only. `public."enforcePublicationMaximum"()` is the trigger function
+behind OD-27: it refuses a publish that would exceed a module's `published_maximum`.
+
 ---
 
 ## §8 Integrity, expressed as constraints rather than a script
@@ -280,11 +302,13 @@ violate:
 | Every membership points at a real `ProgrammeTier` | foreign key, `on delete cascade` |
 | Every tier points at a real `Programme` | foreign key, `on delete cascade` |
 | No duplicate membership | unique on (`ProgrammeTier`, `LabTest`) |
-| 121 rows in, 72 distinct `LabTest` out | asserted **inside the seed migration**, which aborts on any other figure |
+| 121 rows in, 72 distinct `LabTest` out | asserted **inside the seed migration**, which aborts on any other figure. M4c's 2018 seed; the signed catalogue is 124 → 71 after M8 |
 | One `SiteSettings` row | unique index on a constant expression |
 | At most one head office | partial unique index on `is_head_office` where true |
 | `valid_until >= valid_from` | check constraint on `"Offer"` |
 | A published row is bilingually complete | partial check per bilingual pair, where state is `published` |
+| A published `Announcement` is dated and affirmed | two check constraints, where state is `published` |
+| No module exceeds its publishing maximum | the `enforcePublicationMaximum` trigger (OD-27) |
 
 The 121→72 assertion lives in the migration rather than in a spec, because a migration
 that silently loads 120 rows is worse than one that fails.
@@ -303,28 +327,44 @@ decoration.
   which the unique constraint in §8 already indexes.
 - Publication state on every published table, because RLS filters on it for every
   anonymous read.
-- Bilingual search across `name_ar`, `name_en` and `aliases` — **deferred.**
-  `CONTENT_MODEL.md` records a build-time index (D-06, OD-02) rather than a database one,
-  and cross-script matching is an open question (CF-54). No search index is created until
-  that is answered.
+- Bilingual search across `name_ar`, `name_en` and `aliases` — **not a database index.**
+  Search is a build-time artefact (OD-02, `CONTENT_MODEL.md` §3f), delivered at P04, and
+  cross-script matching is decided by D-50. No database search index exists.
 
 ---
 
 ## §10 Migration sequence
 
-Five migrations, one per task (OD-10 control 3). Each carries a verified reverse authored
-in the same task.
+The first cut planned five migrations. Eighteen forward migrations are applied, in the
+order below, each with a reverse (`.down.sql`, no timestamp, so the CLI never applies
+it) authored in the same task. No reverse has ever been executed (CF-83). The count is
+computed by `scripts/audit/inventory.py` from `supabase/migrations/`; the file names are authoritative
+and the labels are this project's.
 
-| # | Creates | Reverse |
+| # | File (forward) | What it does |
 |---|---|---|
-| M1 | the four enum types, the common column conventions, the CI naming guard | drop types |
-| M2 | `"LabUnit"`, `"Branch"`, `"MediaAsset"`, `"SiteSettings"` — the independent tables, each with RLS enabled | drop tables |
-| M3 | `"Programme"`, `"LabTest"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and their keys, each with RLS enabled, plus the grant revoke across all eight tables | drop tables, restore grants |
-| M4 | the §7 function, the RLS policies, and the seed load with its 121→72 assertion | drop function and policies; truncate |
-| M5 | `"Offer"`, `"Video"`, `"Equipment"` — each with RLS enabled in the create-table block and both §3 policy shapes | drop tables |
+| M1 | `20260831082725_m1_enum_types.sql` | the four enum types |
+| M2 | `20260831090539_m2_independent_tables.sql` | `"LabUnit"`, `"Branch"`, `"SiteSettings"`, `"MediaAsset"`, each with RLS enabled |
+| M3 | `20260831104408_m3_catalogue_tables.sql` | `"LabTest"`, `"Programme"`, `"ProgrammeTier"`, `"ProgrammeLabTest"` and their keys, RLS enabled, grant revoke across all eight tables |
+| M4a | `20260831111505_m4a_programme_lab_tests_function.sql` | the §7 function |
+| M4b | `20260831111522_m4b_policies_and_write_grants.sql` | sixteen policies in the published-read and Operator-write shapes; write grants to `authenticated` |
+| M4c | `20260831111538_m4c_seed_load.sql` | the 2018 seed, all `draft`, with its 121 → 72 assertion |
+| M4d | `20260831111557_m4d_eligibility_hold.sql` | asserts every membership `unreviewed`; sets nothing |
+| M5 | `20260901084408_m5_offer_equipment_video.sql` | `"Offer"`, `"Video"`, `"Equipment"` with RLS and both policy shapes |
+| — | `20260903150000_media_asset_bucket.sql` | the private `media-asset` bucket and its two `storage.objects` policies |
+| M6 | `20260905020000_m6_site_settings_hero_reason_media.sql` | 21 `"SiteSettings"` columns, 9 bilingual checks, 3 media-role keys |
+| M8 | `20260906110552_m8_signed_catalogue.sql` | the signed catalogue: Arabic names, corrected memberships, explicit eligibility, 124 → 71 |
+| M7B-2 | `20260907000019_m7b2_operator_claim_write_policies.sql` | the twelve write policies require the `Operator` claim |
+| M9 | `20260908143000_m9_offer_partner_read.sql` | `Offer_partner_read` |
+| M10 | `20260908160000_m10_drop_offer_published_read.sql` | drops `Offer_published_read`; `"Offer"` has no anonymous read |
+| — | `20260913140000_photography_slot_media.sql` | four photography keys on `"LabUnit"` and `"SiteSettings"` |
+| — | `20260913180000_announcement.sql` | `"Announcement"`, with RLS and both policy shapes |
+| — | `20260913234353_publication_maximum.sql` | `"PublicationMaximum"`, its Operator-read policy and the `enforcePublicationMaximum` trigger |
+| — | `20260914120000_current_nel_principal.sql` | `currentNelPrincipal()`; `Offer_partner_read` rewritten to call it (OD-28) |
 
-**M4 is the only one that loads data and the only one that can fail on what it loads.**
-Its assertion aborts the transaction on any figure other than 121 and 72.
+**M4c and M8 are the only migrations that change catalogue data**, and each asserts its
+own figures inside the transaction: 121 and 72 for the 2018 seed, 124 and 71 for the
+signed catalogue.
 
 **RLS is enabled in the same statement block that creates each table. Policies land in
 M4. These are two different things and conflating them is a security defect.**
@@ -356,14 +396,9 @@ much as the conclusion here, because a wrong justification is how someone later 
 ## §11 What this document does not decide
 
 - The SQL text of any migration. Written per task against these rules.
-- The Arabic names of the 72 `LabTest` records (F3). Opus-class work, then the lab's
-  sign-off. Unscheduled and unpriced.
-- The eligibility value of any `ProgrammeLabTest` membership (F2). A clinical judgement, taken with the
-  sign-off that governs the name. Until then every row is `unreviewed` and withheld.
-- Whether the five QA-flagged `LabTest` records are corrected before or after first
-  publication. `ast`, `esr`, `fsh`, `app-afp`, `creatinine-urea-combined` — the flags are
-  carried on the row and the clinical gate governs their resolution.
-- Search architecture. CF-54.
-- Backup, retention and plan tier. CF-37, CF-79.
-- Anything about `"Announcement"` or `"ClinicalNotice"` beyond §6, which is provisional
-  until OD-09 is signed.
+- Any Arabic `LabTest` name or eligibility value. Both are the laboratory's, signed on
+  6 September 2026 and transcribed by M8; this document records the columns, not the
+  judgements.
+- Search architecture. OD-02 and D-50 decide it; it is not a database object.
+- Backup, retention and plan tier. CF-37, CF-79, and the cutover runbook.
+- Anything about `"ClinicalNotice"` beyond §6 row 13. OD-37 withdrew it.

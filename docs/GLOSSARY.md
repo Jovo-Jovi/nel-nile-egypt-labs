@@ -3,6 +3,10 @@
 **Status:** FROZEN at P00-T01 · 2026-08-25 · amend only by explicit supersession
 **Superseded in part:** P00-T02-A · 2026-08-25 · §7 supersedes the words "route
 segments" in §6. Every other clause of §6 stands. The FROZEN marker stands.
+**Superseded in part:** P07-T03 · authored 24 September 2026 · §2 restates the
+`ProgrammeTier`, `LabTest`, `Branch`, `Offer`, `PartnerLab` and `ResultsPortalLink`
+rows to the delivered state and adds five entity rows. Every other clause stands.
+The FROZEN marker stands.
 **Binding on:** every prompt issued, every document authored, every identifier written
 
 ## §1 Why this exists
@@ -19,17 +23,22 @@ rebuild exists to solve.
 | Entity | Meaning |
 |---|---|
 | `Programme` | One of nine published check-up programmes |
-| `ProgrammeTier` | A tier within a Programme. The seed carries eight distinct values, verified by the STEP 2 command: '' (seven untiered Programmes), Silver, Gold, Platinum — Female, Platinum — Male, Children, Male, Female. Whether the Platinum sex split is a tier value or a second axis is NOT decided here — see CONTENT_MODEL. |
-| `LabTest` | A single laboratory analysis. 72 unique across 121 Programme relationships as extracted, verified programmatically. This total is PRE-SIGN-OFF and will move: five flagged rows and four absent-but-promised rows are with the lab (PR-08). Recompute after the signed corrections land; do not cite 72 as final. |
+| `ProgrammeTier` | A selectable slot within a Programme, identified by two axes (D-05): `ProgrammeTierAxis` (none · Silver · Gold · Platinum · Children) and `AudienceAxis` (none · Male · Female). The 2018 seed's eight tier strings map onto fourteen tier rows (`CONTENT_MODEL.md` §3a). |
+| `ProgrammeLabTest` | Membership of one `LabTest` in one `ProgrammeTier`, carrying its eligibility audience and bilingual note (D-42, D-44). |
+| `LabTest` | A single laboratory analysis. 71 in the signed catalogue, reached through 124 `ProgrammeLabTest` memberships (M8; clinical sign-off of 6 September 2026). The 2018 extraction held 72 across 121 relationships; that figure is historical. |
 | `LabUnit` | A laboratory department — Immunology, Chemistry, Haematology, Molecular Biology |
-| `Branch` | A physical laboratory location. Three confirmed plus one unconfirmed, one flagged head office. The fourth address and the working hours for all four are open carry-forwards owned by the client; the count is not frozen until they close. |
-| `Offer` | A published promotional offer with validity dates |
+| `Branch` | A physical laboratory location. Four, one flagged head office (CF-04 closed at P06-T09). Working hours remain a client carry-forward (CF-05). |
+| `Offer` | A promotional offer with validity dates and a price. Readable only by an approved `PartnerLab`, never by an anonymous `Visitor` (OD-15) |
 | `Equipment` | Laboratory equipment published on the site |
 | `Video` | A published video record surfaced on the public site and managed from the dashboard. Third-party embeds carry boundary consequences — see BOUNDARY_MODEL §4 |
+| `Announcement` | A published news item, bilingual, affirmed free of medical instruction (OD-09) |
+| `SiteSettings` | The singleton of published laboratory-wide values |
+| `MediaAsset` | One uploaded image in the Media Library, with bilingual alt text |
+| `PublicationMaximum` | Configuration: the most records of one module that may be published at once (OD-27). Not Visitor-facing |
 | `Visitor` | A person browsing the public site. Holds no account |
 | `Operator` | A dashboard user. Minimum two accounts, MFA required |
-| `PartnerLab` | Another laboratory holding an account on this site. An authenticated reader with no write access anywhere |
-| `ResultsPortalLink` | The outbound link to the separate results application. Whether its target is a build-time constant or an Operator-editable value is NOT decided here — see CONTENT_MODEL. If Operator-editable, the target host must be allowlisted; an unconstrained editable target is an open redirect on a medical site. |
+| `PartnerLab` | Another laboratory holding an account on this site. An authenticated reader with no write access anywhere. Created by self-signup (OD-15) or by an `Operator` with a numeric identifier (OD-30) |
+| `ResultsPortalLink` | The outbound link to the separate results application. Decided by D-07 and OD-23: two HTTPS URLs held as deployment configuration, host allowlisted, never Operator-editable. |
 
 ## §3 Forbidden bare nouns
 

@@ -1818,3 +1818,29 @@ OD-35 sets the handover programme: documentation, hardening, handover documents
 and the cutover plan, and only then transfer, cutover and G7. CF-214 to CF-217
 record the other audit findings; missing security headers were already CF-177.
 Open CF 111. Next free CF-218.
+
+## 2026-09-25 — P07-T03: Stage 1 of the handover programme
+
+Cut from `origin/main` after #172 merged. STEP 1 recorded P07-T02 as PASS.
+
+OD-37 records that development is complete. The delivered state is the final
+scope. Clinical notices is withdrawn. The undelivered baseline items are
+excluded. Re-authentication before destructive actions is recorded as a
+finding of the delivered state; the requirement is unchanged and not met.
+
+The product is documented as it exists. Every count `PRODUCT_BRIEF.md` and
+`SCOPE.md` state is reproduced by `scripts/audit/inventory.py`.
+
+Quotation Revision 1 is drafted with no prices. It separates what was
+delivered, what was withdrawn, and what is excluded.
+
+Six model documents carry their drift corrections: the glossary, the content
+model, the data model, the i18n model, the admin specification, and the
+security model.
+
+Nine pre-development papers were copied byte-exact to `nel-private` and
+removed from the tree under OD-36, each recorded by its git blob. Two of
+them, the audit brief and the blank Arabic form, carried the last copies of
+a full name that P07-T02's text-only rescan missed.
+
+CF-156 closed. Open CF 112.

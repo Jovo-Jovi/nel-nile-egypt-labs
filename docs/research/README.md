@@ -7,20 +7,20 @@ These justify decisions. When someone asks in month three why the hotline is
 
 | File | What it is | Date |
 |---|---|---|
-| `01-audit-brief.pdf` | Unauthenticated public audit — 9 findings, 1 critical | 16 Aug 2026 |
-| `02-architecture-and-user-journeys.pdf` | First architecture pass — **superseded** by the method docs | Aug 2026 |
-| `03-original-quotation-superseded.pdf` | Original 65,000 EGP quotation — **superseded**, kept for history | Aug 2026 |
-| `04-spec-and-gap-review.md` | Consolidated spec, 25 gaps, 7 contradictions found across the first three documents | 18 Aug 2026 |
-| `05-owner-form-en-source.md` | English source text of the client questionnaire | Aug 2026 |
-| `06-owner-form-ar-blank.docx` | Arabic RTL questionnaire as sent to the client | Aug 2026 |
+| ~~`01-audit-brief.pdf`~~ | Unauthenticated public audit — 9 findings, 1 critical. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `bafe9b3d32d9e35db5990591d2ccb05448779a38`; check a copy with `git hash-object --no-filters` | 16 Aug 2026 |
+| ~~`02-architecture-and-user-journeys.pdf`~~ | First architecture pass — **superseded** by the method docs. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `5c07fe5795fdb0e4428154e298a834ba804300cd`; check a copy with `git hash-object --no-filters` | Aug 2026 |
+| ~~`03-original-quotation-superseded.pdf`~~ | Original 65,000 EGP quotation — **superseded**, kept for history. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `7716815cbee6b26d990583a9ef3dd462b17f0fb5`; check a copy with `git hash-object --no-filters` | Aug 2026 |
+| ~~`04-spec-and-gap-review.md`~~ | Consolidated spec, 25 gaps, 7 contradictions found across the first three documents. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `85fca00e7793d40b0fb172c81f224d8e3c68e65f`; check a copy with `git hash-object --no-filters` | 18 Aug 2026 |
+| ~~`05-owner-form-en-source.md`~~ | English source text of the client questionnaire. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `8da8d82103b9c9063c804507c48bc46faeb2da98`; check a copy with `git hash-object --no-filters` | Aug 2026 |
+| ~~`06-owner-form-ar-blank.docx`~~ | Arabic RTL questionnaire as sent to the client. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `414d117c71fd8a4677d94dd891ff322baf1261a3`; check a copy with `git hash-object --no-filters` | Aug 2026 |
 | ~~`07-owner-form-ar-ANSWERED.docx`~~ | Removed from the repository at P07-T02 because it carries a person's contact details (PR-39); held outside the repository for the lab | Aug 2026 |
 | `08-form-review-and-next-steps.md` | Review of the returned form — what was answered, what was missing | 24 Aug 2026 |
 | `09-locked-baseline.md` | Decisions closed after the client's rulings. **Feeds `SCOPE.md`** | 24 Aug 2026 |
-| `10-research-prompt.md` | The open-source research brief, incl. the disambiguation list for seven confusable Cairo labs | 24 Aug 2026 |
+| ~~`10-research-prompt.md`~~ | The open-source research brief, incl. the disambiguation list for seven confusable Cairo labs. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `60237d11fe5af751d5ae4416376604b4b74559f5`; check a copy with `git hash-object --no-filters` | 24 Aug 2026 |
 | `11-research-findings.md` | Research results — branches, domains, assets, clinical defects, conflicts | 24 Aug 2026 |
-| `12-research-reconciliation.md` | Findings reconciled against the baseline | 24 Aug 2026 |
+| ~~`12-research-reconciliation.md`~~ | Findings reconciled against the baseline. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `e802e1fde2f8d91d49f649e0a17535dde4e9f2dc`; check a copy with `git hash-object --no-filters` | 24 Aug 2026 |
 | `13-brand-extraction.md` | Brand extraction evidence — colour, logo, typography, template fingerprint across the results portal, the 2018 site and the Facebook page | 26 Aug 2026 |
-| `14-brand-extraction-portal-login.md` | Site 1 supplement — the results portal `/Login/` static HTML and bundled global CSS, authorised under OD-06 | 26 Aug 2026 |
+| ~~`14-brand-extraction-portal-login.md`~~ | Site 1 supplement — the results portal `/Login/` static HTML and bundled global CSS, authorised under OD-06. Moved out of the repository at P07-T03 (OD-36); held in the private handover folder `nel-private` for the laboratory. Git blob `7ad997ab53021dbad254643ac5787ba61e52e50b`; check a copy with `git hash-object --no-filters` | 26 Aug 2026 |
 | `15-mark-colour-sampling.md` | Pixel-level colour sampling of the two committed mark binaries — favicon (source of record) and Facebook cover (corroboration), no network access | 27 Aug 2026 |
 | `16-owner-approved-composition.md` | Approval evidence for the composition the client approved on 29 August 2026, promoted under OD-08. Not a specification — `DESIGN_SYSTEM.md` §9 governs. Moved here from `docs/` at P01-T03-R-M1 | 29 Aug 2026 |
 | `g3-evidence.md` | Computed facts a build can prove at P03 exit. Not a model document, not a G3 verdict. CF-59 and CF-60 are named as absent | 2 Sep 2026 |

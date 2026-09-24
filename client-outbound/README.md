@@ -1,5 +1,11 @@
 # Client outbound
 
+**Status, 24 September 2026 (P07-T03):** answered. The laboratory's clinical staff
+resolved these questions in the signed catalogue of 6 September 2026
+(`docs/research/clinical-signoff.md`, transcribed by M8), and no row in
+`data/seed/tests.csv` carries a `qa_flag` today. The files below are kept as the record of
+what was asked; the notice that follows is the wording of the time.
+
 > **Public repository (OD-04).** The `qa_flag` entries in the seed and the
 > rows in `client-outbound/` are unconfirmed readings of a public 2018 page
 > (PR-09). They are questions for the lab's clinical staff, not assertions

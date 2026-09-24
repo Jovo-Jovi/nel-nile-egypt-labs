@@ -5,8 +5,11 @@
 Every entity below is PascalCase and exact. Public path segments are Visitor-facing
 strings governed by §3c, not identifiers — see `GLOSSARY.md` §7.
 **Decisions this file records:** D-03, D-04, D-05, D-06, D-07, D-13, D-14, D-15, D-16, D-18.
+**Amended at P07-T03 · authored 24 September 2026:** delivered-state corrections to §3a,
+§3b, §3d, §3e, §3f and §3g. The P00 rationale, the 2018 seed figures and the D-05 mapping
+stand as written; where a delivered fact differs, it is stated beside them.
 
-Totals stated in this file are enumerated in the sections that follow and are verified programmatically before landing (PR-01). Seed cardinalities (9 Programmes, 72 LabTests, 121 relationships) are computed from `data/seed/catalogue.json`, not re-derived by hand.
+Totals stated in this file are enumerated in the sections that follow and are verified programmatically before landing (PR-01). Seed cardinalities (9 Programmes, 72 LabTests, 121 relationships) are computed from `data/seed/catalogue.json`, not re-derived by hand. They describe the 2018 extraction. The signed catalogue is 9 Programmes · 71 LabTests · 124 memberships (M8, clinical sign-off of 6 September 2026), verified by `python -X utf8 data/seed/verify_seed.py` → `124 -> 71`.
 
 ---
 
@@ -25,24 +28,27 @@ CF-16 is closed on this confirmation.
 
 ## 3a. Entity model
 
-Fourteen entities. Visitor-facing strings on every persisted entity that has any are bilingual (`_ar` / `_en`). No entity carries a price except `Offer` (D-04).
+Seventeen entities. Visitor-facing strings on every persisted entity that has any are bilingual (`_ar` / `_en`). No entity carries a price except `Offer` (D-04).
 
 | # | Entity | What it is |
 |---|---|---|
 | 1 | `Programme` | One of nine published check-up programmes. No price field. |
 | 2 | `ProgrammeTier` | One selectable slot on a `Programme`, identified by the two D-05 axes. |
 | 3 | `ProgrammeLabTest` | Membership of one `LabTest` in one `ProgrammeTier`. |
-| 4 | `LabTest` | One laboratory analysis. Seventy-two unique in the seed, PRE-SIGN-OFF. |
+| 4 | `LabTest` | One laboratory analysis. Seventy-one in the signed catalogue (M8); the 2018 seed held seventy-two, pre-sign-off. |
 | 5 | `LabUnit` | One laboratory department. Four: Immunology, Chemistry, Haematology, Molecular Biology. |
-| 6 | `Branch` | One physical laboratory location. Four records, three confirmed (CF-04). |
-| 7 | `Offer` | One published promotional offer with validity dates and the price. |
+| 6 | `Branch` | One physical laboratory location. Four records, one head office (CF-04 closed at P06-T09). |
+| 7 | `Offer` | One promotional offer with validity dates and the price. Readable only by an approved `PartnerLab` (OD-15). |
 | 8 | `Equipment` | One published piece of laboratory equipment. |
 | 9 | `Video` | One published video record. YouTube only; never hosted here. |
 | 10 | `Visitor` | A person browsing the public site. Holds no account, submits nothing, is not persisted. |
 | 11 | `Operator` | A dashboard user. Minimum two accounts. MFA required (D-08). Touches published site material only. |
 | 12 | `ResultsPortalLink` | The outbound link pair to the separate portal application. Not a table. Not Operator-editable. |
-| 13 | `SiteSettings` | The singleton of published lab-wide values (hotline, WhatsApp, hours, social URLs, map, default SEO, Lab-to-Lab copy, About body, Privacy Policy body). |
+| 13 | `SiteSettings` | The singleton of published lab-wide values (hotline, WhatsApp, hours, social URLs, default SEO, Lab-to-Lab copy, About body, Privacy Policy body, hero and reason-card copy, media roles). |
 | 14 | `MediaAsset` | One uploaded image in the Media Library, with bilingual alt text. |
+| 15 | `PartnerLab` | Another laboratory holding an account. Reads approved `Offer` rows only and writes nothing (OD-15, OD-30). An authentication identity, not a table. |
+| 16 | `Announcement` | One published news item, bilingual, with an optional image (OD-09, OD-24). |
+| 17 | `PublicationMaximum` | Configuration: the most records of one module that may be published at once (OD-27). Not Visitor-facing. |
 
 ### Fields
 
@@ -67,17 +73,19 @@ Four seed rows carry a qualifier inside `sourceName`, computed by matching `/mal
 
 The remaining 117 rows default to `audience` = `all`, `minAge` = null, no note. No qualifier is inferred for a row the seed does not qualify.
 
-**`LabTest`.** `slug` · `name_ar` · `name_en` · `aliases` (both locales, one list) · `qaFlag` (internal; never Visitor-facing). `name_ar` is empty on all seventy-two seed rows (CF-14). Material ships behind a feature flag (D-19 / PR-08).
+**As delivered (M3, M8, D-42).** Eligibility is stored as `eligibility_audience` (`unreviewed` · `all` · `male` · `female`) with the `note_ar` / `note_en` pair. `minAge` is not a column: an age qualifier reaches the Visitor only through the note. The mapping above describes the 2018 seed. The signed catalogue sets an explicit value on all 124 memberships — 94 `all`, 16 `female`, 14 `male`, 0 `unreviewed` — taken from the signed worklist, not inferred.
 
-**`LabUnit`.** `name_ar` · `name_en` · `description_ar` · `description_en` · `published` · `displayOrder`. Optional `MediaAsset`.
+**`LabTest`.** `slug` · `name_ar` · `name_en` · `aliases` (both locales, one list) · `qaFlag` (internal; never Visitor-facing). `name_ar` was empty on all seventy-two seed rows (CF-14); all seventy-one signed rows carry one (M8), and `qaFlag` is empty on every signed row. Material ships behind a feature flag (D-19 / PR-08).
 
-**`Branch`.** `name_ar` · `name_en` · `isHeadOffice` · `addressLine_ar` · `addressLine_en` · `phone` · `workingHours` · `latitude` · `longitude` · `published` · `displayOrder`. Optional `MediaAsset`. `workingHours` is a structured value rendered by locale formatting, not a translated string. Published business data lives here, never as a literal in application source (PR-16).
+**`LabUnit`.** `slug` · `name_ar` · `name_en` · `description_ar` · `description_en` · `published` · `displayOrder`. Optional `MediaAsset` as the department photograph (`photography_media`, P06-T13).
+
+**`Branch`.** `name_ar` · `name_en` · `isHeadOffice` · `address_ar` · `address_en` · `hours_ar` · `hours_en` · `whatsapp_e164` · `latitude` · `longitude` · `published` · `displayOrder`. No `MediaAsset`. As delivered, working hours are a free-text bilingual pair rather than a structured value (P05-T14), and the Branch contact number is its WhatsApp number in E.164 form. Coordinates are entered by pasting a Google Maps link, parsed without any network request (P06-T10). At most one head office, enforced by a partial unique index. Published business data lives here, never as a literal in application source (PR-16).
 
 **`Offer`.** `title_ar` · `title_en` · `description_ar` · `description_en` · `validFrom` · `validUntil` · `priceAmount` · `priceCurrency` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Programme` (D-18). `priceCurrency` is stored per `Offer`. No currency is hardcoded in application source, and none is named in this document. The effective public rule is `publication_state = 'published' AND (valid_until IS NULL OR valid_until >= now)` — an additional read-path filter that does not mutate `publication_state` (D-48).
 
 **`Equipment`.** `name_ar` · `name_en` · `description_ar` · `description_en` · `published` · `displayOrder`. Optional `MediaAsset`. Optional `Video`.
 
-**`Video`.** `youtubeId` (YouTube host only) · `title_ar` · `title_en` · `description_ar` · `description_en` · `published` · `displayOrder` · `featured`. Rendered under D-13: privacy-enhanced mode, placeholder until the Visitor clicks. An autoloading embed voids `BOUNDARY_MODEL.md` §5. Optional `MediaAsset` as the poster. `DESIGN_SYSTEM.md` §10 requires a poster and D-13 forbids a YouTube-hosted thumbnail URL, so the poster cannot come from the video host and has no other home. Amended at M5A.
+**`Video`.** `youtubeId` (YouTube host only) · `title_ar` · `title_en` · `description_ar` · `description_en` · `published` · `displayOrder` · `featured`. Rendered under D-13: privacy-enhanced mode, placeholder until the Visitor clicks. An autoloading embed voids `BOUNDARY_MODEL.md` §5. As delivered, no Visitor page embeds a player: a `Video` card shows its poster and opens the video's YouTube page on click (P05-T22). The Operator pastes a full YouTube link; the identifier is parsed from it and the poster is fetched once into the Media Library on save (P05-T13). The only embed is the Operator's preview behind AAL2 (OD-14). Optional `MediaAsset` as the poster. `DESIGN_SYSTEM.md` §10 requires a poster and D-13 forbids a YouTube-hosted thumbnail URL, so the poster cannot come from the video host and has no other home. Amended at M5A.
 
 **`Visitor`.** No fields. No table. No account.
 
@@ -85,9 +93,15 @@ The remaining 117 rows default to `audience` = `all`, `minAge` = null, no note. 
 
 **`ResultsPortalLink`.** Two build-time HTTPS URLs on an allowlisted host: Visitor entry, Lab-to-Lab entry. Either URL may equal the other. When they resolve equal, `/online-results` renders one action and not two — two affordances to a single destination present a choice that does not exist. The laboratory confirmed on 5 September 2026 that the Lab-to-Lab entry is the same page as the Visitor entry. No Operator edit path, no dashboard field, no table (D-07). Linked, never framed (D-17). Carry no parameters (`BOUNDARY_MODEL.md` §4 item 6).
 
-**`SiteSettings`.** Singleton. Hotline · WhatsApp number · WhatsApp predefined message (`_ar` / `_en`) · default working hours · social URLs · map · default SEO title and description (`_ar` / `_en`) · Lab-to-Lab copy (`_ar` / `_en`, D-15) · About body (`_ar` / `_en`) · Privacy Policy body (`_ar` / `_en`) · hero eyebrow (`hero_eyebrow_ar` / `hero_eyebrow_en`) · hero headline (`hero_headline_ar` / `hero_headline_en`; one field per locale, not two lines) · hero standfirst (`hero_standfirst_ar` / `hero_standfirst_en`) · three reason cards (`reason1_title_ar` / `reason1_title_en` · `reason1_body_ar` / `reason1_body_en` · `reason2_title_ar` / `reason2_title_en` · `reason2_body_ar` / `reason2_body_en` · `reason3_title_ar` / `reason3_title_en` · `reason3_body_ar` / `reason3_body_en`) · optional `MediaAsset` as favicon (`favicon_media`), app icon (`app_icon_media`) and hero (`hero_media`), each a nullable foreign key `on delete set null`. No partner-laboratory list (D-15). The public site builds the WhatsApp deep link from these values and opens it client-side (D-09). Amended at M6A.
+**`SiteSettings`.** Singleton. Hotline · WhatsApp number · WhatsApp predefined message (`_ar` / `_en`) · default working hours · social URLs · default SEO title and description (`_ar` / `_en`) · Lab-to-Lab copy (`_ar` / `_en`, D-15) · About body (`_ar` / `_en`) · Privacy Policy body (`_ar` / `_en`) · hero eyebrow (`hero_eyebrow_ar` / `hero_eyebrow_en`) · hero headline (`hero_headline_ar` / `hero_headline_en`; one field per locale, not two lines) · hero standfirst (`hero_standfirst_ar` / `hero_standfirst_en`) · three reason cards (`reason1_title_ar` / `reason1_title_en` · `reason1_body_ar` / `reason1_body_en` · `reason2_title_ar` / `reason2_title_en` · `reason2_body_ar` / `reason2_body_en` · `reason3_title_ar` / `reason3_title_en` · `reason3_body_ar` / `reason3_body_en`) · optional `MediaAsset` as favicon (`favicon_media`), app icon (`app_icon_media`) and hero (`hero_media`), each a nullable foreign key `on delete set null`. No partner-laboratory list (D-15). The public site builds the WhatsApp deep link from these values and opens it client-side (D-09). Amended at M6A. Three further photography roles — `story_main_media`, `story_float_media`, `story_float_alt_media` — were added at P06-T13. There is no map column: the Greater Cairo map is drawn and places its pins from published `Branch` coordinates (OD-22). The published hotline renders as a call link when it is a short code (OD-33).
 
-**`MediaAsset`.** Storage path · `altText_ar` · `altText_en` · mime type · byte size · width · height.
+**`MediaAsset`.** Storage path · `altText_ar` · `altText_en` · mime type · byte size · width · height. Bytes live in the private `media-asset` bucket (JPEG, PNG or WebP, at most 5 MiB), and a Visitor reaches a published asset only through the same-origin `/media-asset/{name}` route.
+
+**`PartnerLab`.** Authentication identity only (ADR-001). Approval sets `app_metadata.nel_principal` = `PartnerLab`; rejection is recorded as `nel_partner_state`. No table and no column in `public`.
+
+**`Announcement`.** `title_ar` · `title_en` · `body_ar` · `body_en` · `published_at` · `published` · `displayOrder` · `no_medical_instruction_affirmed`. Optional `MediaAsset`. Publishing requires the affirmation, and at most three may be published at once (OD-27).
+
+**`PublicationMaximum`.** `module_key` · `governed_table` · `published_maximum`. One row, `Announcement`, maximum 3. Readable by an `Operator`, changed only by migration.
 
 ### Relations and cardinality
 
@@ -101,12 +115,15 @@ The remaining 117 rows default to `audience` = `all`, `minAge` = null, no note. 
 | `Video` → `MediaAsset` | many to zero-or-one | Optional. The poster. Amended at M5A. |
 | `Offer` → `MediaAsset` | many to zero-or-one | |
 | `Equipment` → `MediaAsset` | many to zero-or-one | |
-| `LabUnit` → `MediaAsset` | many to zero-or-one | |
-| `Branch` → `MediaAsset` | many to zero-or-one | |
+| `LabUnit` → `MediaAsset` | many to zero-or-one | Department photograph (P06-T13). |
+| `SiteSettings` → `MediaAsset` | six roles, each zero-or-one | Favicon, app icon, hero and three story frames. |
+| `Announcement` → `MediaAsset` | many to zero-or-one | |
+| `Branch` → `MediaAsset` | none | Not delivered; no column exists. |
 | `SiteSettings` | one | Singleton. No relation to a partner-laboratory list. |
 | `Visitor` | zero | Not persisted. |
 | `ResultsPortalLink` | zero rows | Build-time constants, not a relation. |
 | `Operator` | many (minimum two) | Auth, not a catalogue relation. |
+| `PartnerLab` | many | Auth, not a catalogue relation. |
 
 ### D-05 mapping of the seed's eight `ProgrammeTier` values
 
@@ -160,6 +177,8 @@ The T02-A fence asked for the following figures to be *reported*, not landed in 
 | `Platinum` / `Male` | 26 | yes |
 | `Children` / `none` | 13 | no — never unioned |
 
+These figures are computed from the 2018 seed. Against the signed catalogue the live function resolves `Platinum` / `Male` to 27 (CF-196); the rule itself is unchanged.
+
 ---
 
 ## 3c. Route enumeration
@@ -205,7 +224,7 @@ This differs from the phase-map claim of 13, and from the 24 this document state
 
 ## 3d. Module enumeration
 
-Eight dashboard modules (D-16). Login is authentication, not a module. Activity log is a platform feature. The quotation's incoming-message inbox is struck (D-09). There is no ninth module (D-15). There is no Operator edit path for `ResultsPortalLink` (D-07).
+Eleven dashboard modules are delivered: the eight fixed at P00 (D-16), Announcements (OD-09, made effective by OD-24), LabTests (the `LabTest` half of the Programmes work, given its own module at P05-T24A), and PartnerLab accounts (OD-15, OD-30). Clinical notices, OD-09's second module, was withdrawn by OD-37 and is not built. Login is authentication, not a module. Activity log is a platform feature. The quotation's incoming-message inbox is struck (D-09). There is no Operator edit path for `ResultsPortalLink` (D-07).
 
 | # | Module | Entity it manages |
 |---|---|---|
@@ -217,6 +236,11 @@ Eight dashboard modules (D-16). Login is authentication, not a module. Activity 
 | 6 | LabUnits | `LabUnit` |
 | 7 | Site Settings | `SiteSettings` |
 | 8 | Media Library | `MediaAsset` |
+| 9 | Announcements | `Announcement` |
+| 10 | LabTests | `LabTest` |
+| 11 | PartnerLab accounts | `PartnerLab` (authentication identities, through the Auth Admin API) |
+
+The eleven are counted by the module directories under `src/app/[locale]/dashboard/(session)/(modules)/`.
 
 ---
 
@@ -224,12 +248,14 @@ Eight dashboard modules (D-16). Login is authentication, not a module. Activity 
 
 Every Visitor-facing string exists in `ar` and `en`. Arabic is default (D-10).
 
-CF-14 block, recomputed from `data/seed/catalogue.json` at T02:
+CF-14 block, recomputed from `data/seed/catalogue.json` at T02. Kept as history; the delivered state follows it.
 
 - All 72 `LabTest` `name_ar` values are empty. P04 cannot match an Arabic query on `name_ar` for any `LabTest`. P06 cannot publish bilingual `LabTest` names until those values are filled and clinically signed off.
 - Twelve `LabTest` rows also carry no Arabic alias, so they have no Arabic search surface at all. Enumerated: `hscrp` · `ca-242` · `ca-19-9` · `nse` · `ggt` · `beta-crosslaps` · `rose-waaler` · `lh-fsh-ratio` · `cmv-igg` · `cmv-igm` · `hsv-igg` · `hsv-igm`.
 
-Operator UI language is not decided here.
+**As delivered.** All 71 signed `LabTest` rows carry `name_ar` (M8). Twelve still carry no Arabic alias (CF-204), so a colloquial Arabic term does not reach them, while the official Arabic name does (D-50).
+
+Operator UI language is not decided here. `ADMIN_SPEC.md` §4a decides it: the dashboard is bilingual on the same locale switch, Arabic default.
 
 ---
 
@@ -245,11 +271,13 @@ Built at build time. Queried client-side. No server round trip (D-03). One recor
 |---|---|---|
 | `slug` | — | `LabTest.slug` |
 | `name_en` | `en` | `LabTest.name_en` |
-| `name_ar` | `ar` | `LabTest.name_ar` (empty × 72 until CF-14 closes) |
+| `name_ar` | `ar` | `LabTest.name_ar` (populated on all 71 signed rows) |
 | `aliases` | `ar` and `en`, one list | `LabTest.aliases` |
 | `membership` | — | Distinct `Programme.slug` values reached through `ProgrammeLabTest` / `ProgrammeTier`, any axis |
 
 A query matches `name_en`, `name_ar`, and every alias. A hit returns the `LabTest` and the Programmes that contain it.
+
+**As delivered (P04, G4 on 14 September 2026).** `scripts/emit-catalogue-index.ts` runs before every build and writes the index only when `NEL_LABTEST_CONTENT` is exactly `on`, from published rows only: one entry per published `LabTest` per locale, carrying its name, its aliases and the slugs of the published Programmes that reach it through a published tier and a published membership. Matching follows D-50: NFC and lower-case folding, substring match, no transliteration between scripts.
 
 **Where a hit lands.** A hit lands on `/{locale}/programmes/{slug}`, the detail route added in §3c, one link per `Programme` in `membership`. The WhatsApp deep link remains available from that page and from `/{locale}/contact`; it is no longer the only destination a hit can offer. The index itself is a build artefact, not a public route.
 
@@ -265,3 +293,5 @@ Two outbound surfaces, and only two:
 2. **`ResultsPortalLink`** — two build-time HTTPS URLs, allowlisted host, no parameters, new browsing context, never framed (D-07, D-17).
 
 An autoloading YouTube embed is not an outbound surface in this list; it is a boundary breach of `BOUNDARY_MODEL.md` §5 and evidence item 7, and D-13 forbids it.
+
+**Amended by later decisions, stated here so the list above is not read as the delivered total.** OD-16 permits the laboratory's published contact details to appear as text. OD-33 renders the published hotline as a `tel:` link when it is a short code. The footer links to the four published social profiles, a `Video` card opens its YouTube page, and OD-32 adds a development-credit link. Each is a Visitor-initiated navigation to a published destination; none accepts or transmits data from this system, and WhatsApp remains the only contact channel NEL builds (D-09 as restated by OD-16).
