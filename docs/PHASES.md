@@ -125,8 +125,8 @@ Delivery order under `OD-12`: ~~**P03 → P05 → P06 → P04 → P07**~~ (P03-T
 | 4 | P06 Content and Arabic | Arabic test names, clinical review, content entry, sign-off | G6 | Clinical · Bilingual | **Closed** — 13 Sep 2026 |
 | 5 | P04 Catalogue search | Bilingual search over Programmes and LabTests | G4 | Clinical · Data integrity · Bilingual | **Closed** — 14 Sep 2026 |
 | 6 | P10 Operator-provisioned PartnerLab accounts | Numeric-identifier accounts provisioned by an Operator (OD-30) | G10 | Boundary | **Closed** — 14 Sep 2026 |
-| 7 | P09 Design | The designer's review and its landing, before cutover (OD-25) | G9 | — | **Active** — G9 pending |
-| 8 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | Next |
+| 7 | P09 Design | The designer's review and its landing, before cutover (OD-25) | G9 | — | **Closed** — 24 Sep 2026 |
+| 8 | P07 Hardening and cutover | Headers, DNS, redirects, decommission, repo to private | **G7 launch** | Clinical · Boundary · Bilingual · Data integrity | **Active** |
 
 ### Why this order
 
@@ -287,8 +287,9 @@ provisioning form, production-only.
 - [x] **P10-T04** — Measure provisioning end to end, and settle the timing
 - [x] **G10** — item 9 re-proved against both account-creation paths; item 10 and D-40 untouched; OD-18 §6 neutrality measured for numeric identifiers; injectivity of 123, 0123 and 00123; existing self-signup and sign-in still working
 
-### P07 — Hardening and cutover · UNSTARTED · AFTER G9
+### P07 — Hardening and cutover · ACTIVE
 
+- [ ] **P07-T01** — Record G9, close CF-192, open P07
 - [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
 - [ ] security headers
 - [ ] DNS move and redirects from the 2018 URLs
@@ -348,7 +349,7 @@ Follows G5. Precedes G7 (OD-19 §1). Not in OD-12's delivery sequence; OD-12 pre
 - [x] **G8-R2** — re-run in full
 - [x] **G8** — Boundary
 
-### P09 — Design · ACTIVE · G9 pending
+### P09 — Design · CLOSED at G9, 24 September 2026
 
 Follows G4. Precedes P07 (OD-25). Short-lived branches from `main`,
 reviewed and merged one at a time (OD-19 §3). The design envelope is its own OD,
@@ -369,8 +370,8 @@ decided in OD-31, OD-33 and OD-34; G9 gates on every design-review finding havin
 - [x] **P09-T06-F** — Finish P09-T06 from STEP 4g with corrected checks
 - [x] **P09-T07** — Give every Visitor page the dashboard's background (OD-34)
 - [x] **P09-T08** — Remove the tokens.css animation workaround; record P09-T07
-- [ ] **P09-T09** — Record the design-gate dispositions and tidy the phase plan
-- [ ] **G9** — every design-review finding has a disposition (OD-25)
+- [x] **P09-T09** — Record the design-gate dispositions and tidy the phase plan
+- [x] **G9** — every design-review finding has a disposition (OD-25)
 
 ---
 
