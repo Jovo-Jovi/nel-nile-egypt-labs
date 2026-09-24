@@ -2,7 +2,7 @@
 
 Every finding becomes a row here with an owner. Nothing is silently patched.
 
-**Next free id: CF-213**
+**Next free id: CF-218**
 
 | Id | Item | Owner | Status | Lands at |
 |---|---|---|---|---|
@@ -218,6 +218,11 @@ Every finding becomes a row here with an owner. Nothing is silently patched.
 | CF-210 | Pending labels (`ApprovalGate` `pendingLabel`, `muted`) rendered on the `primary` hero, lab-to-lab and footer bands whenever their content was pending: 1.93:1 after P09-T04, and 2.38:1 on main's earlier `primary-strong` band. They did not render with production's data, so P09-T04's live-data audit passed; the reviewer's data-less audit found them on 23 September 2026. OD-31 §2 requires `surface` text on a band. P09-T05 gave pending labels on a band `surface` text. | reviewer | CLOSED at P09-T05 | P09-T05 |
 | CF-211 | Footer text links measure under 44×44: the reviewer counted 130 undersized `link` and `privacy` elements across 26 page renders on main at 70ba193, and 117 on the design-session branch. DESIGN_SYSTEM §8 criterion 2 requires 44×44 on every interactive element. Pre-existing. | reviewer | OPEN | P07 |
 | CF-212 | P09-T07 added a global `@keyframes nel-site-orb` and an `!important` rule on the structural selector `[data-nel-chrome="site"] > :first-child > span` to src/styles/tokens.css, because its fence required the literal animation name and CSS modules hash keyframe names. The module's own keyframes already animated the orbs. The rule hit only the two orbs, but any change to the site root's first child would have animated other spans. P09-T08 removed it; the orbs animate under the module's hashed keyframes and stop under reduced motion. | reviewer | CLOSED at P09-T08 | P09-T08 |
+| CF-213 | The lab representative's answered owner form, `docs/research/07-owner-form-ar-ANSWERED.docx`, held a personal email address, two unpublished mobile numbers and his full name, and has sat in the public repository since the bootstrap commit of 25 August 2026. One of those numbers and the full name were copied into six research notes. No fork existed on 24 September 2026. P07-T02 removed the form from the tree and redacted the copies (PR-39). History is not rewritten (OD-35 §5), so the details stay reachable in public history until the repository turns private at the Stage 4 transfer (OD-35 §4); this row closes then. | reviewer | OPEN | P07 |
+| CF-214 | `npm audit` reports two high advisories on main at 95ca5d8, both with non-breaking fixes. `js-yaml` is reached only through ESLint. `sharp` is a production dependency through Next.js; its advisory concerns decoding HEIF input, and sharp decodes only Operator-supplied media. Quotation §3 names dependency hygiene. | builder | OPEN | P07 |
+| CF-215 | `public/mark/nel-mark.png` is 334,633 bytes and is loaded by the site header and footer on every page. | builder | OPEN | P07 |
+| CF-216 | Next.js 16 deprecates the file name `src/middleware.ts` in favour of `proxy.ts`. The file matches only dashboard paths; the sign-in redirect lives in the dashboard's (session) layout, and the build passes with the warning. The rename is due at the next Next.js upgrade. | builder | OPEN | maintenance |
+| CF-217 | CI runs no dependency audit. Once CF-214 is fixed, CI adds `npm audit --omit=dev --audit-level=high`, covering production dependencies only, so a new development-only advisory does not fail every build. | builder | OPEN | P07 |
 
 **Note:** CF-01 to CF-11 are client dependencies rather than build defects.
 CF-14 is a bilingual gap owned by the lab. CF-17 and CF-18 are quotation

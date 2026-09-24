@@ -13,7 +13,7 @@ These justify decisions. When someone asks in month three why the hotline is
 | `04-spec-and-gap-review.md` | Consolidated spec, 25 gaps, 7 contradictions found across the first three documents | 18 Aug 2026 |
 | `05-owner-form-en-source.md` | English source text of the client questionnaire | Aug 2026 |
 | `06-owner-form-ar-blank.docx` | Arabic RTL questionnaire as sent to the client | Aug 2026 |
-| `07-owner-form-ar-ANSWERED.docx` | **The client's returned answers.** Selections marked by highlighting, extracted from the document XML | Aug 2026 |
+| ~~`07-owner-form-ar-ANSWERED.docx`~~ | Removed from the repository at P07-T02 because it carries a person's contact details (PR-39); held outside the repository for the lab | Aug 2026 |
 | `08-form-review-and-next-steps.md` | Review of the returned form — what was answered, what was missing | 24 Aug 2026 |
 | `09-locked-baseline.md` | Decisions closed after the client's rulings. **Feeds `SCOPE.md`** | 24 Aug 2026 |
 | `10-research-prompt.md` | The open-source research brief, incl. the disambiguation list for seven confusable Cairo labs | 24 Aug 2026 |

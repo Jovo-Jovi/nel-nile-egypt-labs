@@ -289,7 +289,8 @@ provisioning form, production-only.
 
 ### P07 — Hardening and cutover · ACTIVE
 
-- [ ] **P07-T01** — Record G9, close CF-192, open P07
+- [x] **P07-T01** — Record G9, close CF-192, open P07
+- [ ] **P07-T02** — Personal data out of the tree; the handover programme
 - [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
 - [ ] security headers
 - [ ] DNS move and redirects from the 2018 URLs

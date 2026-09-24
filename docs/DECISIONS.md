@@ -1326,6 +1326,50 @@ now read the same tokens.
 
 ---
 
+### OD-35 — The handover programme
+
+**Status:** SIGNED
+**Signed:** 24 September 2026
+**Confirms:** OD-04. The repository stays public for review through Stages 1 to
+3, and turns private at the repository transfer in Stage 4, before DNS cutover.
+
+**1. Order.** The remaining work runs in six stages, in order: documentation;
+hardening; handover documentation and the cutover plan; account handover; DNS
+and domain cutover; G7. Stages 1 to 3 proceed without the lab's domain, DNS,
+hosting or account details, using named placeholders, and the work stops before
+Stage 4 until the human supplies them.
+
+**2. Documentation truth.** `PRODUCT_BRIEF.md` and `SCOPE.md` describe the
+product as delivered — implemented, approved and merged — with every count
+computed from the repository. The signed quotation and its signed amendments
+stay historically accurate. Delivered scope beyond them is recorded in a
+separate quotation revision, drafted for the human's approval, without prices.
+Nothing discussed and excluded is re-admitted.
+
+**3. Hardening.** Every hardening item traces to a recorded source — the
+quotation, a carry-forward or an OD — and closes with a measurable PASS or FAIL
+in the ledger.
+
+**4. Visibility.** The repository stays public so the reviewer can verify from
+an unauthenticated clone. It turns private at the repository transfer in
+Stage 4, before DNS cutover, as OD-04 requires. The personal details removed
+from the tree at P07-T02 stay reachable in public history until then. The
+human accepted that on 24 September 2026, and CF-213 stays open until the
+repository is private.
+
+**5. History.** Repository history is not rewritten; squashing would erase the
+approval trail every verdict cites. Personal contact details are removed from
+the tree going forward (PR-39). Which of `docs/research/` and
+`docs/commercial/` the lab receives is decided at handover.
+
+**6. Basis of signature.** The human set this programme on 24 September 2026.
+Merging the pull request that lands this OD is the confirming act.
+
+**Does not decide:** the transfer targets, the domain, the cutover window, or
+the maintenance terms.
+
+---
+
 ## Decision log
 
 ### D-01 — Scope freeze

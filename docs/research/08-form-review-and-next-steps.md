@@ -1,6 +1,6 @@
 # Nile Egypt Labs — Review of Returned Form & Pre-Development Steps
 
-**Reviewed:** answered approvals form (returned by Androw Nader) + live site + public listings
+**Reviewed:** answered approvals form (returned by Androw) + live site + public listings
 **Date of review:** 24 August 2026
 **Purpose:** establish what is locked, what I filled in myself, what still blocks work, and the sequence to follow before writing a development plan
 
@@ -27,7 +27,7 @@ Option B is worth offering. His real pressure is probably that the current site 
 
 ## 1. Who actually answered the form
 
-Every role in this project currently sits with one person, **Androw Nader**:
+Every role in this project currently sits with one person, **Androw**:
 
 - Main contact and preferred channel (WhatsApp)
 - The person who approves designs and gives final sign-off
@@ -60,7 +60,7 @@ This is not a criticism of him — he is staff, and having one responsive counte
 | All branches shown, head office marked | Approved |
 | Client self-manages content via dashboard | Approved |
 | Company name | معامل النيل مصر / Nile Egypt labs |
-| WhatsApp Business number | 01278616166 |
+| WhatsApp Business number | [redacted-phone] |
 | Public email | info@nileegyptlabs.org |
 | Founded 2007 by Dr. Ramy Abdou | Confirmed correct |
 | Results portal URL | Confirmed correct |

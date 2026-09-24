@@ -27,7 +27,7 @@ the free-text fields an answer was written into.
 | Field | Value | Status | Source |
 |---|---|---|---|
 | `hotline` | 15504 | `CONFIRMED` | `09` §1 item 1. The old-site footer and one Facebook page still publish 16402; both corrected at launch |
-| `whatsapp_e164` | 01278616166 → E.164 at entry | `CONFIRMED` | Owner form §1 item 2, free-text answer |
+| `whatsapp_e164` | [redacted-phone] → E.164 at entry | `CONFIRMED` | Owner form §1 item 2, free-text answer |
 | `hours_ar` / `hours_en` | 10:00–23:00 | `CONFIRMED` | `09` §1 item 4, applied to all branches for now |
 | `whatsapp_message_ar` / `_en` | — | `NOT IN SOURCE` | No preset message anywhere. Operator pre-launch |
 | `facebook_url` | — | `NOT IN SOURCE` | Owner form left blank. Three Facebook pages exist and none is nominated |

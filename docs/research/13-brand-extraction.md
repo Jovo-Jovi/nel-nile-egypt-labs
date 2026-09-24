@@ -266,7 +266,7 @@ Deciding source lines:
 5. Theme switcher attribute: `<link id="switcher" href="css/themes/default-theme.css" rel="stylesheet">`
 6. Framework: Bootstrap **v3.3.4** (`css/bootstrap.min.css` header `Bootstrap v3.3.4 (http://getbootstrap.com)`); Font Awesome **4.3.0**; jQuery version UNDETERMINED (`js/jquery.js` is referenced but JS files are outside the expansion allow-list).
 7. Demo residue still in the delivered HTML: visible footer sentence “The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.”; appointment modal with template departments (`Dental`, `cardiology`, …); large commented blocks of template doctors / Lorem Ipsum testimonials / “Dr. Smith”.
-8. Visible footer credit line: `Design & Developed By Eng:-Androw Nader` (`<div class="footer-bottom">`).
+8. Visible footer credit line: `Design & Developed By Eng:-Androw` (`<div class="footer-bottom">`).
 9. Unused raster `images/logo.png` still serves **WPF MEDINOVA**, `Last-Modified: Sun, 10 May 2015 14:02:50 GMT`, versus HTML `Last-Modified: Wed, 21 Feb 2018 20:37:16 GMT`.
 
 ### E. Arabic and direction
