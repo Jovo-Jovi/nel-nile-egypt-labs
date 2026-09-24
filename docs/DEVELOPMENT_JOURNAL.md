@@ -1778,3 +1778,21 @@ Halted task boxes stay unchecked, as PR-36 requires.
 
 Every design-review finding now has a disposition. Open CF 113 − 6 = 107.
 Next free CF-213.
+
+## 2026-09-24 — P07-T01: G9 recorded, P07 opened
+
+Cut from `origin/main` after #170 merged. STEP 1 recorded P09-T09 as
+PASS.
+
+G9 passed at reviewer verdict on 24 September 2026. OD-25's criterion
+is that every design-review finding has a disposition. The designer's
+findings landed through P09-T03 to P09-T07 and were accepted; the human
+closed CF-197, CF-200, CF-207 and CF-209 on his tests, CF-54 with D-50,
+and CF-202 with its corrections. The reviewer's gate check found one
+more, CF-192, still landing at P09. The design session had already
+resolved it: the Contact page's social links now use translated Arabic
+labels, and no built Arabic page carries the Latin string. This task
+re-measured that and closed it.
+
+P09 is closed at G9 and P07 is active. Open CF 107 − 1 = 106. Next free
+CF-213.
