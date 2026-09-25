@@ -10,6 +10,10 @@ never reconciled in SQL.
 schema exists.
 **Governs:** authentication, authorisation, row-level security, secret handling, and the
 database-layer expression of the boundary gate.
+**Amended at P07-T03 · authored 24 September 2026:** §3, §4, §7, §8 and §9 are brought to
+the delivered state — the Offer read after M10 and OD-28, the Operator claim of M7B-2, the
+bounded service-role use of ADR-001 and OD-30, and the fourth policy shape of OD-27. One
+§4 requirement is recorded as not delivered rather than removed.
 
 `DATA_MODEL.md` (document 7) is authored after this one. No table, column or policy is
 fixed here; this document fixes the **rules** every table and policy must satisfy.
@@ -57,16 +61,22 @@ writable by anyone holding the publishable key, and the publishable key ships in
 browser by design. "This table is only opening hours" is how the first unprotected table
 gets created, and the second one is never only opening hours.
 
-**Three policy shapes, and every table uses one of them.**
+**Four policy shapes, and every table uses one or more of them.** Twenty-five policies on
+thirteen tables in `public`, plus two on `storage.objects` for the `media-asset` bucket,
+counted by `scripts/audit/inventory.py` from the forward migrations.
 
 *Published-read.* Anonymous `SELECT` restricted to rows whose publication state is
 published, and nothing else. No `INSERT`, no `UPDATE`, no `DELETE` for the anonymous
 role, ever. Applies to `Programme`, `ProgrammeTier`, `ProgrammeLabTest`, `LabTest`,
-`LabUnit`, `Branch`, `Offer`, `Equipment`, `Video`, `SiteSettings`, `MediaAsset`, and to
-`Announcement` and `ClinicalNotice` when OD-09 takes effect.
+`LabUnit`, `Branch`, `Equipment`, `Video`, `SiteSettings`, `MediaAsset` and
+`Announcement`, and to the `media-asset` bucket for objects a published `MediaAsset` row
+names. **Not to `Offer`**: its anonymous read policy was dropped at M10 (OD-15), so an
+anonymous request reads no `Offer` row, published or not.
 
 *Operator-write.* Full `SELECT`, `INSERT`, `UPDATE` and `DELETE` for an authenticated
-`Operator`, on the same tables. There is no per-`Operator` partition: every `Operator`
+`Operator`, on the same tables and on `Offer` — twelve tables and the bucket. Since M7B-2
+every write policy requires `app_metadata.nel_principal = 'Operator'` in the session token,
+and the application gate checks the same claim before AAL2 (M7C). There is no per-`Operator` partition: every `Operator`
 manages the whole site. A two-person lab does not need a permission matrix, and inventing
 one produces a system where a mistake is untraceable rather than one where it is
 impossible.
@@ -74,18 +84,30 @@ impossible.
 *Partner-read.* `for select to authenticated`, gated on the approved claim. A
 `PartnerLab` with that claim may `SELECT` published Offers; rejected and pending
 accounts read nothing (OD-15 §8). No write of any kind. The two shapes above are
-unchanged.
+unchanged. As delivered the policy reads the principal from live server-side account
+state through `public."currentNelPrincipal"()`, not from the session token, so a revoked
+`PartnerLab` reads nothing on its next request (OD-28, ADR-002).
+
+*Operator-read.* `PublicationMaximum` is readable by an `Operator` and writable by no
+role through the API. Its values change by migration (OD-27).
 
 **An unpublished row is not visible to an anonymous request.** This is the mechanism
-behind `DESIGN_SYSTEM.md` §12 and behind the clinical gate: a `ClinicalNotice` without a
-sign-off record is unpublished, so it does not leave the database, so it cannot reach a
-page. **The gate is a policy, not a rendering choice.** A front-end that forgets to check
+behind `DESIGN_SYSTEM.md` §12 and behind the clinical gate: a clinical record that has not
+been published does not leave the database, so it cannot reach a page. **The gate is a policy, not a rendering choice.** A front-end that forgets to check
 still shows nothing.
 
-**The `service_role` key is never used by the application.** Not in a route handler, not
-in a server component, not in a build step. It bypasses RLS entirely and exists for
-administrative tooling run by a human. If a task appears to need it, the policy is wrong
-and the policy gets fixed.
+**The `service_role` key is never used by the application for data.** Not for a table read
+or write, not on a public or `PartnerLab` route, not in a Client Component, not in a build
+step. It bypasses RLS entirely. If a data task appears to need it, the policy is wrong and
+the policy gets fixed.
+
+**One bounded use, decided by ADR-001 and OD-30 §8.** Account administration that only the
+Auth Admin API can perform uses the key server-side, on `Operator` routes behind AAL2 and
+the `Operator` claim: approving, rejecting, reinstating and revoking a `PartnerLab`
+(OD-15, OD-18, OD-20), and provisioning one with a numeric identifier (OD-30). The client
+is created in `src/lib/supabase/serviceRole.ts` and calls `auth.admin` only. Production
+holds the key; Preview does not and must not, and the provisioning surface says so when it
+is absent.
 
 ---
 
@@ -109,10 +131,13 @@ temporary `Operator` by signing up through the public form and promoting the acc
 through the authenticated Supabase CLI. It is still created deliberately by a human —
 the human invokes the run — and it deletes itself in the same run. It is not a standing
 account and it must never run unattended: no scheduler, no CI trigger, no hook. While it
-exists it holds write access to eleven tables and the clinical catalogue, so a failed
-cleanup is a security incident and the mode reports it as one.
+exists it holds write access to every `Operator`-writable table, the clinical catalogue
+among them, so a failed cleanup is a security incident and the mode reports it as one.
 
-**`PartnerLab` signup is open; access is not (OD-15 §4).** Anyone may create an account.
+**`PartnerLab` signup is open when enabled; access is not (OD-15 §4).** The signup route
+resolves only while `NEL_PARTNER_SIGNUP` is `on`. OD-30 adds a second path: an `Operator`
+provisions an account with a numeric identifier and a password, and it enters the same
+approval state machine. Anyone may create an account.
 A new account is `pending`, may sign in, and reads nothing — no `Offer`, no title, no
 price, no image. An `Operator` approves or rejects it. A rejected account reads nothing
 either. Open signup is not open access: the approved claim is what grants reading, and
@@ -126,6 +151,10 @@ authenticated session plus an approved claim. Neither implies the other.
 
 **Sessions are short and re-authentication is required for destructive actions.** Deleting
 a `Programme` or unpublishing the site's contact details asks for the factor again.
+**Not delivered.** As built, a destructive action requires a typed confirmation naming the
+row (`ADMIN_SPEC.md` §4d) inside an AAL2 session; no route asks for the factor again. The
+requirement is unchanged and is not met. OD-37 §4 records it as a finding of the delivered
+state, and a carry-forward landed at P07-T03 holds it for the G7 triage.
 
 ---
 
@@ -190,8 +219,9 @@ OD-04 condition 1, and it applies to reports, fences and documents as well as so
 
 - The publishable key is public by design and ships in the browser. It is protected by
   RLS and by nothing else, which is why §3 admits no exception.
-- The `service_role` key is never present in the repository, in an environment file that
-  is committed, or in a deployment environment the application reads.
+- The `service_role` key is never present in the repository or in an environment file that
+  is committed. It is present in the Production deployment environment only, for the §3
+  bounded use, and never under a `NEXT_PUBLIC_` name.
 - The project reference is treated as a secret in this repository even though it is not
   strictly one, because a consistent rule survives where a nuanced one does not.
 - Secrets referenced in a report are replaced with `[redacted under OD-04 condition 1]`
@@ -202,24 +232,28 @@ OD-04 condition 1, and it applies to reports, fences and documents as well as so
 ## §8 Transport and headers
 
 HTTPS everywhere, HSTS on the production host, and no insecure subresource. Security headers —
-CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` — are set at the
-cutover and are Opus-class work under the model rule, never Grok.
+CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` — are not yet set on
+the deployment (CF-177) and are Stage 2 of the handover programme (OD-35). OD-17 made the
+model tiers advisory.
 
 **CSP is enforceable on this project in a way it usually is not**, because the site loads
 nothing from anywhere else: fonts are self-hosted, the map is drawn, video posters are
 self-hosted, and there is no analytics, no tag manager and no third-party script. A
 restrictive policy costs nothing here and should be written tightly rather than loosely.
 
-The only outbound destinations are the WhatsApp deep link and the `ResultsPortalLink`,
-both `Visitor`-initiated navigations to a new browsing context, neither a subresource.
+The outbound destinations are the WhatsApp deep link, the `ResultsPortalLink`, the
+published hotline as a `tel:` link (OD-33), the four published social profiles, each
+`Video`'s YouTube page, and the development-credit link (OD-32). Every one is a
+`Visitor`-initiated navigation, none is a subresource, and none carries data from this
+system.
 
 ---
 
 ## §9 What this document does not decide
 
-- Any table, column, type or index. `DATA_MODEL.md`, authored next.
+- Any table, column, type or index. `DATA_MODEL.md`.
 - The exact SQL of any policy. Written per table at the migration that creates it, against
-  the two shapes in §3.
+  the shapes in §3.
 - The MFA factor type, enrolment flow or recovery procedure. `ADMIN_SPEC.md`.
 - The cutover header values and the CSP directive list. `CUTOVER_RUNBOOK.md`.
 - The hosting region is settled by D-47; CF-39 is closed.

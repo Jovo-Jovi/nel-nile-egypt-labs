@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Forty-nine decisions. Thirty of them are filed as formal Operational Decisions (OD-01, OD-02, OD-03, OD-04, OD-05, OD-06, OD-07, OD-08, OD-09, OD-10, OD-11, OD-12, OD-13, OD-14, OD-15, OD-16, OD-17, OD-18, OD-19, OD-20, OD-21, OD-22, OD-23, OD-24, OD-25, OD-26, OD-27, OD-28, OD-29, OD-30). A decision is in force when it appears here. Conversation does not amend this file.
+Fifty decisions, D-01 to D-50, and thirty-seven Operational Decisions, OD-01 to OD-37. A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -1367,6 +1367,91 @@ Merging the pull request that lands this OD is the confirming act.
 
 **Does not decide:** the transfer targets, the domain, the cutover window, or
 the maintenance terms.
+
+---
+
+### OD-36 — Pre-development papers leave the tree
+
+**Status:** SIGNED — 24 September 2026
+**Amends:** OD-35 §5 in part. It decides now, for nine files, what §5 left to the
+handover. The rest of §5 stands, and OD-35's text is not edited.
+**Requested by:** the human, 24 September 2026.
+
+**1. What leaves.** Nine files leave the working tree: `docs/research/01-audit-brief.pdf`,
+`02-architecture-and-user-journeys.pdf`, `03-original-quotation-superseded.pdf`,
+`04-spec-and-gap-review.md`, `05-owner-form-en-source.md`, `06-owner-form-ar-blank.docx`,
+`10-research-prompt.md`, `12-research-reconciliation.md` and
+`14-brand-extraction-portal-login.md`.
+
+**2. The test each passed.** No read by application code, CI or a migration, and no
+citation by a signed decision or a model document, verified at P07-T03 before removal.
+Only the research index and the ledgers' history name them.
+
+**3. Custody.** Each file is held in the private handover folder `nel-private`, outside the
+repository, with the answered owner form, and is handed to the laboratory at the Stage 4
+handover. `docs/research/README.md` keeps one row per file with its git blob id, so the
+laboratory can check its copy with `git hash-object --no-filters`.
+
+**4. What stays.** Everything else in `docs/research/` and `data/seed/`: the 2018
+extraction that signed decisions cite, the clinical artefacts, the gate evidence, and the
+seed CI reads.
+
+**5. History.** Not rewritten (OD-35 §5). The files stay reachable in the repository's
+history, which transfers with it.
+
+**Basis of signature:** the human approved the draft on 24 September 2026. Merging the
+pull request that lands this OD is the confirming act.
+
+**Does not decide:** what else from `docs/research/` or `docs/commercial/` the laboratory
+receives.
+
+---
+
+### OD-37 — Development is complete
+
+**Status:** SIGNED — 24 September 2026
+**Amends:** OD-09 and OD-24, in part: Clinical notices is withdrawn. D-16's module list, in
+part, for the same reason. Neither text is edited.
+**Requested by:** the human, 24 September 2026.
+
+**1. The final scope.** Development is finished. The product on `main` after P07-T02 is
+the final delivered scope, and `SCOPE.md` records it. No page, module, feature, table, API,
+integration or product requirement is added. The rest of P07 is documentation, hardening
+and verification, handover, ownership transfer and cutover (OD-35), and none of it adds
+product functionality.
+
+**2. Clinical notices is withdrawn.** The second module OD-09 approved, and OD-24 made
+effective, is withdrawn and is not built: no `"ClinicalNotice"` table, route or module
+exists. Announcements, OD-09's first module, is delivered and unaffected. OD-24's price
+covered both modules; any commercial consequence of the withdrawal is the human's, and this
+OD states no figure.
+
+**3. Undelivered baseline items are excluded.** These quotation-baseline items were not
+delivered as written, and no earlier decision excluded them. They are excluded from the
+delivered scope by this OD:
+- a sitemap, a robots file and structured data (quotation §2.4);
+- error monitoring (quotation §3);
+- an agreed device matrix with cross-browser and performance checks (quotation §2.4);
+- a featured video and the latest equipment on the home page (quotation §2.2);
+- a telephone number per `Branch` (quotation §2.3);
+- a category field on a `Programme` (quotation §2.3);
+- a video player loading on click (quotation §2.2); the delivered card opens YouTube.
+
+**4. Findings recorded, not excluded.** Two facts about the delivered state are recorded
+rather than excluded or built. `SECURITY_MODEL.md` §4 requires re-authentication before
+destructive actions and it is not delivered; the requirement is unchanged, is recorded as
+not met, and its disposition is the human's at the G7 triage. The `Video` featured flag is
+editable in the dashboard and read by no public page; it stays as delivered.
+
+**5. Hardening is not product work.** Hardening under OD-35 — security headers, dependency
+fixes, audit steps, measurements — changes no page, module or data the product offers. An
+item that would add product functionality is outside P07 under this OD.
+
+**Basis of signature:** the human decided this on 24 September 2026. Merging the pull
+request that lands this OD is the confirming act.
+
+**Does not decide:** any price; the maintenance terms; work the laboratory commissions
+after handover, which is a new engagement.
 
 ---
 

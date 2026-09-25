@@ -2,6 +2,9 @@
 
 **Status:** v1, COMPLETE and landable
 **Authored at:** P05 entry · 2 September 2026 · document 9
+**Amended at P07-T03 · authored 24 September 2026:** §1, §2, §4h.5, §5, §6 and §8 are
+brought to the delivered state. §9 is the record of what G5 had to show and stands as
+written.
 **Precedence:** outranked by `PRODUCT_BRIEF.md`, `GLOSSARY.md`, `DECISIONS.md`, `SCOPE.md`,
 `CONTENT_MODEL.md`, `BOUNDARY_MODEL.md`, `SECURITY_MODEL.md`, `I18N_MODEL.md`,
 `DATA_MODEL.md` and `DESIGN_SYSTEM.md`, in that order. Where this document disagrees with any
@@ -23,18 +26,19 @@ It follows that the dashboard is judged by one question: **can the lab change wh
 sees, unaided?** A module that requires a developer for any routine change has failed, however
 correct it is.
 
-Twenty-one regions on the public site currently render a pending state. The dashboard is what
-clears them.
+Every approval-gated region on the public site derives its state from the published data it
+needs (OD-26): present renders, absent renders the `DESIGN_SYSTEM.md` §12 pending state. The
+dashboard is how that data arrives.
 
 ---
 
 ## §2 What this document does not decide
 
-- Any table, column, type or index. `DATA_MODEL.md` decides those and eleven tables already
-  exist.
+- Any table, column, type or index. `DATA_MODEL.md` decides those; thirteen tables exist.
 - The exact SQL of any policy. Written at the migration that creates the table, against
-  `SECURITY_MODEL.md` §3's two shapes. The eleven existing tables already carry both.
-- Whether `"Announcement"` and `"ClinicalNotice"` exist. They do not. See §8.
+  the shapes in `SECURITY_MODEL.md` §3.
+- Anything about `"ClinicalNotice"`. `"Announcement"` exists; OD-37 withdrew
+  `"ClinicalNotice"`. See §8.
 - Cutover headers, the CSP directive list, backup and retention. `CUTOVER_RUNBOOK.md`.
 - Hosting region. Recorded as D-47; remaining PDPL obligations as controller are CF-105.
   See §3f.
@@ -438,12 +442,12 @@ though they had simply not got to it yet.
 Programmes reports **awaiting clinical sign-off** and reports nothing else,
 whatever its fields hold.
 
-Publishing a Programme is a clinical act. All 72 `LabTest` Arabic names are
-empty (CF-81), 121 memberships default to `unreviewed` eligibility (CF-82),
-and five records carry QA flags of which two are high severity (CF-83). A
-green tick on that module would tell an Operator the work is done while the
-laboratory has signed nothing, and that is the failure the clinical gate
-exists to prevent.
+Publishing a Programme is a clinical act. When this section was written, all
+72 `LabTest` Arabic names were empty, 121 memberships were `unreviewed`, and
+five records carried QA flags; the laboratory signed the corrected catalogue
+on 6 September 2026. The rule does not change with the signature: a green
+tick on that module would tell an Operator the clinical work is a form to
+fill, and that is the failure the clinical gate exists to prevent.
 
 The module may report progress against the clinical work — names translated,
 memberships reviewed, flags resolved — as counts. It never converts those
@@ -531,45 +535,67 @@ Three things stay out of that count and are shown beside it, never inside it:
   channel. A checklist entry for a field this system will never hold is a
   standing invitation to add one.
 
-## §5 The eight modules
+## §5 The modules
 
-Eight (D-16, first eight). Login is authentication, not a module. The activity log is a
-platform feature. The incoming-message inbox is struck (D-09).
+Eleven are delivered: the eight fixed at P00 (D-16), Announcements (OD-09, OD-24), LabTests
+(split from the Programmes work at P05-T24A) and PartnerLab accounts (OD-15, OD-30). Clinical
+notices was withdrawn by OD-37 (§8). Login is authentication, not a module. The activity
+log is a platform feature. The incoming-message inbox is struck (D-09).
 
 | # | Module | Entity | What the Operator does |
 |---|---|---|---|
 | 1 | Offers | `Offer` | Title, description, validity dates, price amount and currency, optional image, optional Programme |
-| 2 | Videos | `Video` | YouTube id, title, description, featured flag, poster image |
+| 2 | Videos | `Video` | Full YouTube link, title, description, featured flag; poster fetched on save and replaceable by upload |
 | 3 | Equipment | `Equipment` | Name, description, optional image, optional Video |
-| 4 | Branches | `Branch` | Name, address, hours, head-office flag, coordinates |
-| 5 | Programmes | `Programme`, `ProgrammeTier`, `ProgrammeLabTest` | Name, description, tiers, memberships — see §6 |
-| 6 | LabUnits | `LabUnit` | Department name and description |
-| 7 | Site Settings | `SiteSettings` | WhatsApp number, hours, portal URLs, social links |
-| 8 | Media Library | `MediaAsset` | Upload, bilingual alt text, replace, delete |
+| 4 | Branches | `Branch` | Name, address, hours, WhatsApp number, head-office flag, coordinates from a pasted Google Maps link |
+| 5 | Programmes | `Programme`, `ProgrammeTier`, `ProgrammeLabTest` | Name, description, preparation notes, tiers, memberships — see §6 |
+| 6 | LabUnits | `LabUnit` | Slug, department name and description, department photograph |
+| 7 | Site Settings | `SiteSettings` | Hotline, WhatsApp number and message, hours, social links, About, Privacy Policy and Lab-to-Lab copy, default SEO, hero and reason-card copy, media roles |
+| 8 | Media Library | `MediaAsset` | Upload, bilingual alt text, replace, delete; thumbnail grid with alt-text search |
+| 9 | Announcements | `Announcement` | Title, body, date, optional image, and the affirmation that it carries no medical instruction |
+| 10 | LabTests | `LabTest` | Slug, names, aliases, department, QA flag — see §6 |
+| 11 | PartnerLab accounts | `PartnerLab` | Approve, reject, reinstate, revoke to pending or to rejected; provision an account with a numeric identifier |
 
 Notes that change behaviour rather than describe it:
 
+- **Every module.** Create as draft, edit, publish, unpublish, reorder, and delete behind a
+  typed confirmation (§4b–§4d). The dashboard home shows each module's published and draft
+  counts and the completeness checklist (§4h).
 - **Offers.** `price_currency` is stored per row and no currency is named in application
   source (CF-21). The form offers a currency field; it does not default to one.
-- **Videos.** The poster comes from `MediaAsset`, never from the video host. D-13 forbids a
+- **Videos.** The Operator pastes a full YouTube link and the identifier is parsed from it; a
+  link that does not parse is refused by name. The poster is fetched once, on save, into the
+  Media Library (P05-T13); the Operator preview may embed the video behind AAL2 (OD-14). The
+  poster comes from `MediaAsset`, never from the video host. D-13 forbids a
   host-supplied thumbnail URL and an autoloading embed, and `guard:design` now enforces the
   first. The public card is a placeholder until the Visitor clicks.
-- **Branches.** Coordinates cannot currently be placed on the drawn map, which is a schematic
-  with no georeference. The module stores them; whether the map can use them is an open
-  design question and the module must not wait on it.
+- **Branches.** Coordinates are taken from a pasted Google Maps link, parsed without any
+  network request; a shortened link is refused with a request for the expanded one (P06-T10).
+  The map places its pins from published coordinates once every published Branch carries
+  them (OD-22). At most one head office.
 - **Site Settings.** One row. Every value here is one the public site renders and no value is
-  hardcoded anywhere in source (PR-16). Publishing this row is what clears most of the
+  hardcoded anywhere in source (PR-16). The results-portal URLs are not here: they are
+  deployment configuration (D-07, OD-23). Publishing this row is what clears most of the
   pending regions enumerated in `src/lib/regions.ts`.
 - **Media Library.** Images only. The bucket accepts image MIME types and rejects everything
   else at the policy, not in the form — a PDF upload path is a route by which a patient result
   could enter this system, and the boundary gate forbids it. Alt text in both languages is
-  required before an asset can be attached to a published row.
+  required before an asset can be attached to a published row. Photographs are bound by role
+  from the module that owns them: hero, favicon, app icon and three story frames from Site
+  Settings, one per department from LabUnits.
+- **Announcements.** Publishing requires the date and the affirmation, and at most three may be
+  published at once; a fourth publish is refused and the record stays draft (OD-27).
+- **PartnerLab accounts.** Every action is server-side, behind AAL2 and the `Operator` claim,
+  through the Auth Admin API (ADR-001, `SECURITY_MODEL.md` §3). Revocation takes effect on the
+  account's next request (OD-28). Provisioning runs in Production only (OD-30 §8). No password
+  reset exists for a `PartnerLab` (D-49).
 
 ---
 
 ## §6 The Programmes module and the clinical gate
 
-This module is different from the other seven and the difference is not cosmetic.
+The Programmes and LabTests modules are different from the others and the difference is not
+cosmetic.
 
 Everything it edits is clinical content. `LabTest` names, panel membership and medical
 descriptions **do not reach production without the lab's written sign-off**. That gate is not
@@ -582,20 +608,21 @@ Consequences for the module:
    flag turns on when sign-off lands — not when the content looks finished.
 2. **Eligibility is a clinical judgement, one per membership.** `eligibility_audience`
    defaults to `unreviewed` and an `unreviewed` row never renders (D-42). The module presents
-   the 121 memberships for review and records the judgement. It offers no bulk "set all",
+   the memberships for review and records the judgement; all 124 signed memberships carry one. It offers no bulk "set all",
    because a bulk action on a clinical judgement is the failure mode the default exists to
    prevent.
 3. **The Children tier is standalone and never cumulative** (D-06, D-43). The module must not
    present Children as inheriting from another tier, and must not offer an interface that
    implies it could. The cumulation rule lives in `public."programmeLabTests"` and is not
    reimplemented here.
-4. **Five QA-flagged records are shown as flagged**, with the flag text, until the lab
-   resolves them: `ast`, `esr`, `fsh`, `app-afp`, `creatinine-urea-combined`. Two are high
-   severity — FSH appears in a thyroid-described tier and is very likely TSH; APP is very
-   likely AFP. The module never silently corrects one. It shows the flag and records what the
-   lab decides.
-5. **All 72 Arabic `LabTest` names are empty.** The module is the surface through which they
-   arrive, and it must not accept a row as complete with an empty `name_ar`.
+4. **A QA-flagged record is shown as flagged**, with the flag text, until the lab resolves it.
+   The module never silently corrects one. The five flags of the 2018 extraction were resolved
+   by the signed catalogue (M8) and none is set today.
+5. **A row with an empty `name_ar` is never complete.** All 71 signed `LabTest` rows carry one
+   (M8), and the module refuses to publish a row without it.
+6. **Publishing is a clinical act.** Publishing a `Programme`, `ProgrammeTier`,
+   `ProgrammeLabTest` or `LabTest` is refused unless `docs/research/clinical-signoff.md`
+   carries its heading and `Status: SIGNED`, which it has since 6 September 2026.
 
 ---
 
@@ -615,17 +642,22 @@ be tested:
 
 ---
 
-## §8 Announcements and Clinical notices — drafted, unsigned
+## §8 Announcements and Clinical notices
 
-OD-09 would add modules 9 and 10. **It is DRAFT, unsigned and unpriced.** Neither table
-exists; `DATA_MODEL.md` §6 rows 12 and 13 say so in terms. They would need an M6 migration.
+OD-09 approved both as modules; OD-24 made it effective on 13 September 2026; OD-37
+withdrew the second.
+**Announcements is delivered** (P06-T14, P06-T15): the `"Announcement"` table, the dashboard
+module, the `/{locale}/announcements` listing and the home news band. An Announcement carries
+no medical instruction, and the Operator affirms that before it can publish; at most three
+are published at once (OD-27).
 
-The owner's Arabic summary lists both and marks them `+ إضافة` requiring separate pricing,
-which is accurate and consistent with D-16 gating its last two modules on the signature.
+**Clinical notices is withdrawn** (OD-37). No table, route or module exists, and none is
+built. The paragraph below is kept as the record of the design question that was open when
+it was withdrawn.
 
-**One thing to resolve before signing, not after.** Row 13 gives `"ClinicalNotice"` a
+**The open question at withdrawal.** Row 13 gives `"ClinicalNotice"` a
 `signed_by` column. D-40 forbids any audit column that references a person — no `created_by`,
-no `updated_by`, no `owner_id` — and `signed_by` is one. Signing OD-09 as drafted therefore
+no `updated_by`, no `owner_id` — and `signed_by` is one. Building it as drafted therefore
 requires a choice: amend D-40 for this one table with the reason recorded, or store the
 sign-off as `signed_at` plus `signed_text_hash` only and let *who* signed live in the Supabase
 authentication log where every other Operator action already lives. The second keeps D-40
