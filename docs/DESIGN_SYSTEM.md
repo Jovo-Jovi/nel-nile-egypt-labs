@@ -31,8 +31,12 @@ values exist.
 **Precedence:** document 8. Everything above it wins on conflict, and a conflict is
 raised as a formal amendment rather than reconciled silently.
 
-`DATA_MODEL.md` (document 7) and `SECURITY_MODEL.md` (document 5) are unauthored.
-Nothing here decides a data or security question and nothing here pre-empts either.
+`DATA_MODEL.md` (document 7) and `SECURITY_MODEL.md` (document 5) govern data and
+security. Nothing here decides a data or security question and nothing here pre-empts
+either.
+**Amended at P07-T04 · authored 25 September 2026:** the statements that those two
+documents are unauthored, that the dashboard chrome language is deferred, and that OD-05
+bound 2 limits routes are brought to the delivered state. Nothing else changes.
 
 Counts stated below are enumerated in the sections that follow and are verified
 programmatically before landing (PR-01, PR-28).
@@ -595,7 +599,7 @@ stacks in source order.
 **Tabbed block.** In-page tabs switching between prepared regions. Tabs are 44px targets,
 the selected tab carries a 2px `accent` underline on the block-end edge, and the region
 it reveals is `surface` at radius `8px`. **Tab state is not a route** and does not enter the
-URL — OD-05 bound 2 permits no route beyond the placeholder.
+URL.
 
 ### Social marks
 
@@ -975,8 +979,8 @@ client carries a visible banner saying so, and that banner survives a screenshot
 - Page composition for any specific route beyond the landing surface. §9 fixes the
   grid, rhythm and patterns; applying them route by route is P03 build work against
   `CONTENT_MODEL.md` §3c.
-- The `Operator` dashboard's chrome language. CF-52, deferred to `ADMIN_SPEC.md`.
-- Anything about data shape or security. `DATA_MODEL.md` and `SECURITY_MODEL.md` are
-  unauthored.
+- The `Operator` dashboard's chrome language. `ADMIN_SPEC.md` §4a decides it.
+- Anything about data shape or security. `DATA_MODEL.md` and `SECURITY_MODEL.md` govern
+  them.
 - Whether any `pending` region in §12 is ever approved. That is the client's and the
   lab's, and no design decision substitutes for a signature.

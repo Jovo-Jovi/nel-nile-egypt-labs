@@ -6,6 +6,10 @@ recorded in one place, so a single repricing conversation replaces six scattered
 **Authority:** this document **sets no price**. It states what changed, why it sits
 outside the draft, and what each entry depends on. Pricing is the human's, and `SCOPE.md`
 still derives from a signed quotation, not from this file.
+**Current state:** development is complete (OD-37). §1 to §7 are the schedule as it stood
+before delivery and are kept as written; §8 records what became of each entry. The
+delivered scope is `SCOPE.md`, and its commercial view is
+`docs/commercial/quotation-revision-1-delivered-scope.md`.
 **Precedence:** subordinate to `DECISIONS.md` and `SCOPE.md`. Where this schedule appears
 to disagree with a signed OD, the OD wins and the disagreement is a defect in this file.
 
@@ -144,3 +148,33 @@ In a single message rather than six:
   unamended. The reviewer rules.
 - What `SCOPE.md` says, which derives from a **signed** quotation and not from this
   schedule.
+
+---
+
+## §8 Outcome of each entry — P07-T04, 25 September 2026
+
+No price is set, changed or restated here.
+
+| # | Entry | Outcome | Source |
+|---|---|---|---|
+| C1 | Payment schedule | A commercial record; unchanged | D-12 |
+| C2 | Phase line | P01 ran as its own phase | `PHASES.md` |
+| C3 | Incoming-message inbox struck | Not built; WhatsApp is the only contact channel | D-09 |
+| R1 | Public Offers page and home Offers band | Withdrawn; Offers are delivered privately to approved PartnerLabs | OD-15, signature of 4 September 2026 |
+| A1 | Bilingual delivery | Delivered; Arabic default | D-10 |
+| A2 | Brand refinement | Delivered; approved by the signature of 4 September 2026 | OD-07 |
+| A3 | Announcements module | Delivered | OD-09, OD-24 |
+| A4 | Clinical notices module | Withdrawn; never built | OD-37 |
+| A5 | Photography direction | The product's photography roles are delivered (P06-T13); this file does not record the direction service as commissioned | — |
+| A6 | Dark theme | Never confirmed; not built | — |
+| A7 | PartnerLab accounts and private Offers | Delivered; signed | OD-15 |
+| B1 | Clinical sign-off | Signed 6 September 2026; addendum countersigned 7 September 2026 | `docs/research/clinical-signoff.md` |
+| B2 | Certification evidence | The rule stands: no accreditation claim renders without a supplied document | `DESIGN_SYSTEM.md` §12 |
+| B3 | The mark as vector | Open | CF-74, CF-215 |
+| B4 | Photography files | Bound through the Media Library; a region renders when its photograph is bound | OD-26 |
+| B5 | `Branch` addresses | Four published | CF-04, closed at P06-T09 |
+| B6 | No database | Resolved: the schema has been live since 31 August 2026 | `DATA_MODEL.md` §10 |
+
+§5's statement that B6 is the real blocker, and §6's conversation, describe the project
+before delivery. The two new modules §6 names were resolved by OD-24, which made
+Announcements effective, and OD-37, which withdrew Clinical notices.

@@ -1844,3 +1844,11 @@ them, the audit brief and the blank Arabic form, carried the last copies of
 a full name that P07-T02's text-only rescan missed.
 
 CF-156 closed. Open CF 112.
+## 2026-09-25 — P07-T04: the remaining documentation audit
+
+Cut from `origin/main` after #173 merged. STEP 1 recorded P07-T03 as PASS.
+
+Seven documents were brought to the delivered state. `PHASES.md` lists the pages as delivered and the eleven dashboard modules, and marks Clinical notices withdrawn by OD-37. Sections 4 to 7 describe the project after delivery, and the P07-T03 box is checked. `BOUNDARY_MODEL.md` records the delivered YouTube behaviour in §5 and lists every amendment, with its authority, date, sections and effect on the gate, in §6. The gate is unchanged. `DESIGN_SYSTEM.md` no longer calls the data and security documents unauthored, no longer defers the dashboard chrome language, and no longer cites OD-05 bound 2 as a route limit. `QUOTATION_AMENDMENTS.md` §8 records the outcome of each entry, including the Clinical notices module withdrawn and never built. `data/seed/README.md` describes the signed catalogue, 124 memberships and 71 LabTests, and keeps the 2018 defects as history the laboratory has already resolved. `scripts/smoke/README.md` states that the temporary Operator can write every Operator-writable table, the clinical catalogue among them. `docs/method/README.md` records that the method documents say how the project was run, and that the delivered state is in `SCOPE.md`.
+
+CF-125 and CF-182 closed at P07-T04. `origin/p07-t02` and `origin/p07-t03`, and their local copies, were deleted after each was an ancestor of `origin/main`. Open CF 112 − 2 = 110.
+
