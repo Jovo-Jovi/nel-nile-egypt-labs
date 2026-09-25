@@ -1862,3 +1862,13 @@ The human's Stage 2 rules bound the task: security only, the smallest change, an
 OD-38 sets the site-wide headers in `next.config.ts`: `Strict-Transport-Security: max-age=86400` with no `includeSubDomains` and no `preload`; `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`; `Permissions-Policy: camera=(), microphone=(), geolocation=()`; `X-Frame-Options: DENY`; and a Content-Security-Policy of five directives whose `frame-src` permits only the Operator's YouTube preview and Vercel's preview tooling. The full script and connect allow-list is deferred.
 
 CF-214 and CF-217 closed at P07-T05. CF-177 stays open until the production alias serves the headers. CF-221 records the superseded notes still sitting under Next action. Open CF 109.
+
+## 2026-09-25 — P07-T06: Stage 2 measurements
+
+The human's Stage 2 rules bound the task: security only, the smallest change, and no feature, workflow, access-model or appearance change. Apart from whitespace, no code and no data changed.
+
+The first issue halted at STEP 2c. The fence required both a blank line in the CI audit step and an empty `git diff -w`. `-w` ignores whitespace inside a line and still prints an added blank line, so the two instructions could not both be true. The halt was correct under PR-25. The reissued fence checks `git diff -w --ignore-blank-lines` and a numstat of one line added. The headers block in `next.config.ts` is two spaces shallower, aligned with `async redirects()`.
+
+The second issue measured the production alias. Eight paths each returned HTTP 200 with the six OD-38 headers once, and no second `Strict-Transport-Security`. Partner sign-up returned 200. The programmes body contains the catalogue-search marker. The same issue then ran `npx supabase db query --linked` for the orphan count. The CLI initialises a temporary login role that needs `database_write`, which a read-only token does not carry. The command exited 1 with that refusal. That is not a count, so the halt was correct. No database command was run after it, and the permission was not requested. PR-40 records that live counts of this kind are run by the human in the SQL Editor and recorded as human-attested.
+
+This issue records those headers, the flags, the human-attested counts, and the human-attested Auth rate limits. Orphans are all zero. The live schema counts match `SCOPE.md` §8. Idle connections are 14 against a maximum of 60, including the SQL Editor's own session. The application implements no rate limit of its own. Sign-in and signup call Supabase Auth from the server, so a per-address platform limit sees the server's address. CF-177 closed. CF-222 closed. CF-223 stays open for the human at the G7 triage. Open CF 109.

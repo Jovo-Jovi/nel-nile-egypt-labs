@@ -280,9 +280,9 @@ Delivered:
 - the results portal linked and never framed (D-17), from an allowlisted host.
 
 Security headers with a minimal enforced CSP (OD-38), dependency advisories fixed, and a
-production dependency audit in CI (P07-T05). Stage 2 of the handover programme measures
-rate limiting on sign-in and signup, the auth orphan read and the idle connection count,
-each with a PASS or FAIL in the ledger. Hardening changes no page, module or data the
+production dependency audit in CI (P07-T05). Stage 2 measured the production headers,
+rate limiting on sign-in and signup, the auth orphan read, the idle connection count and
+the live schema counts; the results are in `docs/research/p07-t06-measurements.md`. Hardening changes no page, module or data the
 product offers (OD-37 §5).
 
 ## §20 Deployment and platform
@@ -368,4 +368,5 @@ laboratory and the maintainer know it, and OD-37 §4 governs the two it names.
   CF-211).
 - **Search** does not reach twelve analyses by an Arabic alias, because they have none; the
   official Arabic name reaches all 71 (CF-204, D-50).
+- **Rate limiting** on sign-in and signup is Supabase Auth's project-level limit only. The application adds none, and because sign-in runs on the server, the platform sees the server's address rather than each visitor's (P07-T06).
 - **The CSP is minimal.** Five directives are enforced; the full script and connect allow-list is deferred (OD-38 §4).

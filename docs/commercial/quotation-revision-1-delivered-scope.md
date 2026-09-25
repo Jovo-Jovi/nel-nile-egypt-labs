@@ -246,7 +246,7 @@ delivered differently, withdrawn, or excluded by the decision named.
 | §2.3 Activity log | Provided by the platform's logs, not a module | D-16 |
 | §2.4 HTTPS, HSTS, CSP and security headers | Delivered: the header set with a minimal enforced CSP; the full allow-list deferred | OD-38 |
 | §2.4 Server-side validation, secure sessions, secure media upload | Delivered | `ADMIN_SPEC.md` §4g, §3e; bucket policy |
-| §2.4 Rate limiting on login and public forms | To be measured in Stage 2 | quotation §2.4 |
+| §2.4 Rate limiting on login and public forms | Supabase Auth's project-level limit only; the application adds none | P07-T06 |
 | §2.4 Dependency scanning | Stage 2 | CF-214, CF-217 |
 | §2.4 SEO: metadata | Delivered | `SCOPE.md` §7 |
 | §2.4 SEO: sitemap, robots, structured data | Excluded | OD-37 §3 |
