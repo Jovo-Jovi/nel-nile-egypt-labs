@@ -18,6 +18,9 @@ separate application; this one links to it and nothing else.
 `docs/PRODUCT_BRIEF.md` describes the product. `docs/SCOPE.md` inventories it, with every
 page, module and database object counted and the count explained.
 
+`docs/HANDOVER.md` is the handover: access, responsibilities, backups and known limitations.
+`docs/CUTOVER_RUNBOOK.md` is the cutover plan, and `docs/ADMIN_GUIDE.md` the Operators' guide.
+
 ## Architecture
 
 | Layer | What |

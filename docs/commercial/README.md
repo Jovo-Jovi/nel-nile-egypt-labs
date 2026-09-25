@@ -4,6 +4,7 @@
 |---|---|
 | `quotation-draft-no-price.md` | The quotation baseline as drafted, prices blank. The client signed an amended quotation on 4 September 2026; the signed copy is held by the human, outside this repository. Kept unchanged as the historical baseline |
 | `quotation-revision-1-delivered-scope.md` | Revision 1: the delivered scope beside the baseline, with the decision that admitted each change. **Draft, awaiting the human's approval. No prices** |
+| `maintenance-agreement-draft.md` | The maintenance agreement for after handover. **Draft, awaiting the human's review. No prices** |
 
 ## Where each commercial fact lives
 
