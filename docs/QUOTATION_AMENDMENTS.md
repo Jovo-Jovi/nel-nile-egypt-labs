@@ -162,7 +162,7 @@ No price is set, changed or restated here.
 | C3 | Incoming-message inbox struck | Not built; WhatsApp is the only contact channel | D-09 |
 | R1 | Public Offers page and home Offers band | Withdrawn; Offers are delivered privately to approved PartnerLabs | OD-15, signature of 4 September 2026 |
 | A1 | Bilingual delivery | Delivered; Arabic default | D-10 |
-| A2 | Brand refinement | Delivered; approved by the signature of 4 September 2026 | OD-07 |
+| A2 | Brand refinement | Delivered, except the vector mark, which waits on a client-supplied file (CF-65, CF-74); approved by the signature of 4 September 2026 | OD-07 |
 | A3 | Announcements module | Delivered | OD-09, OD-24 |
 | A4 | Clinical notices module | Withdrawn; never built | OD-37 |
 | A5 | Photography direction | The product's photography roles are delivered (P06-T13); this file does not record the direction service as commissioned | — |

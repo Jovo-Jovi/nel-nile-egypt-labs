@@ -8,6 +8,7 @@
 | `DEVOS_ADAPTATION_NOTES.md` | What was taken from B2S/BETK, dropped, and added. Read this to understand *why* the gates are shaped this way |
 | `SETUP_RUNBOOK.md` | Bootstrap steps and the reviewer kickoff prompt |
 | `PRE_DEVELOPMENT_PLAYBOOK.md` | Pre-Dev-OS planning pass. Superseded by the above; retains the model-routing rationale |
+| `G7_TRIAGE.md` | The G7 carry-forward triage, signed 25 September 2026: every carry-forward open at P07-T06 and its disposition |
 
 The method documents record how the project was run. Figures in them are those of the day
 they were written; the delivered state is in `docs/SCOPE.md` (P07-T04).
