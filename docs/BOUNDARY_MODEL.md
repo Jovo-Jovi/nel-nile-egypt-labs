@@ -6,6 +6,8 @@
 **Amended under OD-16 · 5 September 2026 · §2 only — clarifying, gate unchanged.**
 **Amended under OD-15 · 7 September 2026 · §2 only — the gate's scope is
 restated, not waived.**
+**Amended at P07-T04 · 25 September 2026 · §5 delivered-state note and §6 amendment
+history only — documentary, gate unchanged.**
 
 ## §1 What this replaces
 
@@ -115,3 +117,23 @@ catch.
 
 Confirm with the client's legal advisor before assuming either way, and
 re-confirm if any evidence-item-7 or item-8 surface is introduced.
+
+**As delivered.** No public page embeds a player or loads anything from YouTube. A
+`Video` card shows the laboratory's own poster, served from this site, and links to the
+video's YouTube page (P05-T22). `guard:design` R5 fails on a YouTube host string in the
+Visitor code outside its named exemptions, and the only embed is the `Operator` preview
+behind AAL2 (OD-14). No analytics script, externally hosted font or remote asset loads on
+a public route. The no-banner position above therefore rests on the delivered state, and
+still waits on the legal confirmation.
+
+## §6 Amendment history
+
+This document is frozen and its gate cannot be overridden by an OD. Every change to it is
+listed here, in order.
+
+| # | Under | Date | Sections | Effect on the gate |
+|---|---|---|---|---|
+| 1 | OD-04 | 25 August 2026 | §3 | None |
+| 2 | OD-16 | 5 September 2026 | §2 | None — clarifies that publishing a contact detail is not a channel |
+| 3 | OD-15 | 7 September 2026 | §2 | None — restates that an authentication credential is not the data the gate excludes, and adds evidence items 9 to 11 |
+| 4 | P07-T04 | 25 September 2026 | §5 note, §6 | None — records the delivered state and this history |

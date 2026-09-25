@@ -1,6 +1,9 @@
 # NEL — Phases to launch and handover
 
 **Status:** v2 — AUTHORED at P03 · 1 September 2026 · ~~reordered under OD-12~~ (P03-T03, `9dac44f`) reordered under OD-19
+**Amended at P07-T04 · authored 25 September 2026:** §1, §4, §5, §6 and §7 are brought to
+the delivered state; development is complete (OD-37). The phase checklists in §3 are the
+record and are unchanged except for the P07 list.
 **Precedence:** navigational only. This document decides nothing. Where it disagrees with
 `PRODUCT_BRIEF.md`, `GLOSSARY.md`, `DECISIONS.md`, `SCOPE.md`, `CONTENT_MODEL.md`,
 `BOUNDARY_MODEL.md`, `SECURITY_MODEL.md`, `I18N_MODEL.md`, `DATA_MODEL.md`,
@@ -18,62 +21,57 @@ maps every promise in that summary to the phase that delivers it.
 
 The Arabic summary of 29 August 2026 makes four sets of promises. Every one is traced here.
 
-### §1a The thirteen pages
+### §1a The pages
 
-Twelve static route patterns plus one dynamic, each in Arabic and English, enumerated in
-`CONTENT_MODEL.md` §3c. Twenty-four static URLs render today; the eighteen Programme detail
-URLs render only after publication, which is a clinical act (§4).
+Thirteen static route patterns plus one dynamic, each in Arabic and English, enumerated in
+`CONTENT_MODEL.md` §3c and counted in `SCOPE.md` §3. With the nine programmes published,
+that is 44 URLs.
 
-| # | Summary page | Route | Delivered in | Renders today |
+| # | Summary page | Route | Delivered in | State |
 |---|---|---|---|---|
-| 1 | الرئيسية | `/{locale}` | P03 | Yes — the approved composition |
-| 2 | من نحن | `/{locale}/about` | P03 | Shell, gated |
-| 3 | الأقسام | `/{locale}/departments` | P03 | Shell, gated |
-| 4 | البرامج | `/{locale}/programmes` | P03 listing · **P04 search** | Shell, gated |
-| 5 | العروض | `/{locale}/offers` | P03, after M5 | Shell — **no table yet** |
-| 6 | الفيديوهات | `/{locale}/videos` | P03, after M5 | Shell — **no table yet** |
-| 7 | الأجهزة | `/{locale}/equipment` | P03, after M5 | Shell — **no table yet** |
-| 8 | الفروع | `/{locale}/locations` | P03 | Shell, gated |
-| 9 | تواصل معنا | `/{locale}/contact` | P03 | Shell, gated |
-| 10 | نتائج المرضى | `/{locale}/online-results` | P03 | Shell, gated |
-| 11 | سياسة الخصوصية | `/{locale}/privacy-policy` | P03 | Shell, gated |
-| 12 | خدمة معمل لمعمل | `/{locale}/lab-to-lab` | P03 | Shell, gated |
-| 13 | صفحة لكل برنامج | `/{locale}/programmes/{slug}` | P03 route · P06 content | **Zero pages** — every row is draft |
+| 1 | الرئيسية | `/{locale}` | P03, refined at P06 and P09 | Delivered |
+| 2 | من نحن | `/{locale}/about` | P03 | Delivered |
+| 3 | الأقسام | `/{locale}/departments` | P03 | Delivered |
+| 4 | البرامج | `/{locale}/programmes` | P03 listing · P04 search | Delivered |
+| 5 | العروض | `/{locale}/offers` | P03, private at P08 | Delivered to approved PartnerLabs (OD-15) |
+| 6 | الفيديوهات | `/{locale}/videos` | P03 | Delivered |
+| 7 | الأجهزة | `/{locale}/equipment` | P03 | Delivered |
+| 8 | الفروع | `/{locale}/locations` | P03 | Delivered |
+| 9 | تواصل معنا | `/{locale}/contact` | P03 | Delivered |
+| 10 | نتائج المرضى | `/{locale}/online-results` | P03 | Delivered |
+| 11 | سياسة الخصوصية | `/{locale}/privacy-policy` | P03 | Delivered |
+| 12 | خدمة معمل لمعمل | `/{locale}/lab-to-lab` | P03 | Delivered |
+| 13 | الأخبار | `/{locale}/announcements` | P06 | Delivered (OD-09) |
+| 14 | صفحة لكل برنامج | `/{locale}/programmes/{slug}` | P03 route · P06 content | Delivered, one per published programme |
 
-Pages 5, 6 and 7 have no database table. `DATA_MODEL.md` §6 specifies `"Offer"`,
-`"Equipment"` and `"Video"` as rows 7–9; no migration creates them. That is M5, and it is the
-next piece of work.
+### §1b The dashboard modules
 
-### §1b The ten dashboard modules
+Eleven are delivered, counted in `SCOPE.md` §4. OD-37 withdrew Clinical notices.
 
-Eight are signed scope under D-16 and land at P05. Two are **draft, unpriced and unsigned**.
-
-| # | Summary module | Entity | Status |
+| # | Summary module | Entity | State |
 |---|---|---|---|
-| 1 | العروض | `Offer` | Signed. Table at M5, module at P05 |
-| 2 | الفيديوهات | `Video` | Signed. Table at M5, module at P05 |
-| 3 | الأجهزة | `Equipment` | Signed. Table at M5, module at P05 |
-| 4 | الفروع | `Branch` | Signed. Table exists. Module at P05 |
-| 5 | البرامج | `Programme`, `ProgrammeTier`, `ProgrammeLabTest` | Signed. Tables exist. Module at P05 |
-| 6 | الأقسام | `LabUnit` | Signed. Table exists. Module at P05 |
-| 7 | إعدادات الموقع | `SiteSettings` | Signed. Table exists. Module at P05 |
-| 8 | مكتبة الوسائط | `MediaAsset` | Signed. Table exists. Module at P05 |
-| 9 | الأخبار | `Announcement` | **OD-09 DRAFT — unsigned, unpriced.** No table, no spec |
-| 10 | التنبيهات الطبية | `ClinicalNotice` | **OD-09 DRAFT — unsigned, unpriced.** No table, no spec |
-
-The summary marks 9 and 10 as `+ إضافة` requiring separate pricing, which is accurate. Until
-OD-09 is signed, `CONTENT_MODEL.md` §3d correctly enumerates eight and they are out of scope.
-Their tables would be M6, after M5.
+| 1 | العروض | `Offer` | Delivered |
+| 2 | الفيديوهات | `Video` | Delivered |
+| 3 | الأجهزة | `Equipment` | Delivered |
+| 4 | الفروع | `Branch` | Delivered |
+| 5 | البرامج | `Programme`, `ProgrammeTier`, `ProgrammeLabTest` | Delivered |
+| 6 | الأقسام | `LabUnit` | Delivered |
+| 7 | إعدادات الموقع | `SiteSettings` | Delivered |
+| 8 | مكتبة الوسائط | `MediaAsset` | Delivered |
+| 9 | الأخبار | `Announcement` | Delivered (OD-09, OD-24) |
+| 10 | التنبيهات الطبية | `ClinicalNotice` | **Withdrawn by OD-37; never built** |
+| — | — | `LabTest` | Delivered as its own module (P05-T24A) |
+| — | — | `PartnerLab` accounts | Delivered (OD-15, OD-30) |
 
 ### §1c The clinical-notice rule
 
-The summary states it as a system constraint rather than a staff policy:
+The summary stated it as a system constraint:
 
 > «لا يُنشر أي تنبيه طبي على الموقع قبل اعتماده كتابيًا من الطاقم الطبي للمعمل.»
 
-That is enforceable and specified. `DATA_MODEL.md` §6 row 13 carries `signed_by`, `signed_at`
-and `signed_text_hash` on `"ClinicalNotice"`; the hash is what makes an edited notice revert
-to pending automatically rather than relying on anyone remembering. It ships when OD-09 does.
+OD-37 withdrew the Clinical notices module, so no clinical notice is published by this
+system at all. The clinical gate still governs every `LabTest` name, `Programme` membership
+and medical description (`SCOPE.md` §11).
 
 ### §1d The visual identity
 
@@ -291,13 +289,14 @@ provisioning form, production-only.
 
 - [x] **P07-T01** — Record G9, close CF-192, open P07
 - [x] **P07-T02** — Personal data out of the tree; the handover programme
-- [ ] **P07-T03** — Stage 1: the delivered-scope documents, the drift corrections, the pre-development papers out of the tree
+- [x] **P07-T03** — Stage 1: the delivered-scope documents, the drift corrections, the pre-development papers out of the tree
+- [ ] **P07-T04** — Stage 1: the remaining documentation audit
 - [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
 - [ ] security headers
 - [ ] DNS move and redirects from the 2018 URLs
 - [ ] decommission the old site
 - [ ] revert the repository to private (OD-04)
-- [ ] Owner handover — unscoped, see §5
+- [ ] Owner handover — OD-35 Stages 3 and 4
 - [ ] **G7** launch — all four standards
 
 ### P08 — PartnerLab accounts and private Offers · CLOSED at G8, 14 September 2026
@@ -442,31 +441,21 @@ one blocks a specific, named thing.
 | 4 | The four branch addresses | Accurate map pins. Unverified geography is a defect, not a placeholder | P05 |
 | 5 | **Clinical sign-off** on test names, programme names and notices | P04 entirely, P06 entirely, G7 | P06 |
 
-Twenty-one regions across the site currently render a pending state waiting on items 1–4.
-Each shows what it is missing rather than a stand-in.
+Item 5 was signed on 6 September 2026 and item 4 is published (CF-04, closed at P06-T09).
+Items 1 to 3 stand as `QUOTATION_AMENDMENTS.md` §8 records. Every region renders from the
+published data it needs, and shows what it is missing when that data is absent (OD-26).
 
 ---
 
 ## §5 Promised or implied, but not yet scoped
 
-Three gaps. Each is a decision for the human, not a task.
+None remains. The three gaps this section once named are resolved:
 
-**Owner handover is not in any phase.** Searching every document for handover, training,
-warranty, support period or acceptance returns nothing. P07 ends at "launch" and the owner
-receives no training on the dashboard, no credential transfer procedure, and no acceptance
-step where he confirms he has what he paid for. `D-12` puts **30% of the fee — the largest
-instalment — at P07 launch**, so the biggest payment is gated on a phase whose written scope
-does not include handing anything over. This needs an OD adding handover content to P07, or
-it is unpaid work.
-
-**OD-09 is drafted, not signed.** Modules 9 and 10 appear in the owner summary marked as
-priced additions. They have no table, no specification and no phase. If signed, they add an M6
-migration and two modules to P05.
-
-**`QUOTATION_AMENDMENTS.md` §5 is out of date and it is client-facing.** Blocker B6 still
-reads that there is no schema and that work cannot start. The schema has been live since M4 —
-eleven tables, row-level security on every one, twenty-two policies, seed loaded and verified.
-Sent to the client today, that document understates the project badly.
+- **Owner handover** is scoped by OD-35: documentation, hardening, handover documents and
+  the cutover plan, the account handover, the DNS and domain cutover, and G7.
+- **OD-09** was signed and priced (OD-24). Announcements is delivered; OD-37 withdrew
+  Clinical notices.
+- **`QUOTATION_AMENDMENTS.md`** now records the outcome of every entry in its §8.
 
 ---
 
@@ -479,22 +468,16 @@ Sent to the client today, that document understates the project badly.
 | 30% | Signature | The revised quotation was signed 4 September 2026 |
 | 20% | G3 | The thirteen pages render in both languages and pass the boundary and bilingual gates |
 | 20% | G5 | The owner can edit the site himself through the dashboard |
-| 30% | G7 | Launch — and, if §5 is resolved, handover |
+| 30% | G7 | Launch, with the handover OD-35 sets out |
 
 ---
 
 ## §7 What stops the project today
 
-G8 PASSED at reviewer verdict on 14 September 2026, on P08-T29 / G8-R2 evidence at `docs/research/g8r2-evidence.md`. G8-R of 10 September 2026 did not pass it. The original G8-R named gaps at P4, P5 and P10 were measured in later P08 tasks. CF-169 and CF-170 CLOSED at P08-T29. OD-21 is signed; its §3 is SUSPENDED, so no build task proceeds from it.
+Nothing in development. Development is complete and the delivered state is the final scope
+(OD-37). P07 runs the handover programme of OD-35 in order: documentation, hardening,
+handover documents and the cutover plan, then — once the human supplies the domain, DNS,
+hosting and account details — the account handover, the DNS and domain cutover, and G7.
+`SESSION_CONTEXT.md` names the next task.
 
-~~`currentNelPrincipal` exists only as a rolled-back rehearsal at P08-T26; `git grep currentNelPrincipal supabase/` is empty.~~
-**UNRATIFIED residual repair, PR-19, P08-T28.** That sentence was false after T27 authored the migration and T28 read the live function. Struck. `currentNelPrincipal` is authored (P08-T27) and live (P08-T28 STEP 1a).
-~~G8 remains FAIL. G8-R2 has not run. CF-169 and CF-170 stay OPEN.~~
-**UNRATIFIED residual repair, PR-19, P08-T29.** Those three sentences were false after G8-R2 landed. G8-R2 evidence is `docs/research/g8r2-evidence.md`. CF-169 and CF-170 CLOSED at P08-T29.
-**UNRATIFIED residual repair, PR-19, P04-T01.** The heading and the first §7 sentence still said G8 FAIL after the reviewer issued PASS. G8 PASSED 14 September 2026. The P08 heading is CLOSED at G8.
-
-OD-09 is SIGNED and priced at 1000 EGP (OD-24). `"Announcement"` was authored at P06-T14 and applied by the human. ClinicalNotice is not built.
-
-~~P06 is in flight. P06-T07 restored `SECURITY_MODEL.md` §3 on production. G6 has not started. CF-180 and CF-181 are OPEN. The id-less content-entry box is still unchecked.~~
-**UNRATIFIED residual repair, PR-19, P08-T27.** The fence set the phase-map Gate cell to PASSED, which requires the G6 box to be checked. Leaving "G6 has not started" would contradict that cell. G6 PASSED at reviewer verdict on P06-T18 evidence, 13 September 2026. CF-180 and CF-181 are already closed. The id-less content-entry box is still unchecked. P06-T03 and P06-T11 stay unchecked (PR-36).
-
+Earlier states of this section are in the git history and `DEVELOPMENT_JOURNAL.md`.

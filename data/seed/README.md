@@ -1,45 +1,39 @@
 # Seed data
 
-**Source:** `http://nileegyptlabs.com/features.html` · Last-Modified **21 Feb 2018**
-**Extracted:** 24 August 2026
+**Source of the 2018 snapshot:** `http://nileegyptlabs.com/features.html` · Last-Modified
+**21 Feb 2018** · extracted 24 August 2026.
+**Current content:** the laboratory's signed clinical catalogue of 6 September 2026
+(`docs/research/clinical-signoff.md`), transcribed by M8. Updated at P07-T04 · 25 September
+2026.
 
 ## What this is
 
-Source of truth for **structure**. Not for clinical accuracy.
-
 | File | Rows | Contents |
 |---|---|---|
-| `programmes.csv` | 9 | Programmes, EN + AR names, tier notes |
-| `tests.csv` | 72 | Unique LabTests, EN name, blank AR column, bilingual search aliases, QA flags |
-| `programme_tests.csv` | 121 | Programme → ProgrammeTier → LabTest, with verbatim source wording preserved |
-| `catalogue.json` | — | All of the above as one importable bundle |
+| `programmes.csv` | 9 | Programmes, English and Arabic names, tier notes |
+| `tests.csv` | 71 | LabTests of the signed catalogue: English name, Arabic name, search aliases, QA flag (none set) |
+| `programme_tests.csv` | 124 | Programme → ProgrammeTier → LabTest memberships, with the source wording preserved |
+| `catalogue.json` | — | The 2018 extraction snapshot, 72 LabTests across 121 relationships. Kept as evidence and not asserted (PR-09) |
 
-**121 → 72 is the point.** Without deduplication a Visitor searching `CBC` gets
-five unconnected text blobs. With it, one result listing every Programme
-containing it.
+The Arabic-name column in `tests.csv` keeps its original header, `name_ar_TO_TRANSLATE`;
+every row now carries the laboratory's signed Arabic name.
 
-## Known defects — flagged, not fixed (CF-01)
+**Deduplication is the point.** Without it a Visitor searching `CBC` would get unconnected
+text blobs. With it, one LabTest lists every Programme that contains it.
 
-Five in `tests.csv` under `qa_flag`, four in `client-outbound/qa-missing-tests.csv`.
-Two are clinically significant:
+## The 2018 defects
 
-- **`FSH` appears in the Gold tier**, whose description is entirely about thyroid
-  disorders. FSH is a fertility hormone. Almost certainly meant to be **TSH**.
-- **`APP` is listed as a tumour marker.** Not a recognised marker. Given the
-  stated purpose (liver tumours), almost certainly **AFP**.
+The 2018 snapshot carried five flagged LabTests and four analyses promised in descriptions
+but missing from their own panels, among them `FSH` in a thyroid tier and `APP` as a tumour
+marker. The laboratory resolved each one in its signed catalogue; no row in `tests.csv`
+carries a `qa_flag` today. The four missing-analysis questions, as they were put to the
+laboratory, are kept in `client-outbound/qa-missing-tests.csv`.
 
-**Do not correct these.** PR-08: LabTest content ships behind a feature flag
-until the lab signs off in writing.
+Clinical content is the laboratory's. Nothing here is corrected by the project (PR-08).
 
 ## Verification
 
     python data/seed/verify_seed.py
 
-Must print `121 -> 72`. PR-01: counts are computed, never asserted.
-
-## The Arabic column is deliberately blank
-
-`name_ar` in `tests.csv` is empty by design. Clinical Arabic translation is an
-Opus-Max task and then goes to the lab for verification. A mistranslated LabTest
-name on a laboratory site is a harm vector, and it is invisible to a reviewer who
-does not read clinical Arabic.
+Must print `124 -> 71` and `PASS`. CI runs it on every push and pull request. PR-01:
+counts are computed, never asserted.

@@ -76,7 +76,7 @@ returned `created=1` with no Auth row (P08-T18), and Preview may have
 the partner signup flag off.
 
 Never run this mode unattended. While the temporary Operator exists it
-holds write access to eleven tables and the clinical catalogue.
+holds write access to every Operator-writable table, the clinical catalogue among them.
 
 ## Lesson W6 (P08-T17)
 

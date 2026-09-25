@@ -9,6 +9,9 @@
 | `SETUP_RUNBOOK.md` | Bootstrap steps and the reviewer kickoff prompt |
 | `PRE_DEVELOPMENT_PLAYBOOK.md` | Pre-Dev-OS planning pass. Superseded by the above; retains the model-routing rationale |
 
+The method documents record how the project was run. Figures in them are those of the day
+they were written; the delivered state is in `docs/SCOPE.md` (P07-T04).
+
 ## The two non-waivable gates
 
 **Boundary** — no personal or medical data on any path. Enforced twice: as gate
