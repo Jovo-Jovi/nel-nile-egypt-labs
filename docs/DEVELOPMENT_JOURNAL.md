@@ -1852,3 +1852,13 @@ Seven documents were brought to the delivered state. `PHASES.md` lists the pages
 
 CF-125 and CF-182 closed at P07-T04. `origin/p07-t02` and `origin/p07-t03`, and their local copies, were deleted after each was an ancestor of `origin/main`. Open CF 112 − 2 = 110.
 
+
+## 2026-09-25 — P07-T05: Stage 2 security hardening
+
+The human's Stage 2 rules bound the task: security only, the smallest change, and no feature, workflow, access-model or appearance change. Nothing under `src/`, `supabase/`, `public/` or `data/` changed. `package.json` is unchanged.
+
+`npm audit fix`, without `--force`, updated `package-lock.json` only. `sharp` and every `@img/sharp-<platform>` package moved from 0.35.3 to 0.35.4, every `@img/sharp-libvips-<platform>` package from 1.3.2 to 1.3.3, and `js-yaml` from 4.3.1 to 4.3.2. Both audits at high exit 0. CI runs `npm audit --omit=dev --audit-level=high` after installing dependencies.
+
+OD-38 sets the site-wide headers in `next.config.ts`: `Strict-Transport-Security: max-age=86400` with no `includeSubDomains` and no `preload`; `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`; `Permissions-Policy: camera=(), microphone=(), geolocation=()`; `X-Frame-Options: DENY`; and a Content-Security-Policy of five directives whose `frame-src` permits only the Operator's YouTube preview and Vercel's preview tooling. The full script and connect allow-list is deferred.
+
+CF-214 and CF-217 closed at P07-T05. CF-177 stays open until the production alias serves the headers. CF-221 records the superseded notes still sitting under Next action. Open CF 109.

@@ -231,10 +231,13 @@ OD-04 condition 1, and it applies to reports, fences and documents as well as so
 
 ## §8 Transport and headers
 
-HTTPS everywhere, HSTS on the production host, and no insecure subresource. Security headers —
-CSP, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` — are not yet set on
-the deployment (CF-177) and are Stage 2 of the handover programme (OD-35). OD-17 made the
-model tiers advisory.
+HTTPS everywhere and no insecure subresource. Security headers are set site-wide in
+`next.config.ts` (OD-38): `Strict-Transport-Security` without `includeSubDomains` or
+`preload`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`,
+`X-Frame-Options: DENY`, and an enforced Content-Security-Policy whose `frame-src` permits
+only the Operator's YouTube preview and Vercel's preview tooling, excluding the
+results-portal host. The full script and connect allow-list is deferred (OD-38 §4). OD-17
+made the model tiers advisory.
 
 **CSP is enforceable on this project in a way it usually is not**, because the site loads
 nothing from anywhere else: fonts are self-hosted, the map is drawn, video posters are
