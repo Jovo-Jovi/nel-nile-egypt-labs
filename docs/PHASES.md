@@ -292,7 +292,8 @@ provisioning form, production-only.
 - [x] **P07-T03** — Stage 1: the delivered-scope documents, the drift corrections, the pre-development papers out of the tree
 - [x] **P07-T04** — Stage 1: the remaining documentation audit
 - [x] **P07-T05** — Stage 2: dependency advisories, CI audit, security headers
-- [ ] **P07-T06** — Stage 2: read-only measurements
+- [x] **P07-T06** — Stage 2: read-only measurements
+- [ ] **P07-T07** — Stage 2: the G7 carry-forward triage
 - [ ] `CUTOVER_RUNBOOK.md` — authored one step ahead
 - [ ] security headers
 - [ ] DNS move and redirects from the 2018 URLs
