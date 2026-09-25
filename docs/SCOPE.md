@@ -279,11 +279,11 @@ Delivered:
   §3);
 - the results portal linked and never framed (D-17), from an allowlisted host.
 
-Hardening in Stage 2 of the handover programme, each item closing with a PASS or FAIL in
-the ledger: security headers and a minimal CSP (CF-177), dependency advisories and a CI
-audit step (CF-214, CF-217), and measurements of rate limiting on sign-in and signup, the
-auth orphan read and the idle connection count. Hardening changes no page, module or data
-the product offers (OD-37 §5).
+Security headers with a minimal enforced CSP (OD-38), dependency advisories fixed, and a
+production dependency audit in CI (P07-T05). Stage 2 of the handover programme measures
+rate limiting on sign-in and signup, the auth orphan read and the idle connection count,
+each with a PASS or FAIL in the ledger. Hardening changes no page, module or data the
+product offers (OD-37 §5).
 
 ## §20 Deployment and platform
 
@@ -368,4 +368,4 @@ laboratory and the maintainer know it, and OD-37 §4 governs the two it names.
   CF-211).
 - **Search** does not reach twelve analyses by an Arabic alias, because they have none; the
   official Arabic name reaches all 71 (CF-204, D-50).
-- **Security headers** are not yet set on the deployment (CF-177); Stage 2 sets them.
+- **The CSP is minimal.** Five directives are enforced; the full script and connect allow-list is deferred (OD-38 §4).

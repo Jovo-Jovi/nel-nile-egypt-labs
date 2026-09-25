@@ -4,7 +4,7 @@
 **Binding on:** every prompt issued, every document authored, every identifier written
 **Supersedes:** the unsigned draft quotation where a row below says so. The draft is not deleted; the conflict is named and owned as a carry-forward.
 
-Fifty decisions, D-01 to D-50, and thirty-seven Operational Decisions, OD-01 to OD-37. A decision is in force when it appears here. Conversation does not amend this file.
+Fifty decisions, D-01 to D-50, and thirty-eight Operational Decisions, OD-01 to OD-38. A decision is in force when it appears here. Conversation does not amend this file.
 
 ---
 
@@ -1452,6 +1452,44 @@ request that lands this OD is the confirming act.
 
 **Does not decide:** any price; the maintenance terms; work the laboratory commissions
 after handover, which is a new engagement.
+
+---
+
+### OD-38 — Security headers, and the deferred allow-list
+
+**Status:** SIGNED — 25 September 2026
+**Amends:** none. It records how quotation §2.4's security headers and CSP are delivered.
+**Requested by:** the human: the header set on 24 September 2026, the Stage 2 rules on
+25 September 2026.
+
+**1. The headers.** Set in `next.config.ts` for every path: `Strict-Transport-Security:
+max-age=86400`; `X-Content-Type-Options: nosniff`; `Referrer-Policy:
+strict-origin-when-cross-origin`; `Permissions-Policy: camera=(), microphone=(),
+geolocation=()`; `X-Frame-Options: DENY`; and the Content-Security-Policy of §3.
+
+**2. HSTS.** No `includeSubDomains` and no `preload`, because the results portal may sit on
+a subdomain of the production domain. One day keeps a DNS rollback to the 2018 site, which
+has no HTTPS, open for returning browsers. `CUTOVER_RUNBOOK.md` raises `max-age` once the
+rollback window closes.
+
+**3. The enforced CSP.** `frame-ancestors 'none'; object-src 'none'; base-uri 'self';
+form-action 'self'; frame-src https://www.youtube.com https://vercel.live`. `frame-src`
+permits the Operator's YouTube preview (OD-14) and Vercel's preview tooling, and so
+excludes the results-portal host (`BOUNDARY_MODEL.md` §4 item 8).
+
+**4. Deferred.** `default-src`, `script-src`, `style-src`, `img-src`, `font-src` and
+`connect-src` — the full allow-list. Enforcing it needs per-request nonces or hashes
+through the rendering pipeline, which would change the delivered application; under OD-37
+and the human's Stage 2 rules that is outside P07. It is a maintenance decision.
+
+**5. No product change.** No page, module, workflow, access rule or appearance changes.
+Public video cards remain links to YouTube, the results portal remains a public outbound
+link, and Offers remain restricted to approved PartnerLabs.
+
+**Basis of signature:** the human's decisions of 24 and 25 September 2026. Merging the pull
+request that lands this OD is the confirming act.
+
+**Does not decide:** the maintenance terms.
 
 ---
 

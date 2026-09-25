@@ -182,8 +182,8 @@ media roles.
 
 ### §5n Security, design, accessibility, SEO and platform
 
-Security controls as listed in `SCOPE.md` §19, with security headers, rate-limit
-verification and dependency audit measured in Stage 2 of the handover. A design system with
+Security controls as listed in `SCOPE.md` §19, including security headers with a minimal
+enforced CSP (OD-38) and a production dependency audit in CI. A design system with
 tokens, components and responsive layouts; accessibility work against `DESIGN_SYSTEM.md`
 §8 with three open items (CF-92, CF-208, CF-211). Per-page titles and descriptions,
 `hreflang` alternates, the home page's title and description from Site Settings, favicon,
@@ -244,7 +244,7 @@ delivered differently, withdrawn, or excluded by the decision named.
 | §2.3 Site Settings | Delivered, without a map value: the map is drawn from branch coordinates | OD-22 |
 | §2.3 Contact Submissions inbox | Excluded | D-09, correction C3 |
 | §2.3 Activity log | Provided by the platform's logs, not a module | D-16 |
-| §2.4 HTTPS, HSTS, CSP and security headers | HTTPS delivered; headers set by Stage 2 hardening | CF-177 |
+| §2.4 HTTPS, HSTS, CSP and security headers | Delivered: the header set with a minimal enforced CSP; the full allow-list deferred | OD-38 |
 | §2.4 Server-side validation, secure sessions, secure media upload | Delivered | `ADMIN_SPEC.md` §4g, §3e; bucket policy |
 | §2.4 Rate limiting on login and public forms | To be measured in Stage 2 | quotation §2.4 |
 | §2.4 Dependency scanning | Stage 2 | CF-214, CF-217 |
